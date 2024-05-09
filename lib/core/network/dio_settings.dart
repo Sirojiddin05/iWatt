@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
-import 'package:i_watt_app/core/services/shared_preference_manager.dart';
+import 'package:i_watt_app/core/services/storage_repository.dart';
 
 class DioSettings {
   BaseOptions _dioBaseOptions = BaseOptions(

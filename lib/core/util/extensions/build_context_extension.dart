@@ -46,9 +46,3 @@ extension BuildContextExtensions on BuildContext {
     );
   }
 }
-
-extension CrossFade on CrossFadeState {
-  bool get isShowFirst => this == CrossFadeState.showFirst;
-
-  bool get isShowSecond => this == CrossFadeState.showSecond;
-}
