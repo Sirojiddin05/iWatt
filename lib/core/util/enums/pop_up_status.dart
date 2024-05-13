@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i_watt_app/core/config/app_colors/app_colors.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 
 enum PopUpStatus {

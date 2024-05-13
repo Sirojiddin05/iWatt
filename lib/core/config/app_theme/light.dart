@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:i_watt_app/core/config/app_colors/app_colors.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_colors.dart';
 
 abstract class LightTheme {
   static ThemeData theme() => ThemeData(
@@ -19,7 +20,6 @@ abstract class LightTheme {
         fontFamily: 'Inter',
         appBarTheme: AppBarTheme(
           titleSpacing: 0,
-          color: AppColors.white,
           backgroundColor: AppColors.white,
           surfaceTintColor: AppColors.white,
           shadowColor: AppColors.baliHai.withOpacity(0.2),
@@ -60,6 +60,9 @@ abstract class LightTheme {
           onError: AppColors.cyprus,
           onSurface: AppColors.black.withOpacity(0.05),
         ),
+        extensions: {
+          ThemedColors(),
+        },
       );
 
   static const displayLarge = TextStyle(

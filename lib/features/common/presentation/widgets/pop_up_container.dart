@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:i_watt_app/core/config/app_colors/app_colors.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 
