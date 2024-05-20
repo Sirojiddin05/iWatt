@@ -3,15 +3,15 @@ import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 
-class CustomInterceptor implements Interceptor {
+class TokenRefreshInterceptor implements Interceptor {
   final Dio dio;
 
-  const CustomInterceptor({required this.dio});
+  const TokenRefreshInterceptor({required this.dio});
 
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.type == DioExceptionType.badResponse && (err.response?.statusCode == 403 || err.response?.statusCode == 401)) {
-      StorageRepository.deleteString(StorageKeys.accessToken);
+    if (err.type == DioExceptionType.badResponse && (err.response?.statusCode == 403)) {
+      await StorageRepository.deleteString(StorageKeys.accessToken);
       await _refreshToken(err.requestOptions.baseUrl);
       if (StorageRepository.getString(StorageKeys.accessToken).replaceAll('Bearer', '').trim().isNotEmpty) {
         err.requestOptions.headers['Authorization'] = StorageRepository.getString(StorageKeys.accessToken);
@@ -26,8 +26,9 @@ class CustomInterceptor implements Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (StorageRepository.getString(StorageKeys.accessToken, defValue: '').isNotEmpty) {
-      options.headers['Authorization'] = StorageRepository.getString(StorageKeys.accessToken);
+    final accessToken = StorageRepository.getString(StorageKeys.accessToken);
+    if (accessToken.isNotEmpty) {
+      options.headers['Authorization'] = accessToken;
     } else {
       options.headers.remove('Authorization');
     }
@@ -37,14 +38,12 @@ class CustomInterceptor implements Interceptor {
 
   @override
   Future<void> onResponse(Response response, ResponseInterceptorHandler handler) async {
-    if (response.statusCode == 403 || response.statusCode == 401) {
-      if (StorageRepository.getString(StorageKeys.refreshToken).isEmpty) {
-        handler.next(response);
-        return;
-      }
+    if (response.statusCode == 403) {
       await _refreshToken(response.requestOptions.baseUrl);
-      if (StorageRepository.getString(StorageKeys.accessToken).replaceAll('Bearer', '').trim().isNotEmpty) {
-        response.requestOptions.headers['Authorization'] = StorageRepository.getString(StorageKeys.accessToken);
+      final accessToken = StorageRepository.getString(StorageKeys.accessToken);
+      final isTokenRefreshed = accessToken.replaceAll('Bearer', '').trim().isNotEmpty;
+      if (isTokenRefreshed) {
+        response.requestOptions.headers['Authorization'] = accessToken;
       }
       final resolved = await _resolveResponse(response.requestOptions);
       handler.resolve(resolved);
@@ -55,11 +54,17 @@ class CustomInterceptor implements Interceptor {
 
   Future<void> _refreshToken(String baseUrl) async {
     if (StorageRepository.getString(StorageKeys.refreshToken).isNotEmpty) {
-      final response = await dio.post('$baseUrl/users/TokenRefresh/', data: {"refresh": StorageRepository.getString(StorageKeys.refreshToken)});
+      final refreshToken = StorageRepository.getString(StorageKeys.refreshToken);
+      final response = await dio.post(
+        '$baseUrl/users/TokenRefresh/',
+        data: {
+          "refresh": refreshToken,
+        },
+      );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-        StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data['access']}');
+        await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data['access']}');
       } else {
-        StorageRepository.deleteString(StorageKeys.accessToken);
+        await StorageRepository.deleteString(StorageKeys.accessToken);
       }
     }
   }

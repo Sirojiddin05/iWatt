@@ -5,6 +5,27 @@ import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_colors.
 abstract class LightTheme {
   static ThemeData theme() => ThemeData(
         useMaterial3: true,
+        fontFamily: 'Inter',
+        scaffoldBackgroundColor: AppColors.solitude,
+        splashColor: AppColors.white.withAlpha(50),
+        dividerColor: AppColors.zircon,
+        disabledColor: AppColors.geyser.withOpacity(0.4),
+        unselectedWidgetColor: AppColors.blueBayoux,
+        shadowColor: AppColors.black.withOpacity(0.05),
+        highlightColor: Colors.transparent,
+        primaryColor: AppColors.darkTurquoise,
+        appBarTheme: AppBarTheme(
+          titleSpacing: 0,
+          backgroundColor: AppColors.white,
+          surfaceTintColor: AppColors.white,
+          shadowColor: AppColors.baliHai.withOpacity(0.2),
+          titleTextStyle: headlineLarge,
+          toolbarTextStyle: headlineLarge,
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: AppColors.darkTurquoise,
+          refreshBackgroundColor: AppColors.white,
+        ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: AppColors.cyprus,
           // selectionColor: mainButtonColor,
@@ -16,20 +37,13 @@ abstract class LightTheme {
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           },
         ),
-        scaffoldBackgroundColor: AppColors.solitude,
-        fontFamily: 'Inter',
-        appBarTheme: AppBarTheme(
-          titleSpacing: 0,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: AppColors.limeGreen,
+          unselectedItemColor: AppColors.zumThor,
+          selectedLabelStyle: titleMedium,
+          unselectedLabelStyle: titleMedium.copyWith(color: AppColors.taxBreak),
           backgroundColor: AppColors.white,
-          surfaceTintColor: AppColors.white,
-          shadowColor: AppColors.baliHai.withOpacity(0.2),
-          titleTextStyle: headlineLarge,
-          toolbarTextStyle: headlineLarge,
         ),
-        splashColor: Colors.transparent,
-        dividerColor: AppColors.zircon,
-        highlightColor: Colors.transparent,
-        progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.darkTurquoise, refreshBackgroundColor: AppColors.white),
         textTheme: const TextTheme(
           displayLarge: displayLarge,
           displayMedium: displayMedium,
@@ -48,6 +62,9 @@ abstract class LightTheme {
           labelSmall: labelSmall,
         ),
         colorScheme: ColorScheme(
+          surfaceTint: AppColors.white,
+          primaryContainer: AppColors.white,
+          errorContainer: AppColors.amaranth,
           background: AppColors.white,
           brightness: Brightness.light,
           primary: AppColors.darkTurquoise,

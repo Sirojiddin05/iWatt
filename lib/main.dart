@@ -1,119 +1,96 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
+import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
+import 'package:i_watt_app/service_locator.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await StorageRepository.getInstance();
-  runApp(const IWatt());
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await EasyLocalization.ensureInitialized();
+    await setupLocator();
+    // await SentryFlutter.init((options) {
+    //   options.dsn = '';
+    //   options.tracesSampleRate = 1.0;
+    // }, appRunner: () {
+    return runApp(const App());
+  }, (error, stack) async {
+    // await Sentry.captureException(error, stackTrace: stack);
+  });
 }
 
-class IWatt extends StatelessWidget {
-  const IWatt({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ThemeSwitcherBloc(),
-      child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
-        builder: (context, state) {
-          print('build ${state.appTheme}');
-
-          return MaterialApp(
-            title: 'I WATT',
-            theme: state.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            home: const MyHomePage(title: 'Flutter Demo Home Page'),
-          );
-        },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ThemeSwitcherBloc()),
+        BlocProvider(create: (context) => InternetBloc(Connectivity())),
+      ],
+      child: EasyLocalization(
+        path: 'lib/assets/translations',
+        supportedLocales: const [
+          Locale('uz'),
+          Locale('en'),
+          Locale('ru'),
+        ],
+        fallbackLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'en')),
+        startLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'en')),
+        saveLocale: true,
+        child: const MyApp(),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MyAppState extends State<MyApp> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  NavigatorState get _navigator => _navigatorKey.currentState!;
+
+  @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+        builder: (context, themeState) {
+          return MaterialApp(
+            title: 'I WATT',
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            navigatorKey: _navigatorKey,
+            theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
+            // onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
+            // builder: (context, child) {},
+          );
+        },
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              '',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: Row(
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              final bloc = context.read<ThemeSwitcherBloc>();
-              bloc.add(const SwitchThemeModeEvent(ThemeMode.system));
-              // if (bloc.state.appTheme.isLight) {
-              //   bloc.add(const SwitchThemeModeEvent(ThemeMode.dark));
-              // } else {
-              //   bloc.add(const SwitchThemeModeEvent(ThemeMode.light));
-              // }
-            },
-            tooltip: '',
-            child: const Icon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              final bloc = context.read<ThemeSwitcherBloc>();
-              bloc.add(const SwitchThemeModeEvent(ThemeMode.light));
-              // if (bloc.state.appTheme.isLight) {
-              //   bloc.add(const SwitchThemeModeEvent(ThemeMode.dark));
-              // } else {
-              //   bloc.add(const SwitchThemeModeEvent(ThemeMode.light));
-              // }
-            },
-            tooltip: '',
-            child: const Icon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              final bloc = context.read<ThemeSwitcherBloc>();
-              bloc.add(const SwitchThemeModeEvent(ThemeMode.dark));
-              // if (bloc.state.appTheme.isLight) {
-              //   bloc.add(const SwitchThemeModeEvent(ThemeMode.dark));
-              // } else {
-              //   bloc.add(const SwitchThemeModeEvent(ThemeMode.light));
-              // }
-            },
-            tooltip: '',
-            child: const Icon(Icons.add),
-          ),
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

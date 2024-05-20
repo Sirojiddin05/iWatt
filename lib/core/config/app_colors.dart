@@ -16,4 +16,9 @@ class AppColors {
   static const cyprus = Color(0xff061018);
   static const blueBayoux = Color(0xff667779);
   static const limeGreen = Color(0xff34C759);
+  static const taxBreak = Color(0xff4D696E);
+  static const geyser = Color(0xffC6CECB);
+  static const zumThor = Color(0xffC6CDCE);
+
+  // static const brightSun = Color(0xffEBC032);
 }

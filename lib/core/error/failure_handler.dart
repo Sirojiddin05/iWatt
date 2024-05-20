@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 abstract class Failure {
   final String errorMessage;
 
@@ -5,13 +7,12 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  final num statusCode;
-
-  const ServerFailure({required super.errorMessage, required this.statusCode});
+  const ServerFailure({required super.errorMessage});
 }
 
 class DioFailure extends Failure {
-  const DioFailure({required super.errorMessage});
+  final DioExceptionType type;
+  const DioFailure({required super.errorMessage, this.type = DioExceptionType.badResponse});
 }
 
 class ParsingFailure extends Failure {

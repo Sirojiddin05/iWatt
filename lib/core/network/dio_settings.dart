@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
+import 'package:i_watt_app/core/config/storage_keys.dart';
+import 'package:i_watt_app/core/network/interceptor/custom_interceptor.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 
 class DioSettings {
@@ -10,7 +12,9 @@ class DioSettings {
     connectTimeout: const Duration(seconds: 35),
     receiveTimeout: const Duration(seconds: 33),
     followRedirects: false,
-    headers: <String, dynamic>{'Accept-Language': StorageRepository.getString('language', defValue: 'en')},
+    headers: <String, dynamic>{
+      'Accept-Language': StorageRepository.getString(StorageKeys.language, defValue: 'uz'),
+    },
     validateStatus: (status) => status != null && status <= 500,
   );
 
@@ -29,14 +33,17 @@ class DioSettings {
 
   Dio get dio {
     final dio = Dio(_dioBaseOptions);
-    dio.interceptors.add(
-      LogInterceptor(
-        responseBody: true,
-        requestBody: true,
-        request: true,
-        requestHeader: true,
-        logPrint: (object) => log(object.toString()),
-      ),
+    dio.interceptors.addAll(
+      [
+        LogInterceptor(
+          responseBody: true,
+          requestBody: true,
+          request: true,
+          requestHeader: true,
+          logPrint: (object) => log(object.toString()),
+        ),
+        TokenRefreshInterceptor(dio: dio)
+      ],
     );
     return dio;
   }

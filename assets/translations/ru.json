@@ -1,0 +1,12 @@
+{
+  "map": "Карта",
+  "stations": "Станции",
+  "charging_processes": "Зарядки",
+  "profile": "Профиль",
+  "no_network": "Нет сети",
+  "check_connection": "Проверьте соединение",
+  "check_connection_and_update": "Проверьте соединение с интернетом или \nпопробуйте обновить",
+  "refresh_the_page": "Обновите страницу",
+  "server_problems": "Неполадки с сервером",
+  "request_canceled": "Запрос отменен"
+}
