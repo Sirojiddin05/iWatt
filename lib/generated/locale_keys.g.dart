@@ -11,5 +11,8 @@ abstract class  LocaleKeys {
   static const refresh_the_page = 'refresh_the_page';
   static const server_problems = 'server_problems';
   static const request_canceled = 'request_canceled';
+  static const free = 'free';
+  static const busy = 'busy';
+  static const does_not_work = 'does_not_work';
 
 }

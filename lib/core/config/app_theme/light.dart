@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_constants.dart';
+import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_colors.dart';
+import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_icons.dart';
 
 abstract class LightTheme {
   static ThemeData theme() => ThemeData(
         useMaterial3: true,
         fontFamily: 'Inter',
         scaffoldBackgroundColor: AppColors.solitude,
-        splashColor: AppColors.white.withAlpha(50),
+        splashColor: AppColors.cyprus.withAlpha(50),
         dividerColor: AppColors.zircon,
         disabledColor: AppColors.geyser.withOpacity(0.4),
         unselectedWidgetColor: AppColors.blueBayoux,
         shadowColor: AppColors.black.withOpacity(0.05),
-        highlightColor: Colors.transparent,
+        highlightColor: AppColors.brightSun,
         primaryColor: AppColors.darkTurquoise,
+        splashFactory: InkRipple.splashFactory,
         appBarTheme: AppBarTheme(
           titleSpacing: 0,
           backgroundColor: AppColors.white,
@@ -43,6 +47,36 @@ abstract class LightTheme {
           selectedLabelStyle: titleMedium,
           unselectedLabelStyle: titleMedium.copyWith(color: AppColors.taxBreak),
           backgroundColor: AppColors.white,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          focusColor: AppColors.white,
+          contentPadding: const EdgeInsets.all(12),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          labelStyle: labelMedium.copyWith(color: AppColors.darkGray, fontWeight: FontWeight.w500),
+          hintStyle: titleSmall.copyWith(color: AppColors.darkGray, fontSize: 16),
+          errorStyle: labelMedium.copyWith(color: AppColors.amaranth, fontWeight: FontWeight.w500),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(width: 1, color: AppColors.amaranth),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(width: 1, color: AppColors.fieldBorderZircon),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(width: 1, color: AppColors.fieldBorderZircon),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(width: 2, color: AppColors.darkTurquoise),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(width: 1, color: AppColors.amaranth),
+          ),
+          alignLabelWithHint: true,
+          hintFadeDuration: AppConstants.animationDuration,
         ),
         textTheme: const TextTheme(
           displayLarge: displayLarge,
@@ -79,6 +113,9 @@ abstract class LightTheme {
         ),
         extensions: {
           ThemedColors(),
+          ThemedIcons(
+            splashLogo: AppIcons.splashLogoLight,
+          ),
         },
       );
 

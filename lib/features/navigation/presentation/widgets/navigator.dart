@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
-import 'package:i_watt_app/features/chargings/presentation/chargings_screen.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/chargings_screen.dart';
 import 'package:i_watt_app/features/list/presentation/list_screen.dart';
 import 'package:i_watt_app/features/map/presentation/map_screen.dart';
 import 'package:i_watt_app/features/profile/presentation/profile_screen.dart';

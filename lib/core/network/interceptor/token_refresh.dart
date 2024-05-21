@@ -77,25 +77,31 @@ class TokenRefreshInterceptor implements Interceptor {
       formData.fields.addAll(fields);
 
       for (MapEntry mapFile in options.data.files) {
-        formData.files.add(MapEntry(
+        formData.files.add(
+          MapEntry(
             mapFile.key,
             MultipartFile.fromFileSync(
-                fields
-                    .firstWhere(
-                      (element) => element.key == 'photo_path',
-                      orElse: () => const MapEntry('', ''),
-                    )
-                    .value,
-                filename: mapFile.value.filename)));
+              fields
+                  .firstWhere(
+                    (element) => element.key == 'photo_path',
+                    orElse: () => const MapEntry('', ''),
+                  )
+                  .value,
+              filename: mapFile.value.filename,
+            ),
+          ),
+        );
       }
       options.data = formData;
     }
-    return await dio.request(AppConstants.baseUrl + path,
-        data: options.data,
-        queryParameters: options.queryParameters,
-        options: Options(
-          headers: options.headers,
-          method: options.method,
-        ));
+    return await dio.request(
+      AppConstants.baseUrl + path,
+      data: options.data,
+      queryParameters: options.queryParameters,
+      options: Options(
+        headers: options.headers,
+        method: options.method,
+      ),
+    );
   }
 }

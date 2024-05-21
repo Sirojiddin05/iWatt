@@ -11,6 +11,7 @@ import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
+import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/service_locator.dart';
 
 Future<void> main() async {
@@ -86,8 +87,16 @@ class _MyAppState extends State<MyApp> {
             locale: context.locale,
             navigatorKey: _navigatorKey,
             theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            // onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
-            // builder: (context, child) {},
+            onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
+            home: const SplashScreen(),
+            // builder: (context, child) {
+            //   return BlocListener<AuthenticationBloc, AuthenticationState>(
+            //     child: child,
+            //     listener: (context, state) async {
+            //       _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()), (route) => false);
+            //     },
+            //   );
+            // },
           );
         },
       ),

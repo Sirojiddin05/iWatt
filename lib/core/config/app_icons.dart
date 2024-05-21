@@ -7,4 +7,6 @@ class AppIcons {
   static const String batteryBackground = 'assets/icons/ic_battery_back.svg';
   static const String user = 'assets/icons/ic_user.svg';
   static const String noInternet = 'assets/icons/ic_no_internet.svg';
+  static const String splashLogoLight = 'assets/icons/ic_splash_logo.svg';
+  static const String splashLogoDark = 'assets/icons/ic_splash_logo_dark.svg';
 }

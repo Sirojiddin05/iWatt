@@ -24,7 +24,10 @@ class CodegenLoader extends AssetLoader{
   "check_connection_and_update": "Проверьте соединение с интернетом или \nпопробуйте обновить",
   "refresh_the_page": "Обновите страницу",
   "server_problems": "Неполадки с сервером",
-  "request_canceled": "Запрос отменен"
+  "request_canceled": "Запрос отменен",
+  "free": "Свободен",
+  "busy": "Занят",
+  "does_not_work": "Не работает"
 };
 static const Map<String,dynamic> en = {};
 static const Map<String,dynamic> uz = {};

@@ -19,6 +19,9 @@ class AppColors {
   static const taxBreak = Color(0xff4D696E);
   static const geyser = Color(0xffC6CECB);
   static const zumThor = Color(0xffC6CDCE);
+  static const darkGray = Color(0xff9E9E9E);
+  static const fieldBorderZircon = Color(0xffDFE1E5);
+  static const jungleMist = Color(0xffB5C3C4);
 
   // static const brightSun = Color(0xffEBC032);
 }

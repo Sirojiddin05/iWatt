@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
-import 'package:i_watt_app/core/error/error_handler.dart';
+import 'package:i_watt_app/core/error/exception_handler.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/common/data/models/error_model.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:i_watt_app/core/error/error_handler.dart';
+import 'package:i_watt_app/core/error/exception_handler.dart';
 import 'package:i_watt_app/core/error/failure_handler.dart';
 import 'package:i_watt_app/core/util/either.dart';
 import 'package:i_watt_app/core/util/enums/authentication_status.dart';

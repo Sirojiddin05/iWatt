@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_colors.dart';
+import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_icons.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/pop_up_container.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -17,6 +19,10 @@ extension BuildContextExtensions on BuildContext {
   Brightness get brightness => theme.brightness;
 
   AppBarTheme get appBarTheme => theme.appBarTheme;
+
+  ThemedIcons get themedIcons => theme.extension<ThemedIcons>()!;
+
+  ThemedColors get themedColors => theme.extension<ThemedColors>()!;
 
   Future<void> showPopUp(
     BuildContext context,

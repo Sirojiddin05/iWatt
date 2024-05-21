@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-
 class AppImages {
-  // static const home = "assets/images/home.svg";
-  // Define custom icons or frequently used icons here
+  static const stationSmallWithLuminosity = 'assets/images/location_pin_luminosity.png';
+  static const selectedStationSmall = 'assets/images/selected_location_pin.png';
+  static const stationSmall = 'assets/images/location_pin.png';
+  static const clusterMarkWithLuminosity = 'assets/images/cluster_mark_luminosity.png';
+  static const userIcon = 'assets/images/user_icon.png';
+  static const clusterMark = 'assets/images/cluster_mark.png';
 }
-    

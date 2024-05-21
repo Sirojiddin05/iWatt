@@ -1,7 +1,19 @@
+import 'dart:async';
+import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/enums/app_theme.dart';
+import 'package:i_watt_app/core/util/enums/connector_status.dart';
+import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
+import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
@@ -31,5 +43,245 @@ class MyFunctions {
     final brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
     final theme = brightness == Brightness.light ? AppTheme.light : AppTheme.dark;
     return theme;
+  }
+
+  static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
+    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    return distance;
+  }
+
+  static List<ConnectorStatus> getConnectorStatuses(ChargeLocationEntity location) {
+    final stations = location.chargePoints;
+    final connectors = stations.expand((element) => element.connectors).toList();
+    final List<ConnectorStatus?> listOfConnectorStatuses = List.generate(connectors.length, (i) {
+      final status = getConnectorStatus(connectors[i].status);
+      if (status != null && status.isBooked) {
+        return ConnectorStatus.busy;
+      }
+      return status;
+    });
+    listOfConnectorStatuses.retainWhere((element) => element != null);
+    final List<ConnectorStatus> list = List.generate(listOfConnectorStatuses.length, (index) => listOfConnectorStatuses[index]!);
+    return list;
+  }
+
+  static ConnectorStatus? getConnectorStatus(String? status) {
+    switch (status) {
+      case 'Available':
+        return ConnectorStatus.free;
+      case 'Charging':
+        return ConnectorStatus.busy;
+      case 'Finishing':
+        return ConnectorStatus.busy;
+      case 'Reserved':
+        return ConnectorStatus.booked;
+      case 'SuspendedEVSE':
+        return ConnectorStatus.notWorking;
+      case 'SuspendedEV':
+        return ConnectorStatus.notWorking;
+      case 'Faulted':
+        return ConnectorStatus.notWorking;
+      case 'Preparing':
+        return ConnectorStatus.free;
+      case 'Unavailable':
+        return ConnectorStatus.notWorking;
+      case null:
+        return null;
+      default:
+        return ConnectorStatus.notWorking;
+    }
+  }
+
+  static Future<Uint8List> getBytesFromCanvas({
+    required int width,
+    required int height,
+    int placeCount = 0,
+    required BuildContext context,
+    Offset? offset,
+    required String image,
+    bool shouldAddText = false,
+    bool shouldAddShadow = true,
+    bool shouldAddBackCircle = false,
+    bool withLuminosity = false,
+    List<ConnectorStatus> statuses = const [],
+  }) async {
+    final pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    if (shouldAddShadow) {
+      Rect rect = Rect.fromCircle(center: Offset(width / 2, height / 2), radius: 8);
+      canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
+    }
+    final Paint paint = Paint()..color = Colors.red;
+    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+
+    if (shouldAddText) {
+      TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
+      painter.text = TextSpan(
+        text: placeCount.toString(),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 46, color: AppColors.cyprus),
+      );
+      painter.layout();
+      painter.paint(canvas, Offset((width * (placeCount > 9 ? 0.44 : 0.46)) - painter.width * 0.34, (height * 0.3)));
+    } else if (statuses.isNotEmpty) {
+      final x = width / 2;
+      final y = shouldAddBackCircle ? height / 2.25 : height / 2.7;
+      Rect rect = Rect.fromCircle(center: Offset(x, y), radius: 56);
+      final List<Paint> paints = List.generate(statuses.length, (index) {
+        final paint = Paint();
+        paint.style = PaintingStyle.stroke;
+        paint.strokeCap = StrokeCap.round;
+        paint.strokeWidth = 8;
+        if (withLuminosity) {
+          paint.color = _adjustSaturation(statuses[index].color, -1);
+        } else {
+          paint.color = statuses[index].color;
+        }
+        return paint;
+      });
+
+      const availableSpace = 2 * pi;
+      const indentSingleLength = pi / 12;
+      final indentFullLength = statuses.length * indentSingleLength;
+      final lengthOfStatus = (availableSpace - indentFullLength) / statuses.length;
+      double startAngle = (3 * pi / 2) + (indentSingleLength / 2);
+      for (int i = 0; i < statuses.length; i++) {
+        canvas.drawArc(
+            rect,
+            startAngle,
+            lengthOfStatus, // Sweep angle (adjust as needed)
+            false,
+            paints[i]);
+        startAngle = startAngle + lengthOfStatus + indentSingleLength;
+      }
+    }
+
+    final img = await pictureRecorder.endRecording().toImage(width, height);
+    final data = await img.toByteData(format: ui.ImageByteFormat.png);
+    return data?.buffer.asUint8List() ?? Uint8List(0);
+  }
+
+  static Future<ImageInfo> getImageInfo(BuildContext context, String image) async {
+    AssetImage assetImage = AssetImage(image);
+    ImageStream stream = assetImage.resolve(createLocalImageConfiguration(context));
+    Completer<ImageInfo> completer = Completer();
+    stream.addListener(ImageStreamListener((ImageInfo imageInfo, _) {
+      return completer.complete(imageInfo);
+    }));
+    return completer.future;
+  }
+
+  static Color _adjustSaturation(Color color, double saturationFactor) {
+    List<double> hsl = _rgbToHsl(color);
+    double newSaturation = (hsl[1] * saturationFactor).clamp(0.0, 1.0);
+    return _hslToRgb(hsl[0], newSaturation, hsl[2]);
+  }
+
+  static List<double> _rgbToHsl(Color color) {
+    double r = color.red / 255.0;
+    double g = color.green / 255.0;
+    double b = color.blue / 255.0;
+    double maximum = max(r, max(g, b));
+    double minimum = min(r, min(g, b));
+    late double h, s, l;
+    l = (maximum + minimum) / 2.0;
+
+    if (maximum == minimum) {
+      h = 0.0;
+      s = 0.0;
+    } else {
+      double d = maximum - minimum;
+      s = l > 0.5 ? d / (2.0 - maximum - minimum) : d / (maximum + minimum);
+      if (maximum == r) {
+        h = (g - b) / d + (g < b ? 6 : 0);
+      } else if (maximum == g) {
+        h = (b - r) / d + 2;
+      } else if (maximum == b) {
+        h = (r - g) / d + 4;
+      }
+      h /= 6;
+    }
+
+    return [h, s, l];
+  }
+
+  static Color _hslToRgb(double h, double s, double l) {
+    double r, g, b;
+
+    if (s == 0.0) {
+      r = g = b = l; // Achromatic
+    } else {
+      double hue2rgb(double p, double q, double t) {
+        if (t < 0.0) t += 1.0;
+        if (t > 1.0) t -= 1.0;
+        if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
+        if (t < 1.0 / 2.0) return q;
+        if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
+        return p;
+      }
+
+      double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      double p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1.0 / 3.0);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1.0 / 3.0);
+    }
+
+    return Color.fromRGBO((r * 255).round(), (g * 255).round(), (b * 255).round(), 1);
+  }
+
+  static Future<Position?> getCurrentLocation() async {
+    try {
+      return await Geolocator.getCurrentPosition();
+    } on Exception {
+      return null;
+    }
+  }
+
+  static Future<LocationPermissionStatus> getWhetherPermissionGranted() async {
+    try {
+      final isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!isLocationServiceEnabled) {
+        return LocationPermissionStatus.locationServiceDisabled;
+      } else {
+        final geoPermission = await Geolocator.checkPermission();
+        if (geoPermission == LocationPermission.denied || geoPermission == LocationPermission.deniedForever) {
+          final permission = await Geolocator.requestPermission();
+          if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+            return LocationPermissionStatus.permissionGranted;
+          } else {
+            return LocationPermissionStatus.permissionDenied;
+          }
+        }
+        if (geoPermission == LocationPermission.always || geoPermission == LocationPermission.whileInUse) {
+          return LocationPermissionStatus.permissionGranted;
+        } else {
+          return LocationPermissionStatus.permissionDenied;
+        }
+      }
+    } on Exception {
+      return LocationPermissionStatus.permissionDenied;
+    }
+  }
+
+  static Future<MapObject> getMyIcon(
+      {required BuildContext context, required Function(PlacemarkMapObject object, Point point) onObjectTap, required Position value}) async {
+    final pictureRecorder = ui.PictureRecorder();
+
+    final iconData = await MyFunctions.getBytesFromCanvas(
+        width: 180, height: 214, image: AppImages.userIcon, context: context, offset: const Offset(0, 0), shouldAddShadow: false);
+    final newMarker = PlacemarkMapObject(
+      opacity: 1,
+      onTap: onObjectTap,
+      icon: PlacemarkIcon.single(
+        PlacemarkIconStyle(
+          image: BitmapDescriptor.fromBytes(iconData),
+          scale: 1,
+        ),
+      ),
+      point: Point(latitude: value.latitude, longitude: value.longitude),
+      mapId: const MapObjectId('user_location'),
+    );
+
+    return newMarker;
   }
 }

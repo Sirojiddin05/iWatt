@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
-import 'package:i_watt_app/core/network/interceptor/custom_interceptor.dart';
+import 'package:i_watt_app/core/network/interceptor/token_refresh.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 
 class DioSettings {

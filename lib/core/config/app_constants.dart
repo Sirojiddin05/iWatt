@@ -12,4 +12,6 @@ class AppConstants {
     const NavBar(title: LocaleKeys.charging_processes, id: 2, icon: AppIcons.batteryBackground),
     const NavBar(title: LocaleKeys.profile, id: 3, icon: AppIcons.user),
   ];
+
+  static const Duration animationDuration = Duration(milliseconds: 150);
 }

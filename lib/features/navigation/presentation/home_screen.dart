@@ -14,7 +14,7 @@ import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.da
 import 'package:vibration/vibration.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
