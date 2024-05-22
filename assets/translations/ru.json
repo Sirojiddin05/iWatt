@@ -1,4 +1,5 @@
 {
+  "other": "Другое",
   "map": "Карта",
   "stations": "Станции",
   "charging_processes": "Зарядки",
@@ -12,5 +13,14 @@
   "free": "Свободен",
   "busy": "Занят",
   "does_not_work": "Не работает",
-  "search": "Поиск"
+  "search": "Поиск",
+  "clear": "Очистить",
+  "filter": "Фильтр",
+  "power": "Мощность",
+  "confirm": "Подтвердить",
+  "apply": "Применить",
+  "turn_on": "Включить",
+  "location_access_disabled": "Доступ к GPS не включен",
+  "more_details": "Подробнее",
+  "parking_fees_apply": "Взимается плата за парковку"
 }

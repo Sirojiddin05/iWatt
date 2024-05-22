@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ThemedColors extends ThemeExtension<ThemedColors> {
+  final Color lillyWhiteToTaxBreak;
+
+  ThemedColors({required this.lillyWhiteToTaxBreak});
   @override
   ThemeExtension<ThemedColors> copyWith() {
-    return ThemedColors();
+    return ThemedColors(
+      lillyWhiteToTaxBreak: lillyWhiteToTaxBreak,
+    );
   }
 
   @override
@@ -11,6 +16,8 @@ class ThemedColors extends ThemeExtension<ThemedColors> {
     if (other is! ThemedColors) {
       return this;
     }
-    return ThemedColors();
+    return ThemedColors(
+      lillyWhiteToTaxBreak: Color.lerp(lillyWhiteToTaxBreak, other.lillyWhiteToTaxBreak, t) ?? lillyWhiteToTaxBreak,
+    );
   }
 }

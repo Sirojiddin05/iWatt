@@ -25,6 +25,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   late final BuildContext context;
 
   MapBloc() : super(const MapState()) {
+    on<SetChargeLocations>(_setChargeLocations);
     on<RequestLocationAccess>(_requestLocationAccess);
     on<CheckIfSettingsTriggered>(_checkIfSettingsTriggered);
     on<SetLocationAccessStateEvent>(_setLocationAccessState);
@@ -40,6 +41,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
+    print('initializing controller');
     yandexMapController = event.mapController;
     final lastLat = StorageRepository.getDouble('current_lat', defValue: -1);
     final lastLong = StorageRepository.getDouble('current_long', defValue: -1);
@@ -79,6 +81,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } else {
       add(SetLocationAccessStateEvent(status: locationStatus));
     }
+  }
+
+  void _setChargeLocations(SetChargeLocations event, Emitter<MapState> emit) {
+    emit(state.copyWith(chargeLocations: event.locations));
   }
 
   void _setLocationAccessState(SetLocationAccessStateEvent event, Emitter<MapState> emit) {
@@ -126,13 +132,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _tapObject(TapMapObjectEvent event, Emitter<MapState> emit) async {
-    final oldPLaceMarks = [...state.chargeLocationsObjects!.placemarks];
+    final oldPLaceMarks = [...state.locationsMapObjects!.placemarks];
     for (int i = 0; i < oldPLaceMarks.length; i++) {
       final mapObject = oldPLaceMarks[i];
       if (mapObject.mapId == event.object.mapId) {
         final newAppearance = await _getLocationAppearance(stationStatuses: event.connectorStatuses, isSelected: true);
         oldPLaceMarks[i] = event.object.copyWith(icon: getIcon(newAppearance));
-        final oldCluster = state.chargeLocationsObjects!;
+        final oldCluster = state.locationsMapObjects!;
         final newMapObjects = oldCluster.copyWith(placemarks: [...oldPLaceMarks]);
         emit(state.copyWith(chargeLocationsObjects: newMapObjects));
         break;

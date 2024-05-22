@@ -3,7 +3,7 @@ import 'package:i_watt_app/features/navigation/domain/entity/nav_bar.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class AppConstants {
-  static const String baseUrl = 'https://api.example.com/';
+  static const String baseUrl = 'https://app.k-watt.uz/api/v1/';
   static const String language = '';
 
   static final List<NavBar> navBarSections = [

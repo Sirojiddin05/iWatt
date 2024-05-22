@@ -49,15 +49,19 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           const Spacer(),
           FadeTransition(
             opacity: logoController,
-            child: Image.asset(
-              context.themedIcons.splashLogo,
+            child: Transform.scale(
+              scale: 1.2,
+              child: Image.asset(context.themedIcons.splashLogo, width: 130, height: 32),
             ),
           ),
-          const Spacer(),
-          Lottie.asset(
-            AppLottie.splashLottie,
-            // height: 46,
-            // width: 46,
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Transform.scale(
+                scale: 2,
+                child: Lottie.asset(AppLottie.splashLottie, height: 32, width: 20),
+              ),
+            ),
           ),
           SizedBox(height: context.padding.bottom + 20)
         ],

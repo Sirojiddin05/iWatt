@@ -1,0 +1,88 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/filter_clear_button.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
+
+class FilterHeader extends StatefulWidget {
+  final ValueNotifier<List<int>> connectorTypes;
+  final ValueNotifier<List<int>> powerTypes;
+  final VoidCallback onClearTap;
+  const FilterHeader({super.key, required this.connectorTypes, required this.powerTypes, required this.onClearTap});
+
+  @override
+  State<FilterHeader> createState() => _FilterHeaderState();
+}
+
+class _FilterHeaderState extends State<FilterHeader> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: context.colorScheme.primaryContainer,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(10),
+            topLeft: Radius.circular(10),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.baliHai.withOpacity(0.14),
+              blurRadius: 32,
+              offset: const Offset(0, 4),
+            ),
+          ]
+          // border: Border(bottom: BorderSide(color: dividerSolitude)),
+
+          ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          SvgPicture.asset(AppIcons.sheetHeader),
+          Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ValueListenableBuilder<List<int>>(
+                      builder: (context, connectors, child) {
+                        return ValueListenableBuilder<List<int>>(
+                          builder: (context, powers, child) {
+                            return FilterClearButton(
+                              isActive: powers.isNotEmpty || connectors.isNotEmpty,
+                              onTap: widget.onClearTap,
+                            );
+                          },
+                          valueListenable: widget.powerTypes,
+                        );
+                      },
+                      valueListenable: widget.connectorTypes),
+                ),
+              ),
+              Text(
+                LocaleKeys.filter.tr(),
+                style: context.textTheme.displayMedium,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    behavior: HitTestBehavior.opaque,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      child: SvgPicture.asset(AppIcons.close),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

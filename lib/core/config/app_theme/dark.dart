@@ -13,7 +13,7 @@ abstract class DarkTheme {
         splashColor: AppColors.white.withAlpha(50),
         dividerColor: AppColors.taxBreak,
         highlightColor: AppColors.brightSun,
-        primaryColor: AppColors.darkTurquoise,
+        primaryColor: AppColors.dodgerBlue,
         appBarTheme: AppBarTheme(
           titleSpacing: 0,
           backgroundColor: AppColors.cyprus,
@@ -34,12 +34,12 @@ abstract class DarkTheme {
           },
         ),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
-          color: AppColors.darkTurquoise,
+          color: AppColors.dodgerBlue,
           refreshBackgroundColor: AppColors.white,
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: AppColors.limeGreen,
-          unselectedItemColor: AppColors.taxBreak,
+          unselectedItemColor: AppColors.blueBayoux,
           selectedLabelStyle: titleMedium,
           unselectedLabelStyle: titleMedium.copyWith(color: AppColors.taxBreak),
           backgroundColor: AppColors.cyprus,
@@ -65,7 +65,7 @@ abstract class DarkTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(width: 2, color: AppColors.darkTurquoise),
+            borderSide: const BorderSide(width: 2, color: AppColors.dodgerBlue),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
@@ -96,7 +96,7 @@ abstract class DarkTheme {
           background: AppColors.cyprus,
           brightness: Brightness.dark,
           primaryContainer: AppColors.white.withOpacity(0.04),
-          primary: AppColors.darkTurquoise,
+          primary: AppColors.dodgerBlue,
           secondary: AppColors.white,
           error: AppColors.amaranth,
           surface: AppColors.cyprus,
@@ -107,7 +107,9 @@ abstract class DarkTheme {
           onSurface: AppColors.black.withOpacity(0.05),
         ),
         extensions: {
-          ThemedColors(),
+          ThemedColors(
+            lillyWhiteToTaxBreak: AppColors.taxBreak.withOpacity(0.4),
+          ),
           ThemedIcons(
             splashLogo: AppIcons.splashLogoDark,
           ),

@@ -28,7 +28,9 @@ class NavBarItem extends StatelessWidget {
             navBar.icon,
             height: 24,
             width: 24,
-            color: currentIndex == navBar.id ? context.theme.bottomNavigationBarTheme.selectedItemColor : null,
+            color: currentIndex == navBar.id
+                ? context.theme.bottomNavigationBarTheme.selectedItemColor
+                : context.theme.bottomNavigationBarTheme.unselectedItemColor,
           ),
           const SizedBox(height: 3),
           Text(

@@ -9,9 +9,12 @@ import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
+import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
+import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
-import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
+import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/service_locator.dart';
 
 Future<void> main() async {
@@ -19,11 +22,13 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
     await setupLocator();
+    //TODO uncomment to production
     // await SentryFlutter.init((options) {
-    //   options.dsn = '';
+    //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
     //   options.tracesSampleRate = 1.0;
     // }, appRunner: () {
     return runApp(const App());
+    // }
   }, (error, stack) async {
     // await Sentry.captureException(error, stackTrace: stack);
   });
@@ -36,18 +41,23 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => AuthenticationBloc(
+            GetAuthenticationStatusUseCase(repository: serviceLocator<AuthenticationRepositoryImpl>()),
+          ),
+        ),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
       ],
       child: EasyLocalization(
-        path: 'lib/assets/translations',
+        path: 'assets/translations',
         supportedLocales: const [
           Locale('uz'),
           Locale('en'),
           Locale('ru'),
         ],
-        fallbackLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'en')),
-        startLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'en')),
+        fallbackLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'ru')),
+        startLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'ru')),
         saveLocale: true,
         child: const MyApp(),
       ),
@@ -87,13 +97,24 @@ class _MyAppState extends State<MyApp> {
             locale: context.locale,
             navigatorKey: _navigatorKey,
             theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
-            home: const SplashScreen(),
+            home: const HomeScreen(),
+            // onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
             // builder: (context, child) {
             //   return BlocListener<AuthenticationBloc, AuthenticationState>(
             //     child: child,
+            //     listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
             //     listener: (context, state) async {
-            //       _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()), (route) => false);
+            //       if (state.authenticationStatus.isAuthenticated) {
+            //         _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()), (route) => false);
+            //       } else if (state.authenticationStatus.isUnAuthenticated) {
+            //         final isRegisteredOnce = StorageRepository.getBool(StorageKeys.isRegisteredOnce, defValue: false);
+            //         if (isRegisteredOnce) {
+            //           //TODO
+            //           // _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const SplashScreen()), (route) => false);
+            //         } else {
+            //           _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()), (route) => false);
+            //         }
+            //       }
             //     },
             //   );
             // },

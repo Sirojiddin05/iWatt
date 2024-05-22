@@ -14,5 +14,15 @@ abstract class  LocaleKeys {
   static const free = 'free';
   static const busy = 'busy';
   static const does_not_work = 'does_not_work';
+  static const search = 'search';
+  static const clear = 'clear';
+  static const filter = 'filter';
+  static const power = 'power';
+  static const confirm = 'confirm';
+  static const apply = 'apply';
+  static const turn_on = 'turn_on';
+  static const location_access_disabled = 'location_access_disabled';
+  static const more_details = 'more_details';
+  static const parking_fees_apply = 'parking_fees_apply';
 
 }

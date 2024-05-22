@@ -15,6 +15,7 @@ class CodegenLoader extends AssetLoader{
   }
 
   static const Map<String,dynamic> ru = {
+  "other": "Другое",
   "map": "Карта",
   "stations": "Станции",
   "charging_processes": "Зарядки",
@@ -27,7 +28,17 @@ class CodegenLoader extends AssetLoader{
   "request_canceled": "Запрос отменен",
   "free": "Свободен",
   "busy": "Занят",
-  "does_not_work": "Не работает"
+  "does_not_work": "Не работает",
+  "search": "Поиск",
+  "clear": "Очистить",
+  "filter": "Фильтр",
+  "power": "Мощность",
+  "confirm": "Подтвердить",
+  "apply": "Применить",
+  "turn_on": "Включить",
+  "location_access_disabled": "Доступ к GPS не включен",
+  "more_details": "Подробнее",
+  "parking_fees_apply": "Взимается плата за парковку"
 };
 static const Map<String,dynamic> en = {};
 static const Map<String,dynamic> uz = {};

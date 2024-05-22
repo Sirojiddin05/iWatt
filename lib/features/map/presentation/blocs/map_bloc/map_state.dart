@@ -4,7 +4,7 @@ class MapState extends Equatable {
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
   final int count;
-  final ClusterizedPlacemarkCollection? chargeLocationsObjects;
+  final ClusterizedPlacemarkCollection? locationsMapObjects;
   final MapObject? userLocationObject;
   final double currentLat;
   final double currentLong;
@@ -16,7 +16,8 @@ class MapState extends Equatable {
   final bool areControllersVisible;
   final bool isSearchFieldVisible;
   final bool isMapTappedAlready;
-  final double draggableSheetOffset;
+  final List<ChargeLocationEntity> chargeLocations;
+  final ChargeLocationEntity selectedChargeLocation;
 
   MapState copyWith({
     FormzSubmissionStatus? userLocationAccessingStatus,
@@ -35,6 +36,8 @@ class MapState extends Equatable {
     bool? isSearchFieldVisible,
     bool? isMapTappedAlready,
     double? draggableSheetOffset,
+    List<ChargeLocationEntity>? chargeLocations,
+    ChargeLocationEntity? selectedChargeLocation,
   }) {
     return MapState(
       count: count ?? this.count,
@@ -43,7 +46,7 @@ class MapState extends Equatable {
       next: next ?? this.next,
       locationSettingsTriggered: locationSettingsTriggered ?? this.locationSettingsTriggered,
       locationAccessStatus: locationAccessStatus ?? this.locationAccessStatus,
-      chargeLocationsObjects: chargeLocationsObjects ?? this.chargeLocationsObjects,
+      locationsMapObjects: chargeLocationsObjects ?? this.locationsMapObjects,
       userLocationObject: userLocationObject ?? this.userLocationObject,
       userLocationAccessingStatus: userLocationAccessingStatus ?? this.userLocationAccessingStatus,
       zoomLevel: zoomLevel ?? this.zoomLevel,
@@ -52,7 +55,8 @@ class MapState extends Equatable {
       areControllersVisible: areControllersVisible ?? this.areControllersVisible,
       isSearchFieldVisible: isSearchFieldVisible ?? this.isSearchFieldVisible,
       isMapTappedAlready: isMapTappedAlready ?? this.isMapTappedAlready,
-      draggableSheetOffset: draggableSheetOffset ?? this.draggableSheetOffset,
+      chargeLocations: chargeLocations ?? this.chargeLocations,
+      selectedChargeLocation: selectedChargeLocation ?? this.selectedChargeLocation,
     );
   }
 
@@ -63,7 +67,7 @@ class MapState extends Equatable {
     this.currentLong = 0,
     this.next = '',
     this.locationSettingsTriggered = false,
-    this.chargeLocationsObjects,
+    this.locationsMapObjects,
     this.userLocationObject,
     this.zoomLevel = 15,
     this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
@@ -72,7 +76,8 @@ class MapState extends Equatable {
     this.areControllersVisible = false,
     this.isSearchFieldVisible = false,
     this.isMapTappedAlready = false,
-    this.draggableSheetOffset = 77.1382857142857,
+    this.chargeLocations = const [],
+    this.selectedChargeLocation = const ChargeLocationEntity(),
   });
 
   @override
@@ -82,7 +87,7 @@ class MapState extends Equatable {
         currentLat,
         currentLong,
         next,
-        chargeLocationsObjects,
+        locationsMapObjects,
         userLocationObject,
         zoomLevel,
         locationAccessStatus,
@@ -92,6 +97,5 @@ class MapState extends Equatable {
         areControllersVisible,
         isSearchFieldVisible,
         isMapTappedAlready,
-        draggableSheetOffset,
       ];
 }

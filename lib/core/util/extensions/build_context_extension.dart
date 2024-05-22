@@ -20,6 +20,8 @@ extension BuildContextExtensions on BuildContext {
 
   AppBarTheme get appBarTheme => theme.appBarTheme;
 
+  BottomNavigationBarThemeData get bottomNavigationBarTheme => theme.bottomNavigationBarTheme;
+
   ThemedIcons get themedIcons => theme.extension<ThemedIcons>()!;
 
   ThemedColors get themedColors => theme.extension<ThemedColors>()!;

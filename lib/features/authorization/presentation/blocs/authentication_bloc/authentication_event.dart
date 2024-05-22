@@ -5,7 +5,6 @@ abstract class AuthenticationEvent {}
 
 class AuthenticationStatusChanged extends AuthenticationEvent {
   final AuthenticationStatus authenticationStatus;
-  AuthenticationStatusChanged({required this.authenticationStatus});
+  final bool isRebuild;
+  AuthenticationStatusChanged({required this.authenticationStatus, this.isRebuild = false});
 }
-
-class GetAuthenticationStatus extends AuthenticationEvent {}

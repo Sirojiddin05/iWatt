@@ -64,7 +64,7 @@ SPEC CHECKSUMS:
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450
+  geolocator_apple: 9157311f654584b9bb72686c55fc02a97b73f461
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   Sentry: cd86fc55628f5b7c572cabe66cc8f95a9d2f165a
   sentry_flutter: ca7760fc008dc3bc2981730dc0c1d2f892178370

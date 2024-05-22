@@ -22,6 +22,11 @@ class AppColors {
   static const darkGray = Color(0xff9E9E9E);
   static const fieldBorderZircon = Color(0xffDFE1E5);
   static const jungleMist = Color(0xffB5C3C4);
+  static const whiteSmoke = Color(0xffE5E5E5);
+  static const gullGrey = Color(0xffAFB2B3);
+  static const whiteLilac = Color(0xffDFDFE1);
+  static const lillyWhite = Color(0xffEDF0EF);
+  static const dodgerBlue = Color(0xff2684FC);
 
   // static const brightSun = Color(0xffEBC032);
 }

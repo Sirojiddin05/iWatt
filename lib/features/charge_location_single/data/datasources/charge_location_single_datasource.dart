@@ -21,7 +21,7 @@ class ChargeLocationSingleDataSourceIMpl implements ChargeLocationSingleDataSour
         return ChargeLocationModel.fromJson(response.data);
       } else {
         final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: error.code, errorMessage: error.message);
+        throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);
       }
     } on DioException catch (e) {
       final type = e.type;

@@ -18,6 +18,35 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class MyFunctions {
   const MyFunctions._();
 
+  static String getChargeTypeIconByStatus(String name, [String? status]) {
+    String title = name.replaceAll(' ', '').replaceAll('/', '');
+    if (title == 'NACSAC(Tesla)') {
+      title = title.replaceAll('NACSAC(Tesla)', 'CHadeMO');
+    }
+    if (title == 'NACSDC(Tesla)') {
+      title = title.replaceAll('NACSDC(Tesla)', 'CHadeMO');
+    }
+    if (title == 'GBTAC') {
+      title = title.replaceAll('GBTAC', 'TYPE2');
+    }
+    if (title.contains('charging')) {
+      return 'assets/app_icons/charge_type_icons/${title.replaceAll('charging', '')}/charging.svg';
+    }
+    final ConnectorStatus? s = getConnectorStatus(status);
+    switch (s) {
+      case ConnectorStatus.free:
+        return 'assets/app_icons/charge_type_icons/$title/free.svg';
+      case ConnectorStatus.busy:
+        return 'assets/app_icons/charge_type_icons/$title/busy.svg';
+      case ConnectorStatus.notWorking:
+        return 'assets/app_icons/charge_type_icons/$title/not_working.svg';
+      case ConnectorStatus.booked:
+        return 'assets/app_icons/charge_type_icons/$title/busy.svg';
+      default:
+        return 'assets/app_icons/charge_type_icons/$title/default.svg';
+    }
+  }
+
   static ThemeMode getThemeMode() {
     final themeMode = StorageRepository.getString(StorageKeys.themeMode);
     if (themeMode == 'light') {

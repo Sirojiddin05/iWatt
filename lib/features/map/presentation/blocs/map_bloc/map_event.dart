@@ -4,6 +4,11 @@ abstract class MapEvent {
   const MapEvent();
 }
 
+class SetChargeLocations extends MapEvent {
+  final List<ChargeLocationEntity> locations;
+  const SetChargeLocations(this.locations);
+}
+
 class RequestLocationAccess extends MapEvent {
   const RequestLocationAccess();
 }
@@ -54,9 +59,7 @@ class DrawChargeLocationsEvent extends MapEvent {
 class SelectChargeLocationEvent extends MapEvent {
   final ChargeLocationEntity location;
 
-  const SelectChargeLocationEvent({
-    required this.location,
-  });
+  const SelectChargeLocationEvent({required this.location});
 }
 
 class CheckIfSettingsTriggered extends MapEvent {}

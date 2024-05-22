@@ -8,7 +8,7 @@ import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_icons.d
 abstract class LightTheme {
   static ThemeData theme() => ThemeData(
         useMaterial3: true,
-        fontFamily: 'Inter',
+        // fontFamily: 'Inter',
         scaffoldBackgroundColor: AppColors.solitude,
         splashColor: AppColors.cyprus.withAlpha(50),
         dividerColor: AppColors.zircon,
@@ -16,7 +16,7 @@ abstract class LightTheme {
         unselectedWidgetColor: AppColors.blueBayoux,
         shadowColor: AppColors.black.withOpacity(0.05),
         highlightColor: AppColors.brightSun,
-        primaryColor: AppColors.darkTurquoise,
+        primaryColor: AppColors.dodgerBlue,
         splashFactory: InkRipple.splashFactory,
         appBarTheme: AppBarTheme(
           titleSpacing: 0,
@@ -27,7 +27,7 @@ abstract class LightTheme {
           toolbarTextStyle: headlineLarge,
         ),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
-          color: AppColors.darkTurquoise,
+          color: AppColors.dodgerBlue,
           refreshBackgroundColor: AppColors.white,
         ),
         textSelectionTheme: const TextSelectionThemeData(
@@ -69,7 +69,7 @@ abstract class LightTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(width: 2, color: AppColors.darkTurquoise),
+            borderSide: const BorderSide(width: 2, color: AppColors.dodgerBlue),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
@@ -101,7 +101,7 @@ abstract class LightTheme {
           errorContainer: AppColors.amaranth,
           background: AppColors.white,
           brightness: Brightness.light,
-          primary: AppColors.darkTurquoise,
+          primary: AppColors.dodgerBlue,
           secondary: AppColors.white,
           error: AppColors.amaranth,
           surface: AppColors.white,
@@ -112,7 +112,9 @@ abstract class LightTheme {
           onSurface: AppColors.black.withOpacity(0.05),
         ),
         extensions: {
-          ThemedColors(),
+          ThemedColors(
+            lillyWhiteToTaxBreak: AppColors.lillyWhite,
+          ),
           ThemedIcons(
             splashLogo: AppIcons.splashLogoLight,
           ),
@@ -173,6 +175,7 @@ abstract class LightTheme {
     fontSize: 11,
     fontWeight: FontWeight.w500,
     color: AppColors.cyprus,
+    letterSpacing: 0
   );
   static const titleSmall = TextStyle(
     fontSize: 14,
