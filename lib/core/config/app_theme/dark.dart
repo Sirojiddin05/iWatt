@@ -166,21 +166,13 @@ abstract class DarkTheme {
     fontWeight: FontWeight.w400,
     color: AppColors.white,
   );
-  static const titleMedium = TextStyle(
-    fontSize: 11,
-    fontWeight: FontWeight.w500,
-    color: AppColors.white,
-  );
+  static const titleMedium = TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.white, letterSpacing: 0);
   static const titleSmall = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.blueBayoux,
   );
-  static const labelLarge = TextStyle(
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-    color: AppColors.white,
-  );
+  static const labelLarge = TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.white, letterSpacing: 0);
   static const labelMedium = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,

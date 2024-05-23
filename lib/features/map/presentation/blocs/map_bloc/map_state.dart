@@ -15,9 +15,8 @@ class MapState extends Equatable {
   final bool isMapInitialized;
   final bool areControllersVisible;
   final bool isSearchFieldVisible;
-  final bool isMapTappedAlready;
   final List<ChargeLocationEntity> chargeLocations;
-  final ChargeLocationEntity selectedChargeLocation;
+  final ChargeLocationEntity selectedLocation;
 
   MapState copyWith({
     FormzSubmissionStatus? userLocationAccessingStatus,
@@ -26,7 +25,7 @@ class MapState extends Equatable {
     double? currentLong,
     String? next,
     bool? locationSettingsTriggered,
-    ClusterizedPlacemarkCollection? chargeLocationsObjects,
+    ClusterizedPlacemarkCollection? locationsMapObjects,
     MapObject? userLocationObject,
     double? zoomLevel,
     LocationPermissionStatus? locationAccessStatus,
@@ -34,10 +33,9 @@ class MapState extends Equatable {
     bool? isMapInitialized,
     bool? areControllersVisible,
     bool? isSearchFieldVisible,
-    bool? isMapTappedAlready,
     double? draggableSheetOffset,
     List<ChargeLocationEntity>? chargeLocations,
-    ChargeLocationEntity? selectedChargeLocation,
+    ChargeLocationEntity? selectedLocation,
   }) {
     return MapState(
       count: count ?? this.count,
@@ -46,7 +44,7 @@ class MapState extends Equatable {
       next: next ?? this.next,
       locationSettingsTriggered: locationSettingsTriggered ?? this.locationSettingsTriggered,
       locationAccessStatus: locationAccessStatus ?? this.locationAccessStatus,
-      locationsMapObjects: chargeLocationsObjects ?? this.locationsMapObjects,
+      locationsMapObjects: locationsMapObjects ?? this.locationsMapObjects,
       userLocationObject: userLocationObject ?? this.userLocationObject,
       userLocationAccessingStatus: userLocationAccessingStatus ?? this.userLocationAccessingStatus,
       zoomLevel: zoomLevel ?? this.zoomLevel,
@@ -54,9 +52,8 @@ class MapState extends Equatable {
       isMapInitialized: isMapInitialized ?? this.isMapInitialized,
       areControllersVisible: areControllersVisible ?? this.areControllersVisible,
       isSearchFieldVisible: isSearchFieldVisible ?? this.isSearchFieldVisible,
-      isMapTappedAlready: isMapTappedAlready ?? this.isMapTappedAlready,
       chargeLocations: chargeLocations ?? this.chargeLocations,
-      selectedChargeLocation: selectedChargeLocation ?? this.selectedChargeLocation,
+      selectedLocation: selectedLocation ?? this.selectedLocation,
     );
   }
 
@@ -75,27 +72,27 @@ class MapState extends Equatable {
     this.isMapInitialized = false,
     this.areControllersVisible = false,
     this.isSearchFieldVisible = false,
-    this.isMapTappedAlready = false,
     this.chargeLocations = const [],
-    this.selectedChargeLocation = const ChargeLocationEntity(),
+    this.selectedLocation = const ChargeLocationEntity(),
   });
 
   @override
   List<Object?> get props => [
         userLocationAccessingStatus,
+        locationAccessStatus,
         count,
-        currentLat,
-        currentLong,
-        next,
         locationsMapObjects,
         userLocationObject,
+        currentLat,
+        currentLong,
         zoomLevel,
-        locationAccessStatus,
+        next,
         locationSettingsTriggered,
         hasLuminosity,
         isMapInitialized,
         areControllersVisible,
         isSearchFieldVisible,
-        isMapTappedAlready,
+        chargeLocations,
+        selectedLocation,
       ];
 }

@@ -30,14 +30,11 @@ class MapOpacityContainer extends StatelessWidget {
                   ? const LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.black,
-                        Colors.transparent,
-                      ],
+                      colors: [AppColors.black, Colors.transparent],
                     )
                   : null,
             ),
-            duration: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 400),
           );
         },
       ),

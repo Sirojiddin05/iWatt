@@ -12,7 +12,7 @@ class AppIcons {
   static const plugAlt = 'assets/icons/ic_plug_alt.svg';
   static const search = 'assets/icons/ic_search.svg';
   static const filter = 'assets/icons/ic_filter.svg';
-  static const filterSelected = 'assets/icons/filter_selected.svg';
+  static const filterSelected = 'assets/icons/ic_filter_selected.svg';
   static const sheetHeader = 'assets/icons/ic_sheet_header.svg';
   static const check = 'assets/icons/ic_check.svg';
   static const myLocation = 'assets/icons/ic_my_location.svg';

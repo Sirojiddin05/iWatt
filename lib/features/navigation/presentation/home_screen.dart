@@ -6,10 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/version_check_bloc/version_check_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_controller_provider.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigation_bar_widget.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.dart';
+import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
 import 'package:vibration/vibration.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,6 +34,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     NavItemEnum.profile: GlobalKey<NavigatorState>(),
   };
 
+  Future<void> updateAppDialog(bool isRequired, BuildContext ctx) async {
+    showDialog(
+      barrierDismissible: !isRequired,
+      context: context,
+      builder: (context) {
+        return UpdateDialog(isRequired: isRequired);
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,49 +63,58 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   }
 
   @override
-  Widget build(BuildContext context) => HomeTabControllerProvider(
-        controller: _tabController,
-        child: PopScope(
-          onPopInvoked: (bool didPop) async {
-            final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
-            if (isFirstRouteInCurrentTab) {
-              _changePage(0);
-            }
-          },
-          child: Scaffold(
-            extendBody: true,
-            resizeToAvoidBottomInset: false,
-            body: TabBarView(
-              controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildPageNavigator(NavItemEnum.map),
-                _buildPageNavigator(NavItemEnum.list),
-                _buildPageNavigator(NavItemEnum.chargingProcesses),
-                _buildPageNavigator(NavItemEnum.profile),
-              ],
-            ),
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(
-                color: context.bottomNavigationBarTheme.backgroundColor,
-                border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
-                boxShadow: [
-                  BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
+  Widget build(BuildContext context) => BlocListener<VersionCheckBloc, VersionCheckState>(
+        listenWhen: (o, n) => o.version != n.version,
+        listener: (context, state) async {
+          final needToUpdate = await MyFunctions.needToUpdate(state.version);
+          if (needToUpdate) {
+            updateAppDialog(state.isRequired, context);
+          }
+        },
+        child: HomeTabControllerProvider(
+          controller: _tabController,
+          child: PopScope(
+            onPopInvoked: (bool didPop) async {
+              final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
+              if (isFirstRouteInCurrentTab) {
+                _changePage(0);
+              }
+            },
+            child: Scaffold(
+              extendBody: true,
+              resizeToAvoidBottomInset: false,
+              body: TabBarView(
+                controller: _tabController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  _buildPageNavigator(NavItemEnum.map),
+                  _buildPageNavigator(NavItemEnum.list),
+                  _buildPageNavigator(NavItemEnum.chargingProcesses),
+                  _buildPageNavigator(NavItemEnum.profile),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  AppConstants.navBarSections.length,
-                  (index) => ValueListenableBuilder<int>(
-                    valueListenable: _currentIndex,
-                    builder: (context, val, child) {
-                      return NavigationBarWidget(
-                        index: index,
-                        onTap: () => _onTabChange(index),
-                        currentIndex: val,
-                      );
-                    },
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(
+                  color: context.bottomNavigationBarTheme.backgroundColor,
+                  border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
+                  boxShadow: [
+                    BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(
+                    AppConstants.navBarSections.length,
+                    (index) => ValueListenableBuilder<int>(
+                      valueListenable: _currentIndex,
+                      builder: (context, val, child) {
+                        return NavigationBarWidget(
+                          index: index,
+                          onTap: () => _onTabChange(index),
+                          currentIndex: val,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

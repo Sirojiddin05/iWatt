@@ -53,9 +53,9 @@ class _FilterSheetState extends State<FilterSheet> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          color: context.theme.scaffoldBackgroundColor,
+          color: context.colorScheme.primaryContainer,
         ),
-        margin: const EdgeInsets.only(top: kToolbarHeight),
+        margin: EdgeInsets.only(top: View.of(context).padding.top),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -15,6 +15,7 @@ import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 part 'map_event.dart';
@@ -34,14 +35,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<ChangeZoomEvent>(_changeZoom, transformer: droppable());
     on<SaveZoomOnCameraPositionChanged>(_saveZoomOnCameraPositionChanged);
     on<DrawChargeLocationsEvent>(_drawChargeLocation);
-    on<TapMapObjectEvent>(_tapObject);
-    on<ChangeLuminosityStateEvent>(_changeLuminosityState);
+    on<SelectUnSelectMapObject>(_selectUnSelectMapObject);
+    on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetControllersVisibilityEvent>(_setControllersVisibility);
     on<SetDraggableSheetOffsetEvent>(_setDraggableSheetOffset);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
-    print('initializing controller');
     yandexMapController = event.mapController;
     final lastLat = StorageRepository.getDouble('current_lat', defValue: -1);
     final lastLong = StorageRepository.getDouble('current_long', defValue: -1);
@@ -88,10 +88,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _setLocationAccessState(SetLocationAccessStateEvent event, Emitter<MapState> emit) {
-    emit(state.copyWith(
-      userLocationAccessingStatus: FormzSubmissionStatus.failure,
-      locationAccessStatus: event.status,
-    ));
+    emit(state.copyWith(userLocationAccessingStatus: FormzSubmissionStatus.failure, locationAccessStatus: event.status));
   }
 
   void _changeZoom(ChangeZoomEvent event, Emitter<MapState> emit) async {
@@ -109,7 +106,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       placeMarks.add(newObject);
     }
     final clusterObject = _getClusterObject(placemarks: placeMarks, withLuminosity: event.withLuminosity);
-    emit(state.copyWith(chargeLocationsObjects: clusterObject));
+    emit(state.copyWith(locationsMapObjects: clusterObject));
   }
 
   void _checkIfSettingsTriggered(CheckIfSettingsTriggered event, Emitter<MapState> emit) async {
@@ -131,35 +128,36 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  void _tapObject(TapMapObjectEvent event, Emitter<MapState> emit) async {
+  void _selectUnSelectMapObject(SelectUnSelectMapObject event, Emitter<MapState> emit) async {
     final oldPLaceMarks = [...state.locationsMapObjects!.placemarks];
-    for (int i = 0; i < oldPLaceMarks.length; i++) {
-      final mapObject = oldPLaceMarks[i];
-      if (mapObject.mapId == event.object.mapId) {
-        final newAppearance = await _getLocationAppearance(stationStatuses: event.connectorStatuses, isSelected: true);
-        oldPLaceMarks[i] = event.object.copyWith(icon: getIcon(newAppearance));
+    final locations = state.chargeLocations;
+    for (int i = 0; i < locations.length; i++) {
+      final location = locations[i];
+      if (location.id == event.locationId) {
+        final toSelect = state.selectedLocation.id != event.locationId;
+        final statuses = MyFunctions.getConnectorStatuses(location);
+        final newAppearance = await _getLocationAppearance(stationStatuses: statuses, isSelected: toSelect, withLuminosity: state.hasLuminosity);
+        oldPLaceMarks[i] = oldPLaceMarks[i].copyWith(icon: getIcon(newAppearance));
         final oldCluster = state.locationsMapObjects!;
         final newMapObjects = oldCluster.copyWith(placemarks: [...oldPLaceMarks]);
-        emit(state.copyWith(chargeLocationsObjects: newMapObjects));
+        emit(state.copyWith(locationsMapObjects: newMapObjects, selectedLocation: toSelect ? location : const ChargeLocationEntity()));
         break;
       }
     }
   }
 
   void _changeLuminosityState(ChangeLuminosityStateEvent event, Emitter<MapState> emit) async {
-    if (event.hasLuminosity) {
-      if (!state.isMapTappedAlready) {
+    final hasLocationAccess = state.locationAccessStatus.isPermissionGranted;
+    if (!hasLocationAccess) {
+      if (event.hasLuminosity) {
         await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
-        emit(state.copyWith(hasLuminosity: true, isMapTappedAlready: true));
+        emit(state.copyWith(hasLuminosity: true));
+      } else {
+        await yandexMapController.setMapStyle('');
+        emit(state.copyWith(hasLuminosity: false));
+        await Future.delayed(const Duration(seconds: 10));
+        add(const ChangeLuminosityStateEvent(hasLuminosity: true));
       }
-    } else {
-      // if (!state.hasLuminosity) {
-      await yandexMapController.setMapStyle('');
-      emit(state.copyWith(hasLuminosity: false));
-      //   await Future.delayed(const Duration(seconds: 10));
-      //   await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
-      //   emit(state.copyWith(hasLuminosity: true, isMapTappedAlready: true));
-      // }
     }
   }
 
@@ -189,8 +187,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     return PlacemarkMapObject(
       opacity: 1,
       onTap: (object, point) async {
-        add(TapMapObjectEvent(object: object, connectorStatuses: statuses));
-        add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+        add(SelectUnSelectMapObject(locationId: location.id));
         await _moveMapCamera(object.point.latitude, object.point.longitude, 18);
         onTap(location);
       },
@@ -211,7 +208,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         return cluster.copyWith(appearance: cluster.appearance.copyWith(opacity: 1, icon: getIcon(appearance, const Offset(0.5, 0.5))));
       },
       onClusterTap: (self, cluster) async {
-        add(const ChangeLuminosityStateEvent(hasLuminosity: false));
         final placemarks = cluster.placemarks;
         final point = _getAveragePointOfClusterPlacemarks(placemarks);
         final distance = _getDistanceBetweenClusterPlacemarks(placemarks);
@@ -296,4 +292,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 ]
 ''';
   }
+
+  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }

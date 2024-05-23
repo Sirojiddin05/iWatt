@@ -49,19 +49,20 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
             BlocListener<ChargeLocationsBloc, ChargeLocationsState>(
               listenWhen: (o, n) => o.chargeLocations != n.chargeLocations,
               listener: (context, state) {
+                print('SetChargeLocations');
                 mapBloc.add(SetChargeLocations(state.chargeLocations));
               },
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
                   final areChargeLocationsUpdated = o.chargeLocations != n.chargeLocations;
                   final isLuminosityUpdated = o.hasLuminosity != n.hasLuminosity;
-                  final isMapInitialized = o.isMapInitialized != n.isMapInitialized;
-                  return areChargeLocationsUpdated || isLuminosityUpdated || isMapInitialized;
+                  // final isMapInitialized = o.isMapInitialized != n.isMapInitialized;
+                  return areChargeLocationsUpdated || isLuminosityUpdated;
                 },
                 buildWhen: (o, n) {
                   final arePlacemarksUpdated = o.locationsMapObjects != n.locationsMapObjects;
                   final isUserLocationUpdated = o.userLocationObject != n.userLocationObject;
-                  final isSelectedChargeLocationUpdated = o.selectedChargeLocation != n.selectedChargeLocation;
+                  final isSelectedChargeLocationUpdated = o.selectedLocation != n.selectedLocation;
                   return arePlacemarksUpdated || isUserLocationUpdated || isSelectedChargeLocationUpdated;
                 },
                 listener: (context, state) {
@@ -71,13 +72,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                         withLuminosity: state.hasLuminosity,
                         state.chargeLocations,
                         onLocationTap: (location) {
-                          // showCupertinoModalBottomSheet(
-                          //     backgroundColor: Colors.transparent,
-                          //     context: context,
-                          //     enableDrag: false,
-                          //     builder: (ctx) {
-                          //       return ChargeLocationSheet(location: location);
-                          //     });
+                          headerSizeController.reverse();
+                          showModalBottomSheet(
+                              backgroundColor: Colors.black,
+                              context: context,
+                              enableDrag: false,
+                              builder: (ctx) {
+                                //TODO: Implement location
+                                return Container();
+                              }).then((value) {
+                            headerSizeController.forward();
+                            mapBloc.add(SelectUnSelectMapObject(locationId: location.id));
+                          });
                         },
                       ),
                     );
@@ -109,7 +115,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   void _onMapCreated(YandexMapController controller) async {
-    print('_onMapCreated');
     mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
     await Future.delayed(const Duration(seconds: 1));
     headerSizeController.forward();
@@ -122,9 +127,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     }
   }
 
-  void _onMapTap(Point point) {
-    mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
-  }
+  void _onMapTap(Point point) {}
 
   List<MapObject> _getMapObjects(MapState state) {
     final List<MapObject> mapObjects = [];

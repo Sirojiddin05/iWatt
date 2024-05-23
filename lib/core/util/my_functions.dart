@@ -13,10 +13,38 @@ import 'package:i_watt_app/core/util/enums/app_theme.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static Future<bool> needToUpdate(String newVersion) async {
+    final isValidNumber = isValidVersionNumber(newVersion);
+    if (!isValidNumber) {
+      return false;
+    }
+    final isGreater = await isNewVersionGreater(newVersion);
+    if (isGreater) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool isValidVersionNumber(String newVersion) => RegExp('^[0-9].[0-9].[0-9]').hasMatch(newVersion);
+
+  static Future<bool> isNewVersionGreater(String newVersion) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    final currentVersion = packageInfo.version;
+    final newVersionList = newVersion.split('.');
+    final currentVersionList = currentVersion.split('.');
+    for (int i = 0; i < newVersionList.length; i++) {
+      if (int.parse(newVersionList[i]) > int.parse(currentVersionList[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   static String getChargeTypeIconByStatus(String name, [String? status]) {
     String title = name.replaceAll(' ', '').replaceAll('/', '');

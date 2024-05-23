@@ -23,11 +23,11 @@ class FilterIconCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           color: isActive ? AppColors.dodgerBlue.withOpacity(.12) : null,
         ),
-        child: SvgPicture.asset(
-          isActive ? AppIcons.filterSelected : AppIcons.filter,
-          width: 20,
-          height: 20,
-        ),
+        child: isActive
+            ? SvgPicture.asset(
+                AppIcons.filterSelected,
+              )
+            : SvgPicture.asset(AppIcons.filter),
       ),
     );
   }

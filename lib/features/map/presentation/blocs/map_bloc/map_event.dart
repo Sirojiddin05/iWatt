@@ -64,11 +64,10 @@ class SelectChargeLocationEvent extends MapEvent {
 
 class CheckIfSettingsTriggered extends MapEvent {}
 
-class TapMapObjectEvent extends MapEvent {
-  final PlacemarkMapObject object;
-  final List<ConnectorStatus> connectorStatuses;
+class SelectUnSelectMapObject extends MapEvent {
+  final int locationId;
 
-  const TapMapObjectEvent({required this.object, required this.connectorStatuses});
+  const SelectUnSelectMapObject({required this.locationId});
 }
 
 class ChangeLuminosityStateEvent extends MapEvent {
