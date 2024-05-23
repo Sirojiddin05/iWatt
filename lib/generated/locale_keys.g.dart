@@ -24,5 +24,13 @@ abstract class  LocaleKeys {
   static const location_access_disabled = 'location_access_disabled';
   static const more_details = 'more_details';
   static const parking_fees_apply = 'parking_fees_apply';
+  static const there_are_not_stations = 'there_are_not_stations';
+  static const there_is_nothing_here_yet = 'there_is_nothing_here_yet';
+  static const failure_in_loading = 'failure_in_loading';
+  static const filter_is_active = 'filter_is_active';
+  static const station_singular = 'station.singular';
+  static const station_plural_nominative = 'station.plural_nominative';
+  static const station_plural_genitive = 'station.plural_genitive';
+  static const station = 'station';
 
 }

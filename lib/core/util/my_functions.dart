@@ -13,11 +13,27 @@ import 'package:i_watt_app/core/util/enums/app_theme.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static String getStationDueToQuantity(int quantity) {
+    final isLastDigitOne = quantity % 10 == 1;
+    if (isLastDigitOne && quantity != 11) {
+      return LocaleKeys.station_singular;
+    }
+    final isLastDigitTwo = quantity % 10 == 2;
+    final isLastDigitThree = quantity % 10 == 3;
+    final isLastDigitFour = quantity % 10 == 4;
+    final isBetweenTenAndTwenty = quantity > 10 && quantity < 20;
+    if ((isLastDigitTwo || isLastDigitThree || isLastDigitFour) && !isBetweenTenAndTwenty) {
+      return LocaleKeys.station_plural_nominative;
+    }
+    return LocaleKeys.station_plural_genitive;
+  }
 
   static Future<bool> needToUpdate(String newVersion) async {
     final isValidNumber = isValidVersionNumber(newVersion);

@@ -12,7 +12,8 @@ import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_blo
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class SearchFilterContainer extends StatefulWidget {
-  const SearchFilterContainer({super.key});
+  final EdgeInsets? padding;
+  const SearchFilterContainer({super.key, this.padding});
 
   @override
   State<SearchFilterContainer> createState() => _SearchFilterContainerState();
@@ -27,7 +28,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 6),
+      padding: widget.padding ?? EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 4),
       child: SearchFilterWrapper(
         children: [
           Expanded(

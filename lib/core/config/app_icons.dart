@@ -21,4 +21,12 @@ class AppIcons {
   static const qrScan = 'assets/icons/ic_qr_scan.svg';
   static const plus = 'assets/icons/ic_plus.svg';
   static const minus = 'assets/icons/ic_minus.svg';
+  static const info = 'assets/icons/info.svg';
+  static const locationCardIcon = 'assets/icons/ic_location_card_icon.png';
+  static const power = 'assets/icons/ic_power.svg';
+  static const powerDark = 'assets/icons/ic_power_dark.svg';
+  static const station = 'assets/icons/ic_station.svg';
+  static const stationDark = 'assets/icons/ic_station_dark.svg';
+  static const runner = 'assets/icons/ic_runner.svg';
+  static const runnerDark = 'assets/icons/ic_runner_dark.svg';
 }

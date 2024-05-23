@@ -22,5 +22,14 @@
   "turn_on": "Включить",
   "location_access_disabled": "Доступ к GPS не включен",
   "more_details": "Подробнее",
-  "parking_fees_apply": "Взимается плата за парковку"
+  "parking_fees_apply": "Взимается плата за парковку",
+  "there_are_not_stations": "Нет станций",
+  "there_is_nothing_here_yet": "Пока тут ничего нет",
+  "failure_in_loading": "Ошибка при загрузке",
+  "filter_is_active": "Фильтр активирован.",
+  "station": {
+    "singular": "станция",
+    "plural_nominative": "станции",
+    "plural_genitive": "станций"
+  }
 }

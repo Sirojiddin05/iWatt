@@ -8,4 +8,5 @@ class AppImages {
   static const compass = 'assets/images/compass.png';
   static const balanceMessage = 'assets/images/balance_message.png';
   static const parkingInProgress = 'assets/images/parking_in_progress.png';
+  static const emptyStation = 'assets/images/empty_station.png';
 }

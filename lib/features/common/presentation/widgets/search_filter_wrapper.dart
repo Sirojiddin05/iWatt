@@ -9,6 +9,7 @@ class SearchFilterWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: context.theme.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(8),

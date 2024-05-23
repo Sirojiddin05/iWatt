@@ -15,6 +15,7 @@ class ChargeLocationEntity extends Equatable {
   @StationConverter()
   final List<StationEntity> chargePoints;
   final bool isFavorite;
+  final double distance;
 
   const ChargeLocationEntity({
     this.id = -1,
@@ -27,6 +28,7 @@ class ChargeLocationEntity extends Equatable {
     this.latitude = '',
     this.chargePoints = const [],
     this.isFavorite = false,
+    this.distance = -1,
   });
 
   ChargeLocationEntity copyWith({
@@ -44,6 +46,7 @@ class ChargeLocationEntity extends Equatable {
       longitude: longitude,
       region: region,
       regionName: regionName,
+      distance: distance,
     );
   }
 
@@ -59,6 +62,7 @@ class ChargeLocationEntity extends Equatable {
         latitude,
         chargePoints,
         isFavorite,
+        distance,
       ];
 }
 
