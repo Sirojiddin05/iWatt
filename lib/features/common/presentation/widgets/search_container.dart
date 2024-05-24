@@ -5,23 +5,40 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_connector_types_usecase.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/pages/search_page.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_Icon_card.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/search_filter_wrapper.dart';
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
+import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_controller_provider.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:i_watt_app/service_locator.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SearchFilterContainer extends StatefulWidget {
   final EdgeInsets? padding;
-  const SearchFilterContainer({super.key, this.padding});
+  final bool isForMap;
+
+  const SearchFilterContainer({super.key, this.padding, this.isForMap = false});
 
   @override
   State<SearchFilterContainer> createState() => _SearchFilterContainerState();
 }
 
 class _SearchFilterContainerState extends State<SearchFilterContainer> {
+  late final ConnectorTypesBloc connectorTypesBloc;
+  late final PowerTypesBloc powerTypesBloc;
+
   @override
   void initState() {
+    connectorTypesBloc = ConnectorTypesBloc(GetConnectorTypesUseCase(serviceLocator<ConnectorTypesRepositoryImpl>()))..add(GetConnectorTypesEvent());
+    powerTypesBloc = PowerTypesBloc(GetPowerTypesUseCase(serviceLocator<PowerTypesRepositoryImpl>()))..add(GetPowerTypesEvent());
     super.initState();
   }
 
@@ -34,12 +51,17 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Navigator.of(
-                //   context,
-                //   rootNavigator: true,
-                // ).push(MaterialPageRoute(
-                //   builder: (ctx) => const SearchPage(isForMap: true),
-                // ));
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(
+                  MaterialWithModalsPageRoute(
+                    builder: (ctx) => HomeTabControllerProvider(
+                      controller: HomeTabControllerProvider.of(context).controller,
+                      child: SearchPage(isForMap: widget.isForMap),
+                    ),
+                  ),
+                );
               },
               behavior: HitTestBehavior.opaque,
               child: Padding(
@@ -49,7 +71,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                     SvgPicture.asset(AppIcons.plugAlt),
                     const SizedBox(width: 10),
                     Text(
-                      LocaleKeys.search.tr(),
+                      LocaleKeys.search_stations.tr(),
                       style: context.textTheme.headlineSmall!.copyWith(color: AppColors.blueBayoux),
                     ),
                     const Spacer(),
@@ -77,13 +99,23 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                         backgroundColor: Colors.transparent,
                         isScrollControlled: true,
                         builder: (ctx) {
-                          return FilterSheet(
-                            onChanged: (List<int> powerTypes, List<int> connectorType) {
-                              context.read<ChargeLocationsBloc>().add(SetFilterEvent(powerTypes: powerTypes, connectorTypes: connectorType));
-                              Navigator.pop(ctx);
-                            },
-                            selectedPowerTypes: state.selectedPowerTypes,
-                            selectedConnectorTypes: state.selectedConnectorTypes,
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: connectorTypesBloc,
+                              ),
+                              BlocProvider.value(
+                                value: powerTypesBloc,
+                              ),
+                            ],
+                            child: FilterSheet(
+                              onChanged: (List<int> powerTypes, List<int> connectorType) {
+                                context.read<ChargeLocationsBloc>().add(SetFilterEvent(powerTypes: powerTypes, connectorTypes: connectorType));
+                                Navigator.pop(ctx);
+                              },
+                              selectedPowerTypes: state.selectedPowerTypes,
+                              selectedConnectorTypes: state.selectedConnectorTypes,
+                            ),
                           );
                         },
                       );

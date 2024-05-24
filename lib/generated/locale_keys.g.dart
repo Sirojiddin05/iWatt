@@ -32,5 +32,12 @@ abstract class  LocaleKeys {
   static const station_plural_nominative = 'station.plural_nominative';
   static const station_plural_genitive = 'station.plural_genitive';
   static const station = 'station';
+  static const search_stations = 'search_stations';
+  static const input_for_search = 'input_for_search';
+  static const recent_requests = 'recent_requests';
+  static const find_station = 'find_station';
+  static const you_can_find_the_nearest_charging_station_by_pressing_the_current_button = 'you_can_find_the_nearest_charging_station_by_pressing_the_current_button';
+  static const nothing_found = 'nothing_found';
+  static const nothing_found_to_your_request = 'nothing_found_to_your_request';
 
 }

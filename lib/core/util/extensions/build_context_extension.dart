@@ -14,6 +14,8 @@ extension BuildContextExtensions on BuildContext {
 
   EdgeInsets get padding => MediaQuery.paddingOf(this);
 
+  EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
+
   Size get sizeOf => MediaQuery.sizeOf(this);
 
   Brightness get brightness => theme.brightness;

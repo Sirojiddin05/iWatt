@@ -107,7 +107,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
             ),
             const MapOpacityContainer(),
             MapHeaderWidgets(sizeController: headerSizeController),
-            const MapControllers()
+            MapControllers(headerSizeController: headerSizeController)
           ],
         ),
       ),

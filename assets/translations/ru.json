@@ -31,5 +31,13 @@
     "singular": "станция",
     "plural_nominative": "станции",
     "plural_genitive": "станций"
-  }
+  },
+  "search_stations": "Поиск электростанции",
+  "input_for_search": "Введите для поиска",
+  "recent_requests": "Недавние запросы",
+  "find_station": "Найти станцию",
+  "you_can_find_the_nearest_charging_station_by_pressing_the_current_button": "Вы можете найти самую близкую зарядную станцию, нажав текущую кнопку",
+  "nothing_found": "Ничего не найдено",
+  "nothing_found_to_your_request": "По вашему запросу ничего не найдено"
+
 }

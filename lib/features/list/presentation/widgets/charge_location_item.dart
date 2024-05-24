@@ -117,8 +117,11 @@ class ChargeLocationCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Container(height: 1, decoration: BoxDecoration(color: context.theme.dividerColor)),
-            const SizedBox(height: 9),
+            Container(
+              height: 1,
+              decoration: BoxDecoration(color: context.theme.dividerColor),
+              margin: const EdgeInsets.only(bottom: 8),
+            ),
             Row(
               children: [
                 LocationCardDataRow(
@@ -130,14 +133,13 @@ class ChargeLocationCard extends StatelessWidget {
                   icon: context.themedIcons.station,
                   value: "$stationsCount ${MyFunctions.getStationDueToQuantity(stationsCount).tr()}",
                 ),
-                if (distanceValue != null) ...{
+                if (distanceValue != null && distanceValue!.isNotEmpty) ...{
                   const LocationDataDividerCircle(),
                   LocationCardDataRow(
                     icon: context.themedIcons.runner,
                     value: distanceValue!,
                   ),
-                } else
-                  const Spacer()
+                }
               ],
             )
           ],

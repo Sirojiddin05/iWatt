@@ -78,7 +78,7 @@ class LocationsList extends StatelessWidget {
                   },
                   child: Paginator(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 58),
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom),
                     paginatorStatus: FormzSubmissionStatus.success,
                     itemCount: itemNumber,
                     fetchMoreFunction: () {

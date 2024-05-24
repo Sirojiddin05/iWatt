@@ -187,6 +187,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     return PlacemarkMapObject(
       opacity: 1,
       onTap: (object, point) async {
+        add(const ChangeLuminosityStateEvent(hasLuminosity: false));
         add(SelectUnSelectMapObject(locationId: location.id));
         await _moveMapCamera(object.point.latitude, object.point.longitude, 18);
         onTap(location);
@@ -208,6 +209,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         return cluster.copyWith(appearance: cluster.appearance.copyWith(opacity: 1, icon: getIcon(appearance, const Offset(0.5, 0.5))));
       },
       onClusterTap: (self, cluster) async {
+        add(const ChangeLuminosityStateEvent(hasLuminosity: false));
         final placemarks = cluster.placemarks;
         final point = _getAveragePointOfClusterPlacemarks(placemarks);
         final distance = _getDistanceBetweenClusterPlacemarks(placemarks);

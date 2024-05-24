@@ -8,9 +8,9 @@ import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_icons.d
 abstract class LightTheme {
   static ThemeData theme() => ThemeData(
         useMaterial3: true,
-        // fontFamily: 'Inter',
+        fontFamily: 'Inter',
         scaffoldBackgroundColor: AppColors.solitude,
-        splashColor: AppColors.cyprus.withAlpha(50),
+        splashColor: AppColors.cyprus.withAlpha(30),
         dividerColor: AppColors.zircon,
         disabledColor: AppColors.geyser.withOpacity(0.4),
         unselectedWidgetColor: AppColors.blueBayoux,

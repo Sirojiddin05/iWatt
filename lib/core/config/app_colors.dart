@@ -27,6 +27,7 @@ class AppColors {
   static const whiteLilac = Color(0xffDFDFE1);
   static const lillyWhite = Color(0xffEDF0EF);
   static const dodgerBlue = Color(0xff2684FC);
+  static final cyprusRipple30 = AppColors.cyprus.withAlpha(30);
 
   // static const brightSun = Color(0xffEBC032);
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
@@ -17,6 +18,7 @@ class LocationStatusesWidget extends StatelessWidget {
       child: CustomPaint(
         foregroundPainter: _StatusIconPainter(statuses: connectorStatuses),
         child: Container(
+          alignment: Alignment.center,
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(90),
@@ -32,7 +34,29 @@ class LocationStatusesWidget extends StatelessWidget {
               strokeAlign: BorderSide.strokeAlignCenter,
             ),
           ),
-          child: Image.asset(AppIcons.locationCardIcon, width: 24, height: 24),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.limeGreen,
+            ),
+            alignment: Alignment.center,
+            child: DecoratedBox(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                  blurRadius: 4.5,
+                  color: AppColors.black.withOpacity(.12),
+                  offset: const Offset(0, 3),
+                ),
+                BoxShadow(
+                  blurRadius: 18,
+                  color: AppColors.black.withOpacity(.2),
+                  offset: const Offset(0, 15),
+                ),
+              ]),
+              child: SvgPicture.asset(AppIcons.union),
+            ),
+          ),
         ),
       ),
     );

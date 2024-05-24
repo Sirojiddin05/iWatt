@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_touch_ripple/flutter_touch_ripple.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 
 class WButton extends StatelessWidget {
   final double? width;
@@ -52,9 +52,8 @@ class WButton extends StatelessWidget {
       ignoring: isLoading || isDisabled,
       child: Padding(
         padding: margin ?? EdgeInsets.zero,
-        child: TouchRipple(
-          //TODO adapt to theme
-          rippleColor: rippleColor ?? context.theme.splashColor,
+        child: WCustomTappableButton(
+          rippleColor: rippleColor ?? AppColors.white.withAlpha(40),
           onTap: onTap,
           borderRadius: BorderRadius.circular(borderRadius),
           child: AnimatedContainer(

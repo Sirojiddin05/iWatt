@@ -37,7 +37,7 @@ class _MapHeaderWidgetsState extends State<MapHeaderWidgets> {
         sizeFactor: widget.sizeController,
         child: Column(
           children: [
-            const SearchFilterContainer(),
+            const SearchFilterContainer(isForMap: true),
             ValueListenableBuilder<bool>(
               valueListenable: showNotifications,
               builder: (ctx, show, child) {

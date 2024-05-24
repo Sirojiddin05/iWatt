@@ -54,8 +54,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()));
     final userAuthStatus = context.read<AuthenticationBloc>().state.authenticationStatus;
     isUnAuthenticated = userAuthStatus.isUnAuthenticated;
-    _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0));
-    _currentIndex = ValueNotifier<int>(0)..addListener(() => _tabController.animateTo(_getIndex()));
+    _currentIndex = ValueNotifier<int>(0);
+    _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
+      ..addListener(() => _currentIndex.value = _tabController.index);
+
     //TODO
     // context.read<LoginBloc>().add(GetUserDataEvent());
     // context.read<ChargingProcessBloc>()
@@ -136,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
       //TODO: show login dialog
       // showLoginDialog(context);
     } else {
-      _currentIndex.value = index;
+      _tabController.animateTo(index);
     }
     if (Platform.isAndroid && (await Vibration.hasVibrator() ?? false)) {
       Vibration.vibrate(amplitude: 32, duration: 40);
@@ -148,14 +150,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   Widget _buildPageNavigator(NavItemEnum tabItem) => TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
 
   Future<void> _changePage(int index) async {
-    _currentIndex.value = index;
     _tabController.animateTo(index);
-  }
-
-  int _getIndex() {
-    if (_currentIndex.value == 2 && isUnAuthenticated) {
-      return _currentIndex.value - 1;
-    }
-    return _currentIndex.value;
   }
 }

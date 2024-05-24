@@ -194,7 +194,7 @@ class MyFunctions {
         style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 46, color: AppColors.cyprus),
       );
       painter.layout();
-      painter.paint(canvas, Offset((width * (placeCount > 9 ? 0.44 : 0.46)) - painter.width * 0.34, (height * 0.3)));
+      painter.paint(canvas, Offset((width * (placeCount > 9 ? 0.44 : 0.46)) - painter.width * 0.34, (height * 0.28)));
     } else if (statuses.isNotEmpty) {
       final x = width / 2;
       final y = shouldAddBackCircle ? height / 2.25 : height / 2.7;

@@ -23,13 +23,13 @@ class _WCustomTappableButtonState extends State<WCustomTappableButton> {
     return TouchRipple(
       rippleColor: widget.rippleColor,
       borderRadius: widget.borderRadius,
-      child: widget.child,
+      tapableDuration: const Duration(milliseconds: 120),
       onTap: () {
         if (isTappable) {
-          widget.onTap();
           isTappable = false;
           setState(() {});
-          timer = Timer(const Duration(milliseconds: 150), () {
+          timer = Timer(const Duration(milliseconds: 120), () {
+            widget.onTap();
             if (timer.isActive) {
               timer.cancel();
             }
@@ -39,6 +39,7 @@ class _WCustomTappableButtonState extends State<WCustomTappableButton> {
           });
         }
       },
+      child: widget.child,
     );
   }
 }
