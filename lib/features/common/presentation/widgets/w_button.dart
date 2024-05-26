@@ -5,7 +5,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappabl
 
 class WButton extends StatelessWidget {
   final double? width;
-  final double? height;
+  final double height;
   final String text;
   final Color? color;
   final Color? rippleColor;
@@ -34,7 +34,7 @@ class WButton extends StatelessWidget {
     this.isDisabled = false,
     this.isLoading = false,
     this.width,
-    this.height,
+    this.height = 48,
     this.margin,
     this.padding,
     this.textStyle,
@@ -59,7 +59,7 @@ class WButton extends StatelessWidget {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             width: width,
-            height: height ?? 44,
+            height: height,
             padding: padding ?? EdgeInsets.zero,
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -72,7 +72,7 @@ class WButton extends StatelessWidget {
                 ? loadingWidget ?? const Center(child: CupertinoActivityIndicator(color: AppColors.white))
                 : AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 200),
-                    style: context.textTheme.bodySmall!.copyWith(color: isDisabled ? AppColors.blueBayoux : textColor),
+                    style: context.textTheme.bodySmall!.copyWith(color: isDisabled ? AppColors.geyser : textColor),
                     child: child ??
                         Text(
                           text,

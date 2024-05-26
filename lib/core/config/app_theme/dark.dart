@@ -12,6 +12,7 @@ abstract class DarkTheme {
         scaffoldBackgroundColor: AppColors.cyprus,
         splashColor: AppColors.white.withAlpha(50),
         dividerColor: AppColors.taxBreak.withOpacity(0.4),
+        unselectedWidgetColor: AppColors.slateGrey.withOpacity(0.4),
         highlightColor: AppColors.brightSun,
         primaryColor: AppColors.dodgerBlue,
         appBarTheme: AppBarTheme(

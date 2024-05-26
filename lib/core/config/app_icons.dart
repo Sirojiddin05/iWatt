@@ -30,7 +30,13 @@ class AppIcons {
   static const runner = 'assets/icons/ic_runner.svg';
   static const runnerDark = 'assets/icons/ic_runner_dark.svg';
   static const union = 'assets/icons/ic_union.svg';
-  static const chevronLeft = 'assets/icons/ic_chevron_left.svg';
+  static const chevronLeftGrey = 'assets/icons/ic_chevron_left.svg';
+  static const chevronLeftBlack = 'assets/icons/ic_chevron_left_black.svg';
   static const clearRounded = 'assets/icons/ic_clear_rounded.svg';
   static const historyIcon = 'assets/icons/ic_history_icon.svg';
+  static const phoneEdit = 'assets/icons/ic_phone_edit.svg';
+  static const phone = 'assets/icons/ic_phone.svg';
+  static const resend = 'assets/icons/ic_resend.svg';
+  static const closeBoldGrey = 'assets/icons/ic_close_bold_grey.svg';
+  static const calendar = 'assets/icons/ic_calendar.svg';
 }

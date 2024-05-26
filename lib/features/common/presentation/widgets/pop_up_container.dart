@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class PopUpContainer extends StatelessWidget {
   final PopUpStatus status;
@@ -37,7 +38,7 @@ class PopUpContainer extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   message,
-                  // style: Theme.of(context).textTheme.titleLarge!.copyWith(color: white),
+                  style: context.textTheme.titleLarge?.copyWith(color: AppColors.white),
                 ),
                 const SizedBox(height: 12),
               ],

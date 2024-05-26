@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,6 +20,26 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static String getFormattedDate(DateTime dateTime) {
+    return DateFormat("dd.MM.yyyy").format(dateTime).toString();
+  }
+
+  static String getFormattedTimerTime(int ticks) {
+    final buffer = StringBuffer();
+    final minutes = (ticks / 60).floor();
+    if (minutes < 10) {
+      buffer.write('0');
+    }
+    buffer.write(minutes);
+    buffer.write(':');
+    final seconds = (ticks % 60).floor();
+    if (seconds < 10) {
+      buffer.write('0');
+    }
+    buffer.write(seconds);
+    return buffer.toString();
+  }
 
   static String getStationDueToQuantity(int quantity) {
     final isLastDigitOne = quantity % 10 == 1;

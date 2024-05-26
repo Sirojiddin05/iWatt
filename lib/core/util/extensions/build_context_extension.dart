@@ -33,7 +33,6 @@ extension BuildContextExtensions on BuildContext {
     PopUpStatus status, {
     required String message,
     Widget? child,
-    double? height,
   }) async {
     AnimationController? controller;
     showTopSnackBar(

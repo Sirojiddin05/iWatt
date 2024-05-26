@@ -13,7 +13,7 @@ abstract class LightTheme {
         splashColor: AppColors.cyprus.withAlpha(30),
         dividerColor: AppColors.zircon,
         disabledColor: AppColors.geyser.withOpacity(0.4),
-        unselectedWidgetColor: AppColors.blueBayoux,
+        unselectedWidgetColor: AppColors.slateGrey.withOpacity(0.4),
         shadowColor: AppColors.black.withOpacity(0.05),
         highlightColor: AppColors.brightSun,
         primaryColor: AppColors.dodgerBlue,
@@ -195,6 +195,7 @@ abstract class LightTheme {
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.white,
+    letterSpacing: 0,
   );
   static const labelSmall = TextStyle(
     fontSize: 10,

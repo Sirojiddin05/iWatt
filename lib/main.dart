@@ -12,14 +12,17 @@ import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/about_us_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_all_search_histories.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_single_search_history.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_about_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_search_history.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
-import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/service_locator.dart';
 
@@ -53,6 +56,9 @@ class App extends StatelessWidget {
           create: (context) => AuthenticationBloc(
             GetAuthenticationStatusUseCase(repository: serviceLocator<AuthenticationRepositoryImpl>()),
           ),
+        ),
+        BlocProvider(
+          create: (context) => AboutUsBloc(GetAboutUsUseCase(serviceLocator<AboutUsRepositoryImpl>())),
         ),
         BlocProvider(
           create: (context) => SearchHistoryBloc(
@@ -103,9 +109,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void didChangeDependencies() {
+    print('Locale changed: ${EasyLocalization.of(context)?.currentLocale?.languageCode}');
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
         builder: (context, themeState) {
           return MaterialApp(
@@ -116,7 +128,7 @@ class _MyAppState extends State<MyApp> {
             locale: context.locale,
             navigatorKey: _navigatorKey,
             theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            home: const HomeScreen(),
+            home: const SignInPage(),
             onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
             // builder: (context, child) {
             //   return BlocListener<AuthenticationBloc, AuthenticationState>(

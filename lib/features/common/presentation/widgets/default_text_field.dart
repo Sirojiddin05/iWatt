@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class DefaultTextField extends StatefulWidget {
@@ -79,14 +80,39 @@ class DefaultTextField extends StatefulWidget {
 }
 
 class _DefaultTextFieldState extends State<DefaultTextField> {
+  late final FocusNode focusNode;
+  late final ValueNotifier<bool> focusNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = widget.focusNode ?? FocusNode();
+    focusNotifier = ValueNotifier<bool>(focusNode.hasFocus);
+    focusNode.addListener(() {
+      focusNotifier.value = focusNode.hasFocus;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title.isNotEmpty) ...[
-          Text(widget.title, style: widget.titleStyle ?? Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w500)),
-          const SizedBox(height: 8),
+          ValueListenableBuilder<bool>(
+            valueListenable: focusNotifier,
+            builder: (context, hasFocus, child) {
+              return Text(
+                widget.title,
+                style: widget.titleStyle ??
+                    context.textTheme.titleMedium?.copyWith(
+                      fontSize: 12,
+                      color: hasFocus ? AppColors.dodgerBlue : AppColors.darkGray,
+                    ),
+              );
+            },
+          ),
+          const SizedBox(height: 6),
         ],
         SizedBox(
           height: widget.height ?? 48,
@@ -94,11 +120,9 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
             expands: widget.expands ?? false,
             maxLengthEnforcement: widget.maxLengthEnforcement,
             textAlignVertical: widget.textAlignVertical,
-            focusNode: widget.focusNode,
+            focusNode: focusNode,
             autofocus: widget.autoFocus,
             controller: widget.controller,
-            onChanged: widget.onChanged,
-            onSubmitted: widget.onSubmitted,
             textInputAction: widget.textInputAction,
             style: widget.style ?? Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
             inputFormatters: widget.inputFormatters,
@@ -121,7 +145,12 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
               counterText: '',
               filled: widget.fill,
               fillColor: context.theme.colorScheme.surface,
+              enabledBorder: widget.hasError ? context.theme.inputDecorationTheme.errorBorder : context.theme.inputDecorationTheme.enabledBorder,
+              border: widget.hasError ? context.theme.inputDecorationTheme.errorBorder : context.theme.inputDecorationTheme.border,
+              focusedBorder: widget.hasError ? context.theme.inputDecorationTheme.errorBorder : context.theme.inputDecorationTheme.focusedBorder,
             ),
+            onChanged: widget.onChanged,
+            onSubmitted: widget.onSubmitted,
           ),
         ),
       ],

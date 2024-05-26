@@ -75,7 +75,7 @@ class _SearchFieldState extends State<SearchField> {
         },
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: SvgPicture.asset(AppIcons.chevronLeft),
+          child: SvgPicture.asset(AppIcons.chevronLeftGrey),
         ),
       ),
       hintText: LocaleKeys.input_for_search.tr(),

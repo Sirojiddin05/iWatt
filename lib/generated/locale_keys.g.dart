@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const map = 'map';
   static const stations = 'stations';
   static const charging_processes = 'charging_processes';
@@ -36,8 +36,32 @@ abstract class  LocaleKeys {
   static const input_for_search = 'input_for_search';
   static const recent_requests = 'recent_requests';
   static const find_station = 'find_station';
-  static const you_can_find_the_nearest_charging_station_by_pressing_the_current_button = 'you_can_find_the_nearest_charging_station_by_pressing_the_current_button';
+  static const you_can_find_the_nearest_charging_station_by_pressing_the_current_button =
+      'you_can_find_the_nearest_charging_station_by_pressing_the_current_button';
   static const nothing_found = 'nothing_found';
   static const nothing_found_to_your_request = 'nothing_found_to_your_request';
-
+  static const authorization = 'authorization';
+  static const you_need_input_phone_number_for_login = 'you_need_input_phone_number_for_login';
+  static const resume = 'resume';
+  static const verification_code = 'verification_code';
+  static const authorization_through_qr = 'authorization_through_qr';
+  static const input_code = 'input_code';
+  static const send_code_again_after = 'send_code_again_after';
+  static const we_send_otp_to_your_phone = 'we_send_otp_to_your_phone';
+  static const error = 'error';
+  static const too_many_attempts = 'too_many_attempts';
+  static const you_entered_wrong_code_three_times = 'you_entered_wrong_code_three_times';
+  static const support_service_number = 'support_service_number';
+  static const qr_authorization = 'qr_authorization';
+  static const in_order_to_login_scan_qr_code = 'in_order_to_login_scan_qr_code';
+  static const registration = 'registration';
+  static const input_necessary_fields = 'input_necessary_fields';
+  static const full_name = 'full_name';
+  static const input_full_name = 'input_full_name';
+  static const birth_date = 'birth_date';
+  static const dd_mm_yyyy = 'dd_mm_yyyy';
+  static const your_gender = 'your_gender';
+  static const select_date = 'select_date';
+  static const male = 'male';
+  static const female = 'female';
 }
