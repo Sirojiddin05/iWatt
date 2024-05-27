@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
@@ -25,6 +26,13 @@ class _ListScreenState extends State<ListScreen> {
         getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
         saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()))
       ..add(const GetChargeLocationsEvent());
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('didChangeDependencies ${context.locale.languageCode}');
+    chargeLocationsBloc.add(const GetChargeLocationsEvent());
+    super.didChangeDependencies();
   }
 
   @override

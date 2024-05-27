@@ -8,4 +8,5 @@ class StorageKeys {
   static const latitude = 'lat';
   static const longitude = 'long';
   static const isRegisteredOnce = 'is_registered_once';
+  static const currentAppVersion = 'current_app_version';
 }

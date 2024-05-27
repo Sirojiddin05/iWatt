@@ -14,7 +14,8 @@ class VersionCheckDataSourceImpl implements VersionCheckDataSource {
   @override
   Future<VersionModel> getAppLatestVersion() async {
     try {
-      final response = await dio.get('core/version-history/');
+      //TODO: Change the URL to the correct one
+      final response = await dio.getUri(Uri.parse('https://zty.uicgroup.tech/api/v1/core/version-history/'));
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return VersionModel.fromJson(response.data);
       } else {

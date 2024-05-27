@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/nav_bar_item.dart';
 
 class NavigationBarWidget extends StatelessWidget {
@@ -11,7 +14,7 @@ class NavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (index == 3) {
+    if (index == 2) {
       return Expanded(
         child: Stack(
           alignment: Alignment.center,
@@ -30,6 +33,43 @@ class NavigationBarWidget extends StatelessWidget {
             //         : const SizedBox.shrink();
             //   },
             // ),
+          ],
+        ),
+      );
+    }
+    if (index == 3) {
+      return Expanded(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onTap,
+              child: NavBarItem(navBar: AppConstants.navBarSections[index], currentIndex: currentIndex),
+            ),
+            BlocBuilder<NotificationBloc, NotificationState>(
+              builder: (context, state) {
+                final unreadNotificationCount = state.unReadNotificationsCount;
+                if (unreadNotificationCount > 0) {
+                  return Positioned(
+                    top: 23,
+                    child: Container(
+                      height: 6,
+                      width: 6,
+                      decoration: BoxDecoration(
+                        color: AppColors.amaranth,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.white,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
           ],
         ),
       );

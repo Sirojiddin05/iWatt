@@ -1,0 +1,106 @@
+import 'package:dio/dio.dart';
+import 'package:i_watt_app/core/error/exception_handler.dart';
+import 'package:i_watt_app/features/common/data/models/error_model.dart';
+import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
+import 'package:i_watt_app/features/common/data/models/notification_detail_model.dart';
+import 'package:i_watt_app/features/common/data/models/notification_model.dart';
+
+abstract class NotificationDataSource {
+  Future<GenericPagination<NotificationModel>> getNotifications({String? next});
+  Future<NotificationDetailModel> getNotificationDetail({required int id});
+  Future<void> readAllNotifications();
+  Future<void> notificationOnOff({required bool enabled});
+}
+
+class NotificationDataSourceImpl extends NotificationDataSource {
+  final Dio _dio;
+
+  NotificationDataSourceImpl(this._dio);
+
+  @override
+  Future<NotificationDetailModel> getNotificationDetail({required int id}) async {
+    try {
+      final response = await _dio.get(
+        'core/notifications/',
+        queryParameters: {'id': id},
+      );
+      if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+        return NotificationDetailModel.fromJson(response.data);
+      } else {
+        final error = ErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: response.statusCode!,
+          errorMessage: error.message,
+        );
+      }
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
+    } on Exception catch (e) {
+      throw ParsingException(errorMessage: e.toString());
+    }
+  }
+
+  @override
+  Future<GenericPagination<NotificationModel>> getNotifications({String? next}) async {
+    try {
+      final response = await _dio.get(
+        next ?? 'core/notifications/',
+      );
+      if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+        return GenericPagination.fromJson(
+          response.data,
+          (p0) => NotificationModel.fromJson(p0 as Map<String, dynamic>),
+        );
+      } else {
+        final error = ErrorModel.fromJson(response.data);
+        throw ServerException(statusCode: response.statusCode!, errorMessage: error.message);
+      }
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
+    } on Exception catch (e) {
+      throw ParsingException(errorMessage: e.toString());
+    }
+  }
+
+  @override
+  Future<void> readAllNotifications() async {
+    try {
+      final response = await _dio.post(
+        'core/notifications/',
+        data: {"seen_all": true},
+      );
+      if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
+        throw ServerException(statusCode: response.statusCode!, errorMessage: response.data.toString());
+      }
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
+    } on Exception catch (e) {
+      throw ParsingException(errorMessage: e.toString());
+    }
+  }
+
+  @override
+  Future<void> notificationOnOff({required bool enabled}) async {
+    try {
+      final response = await _dio.post(
+        'account/notifications/',
+        data: {"enabled": enabled},
+      );
+      if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
+        throw ServerException(statusCode: response.statusCode!, errorMessage: response.data.toString());
+      }
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
+    } on Exception catch (e) {
+      throw ParsingException(errorMessage: e.toString());
+    }
+  }
+}

@@ -1,8 +1,8 @@
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 enum Gender {
-  male(LocaleKeys.male),
-  female(LocaleKeys.female);
+  male(LocaleKeys.males),
+  female(LocaleKeys.females);
 
   final String title;
 

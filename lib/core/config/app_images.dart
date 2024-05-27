@@ -10,4 +10,7 @@ class AppImages {
   static const parkingInProgress = 'assets/images/parking_in_progress.png';
   static const emptyStation = 'assets/images/empty_station.png';
   static const searchEmpty = 'assets/images/search_empty.png';
+  static const lightTheme = 'assets/images/light_theme.png';
+  static const darkTheme = 'assets/images/dark_theme.png';
+  static const systemTheme = 'assets/images/system_theme.png';
 }

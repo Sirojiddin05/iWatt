@@ -168,6 +168,7 @@ abstract class LightTheme {
     fontSize: 15,
     fontWeight: FontWeight.w600,
     color: AppColors.cyprus,
+    letterSpacing: 0,
   );
   static const titleLarge = TextStyle(
     fontSize: 14,

@@ -17,7 +17,7 @@ class AboutUsDataSourceImpl implements AboutUsDataSource {
     try {
       final response = await dio.get('core/about/');
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return AboutUsModel.fromJson(response.data);
+        return AboutUsModel.fromJson(response.data['data']);
       } else {
         final error = ErrorModel.fromJson(response.data);
         throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);

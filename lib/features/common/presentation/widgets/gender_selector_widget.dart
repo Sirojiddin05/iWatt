@@ -54,7 +54,7 @@ class _GenderSelectorWidgetState extends State<GenderSelectorWidget> {
                 ),
               );
             },
-            child: ActiveText(text: Gender.values[index].title),
+            child: ActiveText(text: Gender.values[index].title.tr()),
           ),
         )
       ],

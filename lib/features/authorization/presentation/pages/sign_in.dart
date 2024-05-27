@@ -92,7 +92,7 @@ class _SignInPageState extends State<SignInPage> {
                       child: const CodeVerificationPage(),
                     ),
                   ),
-                );
+                ).then((value) => signInBloc.add(const ChangeOTP(otp: '')));
               }
             },
             buildWhen: (o, n) {

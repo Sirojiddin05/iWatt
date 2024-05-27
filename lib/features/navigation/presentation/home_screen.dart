@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   @override
   void initState() {
     super.initState();
-    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()));
+    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))..add(GetVersionEvent());
     final userAuthStatus = context.read<AuthenticationBloc>().state.authenticationStatus;
     isUnAuthenticated = userAuthStatus.isUnAuthenticated;
     _currentIndex = ValueNotifier<int>(0);

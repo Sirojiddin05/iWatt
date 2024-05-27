@@ -11,7 +11,7 @@ import 'package:i_watt_app/features/authorization/domain/repositories/authentica
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final AuthenticationDatasource datasource;
 
-  AuthenticationRepositoryImpl({required this.datasource});
+  AuthenticationRepositoryImpl(this.datasource);
 
   final StreamController<AuthenticationStatus> _statusController = StreamController.broadcast(sync: true);
 

@@ -25,3 +25,5 @@ class VerifyCode extends SignInEvent {
 class CodeAvailableTimeDecreased extends SignInEvent {}
 
 class ResendCode extends SignInEvent {}
+
+class ClearOtp extends SignInEvent {}

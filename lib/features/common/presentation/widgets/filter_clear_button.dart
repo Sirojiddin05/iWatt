@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
@@ -19,7 +20,7 @@ class FilterClearButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           child: Text(
             LocaleKeys.clear.tr(),
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: !isActive ? AppColors.gullGrey : AppColors.dodgerBlue),
+            style: context.textTheme.headlineSmall!.copyWith(color: !isActive ? AppColors.gullGrey : AppColors.dodgerBlue),
           ),
         ),
       ),

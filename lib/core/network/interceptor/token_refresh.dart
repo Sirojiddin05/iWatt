@@ -26,13 +26,15 @@ class TokenRefreshInterceptor implements Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final accessToken = StorageRepository.getString(StorageKeys.accessToken);
+    // final accessToken = StorageRepository.getString(StorageKeys.accessToken);
+    const accessToken =
+        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4MzI4MTk4LCJpYXQiOjE3MTY3OTIxOTgsImp0aSI6Ijc1NTUzYWI0OThlZTQ5MDc4N2I0YjNhYjUwZjQzZmM1IiwidXNlcl9pZCI6MjEwMX0.zPOjO0d1NPIpi5N1nwIsZnnjfti3Zu_dPClia6Bvq2s';
     if (accessToken.isNotEmpty) {
       options.headers['Authorization'] = accessToken;
     } else {
       options.headers.remove('Authorization');
     }
-    options.headers['Accept-Language'] = StorageRepository.getString(AppConstants.language, defValue: 'uz');
+    options.headers['Accept-Language'] = StorageRepository.getString(StorageKeys.language, defValue: 'uz');
     handler.next(options);
   }
 

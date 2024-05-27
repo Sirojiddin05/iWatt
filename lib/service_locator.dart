@@ -4,17 +4,21 @@ import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/authorization/data/datasources/authentication_datasource.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/datasources/about_us_datasource.dart';
+import 'package:i_watt_app/features/common/data/datasources/change_language_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/connector_types_datasource.dart';
+import 'package:i_watt_app/features/common/data/datasources/notifications_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/power_groups_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/search_history_datasource.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/about_us_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/notifications_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/list/data/datasources/charge_locations_data_source.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/data/datasources/version_check_datasource.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
+import 'package:i_watt_app/features/profile/data/repositories_impl/change_language_repository_impl.dart';
 
 final serviceLocator = GetIt.I;
 
@@ -23,7 +27,7 @@ Future<void> setupLocator() async {
 
   serviceLocator.registerLazySingleton(() => DioSettings());
   serviceLocator.registerFactory(() => AuthenticationDatasourceImpl(dio: serviceLocator<DioSettings>().dio));
-  serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(datasource: serviceLocator<AuthenticationDatasourceImpl>()));
+  serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(serviceLocator<AuthenticationDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ConnectorTypesDataSourceImpl(serviceLocator<DioSettings>().dio));
@@ -36,6 +40,10 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => SearchHistoryRepositoryImpl(serviceLocator<SearchHistoryDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => AboutUsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => AboutUsRepositoryImpl(serviceLocator<AboutUsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => NotificationDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => NotificationsRepositoryImpl(serviceLocator<NotificationDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChangeLanguageDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => ChangeLanguageRepositoryImpl(serviceLocator<ChangeLanguageDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => BalanceDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => BalanceRepositoryImplement(dataSource: serviceLocator<BalanceDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => NotificationDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
@@ -52,4 +60,9 @@ Future<void> setupLocator() async {
   // serviceLocator.registerLazySingleton(() => ReservationRepositoryImpl(serviceLocator<ReservationDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => ChangeLanguageDataSourceImpl(serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => ChangeLanguageRepositoryImpl(serviceLocator<ChangeLanguageDataSourceImpl>()));
+}
+
+Future resetLocator() async {
+  await serviceLocator.reset();
+  await setupLocator();
 }

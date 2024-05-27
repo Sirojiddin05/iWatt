@@ -10,7 +10,7 @@ abstract class DarkTheme {
         useMaterial3: true,
         fontFamily: 'Inter',
         scaffoldBackgroundColor: AppColors.cyprus,
-        splashColor: AppColors.white.withAlpha(50),
+        splashColor: AppColors.white.withAlpha(30),
         dividerColor: AppColors.taxBreak.withOpacity(0.4),
         unselectedWidgetColor: AppColors.slateGrey.withOpacity(0.4),
         highlightColor: AppColors.brightSun,
@@ -164,6 +164,7 @@ abstract class DarkTheme {
     fontSize: 15,
     fontWeight: FontWeight.w600,
     color: AppColors.white,
+    letterSpacing: 0,
   );
   static const titleLarge = TextStyle(
     fontSize: 14,

@@ -45,3 +45,9 @@ class SetPointEvent extends ChargeLocationsEvent {
 
   const SetPointEvent({required this.zoom, required this.point});
 }
+
+class SetFavouriteEvent extends ChargeLocationsEvent {
+  final bool isFavourite;
+
+  const SetFavouriteEvent({required this.isFavourite});
+}

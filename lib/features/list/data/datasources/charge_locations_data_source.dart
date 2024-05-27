@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/error/exception_handler.dart';
-import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/common/data/models/error_model.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
@@ -48,11 +47,10 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
   @override
   Future<void> saveUnSaveChargeLocation({required int id}) async {
     try {
-      final response = await _dio.post('core/favorite-charge-points-addres/',
-          data: {'address_id': id},
-          options: StorageRepository.getString('token').isNotEmpty
-              ? Options(headers: {'Authorization': 'Bearer ${StorageRepository.getString('token')}'})
-              : null);
+      final response = await _dio.post(
+        'core/favorite-charge-points-addres/',
+        data: {'address_id': id},
+      );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = ErrorModel.fromJson(response.data);
         throw ServerException(

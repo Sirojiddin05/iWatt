@@ -37,6 +37,12 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    chargeLocationsBloc.add(const GetChargeLocationsEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [

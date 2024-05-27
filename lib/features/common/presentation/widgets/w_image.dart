@@ -11,6 +11,7 @@ class WImage extends StatelessWidget {
   final Color? color;
   final BorderRadius? borderRadius;
   final Widget? placeholder;
+  final Widget? errorWidget;
 
   const WImage({
     this.imageUrl = "",
@@ -19,9 +20,10 @@ class WImage extends StatelessWidget {
     this.fit = BoxFit.fill,
     this.color,
     this.borderRadius,
-    Key? key,
+    super.key,
     this.placeholder,
-  }) : super(key: key);
+    this.errorWidget,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class WImage extends StatelessWidget {
         color: color,
         fit: fit,
         placeholder: (context, url) => placeholder ?? const ImagePreloadShimmer(),
-        errorWidget: (context, url, error) => SvgPicture.asset('assets/icons/placeholder.svg'),
+        errorWidget: (context, url, error) => errorWidget ?? SvgPicture.asset('assets/icons/placeholder.svg'),
       ),
     );
   }

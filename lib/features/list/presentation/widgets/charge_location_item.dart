@@ -1,40 +1,31 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/saved_icon_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_highlighted_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_image.dart';
+import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_card_data_row.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_connector_statuses_widget.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_data_divider_circle.dart';
 
 class ChargeLocationCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
+  final ChargeLocationEntity location;
   final String highlightedTitle;
-  final List<String> powerTypes;
-  final String? distanceValue;
-  final int locationId;
-  final int stationsCount;
-  final List<ConnectorStatus> connectorStatuses;
   final VoidCallback onTap;
-  final String logo;
+  final bool hasSavedIcon;
 
   const ChargeLocationCard({
     super.key,
-    required this.title,
-    required this.highlightedTitle,
-    required this.subtitle,
-    required this.powerTypes,
-    required this.distanceValue,
-    required this.locationId,
-    required this.stationsCount,
-    required this.connectorStatuses,
+    this.highlightedTitle = '',
+    this.hasSavedIcon = false,
+    required this.location,
     required this.onTap,
-    required this.logo,
   });
 
   String getFirstThatNotEmpty(List<List<String>> stations) {
@@ -66,7 +57,7 @@ class ChargeLocationCard extends StatelessWidget {
       rippleColor: context.theme.splashColor,
       borderRadius: BorderRadius.circular(14),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        padding: EdgeInsets.fromLTRB(16, hasSavedIcon ? 0 : 16, hasSavedIcon ? 0 : 16, 8),
         decoration: BoxDecoration(
           color: context.colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(14),
@@ -97,20 +88,40 @@ class ChargeLocationCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                LocationStatusesWidget(connectorStatuses: connectorStatuses),
+                Padding(
+                  padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
+                  child: LocationStatusesWidget(
+                    connectorStatuses: MyFunctions.getConnectorStatuses(location),
+                  ),
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      HighlightedText(
-                        allText: title,
-                        highlightedText: highlightedTitle,
-                        textAlign: TextAlign.left,
-                        maxLines: 2,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
+                              child: HighlightedText(
+                                allText: location.name,
+                                highlightedText: highlightedTitle,
+                                textAlign: TextAlign.left,
+                                maxLines: 2,
+                              ),
+                            ),
+                          ),
+                          if (hasSavedIcon) ...{
+                            SavedUnSaveButton(
+                              location: location,
+                            ),
+                          }
+                        ],
                       ),
                       const SizedBox(height: 8),
-                      WImage(width: 76, height: 18, imageUrl: logo),
+                      WImage(width: 76, height: 18, imageUrl: location.logo),
                     ],
                   ),
                 ),
@@ -126,18 +137,18 @@ class ChargeLocationCard extends StatelessWidget {
               children: [
                 LocationCardDataRow(
                   icon: context.themedIcons.power,
-                  value: powerTypes.take(2).join(', '),
+                  value: powerTypes,
                 ),
                 const LocationDataDividerCircle(),
                 LocationCardDataRow(
                   icon: context.themedIcons.station,
                   value: "$stationsCount ${MyFunctions.getStationDueToQuantity(stationsCount).tr()}",
                 ),
-                if (distanceValue != null && distanceValue!.isNotEmpty) ...{
+                if (location.distance != -1) ...{
                   const LocationDataDividerCircle(),
                   LocationCardDataRow(
                     icon: context.themedIcons.runner,
-                    value: distanceValue!,
+                    value: distanceValue,
                   ),
                 }
               ],
@@ -146,5 +157,18 @@ class ChargeLocationCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String get powerTypes {
+    final powerTypes = location.chargePoints.map((e) => e.type).toList();
+    powerTypes.retainWhere((e) => e.isNotEmpty);
+    return powerTypes.join(', ');
+  }
+
+  int get stationsCount => location.chargePoints.length;
+
+  String get distanceValue {
+    final distance = location.distance;
+    return '${location.distance} km';
   }
 }

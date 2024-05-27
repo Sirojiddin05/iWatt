@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/map_search_app_bar.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
@@ -71,20 +70,9 @@ class _SearchPageState extends State<SearchPage> {
                             paginatorStatus: FormzSubmissionStatus.success,
                             itemBuilder: (ctx, index) {
                               final location = state.chargeLocations[index];
-                              final lat = double.tryParse(location.latitude) ?? 0;
-                              final long = double.tryParse(location.longitude) ?? 0;
-                              //TODO: Implement distance calculation
-                              final distance = '';
-                              final powerTypes = location.chargePoints.map((e) => e.type).toList();
                               return ChargeLocationCard(
-                                title: location.name,
+                                location: location,
                                 highlightedTitle: state.searchPattern,
-                                subtitle: location.address,
-                                powerTypes: powerTypes,
-                                distanceValue: distance,
-                                locationId: location.id,
-                                stationsCount: location.chargePoints.length,
-                                connectorStatuses: MyFunctions.getConnectorStatuses(location),
                                 onTap: () {
                                   // showCupertinoModalBottomSheet(
                                   //   isDismissible: true,
@@ -95,7 +83,6 @@ class _SearchPageState extends State<SearchPage> {
                                   //   },
                                   // );
                                 },
-                                logo: '',
                               );
                             },
                             separatorBuilder: (ctx, index) => const SizedBox(height: 12),

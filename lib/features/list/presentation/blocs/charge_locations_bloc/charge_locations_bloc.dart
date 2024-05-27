@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -35,8 +36,9 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     on<GetMoreChargeLocationsEvent>(_getMoreLocations);
     on<SetSearchPatternEvent>(_setSearchPattern);
     on<SetFilterEvent>(_setFilter);
-    on<ChangeSavedStateOfLocation>(_setSavedState);
+    on<ChangeSavedStateOfLocation>(_setSavedState, transformer: droppable());
     on<SetPointEvent>(_setPoint);
+    on<SetFavouriteEvent>(_setFavouriteEvent);
   }
 
   void _getLocations(GetChargeLocationsEvent event, Emitter<ChargeLocationsState> emit) async {
@@ -57,7 +59,7 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     if (result.isRight) {
       emit(state.copyWith(
         getChargeLocationsStatus: FormzSubmissionStatus.success,
-        chargeLocations: result.right.results,
+        chargeLocations: [...result.right.results],
         fetchMore: result.right.next?.isNotEmpty ?? false,
         next: result.right.next ?? '',
       ));
@@ -101,6 +103,11 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     add(const GetChargeLocationsEvent());
   }
 
+  void _setFavouriteEvent(SetFavouriteEvent event, Emitter<ChargeLocationsState> emit) {
+    emit(state.copyWith(isFavourite: event.isFavourite));
+    add(const GetChargeLocationsEvent());
+  }
+
   void _setPoint(SetPointEvent event, Emitter<ChargeLocationsState> emit) {
     final distance = MyFunctions.getDistanceBetweenTwoPoints(event.point, Point(latitude: state.latitude, longitude: state.longitude));
     if (distance > 10) {
@@ -110,13 +117,18 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
   }
 
   void _setSavedState(ChangeSavedStateOfLocation event, Emitter<ChargeLocationsState> emit) {
-    final oldList = state.chargeLocations;
+    print('_setSavedState');
+    final oldList = [...state.chargeLocations];
     for (int i = 0; i < oldList.length; i++) {
       final location = oldList[i];
       if (location.id == event.location.id) {
-        oldList[i] = oldList[i].copyWith(isFavorite: event.location.isFavorite);
+        if (state.isFavourite && !event.location.isFavorite) {
+          oldList.removeAt(i);
+        } else {
+          oldList[i] = oldList[i].copyWith(isFavorite: event.location.isFavorite);
+        }
         final newList = [...oldList];
-        emit(state.copyWith(chargeLocations: newList));
+        emit(state.copyWith(chargeLocations: [...newList]));
         break;
       }
     }

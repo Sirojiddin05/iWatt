@@ -71,16 +71,27 @@ class MyFunctions {
   static bool isValidVersionNumber(String newVersion) => RegExp('^[0-9].[0-9].[0-9]').hasMatch(newVersion);
 
   static Future<bool> isNewVersionGreater(String newVersion) async {
-    final packageInfo = await PackageInfo.fromPlatform();
-    final currentVersion = packageInfo.version;
+    final cV = await currentVersionAsync;
     final newVersionList = newVersion.split('.');
-    final currentVersionList = currentVersion.split('.');
+    final currentVersionList = cV.split('.');
     for (int i = 0; i < newVersionList.length; i++) {
       if (int.parse(newVersionList[i]) > int.parse(currentVersionList[i])) {
         return true;
       }
     }
     return false;
+  }
+
+  static Future<String> get currentVersionAsync async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    final currentVersion = packageInfo.version;
+    await StorageRepository.putString(StorageKeys.currentAppVersion, currentVersion);
+    return currentVersion;
+  }
+
+  static String getCurrentVersionSync() {
+    final version = StorageRepository.getString(StorageKeys.currentAppVersion);
+    return 'V $version';
   }
 
   static String getChargeTypeIconByStatus(String name, [String? status]) {

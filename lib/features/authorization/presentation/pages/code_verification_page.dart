@@ -144,12 +144,13 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
             }
           },
           buildWhen: (o, n) {
-            final isPhoneChanged = o.otp.length != n.otp.length;
+            final isOtpChanged = o.otp.length != n.otp.length;
             final isStatusChanged = o.verifyCodeStatus != n.verifyCodeStatus;
-            return isPhoneChanged || isStatusChanged;
+            return isOtpChanged || isStatusChanged;
           },
           builder: (context, state) {
             return WButton(
+              key: UniqueKey(),
               margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               text: LocaleKeys.resume.tr(),
               isLoading: state.verifyCodeStatus.isInProgress,

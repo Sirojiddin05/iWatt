@@ -5,7 +5,6 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/info_container.dart';
@@ -93,15 +92,8 @@ class LocationsList extends StatelessWidget {
                       final powerTypes = location.chargePoints.map((e) => e.type).toList();
                       powerTypes.retainWhere((e) => e.isNotEmpty);
                       return ChargeLocationCard(
-                        logo: '',
-                        locationId: location.id,
-                        title: location.name,
+                        location: location,
                         highlightedTitle: state.searchPattern,
-                        subtitle: location.address,
-                        powerTypes: powerTypes,
-                        distanceValue: '',
-                        stationsCount: location.chargePoints.length,
-                        connectorStatuses: MyFunctions.getConnectorStatuses(location),
                         onTap: () {
                           // showModalBottomSheet(
                           //   context: context,

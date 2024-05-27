@@ -29,7 +29,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   void _onRegister(Register event, Emitter<RegistrationState> emit) async {
     emit(state.copyWith(registerStatus: FormzSubmissionStatus.inProgress));
     await Future.delayed(const Duration(seconds: 1));
-    if (false) {
+    if (true) {
       emit(state.copyWith(registerStatus: FormzSubmissionStatus.success));
     } else {
       emit(state.copyWith(registerStatus: FormzSubmissionStatus.failure, errorMessage: 'Error'));
