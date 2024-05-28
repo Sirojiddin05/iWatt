@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           buildWhen: (o, n) => o.authenticationStatus != n.authenticationStatus,
           builder: (context, state) {
-            if (false) {
+            if (true) {
               return AuthedUserProfileBody(
                 controller: controller,
               );

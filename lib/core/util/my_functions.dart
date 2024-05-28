@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/enums/app_theme.dart';
@@ -20,6 +19,25 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static int carNumberType(String number) {
+    if (RegExp("^[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{2}\$").hasMatch(number)) {
+      return 1;
+    } else if (RegExp("^[0-9]{5}[A-Z]{3}\$").hasMatch(number)) {
+      return 2;
+    } else if (RegExp("^UN[0-9]{4}\$").hasMatch(number)) {
+      return 3;
+    } else if (RegExp("^CMD[0-9]{4}\$").hasMatch(number)) {
+      return 4;
+    } else if (RegExp("^T[0-9]{6}\$").hasMatch(number)) {
+      return 5;
+    } else if (RegExp("^[0-9]{2}M[0-9]{4,6}\$").hasMatch(number)) {
+      return 6;
+    } else if (RegExp("^[0-9]{2}H[0-9]{4,6}\$").hasMatch(number)) {
+      return 7;
+    }
+    return 0;
+  }
 
   static String getFormattedDate(DateTime dateTime) {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
@@ -368,12 +386,16 @@ class MyFunctions {
     }
   }
 
-  static Future<MapObject> getMyIcon(
-      {required BuildContext context, required Function(PlacemarkMapObject object, Point point) onObjectTap, required Position value}) async {
+  static Future<MapObject> getMyIcon({
+    required BuildContext context,
+    required Function(PlacemarkMapObject object, Point point) onObjectTap,
+    required Point value,
+    required String userIcon,
+  }) async {
     final pictureRecorder = ui.PictureRecorder();
 
     final iconData = await MyFunctions.getBytesFromCanvas(
-        width: 180, height: 214, image: AppImages.userIcon, context: context, offset: const Offset(0, 0), shouldAddShadow: false);
+        width: 180, height: 214, image: userIcon, context: context, offset: const Offset(0, 0), shouldAddShadow: false);
     final newMarker = PlacemarkMapObject(
       opacity: 1,
       onTap: onObjectTap,

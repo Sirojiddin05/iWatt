@@ -6,15 +6,15 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_cupertino_switch.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
-import 'package:i_watt_app/features/profile/presentation/widgets/delete_account_button.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/lang_bottomsheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/theme_swither_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
@@ -106,22 +106,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     onTap: () {},
                   ),
                   Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
-                  IconTextButton(
-                    title: LocaleKeys.car_on_map.tr(),
-                    icon: AppIcons.carOnMap,
-                    rippleColor: context.theme.splashColor,
-                    actions: [
-                      Text(
-                        LocaleKeys.meter.tr(),
-                        style: context.theme.textTheme.titleMedium?.copyWith(
-                          color: AppColors.taxBreak,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                    onTap: () {},
-                  ),
-                  Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                   BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (ctx, state) {
                       final isAuthenticated = state.authenticationStatus.isAuthenticated;
@@ -137,15 +121,27 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ? const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
                                 : BorderRadius.zero,
                             actions: [
-                              Text(
-                                MyFunctions.getCurrentVersionSync(),
-                                style: context.theme.textTheme.titleMedium?.copyWith(
-                                  color: AppColors.taxBreak,
-                                  fontSize: 12,
-                                ),
+                              BlocBuilder<CarOnMapBloc, CarOnMapState>(
+                                buildWhen: (o, n) => o.carOnMap != n.carOnMap,
+                                builder: (context, state) {
+                                  return Text(
+                                    state.carOnMap.title.tr(),
+                                    style: context.theme.textTheme.titleMedium?.copyWith(
+                                      color: AppColors.taxBreak,
+                                      fontSize: 12,
+                                    ),
+                                  );
+                                },
                               ),
                             ],
-                            onTap: () {},
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (ctx) {
+                                    return const CarOnMapSheet();
+                                  });
+                            },
                           ),
                           if (isAuthenticated) ...{
                             Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
@@ -161,11 +157,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                     final areNotificationsOn = state.user.areNotificationsOn;
                                     return WCupertinoSwitch(
                                       isSwitched: areNotificationsOn,
-                                      onChange: (v) => context.read<NotificationBloc>().add(
-                                            NotificationOnOff(
-                                              enabled: !areNotificationsOn,
-                                            ),
-                                          ),
+                                      onChange: (v) {
+                                        context.read<NotificationBloc>().add(NotificationOnOff(enabled: !areNotificationsOn));
+                                      },
                                     );
                                   },
                                 )
@@ -181,8 +175,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             const ThemeSwitcherWidget(),
-            const SizedBox(height: 18),
-            DeleteAccountButton(onDelete: () {})
           ],
         ),
       ),

@@ -28,6 +28,12 @@ class AppColors {
   static const lillyWhite = Color(0xffEDF0EF);
   static const dodgerBlue = Color(0xff2684FC);
   static const slateGrey = Color(0xff768194);
+  static const ebonyClay = Color(0xff32363E);
+  static const conifer = Color(0xffCAE160);
+  static const fruitSalad = Color(0xff54B057);
+  static const freeSpeechBlue = Color(0xff4048C4);
+  static const kournikova = Color(0xffF7CB48);
+  static const deepFir = Color(0xff0F221B);
   static final cyprusRipple30 = AppColors.cyprus.withAlpha(30);
   static final primaryRipple30 = AppColors.dodgerBlue.withAlpha(30);
 

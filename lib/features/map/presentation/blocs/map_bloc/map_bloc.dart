@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/core/util/enums/car_on_map.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
@@ -38,7 +39,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<SelectUnSelectMapObject>(_selectUnSelectMapObject);
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetControllersVisibilityEvent>(_setControllersVisibility);
-    on<SetDraggableSheetOffsetEvent>(_setDraggableSheetOffset);
+    on<SetCarOnMapEvent>(_setCarOnMap);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
@@ -63,8 +64,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           await StorageRepository.putDouble(StorageKeys.longitude, value.longitude);
           final newMarker = await MyFunctions.getMyIcon(
             context: context,
-            value: value,
+            value: Point(latitude: value.latitude, longitude: value.longitude),
             onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 18),
+            userIcon: CarOnMap.defineType(StorageRepository.getString(StorageKeys.carOnMap)).imageOnMap,
           );
           emit(state.copyWith(
             userLocationObject: newMarker,
@@ -168,8 +170,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     ));
   }
 
-  void _setDraggableSheetOffset(SetDraggableSheetOffsetEvent event, Emitter<MapState> emit) {
-    emit(state.copyWith(draggableSheetOffset: event.offset));
+  void _setCarOnMap(SetCarOnMapEvent event, Emitter<MapState> emit) async {
+    if (state.locationAccessStatus.isPermissionGranted) {
+      final currentLat = StorageRepository.getDouble(StorageKeys.latitude);
+      final currentLong = StorageRepository.getDouble(StorageKeys.longitude);
+      final newMarker = await MyFunctions.getMyIcon(
+        context: context,
+        value: Point(latitude: currentLong, longitude: currentLat),
+        userIcon: event.carOnMap.imageOnMap,
+        onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 18),
+      );
+      emit(state.copyWith(userLocationObject: newMarker));
+    }
   }
 
   Future<void> _moveMapCamera(double lat, double long, [double? zoom]) async {

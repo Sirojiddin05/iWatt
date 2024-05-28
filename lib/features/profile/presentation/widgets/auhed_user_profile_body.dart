@@ -6,6 +6,7 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/pages/my_cars.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/saved_locations.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/settings_page.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
@@ -84,8 +85,12 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.my_cars.tr(),
-                  onTap: () {},
                   icon: AppIcons.carBlue,
+                  onTap: () => Navigator.of(context, rootNavigator: true).push(
+                    MaterialWithModalsPageRoute(
+                      builder: (ctx) => const MyCarsPage(),
+                    ),
+                  ),
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(

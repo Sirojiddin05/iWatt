@@ -88,3 +88,9 @@ class SetDraggableSheetOffsetEvent extends MapEvent {
 
   const SetDraggableSheetOffsetEvent(this.offset);
 }
+
+class SetCarOnMapEvent extends MapEvent {
+  final CarOnMap carOnMap;
+
+  const SetCarOnMapEvent(this.carOnMap);
+}

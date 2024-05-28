@@ -10,8 +10,7 @@ import 'package:i_watt_app/features/common/domain/usecases/change_language_useca
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_header_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/w_radio.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_radio_tile.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/change_language_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/entities/language_entity.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/change_language_bloc/change_language_bloc.dart';
@@ -58,35 +57,14 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
               shrinkWrap: true,
               itemCount: 3,
               itemBuilder: (context, index) {
-                return WCustomTappableButton(
-                  onTap: () {
-                    setState(() {
-                      language = AppConstants.languageList[index];
-                    });
+                return WRadioTile(
+                  onChanged: (v) {
+                    setState(() => language = v);
                   },
-                  borderRadius: BorderRadius.zero,
-                  rippleColor: context.theme.primaryColor.withAlpha(30),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          AppConstants.languageList[index].icon,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppConstants.languageList[index].title,
-                          style: context.textTheme.headlineMedium,
-                        ),
-                        const Spacer(),
-                        WRadio(
-                          groupValue: AppConstants.languageList[index],
-                          value: language,
-                          onChanged: (value) {},
-                        )
-                      ],
-                    ),
-                  ),
+                  value: AppConstants.languageList[index],
+                  groupValue: language,
+                  icon: SvgPicture.asset(AppConstants.languageList[index].icon),
+                  title: AppConstants.languageList[index].title,
                 );
               },
               separatorBuilder: (context, index) {

@@ -9,4 +9,5 @@ class StorageKeys {
   static const longitude = 'long';
   static const isRegisteredOnce = 'is_registered_once';
   static const currentAppVersion = 'current_app_version';
+  static const carOnMap = 'car_on_map';
 }

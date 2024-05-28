@@ -71,4 +71,14 @@ class AppIcons {
   static const flagUzb = 'assets/icons/ic_uzb_flag.svg';
   static const flagRus = 'assets/icons/ic_rus_flag.svg';
   static const flagEng = 'assets/icons/ic_eng_flag.svg';
+  static const whiteCar = 'assets/icons/ic_white_car.png';
+  static const whiteSUV = 'assets/icons/ic_white_suv.png';
+  static const redCar = 'assets/icons/ic_red_car.png';
+  static const taxi = 'assets/icons/ic_taxi.png';
+  static const blackCar = 'assets/icons/ic_black_car.png';
+  static const oper = 'assets/icons/ic_oper.png';
+  static const sportCar = 'assets/icons/ic_sport_car.png';
+  static const circlePlus = 'assets/icons/ic_circle_plus.png';
+  static const numberUzb = 'assets/icons/ic_number_uzb.png';
+  static const uz = 'assets/icons/ic_uz.png';
 }

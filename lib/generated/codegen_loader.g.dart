@@ -107,7 +107,16 @@ class CodegenLoader extends AssetLoader{
   "system": "Системный",
   "delete_account": "Удалить аккаунт",
   "meter": "Метр",
-  "language": "Язык"
+  "language": "Язык",
+  "white_car": "Белая машина",
+  "black_car": "Черная машина",
+  "red_car": "Красний кроссовер",
+  "taxi": "Такси",
+  "oper": "Опер",
+  "sport_car": "Спорткар",
+  "white_suv": "Белый внедорожник",
+  "add_car": "Добавить машину",
+  "no_number": "Номер не указан"
 };
 static const Map<String,dynamic> en = {};
 static const Map<String,dynamic> uz = {};

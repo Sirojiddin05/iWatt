@@ -92,5 +92,14 @@ abstract class  LocaleKeys {
   static const delete_account = 'delete_account';
   static const meter = 'meter';
   static const language = 'language';
+  static const white_car = 'white_car';
+  static const black_car = 'black_car';
+  static const red_car = 'red_car';
+  static const taxi = 'taxi';
+  static const oper = 'oper';
+  static const sport_car = 'sport_car';
+  static const white_suv = 'white_suv';
+  static const add_car = 'add_car';
+  static const no_number = 'no_number';
 
 }

@@ -25,6 +25,7 @@ import 'package:i_watt_app/features/common/domain/usecases/get_search_history.da
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
@@ -57,6 +58,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
         BlocProvider(

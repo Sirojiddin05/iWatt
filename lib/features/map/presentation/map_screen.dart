@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
@@ -52,12 +53,21 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
       child: Scaffold(
         body: Stack(
           children: [
-            BlocListener<ChargeLocationsBloc, ChargeLocationsState>(
-              listenWhen: (o, n) => o.chargeLocations != n.chargeLocations,
-              listener: (context, state) {
-                print('SetChargeLocations');
-                mapBloc.add(SetChargeLocations(state.chargeLocations));
-              },
+            MultiBlocListener(
+              listeners: [
+                BlocListener<ChargeLocationsBloc, ChargeLocationsState>(
+                  listenWhen: (o, n) => o.chargeLocations != n.chargeLocations,
+                  listener: (context, state) {
+                    mapBloc.add(SetChargeLocations(state.chargeLocations));
+                  },
+                ),
+                BlocListener<CarOnMapBloc, CarOnMapState>(
+                  listenWhen: (o, n) => o.carOnMap != n.carOnMap,
+                  listener: (context, state) {
+                    mapBloc.add(SetCarOnMapEvent(state.carOnMap));
+                  },
+                ),
+              ],
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
                   final areChargeLocationsUpdated = o.chargeLocations != n.chargeLocations;

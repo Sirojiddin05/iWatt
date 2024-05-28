@@ -33,7 +33,6 @@ class MapState extends Equatable {
     bool? isMapInitialized,
     bool? areControllersVisible,
     bool? isSearchFieldVisible,
-    double? draggableSheetOffset,
     List<ChargeLocationEntity>? chargeLocations,
     ChargeLocationEntity? selectedLocation,
   }) {
