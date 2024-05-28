@@ -8,5 +8,4 @@ class MainActivity: FlutterActivity(
         GeneratedPluginRegistrant.registerWith(flutterEngine)
         super.configureFlutterEngine(flutterEngine)
     }
-
 )

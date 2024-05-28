@@ -20,4 +20,7 @@ class AppImages {
   static const darkTheme = 'assets/images/dark_theme.png';
   static const systemTheme = 'assets/images/system_theme.png';
   static const shareQrExample = 'assets/images/share_qr_example.png';
+  static const logo = 'assets/images/logo.png';
+  static const uicLogo = 'assets/images/uic_logo.png';
+  static const notificationsEmpty = 'assets/images/notifications_empty.png';
 }

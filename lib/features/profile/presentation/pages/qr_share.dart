@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
@@ -25,8 +26,8 @@ class _QrSharePageState extends State<QrSharePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width * .66,
-              height: MediaQuery.of(context).size.width * .66,
+              width: context.sizeOf.width * .66,
+              height: context.sizeOf.width * .66,
               padding: const EdgeInsets.all(20),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
@@ -61,15 +62,15 @@ class _QrSharePageState extends State<QrSharePage> {
             Text(
               "Использовать пароль с другого устройства?",
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.displayLarge,
+              style: context.textTheme.displayLarge,
             ),
             const SizedBox(height: 6),
             Text(
               "Отсканируйте этот QR-код с помощью устройства, на котором есть пароль, который вы хотите использовать для входа I-Watt",
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).bottomNavigationBarTheme.unselectedLabelStyle?.color,
-                  ),
+              style: context.textTheme.labelMedium?.copyWith(
+                color: context.bottomNavigationBarTheme.unselectedLabelStyle?.color,
+              ),
             ),
           ],
         ),

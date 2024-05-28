@@ -81,4 +81,6 @@ class AppIcons {
   static const circlePlus = 'assets/icons/ic_circle_plus.png';
   static const numberUzb = 'assets/icons/ic_number_uzb.png';
   static const uz = 'assets/icons/ic_uz.png';
+  static const star = 'assets/icons/ic_star.svg';
+  static const checks = 'assets/icons/ic_checks.svg';
 }

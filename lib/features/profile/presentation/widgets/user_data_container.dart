@@ -39,7 +39,7 @@ class UserDataContainer extends StatelessWidget {
             return Row(
               children: [
                 WImage(
-                  imageUrl: 'state.user.avatar',
+                  imageUrl: '${state.user.avatar}',
                   fit: BoxFit.fill,
                   width: 48,
                   height: 48,
