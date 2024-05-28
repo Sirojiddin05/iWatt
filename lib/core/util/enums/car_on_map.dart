@@ -4,12 +4,12 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 enum CarOnMap {
   whiteCar(icon: AppIcons.whiteCar, title: LocaleKeys.white_car, imageOnMap: AppImages.whiteCar),
-  taxi(icon: AppIcons.taxi, title: LocaleKeys.taxi, imageOnMap: AppImages.tax),
-  blackCar(icon: AppIcons.blackCar, title: LocaleKeys.black_car, imageOnMap: ''),
-  redCar(icon: AppIcons.redCar, title: LocaleKeys.red_car, imageOnMap: ''),
-  oper(icon: AppIcons.oper, title: LocaleKeys.oper, imageOnMap: ''),
-  sportCar(icon: AppIcons.sportCar, title: LocaleKeys.sport_car, imageOnMap: ''),
-  whiteSuv(icon: AppIcons.whiteSUV, title: LocaleKeys.white_suv, imageOnMap: '');
+  taxi(icon: AppIcons.taxi, title: LocaleKeys.taxi, imageOnMap: AppImages.taxiCar),
+  blackCar(icon: AppIcons.blackCar, title: LocaleKeys.black_car, imageOnMap: AppImages.blackCar),
+  redCar(icon: AppIcons.redCar, title: LocaleKeys.red_car, imageOnMap: AppImages.redCar),
+  oper(icon: AppIcons.oper, title: LocaleKeys.oper, imageOnMap: AppImages.oper),
+  sportCar(icon: AppIcons.sportCar, title: LocaleKeys.sport_car, imageOnMap: AppImages.sportCar),
+  whiteSuv(icon: AppIcons.whiteSUV, title: LocaleKeys.white_suv, imageOnMap: AppImages.whiteSUV);
 
   const CarOnMap({
     required this.icon,
