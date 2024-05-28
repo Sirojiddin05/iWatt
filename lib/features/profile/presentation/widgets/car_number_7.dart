@@ -54,7 +54,11 @@ class CarNumber7 extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 2, right: 1),
                 child: Text(
                   n[index].toString(),
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontFamily: 'UZBauto', fontSize: 20),
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontFamily: 'UZBauto',
+                    fontSize: 20,
+                    color: AppColors.ebonyClay,
+                  ),
                 ),
               ),
             ),

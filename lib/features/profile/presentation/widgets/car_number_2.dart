@@ -11,8 +11,6 @@ class CarNumber2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List n = [number.substring(2, 5), number.substring(5, 8)];
-
-    print(n);
     return Container(
       // width: 112,
       decoration: BoxDecoration(
@@ -35,7 +33,11 @@ class CarNumber2 extends StatelessWidget {
             alignment: const Alignment(0.1, 0),
             child: Text(
               number.substring(0, 2),
-              style: Theme.of(context).textTheme.bodyText2?.copyWith(fontFamily: 'UZBauto', fontSize: 16),
+              style: context.textTheme.titleLarge?.copyWith(
+                fontFamily: 'UZBauto',
+                fontSize: 16,
+                color: AppColors.ebonyClay,
+              ),
             ),
           ),
           Container(
