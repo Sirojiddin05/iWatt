@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 Future showCustomAdaptiveDialog(
   BuildContext context, {
@@ -11,7 +13,7 @@ Future showCustomAdaptiveDialog(
   TextStyle? titleStyle,
   String? description,
   TextStyle? descriptionStyle,
-  String cancelText = 'Cancel',
+  String? cancelText,
   TextStyle? cancelStyle,
   String confirmText = 'Confirm',
   TextStyle? confirmStyle,
@@ -40,12 +42,13 @@ class CustomAdaptiveDialog extends StatelessWidget {
   final TextStyle? titleStyle;
   final String? description;
   final TextStyle? descriptionStyle;
-  final String cancelText;
+  final String? cancelText;
   final TextStyle? cancelStyle;
   final String confirmText;
   final TextStyle? confirmStyle;
   final Function()? onCancel;
   final Function() onConfirm;
+
   const CustomAdaptiveDialog({
     super.key,
     required this.title,
@@ -82,7 +85,7 @@ class CustomAdaptiveDialog extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: AppColors.dodgerBlue,
                 ),
-            child: Text(cancelText),
+            child: Text(cancelText ?? LocaleKeys.cancel.tr()),
           ),
           CupertinoDialogAction(
             onPressed: onConfirm,

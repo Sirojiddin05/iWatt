@@ -101,5 +101,22 @@ abstract class  LocaleKeys {
   static const white_suv = 'white_suv';
   static const add_car = 'add_car';
   static const no_number = 'no_number';
+  static const cancel = 'cancel';
+  static const mark_everything_as_read = 'mark_everything_as_read';
+  static const mark_everything_as_read_description = 'mark_everything_as_read_description';
+  static const mark = 'mark';
+  static const yesterday = 'yesterday';
+  static const product_is_developed_by_company = 'product_is_developed_by_company';
+  static const there_was_a_problem_with_the_server_adding_the_card = 'there_was_a_problem_with_the_server_adding_the_card';
+  static const rate_app = 'rate_app';
+  static const card_added = 'card_added';
+  static const card_not_found = 'card_not_found';
+  static const card_expired = 'card_expired';
+  static const enter_card_correctly = 'enter_card_correctly';
+  static const verification_not_right = 'verification_not_right';
+  static const remove = 'remove';
+  static const edit = 'edit';
+  static const select_card = 'select_card';
+  static const start = 'start';
 
 }

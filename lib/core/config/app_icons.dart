@@ -83,4 +83,5 @@ class AppIcons {
   static const uz = 'assets/icons/ic_uz.png';
   static const star = 'assets/icons/ic_star.svg';
   static const checks = 'assets/icons/ic_checks.svg';
+  static const edit = 'assets/icons/edit.svg';
 }

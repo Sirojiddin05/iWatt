@@ -116,9 +116,30 @@ class CodegenLoader extends AssetLoader{
   "sport_car": "Спорткар",
   "white_suv": "Белый внедорожник",
   "add_car": "Добавить машину",
-  "no_number": "Номер не указан"
+  "no_number": "Номер не указан",
+  "cancel": "Отменить",
+  "mark_everything_as_read": "Отметить все  прочитанными?",
+  "mark_everything_as_read_description": "Данное действие поменяет статус всех непрочитаных уведомлений на прочитанных",
+  "mark": "Отметить",
+  "yesterday": "Вчера",
+  "product_is_developed_by_company": "Продукт разработан компанией",
+  "there_was_a_problem_with_the_server_adding_the_card": "Возникла проблема с сервером, добавляющим карту.",
+  "rate_app": "Оцените приложение",
+  "card_added": "Карта добавлена",
+  "card_not_found": "Карта не найдена",
+  "card_expired": "Срок действия карты истек",
+  "enter_card_correctly": "Вводите данные правильно!",
+  "verification_not_right": "Код верификации введен неверно",
+  "remove": "Удалить",
+  "edit": "Редактировать",
+  "select_card": "Bыберите карту",
+  "start": "Начать"
 };
-static const Map<String,dynamic> en = {};
-static const Map<String,dynamic> uz = {};
+static const Map<String,dynamic> en = {
+  "cancel": "Cancel"
+};
+static const Map<String,dynamic> uz = {
+  "cancel": "Bekor qilish"
+};
 static const Map<String, Map<String,dynamic>> mapLocales = {"ru": ru, "en": en, "uz": uz};
 }

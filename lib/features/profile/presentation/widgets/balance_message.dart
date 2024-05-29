@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/pay_with_card_sheet.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class BalanceMessage extends StatelessWidget {
   final String message;
+
   const BalanceMessage({
     super.key,
     required this.message,
@@ -17,7 +19,9 @@ class BalanceMessage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: WCustomTappableButton(
-        onTap: () {},
+        onTap: () {
+          showPayWithCardSheet(context);
+        },
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(12),
           bottomRight: Radius.circular(12),

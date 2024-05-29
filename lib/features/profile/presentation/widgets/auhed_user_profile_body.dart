@@ -14,6 +14,7 @@ import 'package:i_watt_app/features/profile/presentation/pages/settings_page.dar
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/balance_message.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/help_sheet.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/my_cards_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/notification_count_badge.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/user_data_container.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
@@ -22,6 +23,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AuthedUserProfileBody extends StatefulWidget {
   final ScrollController controller;
+
   const AuthedUserProfileBody({super.key, required this.controller});
 
   @override
@@ -46,7 +48,9 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   icon: AppIcons.cardBlue,
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
                   borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                  onTap: () {},
+                  onTap: () {
+                    showMyCardsSheet(context);
+                  },
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(

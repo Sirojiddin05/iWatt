@@ -23,4 +23,7 @@ class AppImages {
   static const logo = 'assets/images/logo.png';
   static const uicLogo = 'assets/images/uic_logo.png';
   static const notificationsEmpty = 'assets/images/notifications_empty.png';
+  static const humo = 'assets/images/humo.png';
+  static const masterCard = 'assets/images/master_card.png';
+  static const uzcard = 'assets/images/uzcard.png';
 }

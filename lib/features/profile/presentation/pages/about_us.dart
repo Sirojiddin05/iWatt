@@ -1,11 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
@@ -13,9 +17,9 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWrapper(
+      appBar: AppBarWrapper(
         hasBackButton: true,
-        title: 'О нас',
+        title: LocaleKeys.about_us.tr(),
         subtitle: 'Version 1.0.0',
       ),
       body: Padding(
@@ -30,43 +34,46 @@ class AboutUsPage extends StatelessWidget {
               style: context.textTheme.labelMedium?.copyWith(color: context.textTheme.titleSmall?.color),
             ),
             const SizedBox(height: 32),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: context.appBarTheme.backgroundColor,
-              ),
-              child: const Text.rich(
-                TextSpan(
-                  children: [
+            BlocBuilder<AboutUsBloc, AboutUsState>(
+              builder: (context, state) {
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: context.appBarTheme.backgroundColor,
+                  ),
+                  child: Text.rich(
                     TextSpan(
-                      text: 'I-WATT',
-                      style: TextStyle(
-                        color: Color(0xFF0AE8FE),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      children: [
+                        TextSpan(
+                          text: state.aboutUs.title.isNotEmpty ? state.aboutUs.title : 'I-WATT',
+                          style: const TextStyle(
+                            color: Color(0xFF0AE8FE),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' - ',
+                          style: TextStyle(
+                            color: Color(0xFF061018),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: state.aboutUs.description,
+                          style: const TextStyle(
+                            color: Color(0xFF061018),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: ' - ',
-                      style: TextStyle(
-                        color: Color(0xFF061018),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    TextSpan(
-                      text:
-                          'ваш идеальный компаньон для бесперебойной зарядки электромобилей. Разработанное с учетом инноваций и удобства, это приложение революционизирует способ подзарядки вашего электромобиля, делая каждый сеанс зарядки легким и эффективным.',
-                      style: TextStyle(
-                        color: Color(0xFF061018),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 12),
             WCustomTappableButton(
@@ -86,14 +93,14 @@ class AboutUsPage extends StatelessWidget {
                   children: [
                     SvgPicture.asset(AppIcons.star),
                     const SizedBox(width: 8),
-                    Text('Оцените приложение', style: context.textTheme.headlineSmall),
+                    Text(LocaleKeys.rate_app.tr(), style: context.textTheme.headlineSmall),
                   ],
                 ),
               ),
             ),
             const Spacer(),
             Text(
-              'Продукт разработан компанией',
+              LocaleKeys.product_is_developed_by_company.tr(),
               style: context.textTheme.labelMedium?.copyWith(color: context.textTheme.titleSmall?.color),
             ),
             const SizedBox(height: 12),
