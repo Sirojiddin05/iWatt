@@ -88,4 +88,7 @@ class AppIcons {
   static const bigUz = 'assets/icons/ic_big_uz.svg';
   static const searchLong = 'assets/icons/ic_search_long.svg';
   static const questionMark = 'assets/icons/ic_question.svg';
+  static const star = 'assets/icons/ic_star.svg';
+  static const checks = 'assets/icons/ic_checks.svg';
+  static const edit = 'assets/icons/edit.svg';
 }

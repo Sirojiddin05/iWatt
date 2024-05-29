@@ -5,13 +5,16 @@ import 'package:i_watt_app/features/common/presentation/widgets/sheet_header_con
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_title.dart';
 
 class SheetHeaderWidget extends StatelessWidget {
-  final String title;
+  final String? title;
+  final Widget? titleWidget;
   final VoidCallback? onClose;
+
   const SheetHeaderWidget({
     super.key,
-    required this.title,
+    this.title,
     this.onClose,
-  });
+    this.titleWidget,
+  }) : assert((title == null && titleWidget != null) || (title != null && titleWidget == null));
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class SheetHeaderWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SheetTitleText(title: title),
+            titleWidget ?? SheetTitleText(title: title!),
             const Spacer(),
             SheetCloseButton(
               onTap: onClose ?? () => Navigator.of(context).pop(),

@@ -6,12 +6,15 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/pages/notifications_page.dart';
+import 'package:i_watt_app/features/profile/presentation/pages/about_us.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/my_cars.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/saved_locations.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/settings_page.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/balance_message.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/help_sheet.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/my_cards_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/notification_count_badge.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/user_data_container.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
@@ -20,6 +23,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AuthedUserProfileBody extends StatefulWidget {
   final ScrollController controller;
+
   const AuthedUserProfileBody({super.key, required this.controller});
 
   @override
@@ -34,7 +38,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
       child: Column(
         children: [
           const UserDataContainer(),
-          BalanceMessage(message: '-48 000 UZS'),
+          const BalanceMessage(message: '-48 000 UZS'),
           const SizedBox(height: 16),
           WhiteWrapperContainer(
             child: Column(
@@ -44,7 +48,9 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   icon: AppIcons.cardBlue,
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
                   borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                  onTap: () {},
+                  onTap: () {
+                    showMyCardsSheet(context);
+                  },
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
@@ -70,7 +76,11 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                       },
                     ),
                   ],
-                  onTap: () {},
+                  onTap: () => Navigator.of(context, rootNavigator: true).push(
+                    MaterialWithModalsPageRoute(
+                      builder: (ctx) => const NotificationsPage(),
+                    ),
+                  ),
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
@@ -131,7 +141,8 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   title: LocaleKeys.about_us.tr(),
                   icon: AppIcons.aboutUs,
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                   actions: [
                     Text(
                       MyFunctions.getCurrentVersionSync(),
@@ -141,7 +152,13 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                       ),
                     ),
                   ],
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialWithModalsPageRoute(
+                        builder: (ctx) => const AboutUsPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

@@ -50,6 +50,17 @@ class MyFunctions {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
   }
 
+  static String getFormattedTime(DateTime dateTime) {
+    Duration difference = DateTime.now().difference(dateTime);
+    if (difference.inDays == 1) {
+      return LocaleKeys.yesterday.tr();
+    } else if (difference.inDays > 1) {
+      return DateFormat('dd MMM yyyy').format(dateTime).toLowerCase();
+    } else {
+      return '${difference.inSeconds} ago';
+    }
+  }
+
   static String getFormattedTimerTime(int ticks) {
     final buffer = StringBuffer();
     final minutes = (ticks / 60).floor();
@@ -176,7 +187,8 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
-    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(
+        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -191,7 +203,8 @@ class MyFunctions {
       return status;
     });
     listOfConnectorStatuses.retainWhere((element) => element != null);
-    final List<ConnectorStatus> list = List.generate(listOfConnectorStatuses.length, (index) => listOfConnectorStatuses[index]!);
+    final List<ConnectorStatus> list =
+        List.generate(listOfConnectorStatuses.length, (index) => listOfConnectorStatuses[index]!);
     return list;
   }
 
@@ -242,7 +255,8 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(
+        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

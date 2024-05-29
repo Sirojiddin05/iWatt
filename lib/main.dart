@@ -37,6 +37,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/p
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
 import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/service_locator.dart';
 
@@ -67,6 +68,7 @@ class App extends StatelessWidget {
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
+        BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(
             GetAuthenticationStatusUseCase(repository: serviceLocator<AuthenticationRepositoryImpl>()),

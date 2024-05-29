@@ -5,6 +5,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/chevron_back_but
 class AppBarWrapper extends StatelessWidget implements PreferredSizeWidget {
   final bool hasBackButton;
   final String title;
+  final String subtitle;
   final Widget? child;
   final List<Widget> actions;
   final PreferredSizeWidget? bottom;
@@ -14,6 +15,7 @@ class AppBarWrapper extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.hasBackButton = false,
     this.title = '',
+    this.subtitle = '',
     this.child,
     this.actions = const [],
     this.bottom,
@@ -41,14 +43,32 @@ class AppBarWrapper extends StatelessWidget implements PreferredSizeWidget {
                     child: ChevronBackButton(),
                   ),
                 ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 17),
-                child: Text(
-                  title,
-                  style: context.textTheme.headlineLarge,
+              if (subtitle.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 17),
+                  child: Text(
+                    title,
+                    style: context.textTheme.headlineLarge,
+                  ),
+                )
+              else
+                Column(
+                  children: [
+                    Text(
+                      title,
+                      style: context.textTheme.headlineLarge,
+                    ),
+                    Text(
+                      subtitle,
+                      style: context.textTheme.labelMedium
+                          ?.copyWith(color: Theme.of(context).inputDecorationTheme.labelStyle?.color),
+                    ),
+                  ],
                 ),
-              ),
-              if (actions.isNotEmpty) Expanded(child: Row(mainAxisAlignment: MainAxisAlignment.end, children: actions)) else const Spacer()
+              if (actions.isNotEmpty)
+                Expanded(child: Row(mainAxisAlignment: MainAxisAlignment.end, children: actions))
+              else
+                const Spacer()
             ],
           ),
       bottom: bottom,
