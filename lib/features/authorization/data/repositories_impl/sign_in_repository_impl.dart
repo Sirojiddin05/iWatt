@@ -13,12 +13,12 @@ class SignInRepositoryImpl implements SignInRepository {
   @override
   Future<Either<Failure, String>> login({required String phone}) async {
     try {
-      final result = await _dataSource.login(
-        phone: phone,
-      );
+      final result = await _dataSource.login(phone: phone);
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ServerFailure(errorMessage: e.errorMessage));
+      final message = e.errorMessage;
+      print('ServerException: $message');
+      return Left(ServerFailure(errorMessage: e.errorMessage, error: e.error));
     } on CustomDioException catch (e) {
       final message = e.type.message;
       return Left(DioFailure(errorMessage: message));

@@ -47,9 +47,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         );
         _setTimer();
       } else {
+        print(' result${result.left.errorMessage}');
         emit(state.copyWith(
           signInStatus: FormzSubmissionStatus.failure,
-          signInErrorMessage: 'Error',
+          signInErrorMessage: result.left.errorMessage,
         ));
       }
     } else {
@@ -105,7 +106,13 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     }
   }
 
-  void _onResendCode(ResendCode event, Emitter<SignInState> emit) {
+  void _onResendCode(ResendCode event, Emitter<SignInState> emit) async {
+    final result = await verifyCodeUseCase(VerifyCodeParamsEntity(
+      code: state.otp,
+      phone: state.verifiedPhone,
+      session: state.session,
+      type: 'login_sms_verification',
+    ));
     emit(state.copyWith(codeAvailableTime: 60));
     _setTimer();
   }

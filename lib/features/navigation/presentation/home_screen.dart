@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,8 @@ import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/version_check_bloc/version_check_bloc.dart';
@@ -15,6 +18,7 @@ import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_con
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigation_bar_widget.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:vibration/vibration.dart';
 
@@ -135,8 +139,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
 
   Future<void> _onTabChange(index) async {
     if ((index == 2 || index == 3) && isUnAuthenticated) {
-      //TODO: show login dialog
-      // showLoginDialog(context);
+      showCustomAdaptiveDialog(
+        context,
+        title: LocaleKeys.you_need_to_login_to_do_this_action.tr(),
+        cancelText: LocaleKeys.cancel.tr(),
+        confirmText: LocaleKeys.login.tr(),
+        onConfirm: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInPage()));
+        },
+      );
     } else {
       _tabController.animateTo(index);
     }

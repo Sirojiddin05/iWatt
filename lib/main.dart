@@ -40,6 +40,7 @@ import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
 import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/service_locator.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 Future<void> main() async {
   runZonedGuarded(() async {
@@ -173,28 +174,20 @@ class _MyAppState extends State<MyApp> {
             locale: context.locale,
             navigatorKey: _navigatorKey,
             theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            home: const HomeScreen(),
             themeAnimationDuration: AppConstants.animationDuration,
             onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
-            // builder: (context, child) {
-            //   return BlocListener<AuthenticationBloc, AuthenticationState>(
-            //     child: child,
-            //     listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
-            //     listener: (context, state) async {
-            //       if (state.authenticationStatus.isAuthenticated) {
-            //         _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()), (route) => false);
-            //       } else if (state.authenticationStatus.isUnAuthenticated) {
-            //         final isRegisteredOnce = StorageRepository.getBool(StorageKeys.isRegisteredOnce, defValue: false);
-            //         if (isRegisteredOnce) {
-            //           //TODO
-            //           // _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const SplashScreen()), (route) => false);
-            //         } else {
-            //           _navigator.pushAndRemoveUntil(MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()), (route) => false);
-            //         }
-            //       }
-            //     },
-            //   );
-            // },
+            builder: (context, child) {
+              return BlocListener<AuthenticationBloc, AuthenticationState>(
+                child: child,
+                listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
+                listener: (context, state) async {
+                  _navigator.pushAndRemoveUntil(
+                    MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()),
+                    (route) => false,
+                  );
+                },
+              );
+            },
           );
         },
       ),

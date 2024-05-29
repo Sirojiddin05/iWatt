@@ -9,7 +9,7 @@ part of 'error_model.dart';
 GenericErrorModel _$GenericErrorModelFromJson(Map<String, dynamic> json) =>
     GenericErrorModel(
       statusCode: (json['status_code'] as num?)?.toInt() ?? -1,
-      errors: (json['error'] as List<dynamic>?)
+      errors: (json['errors'] as List<dynamic>?)
               ?.map(
                   (e) => ErrorMessageModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -19,5 +19,5 @@ GenericErrorModel _$GenericErrorModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$GenericErrorModelToJson(GenericErrorModel instance) =>
     <String, dynamic>{
       'status_code': instance.statusCode,
-      'error': instance.errors,
+      'errors': instance.errors,
     };

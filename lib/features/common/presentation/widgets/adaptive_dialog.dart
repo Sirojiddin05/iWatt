@@ -20,7 +20,7 @@ Future showCustomAdaptiveDialog(
   Function()? onCancel,
   required Function() onConfirm,
 }) async {
-  return await showDialog(
+  return await showAdaptiveDialog(
     context: context,
     builder: (ctx) => CustomAdaptiveDialog(
       title: title,
@@ -69,30 +69,26 @@ class CustomAdaptiveDialog extends StatelessWidget {
       return CupertinoAlertDialog(
         title: Text(
           title,
-          style: titleStyle ?? context.textTheme.headlineLarge?.copyWith(fontSize: 17),
+          style: titleStyle?.copyWith(fontFamily: 'SFProText') ?? context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SFProText'),
         ),
         content: description == null
             ? null
             : Text(
                 description!,
-                style: descriptionStyle ?? context.textTheme.titleLarge?.copyWith(fontSize: 13),
+                style: descriptionStyle?.copyWith(fontFamily: 'SFProText') ??
+                    context.textTheme.titleLarge?.copyWith(fontSize: 13, fontFamily: 'SFProText'),
               ),
         actions: [
           CupertinoDialogAction(
             onPressed: onCancel ?? () => Navigator.pop(context),
-            textStyle: cancelStyle ??
-                context.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.dodgerBlue,
-                ),
+            textStyle: cancelStyle?.copyWith(fontFamily: 'SFProText') ??
+                context.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
             child: Text(cancelText ?? LocaleKeys.cancel.tr()),
           ),
           CupertinoDialogAction(
             onPressed: onConfirm,
-            textStyle: confirmStyle ??
-                context.textTheme.headlineLarge?.copyWith(
-                  color: AppColors.dodgerBlue,
-                ),
+            textStyle: confirmStyle?.copyWith(fontFamily: 'SFProText') ??
+                context.textTheme.headlineLarge?.copyWith(color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
             child: Text(confirmText),
           ),
         ],

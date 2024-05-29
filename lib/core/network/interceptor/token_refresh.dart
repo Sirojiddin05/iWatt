@@ -16,7 +16,6 @@ class TokenRefreshInterceptor implements Interceptor {
       if (StorageRepository.getString(StorageKeys.accessToken).replaceAll('Bearer', '').trim().isNotEmpty) {
         err.requestOptions.headers['Authorization'] = StorageRepository.getString(StorageKeys.accessToken);
       }
-
       final response = await _resolveResponse(err.requestOptions);
       handler.resolve(response);
       return;
@@ -26,9 +25,7 @@ class TokenRefreshInterceptor implements Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // final accessToken = StorageRepository.getString(StorageKeys.accessToken);
-    const accessToken =
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4MzI4MTk4LCJpYXQiOjE3MTY3OTIxOTgsImp0aSI6Ijc1NTUzYWI0OThlZTQ5MDc4N2I0YjNhYjUwZjQzZmM1IiwidXNlcl9pZCI6MjEwMX0.zPOjO0d1NPIpi5N1nwIsZnnjfti3Zu_dPClia6Bvq2s';
+    final accessToken = StorageRepository.getString(StorageKeys.accessToken);
     if (accessToken.isNotEmpty) {
       options.headers['Authorization'] = accessToken;
     } else {

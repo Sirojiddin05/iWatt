@@ -17,7 +17,7 @@ class AuthenticationDatasourceImpl extends AuthenticationDatasource {
   Future<void> validateToken() async {
     try {
       final response = await dio.get(
-        'auth/validate',
+        'users/profile-detail/',
       );
       if (!(response.statusCode! >= 200 && response.statusCode! < 300)) {
         final model = GenericErrorModel.fromJson(response.data);

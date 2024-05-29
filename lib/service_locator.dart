@@ -2,7 +2,9 @@ import 'package:get_it/get_it.dart';
 import 'package:i_watt_app/core/network/dio_settings.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/authorization/data/datasources/authentication_datasource.dart';
+import 'package:i_watt_app/features/authorization/data/datasources/sign_in_datasource.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
+import 'package:i_watt_app/features/authorization/data/repositories_impl/sign_in_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/datasources/about_us_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/change_language_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/connector_types_datasource.dart';
@@ -34,6 +36,8 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => DioSettings());
   serviceLocator.registerFactory(() => AuthenticationDatasourceImpl(dio: serviceLocator<DioSettings>().dio));
   serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(serviceLocator<AuthenticationDatasourceImpl>()));
+  serviceLocator.registerLazySingleton(() => SignInDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => SignInRepositoryImpl(serviceLocator<SignInDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ConnectorTypesDataSourceImpl(serviceLocator<DioSettings>().dio));

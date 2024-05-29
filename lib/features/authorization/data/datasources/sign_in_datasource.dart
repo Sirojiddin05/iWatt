@@ -20,16 +20,21 @@ class SignInDataSourceImpl extends SignInDataSource {
         'users/login/',
         data: {'phone': '+998$phone'},
       );
-      if (!(response.statusCode! >= 200 && response.statusCode! < 300)) {
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return response.data['session'];
       } else {
+        print('errorerror ${response.data}');
         final error = GenericErrorModel.fromJson(response.data);
+        print('errorerror ${error.error}');
         throw ServerException(
           statusCode: error.statusCode,
           errorMessage: error.message,
           error: error.error,
         );
       }
+    } on ServerException catch (e) {
+      print('ServerException $e');
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -50,13 +55,13 @@ class SignInDataSourceImpl extends SignInDataSource {
       final response = await _dio.post(
         'users/login/confirm/',
         data: {
-          "type": type,
+          "type_": type,
           "phone": "+998$phone",
           "code": code,
           "session": session,
         },
       );
-      if (!(response.statusCode! >= 200 && response.statusCode! < 300)) {
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
         await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data[StorageKeys.accessToken]}');
         await StorageRepository.putString(StorageKeys.refreshToken, 'Bearer ${response.data[StorageKeys.refreshToken]}');
         return response.data["is_new"];
@@ -68,6 +73,8 @@ class SignInDataSourceImpl extends SignInDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

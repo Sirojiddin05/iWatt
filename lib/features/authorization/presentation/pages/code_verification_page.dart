@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/widgets/blocked_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/base_auth_wrapper.dart';
@@ -129,6 +131,9 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
                 );
               }
             } else if (state.verifyCodeStatus.isSuccess) {
+              context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.authenticated, isRebuild: false));
               Navigator.popUntil(
                 context,
                 (route) => route.isFirst,

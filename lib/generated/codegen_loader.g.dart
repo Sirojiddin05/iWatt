@@ -166,7 +166,8 @@ class CodegenLoader extends AssetLoader{
   "verification_not_right": "Код верификации введен неверно",
   "remove": "Удалить",
   "select_card": "Bыберите карту",
-  "start": "Начать"
+  "start": "Начать",
+  "you_need_to_login_to_do_this_action": "Для выполнения этого действия вам нужно войти в систему!"
 };
 static const Map<String,dynamic> en = {
   "cancel": "Cancel"

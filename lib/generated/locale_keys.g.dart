@@ -148,5 +148,6 @@ abstract class  LocaleKeys {
   static const remove = 'remove';
   static const select_card = 'select_card';
   static const start = 'start';
+  static const you_need_to_login_to_do_this_action = 'you_need_to_login_to_do_this_action';
 
 }

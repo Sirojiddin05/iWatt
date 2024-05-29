@@ -7,7 +7,7 @@ part 'error_model.g.dart';
 class GenericErrorModel {
   @JsonKey(name: 'status_code', defaultValue: -1)
   final int statusCode;
-  @JsonKey(name: 'error', defaultValue: [])
+  @JsonKey(name: 'errors', defaultValue: [])
   final List<ErrorMessageModel> errors;
 
   const GenericErrorModel({this.statusCode = -1, this.errors = const []});

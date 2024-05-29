@@ -18,6 +18,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Stream<AuthenticationStatus> authenticationStatusStream() async* {
     final result = await _validateUser();
+    print('_validateUser');
     await Future.delayed(const Duration(milliseconds: 2800));
     if (result.isRight) {
       yield AuthenticationStatus.authenticated;
