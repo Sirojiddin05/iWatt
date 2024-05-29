@@ -1,6 +1,9 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
 abstract class  LocaleKeys {
+  static const other_masculine = 'other.masculine';
+  static const other_feminine = 'other.feminine';
+  static const other_neuter = 'other.neuter';
   static const map = 'map';
   static const stations = 'stations';
   static const charging_processes = 'charging_processes';
@@ -101,5 +104,33 @@ abstract class  LocaleKeys {
   static const white_suv = 'white_suv';
   static const add_car = 'add_car';
   static const no_number = 'no_number';
+  static const you_have_no_cars_yet = 'you_have_no_cars_yet';
+  static const you_have_not_added_any_cars_yet = 'you_have_not_added_any_cars_yet';
+  static const there_are_no_saved_stations = 'there_are_no_saved_stations';
+  static const you_have_not_save_stations_yet = 'you_have_not_save_stations_yet';
+  static const delete = 'delete';
+  static const edit = 'edit';
+  static const connector_types = 'connector_types';
+  static const choose_model = 'choose_model';
+  static const choose_brand = 'choose_brand';
+  static const connector_type = 'connector_type';
+  static const additional_information = 'additional_information';
+  static const government_number_of_car = 'government_number_of_car';
+  static const further = 'further';
+  static const helpful_information = 'helpful_information';
+  static const brand_capital = 'brand.capital';
+  static const brand_small = 'brand.small';
+  static const brand = 'brand';
+  static const model_capital = 'model.capital';
+  static const model_small = 'model.small';
+  static const model = 'model';
+  static const car_mark_name = 'car_mark_name';
+  static const car_model_name = 'car_model_name';
+  static const input_mark = 'input_mark';
+  static const input_model = 'input_model';
+  static const connector_type_limit = 'connector_type_limit';
+  static const if_you_enter_your_car_number_you_will_have_additional_conveniences = 'if_you_enter_your_car_number_you_will_have_additional_conveniences';
+  static const edit_car = 'edit_car';
+  static const save = 'save';
 
 }

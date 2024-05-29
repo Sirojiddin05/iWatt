@@ -18,6 +18,10 @@ import 'package:i_watt_app/features/list/data/datasources/charge_locations_data_
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/data/datasources/version_check_datasource.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
+import 'package:i_watt_app/features/profile/data/datasources/car_brands_datasource.dart';
+import 'package:i_watt_app/features/profile/data/datasources/cars_datasource.dart';
+import 'package:i_watt_app/features/profile/data/repositories_impl/car_brands_repository_impl.dart';
+import 'package:i_watt_app/features/profile/data/repositories_impl/cars_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/change_language_repository_impl.dart';
 
 final serviceLocator = GetIt.I;
@@ -44,6 +48,10 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => NotificationsRepositoryImpl(serviceLocator<NotificationDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChangeLanguageDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ChangeLanguageRepositoryImpl(serviceLocator<ChangeLanguageDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => CarsDatasourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => CarsRepositoryImpl(serviceLocator<CarsDatasourceImpl>()));
+  serviceLocator.registerLazySingleton(() => CarBrandsDatasourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => CarBrandsRepositoryImpl(serviceLocator<CarBrandsDatasourceImpl>()));
   // serviceLocator.registerLazySingleton(() => BalanceDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => BalanceRepositoryImplement(dataSource: serviceLocator<BalanceDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => NotificationDataSourceImpl(dio: serviceLocator<DioSettings>().dio));

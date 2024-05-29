@@ -33,6 +33,7 @@ class AppIcons {
   static const chevronLeftGrey = 'assets/icons/ic_chevron_left.svg';
   static const chevronLeftBlack = 'assets/icons/ic_chevron_left_black.svg';
   static const chevronRightGrey = 'assets/icons/ic_chevron_right_grey.svg';
+  static const chevronDown = 'assets/icons/ic_chevron_down.svg';
   static const clearRounded = 'assets/icons/ic_clear_rounded.svg';
   static const historyIcon = 'assets/icons/ic_history_icon.svg';
   static const phoneEdit = 'assets/icons/ic_phone_edit.svg';
@@ -78,7 +79,13 @@ class AppIcons {
   static const blackCar = 'assets/icons/ic_black_car.png';
   static const oper = 'assets/icons/ic_oper.png';
   static const sportCar = 'assets/icons/ic_sport_car.png';
-  static const circlePlus = 'assets/icons/ic_circle_plus.png';
-  static const numberUzb = 'assets/icons/ic_number_uzb.png';
-  static const uz = 'assets/icons/ic_uz.png';
+  static const circlePlus = 'assets/icons/ic_circle_plus.svg';
+  static const numberUzb = 'assets/icons/ic_number_uzb.svg';
+  static const uz = 'assets/icons/ic_uz.svg';
+  static const carBigBlue = 'assets/icons/ic_car_blue_big.svg';
+  static const smallCarPlaceHolder = 'assets/icons/ic_small_car_placeholder.svg';
+  static const bigFlag = 'assets/icons/ic_big_flag.svg';
+  static const bigUz = 'assets/icons/ic_big_uz.svg';
+  static const searchLong = 'assets/icons/ic_search_long.svg';
+  static const questionMark = 'assets/icons/ic_question.svg';
 }

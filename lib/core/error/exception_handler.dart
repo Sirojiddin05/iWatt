@@ -3,8 +3,9 @@ import 'package:dio/dio.dart';
 class ServerException implements Exception {
   final String errorMessage;
   final int statusCode;
+  final String error;
 
-  const ServerException({this.statusCode = 400, this.errorMessage = 'error'});
+  const ServerException({this.statusCode = 400, this.errorMessage = 'error', required this.error});
 
   @override
   String toString() => 'ServerException(statusCode: $statusCode, errorMessage: $errorMessage)';

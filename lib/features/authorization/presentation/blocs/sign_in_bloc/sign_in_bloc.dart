@@ -4,13 +4,22 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/error/failure_handler.dart';
+import 'package:i_watt_app/features/authorization/domain/entities/verify_code_params_entity.dart';
+import 'package:i_watt_app/features/authorization/domain/usecases/login_usecase.dart';
+import 'package:i_watt_app/features/authorization/domain/usecases/verify_code_usecase.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
+  final LoginUseCase loginUseCase;
+  final VerifyCodeUseCase verifyCodeUseCase;
   Timer _otpTimer = Timer(Duration.zero, () {});
-  SignInBloc() : super(const SignInState()) {
+  SignInBloc({
+    required this.loginUseCase,
+    required this.verifyCodeUseCase,
+  }) : super(const SignInState()) {
     on<ChangePhone>(_changePhone);
     on<SignIn>(_signIn);
     on<ChangeOTP>(_changeOTP);
@@ -26,15 +35,27 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   void _signIn(SignIn event, Emitter<SignInState> emit) async {
     emit(state.copyWith(signInStatus: FormzSubmissionStatus.inProgress));
     if (state.tempPhone != state.verifiedPhone && state.codeAvailableTime != 0) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (true) {
-        emit(state.copyWith(signInStatus: FormzSubmissionStatus.success, verifiedPhone: state.tempPhone, codeAvailableTime: 60));
+      final result = await loginUseCase(state.tempPhone);
+      if (result.isRight) {
+        emit(
+          state.copyWith(
+            signInStatus: FormzSubmissionStatus.success,
+            verifiedPhone: state.tempPhone,
+            session: result.right,
+            codeAvailableTime: 60,
+          ),
+        );
         _setTimer();
       } else {
-        emit(state.copyWith(signInStatus: FormzSubmissionStatus.failure, signInErrorMessage: 'Error'));
+        emit(state.copyWith(
+          signInStatus: FormzSubmissionStatus.failure,
+          signInErrorMessage: 'Error',
+        ));
       }
     } else {
-      emit(state.copyWith(signInStatus: FormzSubmissionStatus.success));
+      emit(state.copyWith(
+        signInStatus: FormzSubmissionStatus.success,
+      ));
     }
   }
 
@@ -44,11 +65,25 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   void _verifyCode(VerifyCode event, Emitter<SignInState> emit) async {
     emit(state.copyWith(verifyCodeStatus: FormzSubmissionStatus.inProgress));
-    await Future.delayed(const Duration(seconds: 1));
-    if (true) {
-      emit(state.copyWith(verifyCodeStatus: FormzSubmissionStatus.success, isNewUser: true));
+    final result = await verifyCodeUseCase(VerifyCodeParamsEntity(
+      code: state.otp,
+      phone: state.verifiedPhone,
+      session: state.session,
+      type: 'login_sms_verification',
+    ));
+    if (result.isRight) {
+      emit(state.copyWith(
+        verifyCodeStatus: FormzSubmissionStatus.success,
+        isNewUser: result.right,
+      ));
     } else {
-      emit(state.copyWith(verifyCodeStatus: FormzSubmissionStatus.failure, verifyCodeErrorMessage: 'Error', isUserBlocked: true));
+      final error = result.left;
+      final isUserBlocked = error is ServerFailure && error.error.contains('user_is_blocked');
+      emit(state.copyWith(
+        verifyCodeStatus: FormzSubmissionStatus.failure,
+        verifyCodeErrorMessage: result.left.errorMessage,
+        isUserBlocked: isUserBlocked,
+      ));
     }
   }
 

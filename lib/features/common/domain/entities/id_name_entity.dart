@@ -5,8 +5,9 @@ class IdNameEntity {
   final int id;
   final String name;
   final String type;
+  final String icon;
 
-  const IdNameEntity({this.id = -1, this.name = '', this.type = ''});
+  const IdNameEntity({this.id = -1, this.name = '', this.type = '', this.icon = ''});
 }
 
 class IdNameConverter implements JsonConverter<IdNameEntity, Map<String, dynamic>> {

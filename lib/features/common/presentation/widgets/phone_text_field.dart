@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/util/custom_phone_formatter.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/core/util/formatter.dart';
+import 'package:i_watt_app/core/util/text_formatters/custom_phone_formatter.dart';
+import 'package:i_watt_app/core/util/text_formatters/formatter.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/default_text_field.dart';
 
 class PhoneTextField extends StatelessWidget {

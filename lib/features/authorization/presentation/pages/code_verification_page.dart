@@ -5,7 +5,6 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
-import 'package:i_watt_app/features/authorization/presentation/pages/registration_page.dart';
 import 'package:i_watt_app/features/authorization/presentation/widgets/blocked_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/base_auth_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/phone_edit_container.dart';
@@ -14,7 +13,6 @@ import 'package:i_watt_app/features/common/presentation/widgets/resend_otp_code.
 import 'package:i_watt_app/features/common/presentation/widgets/resend_otp_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CodeVerificationPage extends StatefulWidget {
   const CodeVerificationPage({super.key});
@@ -131,16 +129,10 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
                 );
               }
             } else if (state.verifyCodeStatus.isSuccess) {
-              if (state.isNewUser) {
-                Navigator.push(
-                  context,
-                  MaterialWithModalsPageRoute(
-                    builder: (ctx) => const RegistrationPage(),
-                  ),
-                );
-              } else {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              }
+              Navigator.popUntil(
+                context,
+                (route) => route.isFirst,
+              );
             }
           },
           buildWhen: (o, n) {

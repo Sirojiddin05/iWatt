@@ -19,4 +19,5 @@ class AppImages {
   static const lightTheme = 'assets/images/light_theme.png';
   static const darkTheme = 'assets/images/dark_theme.png';
   static const systemTheme = 'assets/images/system_theme.png';
+  static const carsEmpty = 'assets/images/cars_empty.png';
 }

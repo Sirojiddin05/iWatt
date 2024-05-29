@@ -24,7 +24,6 @@ CarModel _$CarModelFromJson(Map<String, dynamic> json) => CarModel(
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      typeStateNumberName: json['type_state_number_name'] as String? ?? '',
       vehicleTypeName: json['vehicle_type_name'] as String? ?? '',
       usableBatterySize:
           (json['usable_battery_size'] as num?)?.toDouble() ?? -1,
@@ -34,7 +33,7 @@ CarModel _$CarModelFromJson(Map<String, dynamic> json) => CarModel(
       modelName: json['model_name'] as String? ?? '',
       version: json['version'] as String? ?? '',
       icon: json['icon'] as String? ?? '',
-      modelManifacturer: json['model_manifacturer'] as String? ?? '',
+      manufacturerName: json['manufacturer_name'] as String? ?? '',
       customModel: json['custom_model'] as String? ?? '',
     );
 
@@ -50,15 +49,14 @@ Map<String, dynamic> _$CarModelToJson(CarModel instance) => <String, dynamic>{
       'icon': instance.icon,
       'state_number': instance.stateNumber,
       'charging_type_name': instance.chargingTypeName,
-      'type_state_number_name': instance.typeStateNumberName,
       'vehicle_type_name': instance.vehicleTypeName,
       'usable_battery_size': instance.usableBatterySize,
       'brand': instance.brand,
       'release_year': instance.releaseYear,
       'variant': instance.variant,
       'model_name': instance.modelName,
+      'manufacturer_name': instance.manufacturerName,
       'custom_model': instance.customModel,
-      'model_manifacturer': instance.modelManifacturer,
       'custom_manufacturer': instance.customManufacturer,
       'version': instance.version,
     };

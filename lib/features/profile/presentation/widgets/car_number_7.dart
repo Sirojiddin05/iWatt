@@ -56,7 +56,7 @@ class CarNumber7 extends StatelessWidget {
                   n[index].toString(),
                   style: context.textTheme.titleLarge?.copyWith(
                     fontFamily: 'UZBauto',
-                    fontSize: 20,
+                    fontSize: 22,
                     color: AppColors.ebonyClay,
                   ),
                 ),

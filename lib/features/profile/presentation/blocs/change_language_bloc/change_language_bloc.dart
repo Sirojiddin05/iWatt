@@ -17,7 +17,8 @@ class ChangeLanguageBloc extends Bloc<ChangeLanguageEvent, ChangeLanguageState> 
   ChangeLanguageBloc(this.changeLanguageUseCase) : super(const ChangeLanguageState()) {
     on<ChangeLanguage>((event, emit) async {
       emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.inProgress));
-      await StorageRepository.putString(StorageKeys.language, event.languageCode);
+      await StorageRepository.putString(StorageKeys.previousLanguage, event.context.locale.languageCode);
+      await StorageRepository.putString(StorageKeys.currentLanguage, event.languageCode);
       await event.context.setLocale(Locale(event.languageCode));
       serviceLocator<DioSettings>().setBaseOptions();
       await resetLocator();

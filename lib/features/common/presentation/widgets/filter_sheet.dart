@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/aplly_filter_button.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/connector_types_list.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_category_title.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_header.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_tile.dart';
@@ -44,7 +44,6 @@ class _FilterSheetState extends State<FilterSheet> {
         ),
         color: context.colorScheme.primaryContainer,
       ),
-      margin: const EdgeInsets.only(top: kToolbarHeight),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -63,66 +62,12 @@ class _FilterSheetState extends State<FilterSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 0, 8),
-                    child: FilterCategoryTitle(title: 'AC:'),
+                  ConnectorTypesList(
+                    defaultSelectedTypes: connectorTypes.value,
+                    onChanged: (List<int> value) {
+                      connectorTypes.value = [...value];
+                    },
                   ),
-                  BlocBuilder<ConnectorTypesBloc, ConnectorTypesState>(builder: (ctx, state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ...List.generate(
-                          state.acConnectionTypes.length,
-                          (index) {
-                            final connector = state.acConnectionTypes[index];
-                            return ValueListenableBuilder<List<int>>(
-                              valueListenable: connectorTypes,
-                              builder: (context, v, child) {
-                                return FilterTile(
-                                  includeIcon: true,
-                                  hasDivider: index != state.acConnectionTypes.length - 1,
-                                  title: connector.name,
-                                  isSelectedDefault: connectorTypes.value.contains(connector.id),
-                                  onSwitch: (val) {
-                                    if (val) {
-                                      connectorTypes.value = [...connectorTypes.value, connector.id];
-                                    } else {
-                                      connectorTypes.value.remove(connector.id);
-                                      connectorTypes.value = [...connectorTypes.value];
-                                    }
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(16, 12, 0, 8),
-                          child: FilterCategoryTitle(title: 'DC:'),
-                        ),
-                        ...List.generate(state.dcConnectionTypes.length, (index) {
-                          final connector = state.dcConnectionTypes[index];
-                          return ValueListenableBuilder<List<int>>(
-                              valueListenable: connectorTypes,
-                              builder: (context, v, child) {
-                                return FilterTile(
-                                    hasDivider: index != state.dcConnectionTypes.length - 1,
-                                    includeIcon: true,
-                                    title: connector.name,
-                                    isSelectedDefault: connectorTypes.value.contains(connector.id),
-                                    onSwitch: (val) {
-                                      if (val) {
-                                        connectorTypes.value = [...connectorTypes.value, connector.id];
-                                      } else {
-                                        connectorTypes.value.remove(connector.id);
-                                        connectorTypes.value = [...connectorTypes.value];
-                                      }
-                                    });
-                              });
-                        })
-                      ],
-                    );
-                  }),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 0, 6),
                     child: FilterCategoryTitle(title: LocaleKeys.power.tr()),
@@ -130,26 +75,31 @@ class _FilterSheetState extends State<FilterSheet> {
                   BlocBuilder<PowerTypesBloc, PowerTypesState>(builder: (ctx, state) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(state.powerTypes.length, (index) {
-                        final power = state.powerTypes[index];
-                        return ValueListenableBuilder<List<int>>(
+                      children: List.generate(
+                        state.powerTypes.length,
+                        (index) {
+                          final power = state.powerTypes[index];
+                          return ValueListenableBuilder<List<int>>(
                             valueListenable: powerTypes,
                             builder: (context, v, child) {
                               return FilterTile(
-                                  hasDivider: index != state.powerTypes.length - 1,
-                                  title: power.name,
-                                  includeIcon: false,
-                                  isSelectedDefault: powerTypes.value.contains(power.id),
-                                  onSwitch: (val) {
-                                    if (val) {
-                                      powerTypes.value = [...powerTypes.value, power.id];
-                                    } else {
-                                      powerTypes.value.remove(power.id);
-                                      powerTypes.value = [...powerTypes.value];
-                                    }
-                                  });
-                            });
-                      }),
+                                hasDivider: index != state.powerTypes.length - 1,
+                                title: power.name,
+                                includeIcon: false,
+                                isSelectedDefault: powerTypes.value.contains(power.id),
+                                onSwitch: (val) {
+                                  if (val) {
+                                    powerTypes.value = [...powerTypes.value, power.id];
+                                  } else {
+                                    powerTypes.value.remove(power.id);
+                                    powerTypes.value = [...powerTypes.value];
+                                  }
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     );
                   })
                 ],

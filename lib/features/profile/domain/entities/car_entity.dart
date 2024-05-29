@@ -14,22 +14,20 @@ class CarEntity extends Equatable {
   final String icon;
   final String stateNumber;
   final List<String> chargingTypeName;
-  final String typeStateNumberName;
   final String vehicleTypeName;
   final double usableBatterySize;
   final String brand;
   final String releaseYear;
   final String variant;
   final String modelName;
+  final String manufacturerName;
   final String customModel;
-  final String modelManifacturer;
   final String customManufacturer;
   final String version;
 
   const CarEntity({
     this.id = -1,
     this.name = '',
-    this.modelManifacturer = '',
     this.model = -1,
     this.typeStateNumber = -1,
     this.chargingType = const [],
@@ -38,7 +36,6 @@ class CarEntity extends Equatable {
     this.vin = '',
     this.stateNumber = '',
     this.chargingTypeName = const [],
-    this.typeStateNumberName = '',
     this.vehicleTypeName = '',
     this.customManufacturer = '',
     this.usableBatterySize = -1,
@@ -49,6 +46,7 @@ class CarEntity extends Equatable {
     this.version = '',
     this.icon = '',
     this.customModel = '',
+    this.manufacturerName = '',
   });
 
   CarEntity copyWith({
@@ -61,9 +59,7 @@ class CarEntity extends Equatable {
     int? vehicleType,
     String? vin,
     String? stateNumber,
-    String? modelManifacturer,
     List<String>? chargingTypeName,
-    String? typeStateNumberName,
     String? vehicleTypeName,
     double? usableBatterySize,
     String? brand,
@@ -71,13 +67,13 @@ class CarEntity extends Equatable {
     String? variant,
     String? customManufacturer,
     String? modelName,
+    String? manufacturerName,
     String? version,
     String? icon,
     String? customModel,
   }) =>
       CarEntity(
         id: id ?? this.id,
-        modelManifacturer: modelManifacturer ?? this.modelManifacturer,
         name: name ?? this.name,
         customManufacturer: customManufacturer ?? this.customManufacturer,
         model: model ?? this.model,
@@ -87,7 +83,6 @@ class CarEntity extends Equatable {
         vin: vin ?? this.vin,
         stateNumber: stateNumber ?? this.stateNumber,
         chargingTypeName: chargingTypeName ?? this.chargingTypeName,
-        typeStateNumberName: typeStateNumberName ?? this.typeStateNumberName,
         vehicleTypeName: vehicleTypeName ?? this.vehicleTypeName,
         usableBatterySize: usableBatterySize ?? this.usableBatterySize,
         brand: brand ?? this.brand,
@@ -96,9 +91,32 @@ class CarEntity extends Equatable {
         modelName: modelName ?? this.modelName,
         version: version ?? this.version,
         manufacturer: manufacturer ?? this.manufacturer,
+        manufacturerName: manufacturerName ?? this.manufacturerName,
         icon: icon ?? this.icon,
         customModel: customModel ?? this.customModel,
       );
+
+  Map<String, dynamic> toApi() => {
+        'name': name,
+        'model': model,
+        'manufacturer': manufacturer,
+        'type_state_number': typeStateNumber > 0 ? typeStateNumber : null,
+        'charging_type': chargingType,
+        'vehicle_type': vehicleType > 0 ? vehicleType : null,
+        'vin': vin,
+        'state_number': stateNumber,
+        'charging_type_name': chargingTypeName,
+        'vehicle_type_name': vehicleTypeName,
+        'usable_battery_size': usableBatterySize,
+        'brand': brand,
+        'release_year': releaseYear,
+        'variant': variant,
+        'model_name': modelName,
+        'version': version.isNotEmpty ? version : null,
+        'icon': icon,
+        'manufacturer_name': manufacturerName,
+        'custom_model': customModel
+      };
 
   @override
   List<Object?> get props => [
@@ -112,7 +130,6 @@ class CarEntity extends Equatable {
         manufacturer,
         vehicleType,
         chargingTypeName,
-        typeStateNumberName,
         vehicleTypeName,
         version,
         vin,
@@ -122,8 +139,8 @@ class CarEntity extends Equatable {
         usableBatterySize,
         brand,
         icon,
-        modelManifacturer,
-        customModel
+        customModel,
+        manufacturerName
       ];
 }
 
@@ -147,7 +164,6 @@ class CarEntityConverter<S> implements JsonConverter<CarEntity, Map<String, dyna
         typeStateNumber: object.typeStateNumber,
         stateNumber: object.stateNumber,
         chargingTypeName: object.chargingTypeName,
-        typeStateNumberName: object.typeStateNumberName,
         usableBatterySize: object.usableBatterySize,
         brand: object.brand,
         releaseYear: object.releaseYear,
@@ -155,7 +171,6 @@ class CarEntityConverter<S> implements JsonConverter<CarEntity, Map<String, dyna
         modelName: object.modelName,
         version: object.version,
         icon: object.icon,
-        modelManifacturer: object.modelManifacturer,
         customModel: object.customModel,
       ).toJson();
 }

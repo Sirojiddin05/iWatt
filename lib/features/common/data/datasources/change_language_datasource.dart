@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/error/exception_handler.dart';
+import 'package:i_watt_app/features/common/data/models/error_model.dart';
 
 abstract class ChangeLanguageDataSource {
   Future<void> changeLanguage({required String languageCode});
@@ -18,7 +19,12 @@ class ChangeLanguageDataSourceImpl implements ChangeLanguageDataSource {
         data: {'language': languageCode},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
-        throw ServerException(statusCode: response.statusCode!, errorMessage: response.toString());
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;

@@ -20,6 +20,13 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class MyFunctions {
   const MyFunctions._();
 
+  static String getNameOfCar(String name, String customName) {
+    if (name.isNotEmpty) {
+      return name;
+    }
+    return customName;
+  }
+
   static int carNumberType(String number) {
     if (RegExp("^[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{2}\$").hasMatch(number)) {
       return 1;

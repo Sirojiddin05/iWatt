@@ -57,8 +57,8 @@ class _SavedLocationsState extends State<SavedLocations> {
                 if (state.chargeLocations.isEmpty) {
                   return Center(
                     child: EmptyStateWidget(
-                      title: LocaleKeys.there_are_not_stations.tr(),
-                      subtitle: LocaleKeys.there_is_nothing_here_yet.tr(),
+                      title: LocaleKeys.there_are_no_saved_stations.tr(),
+                      subtitle: LocaleKeys.you_have_not_save_stations_yet.tr(),
                       icon: AppImages.emptyStation,
                     ),
                   );

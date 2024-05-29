@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/core/util/formatter.dart';
+import 'package:i_watt_app/core/util/text_formatters/formatter.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/registration_bloc/registration_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/base_auth_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/date_picker_widget.dart';

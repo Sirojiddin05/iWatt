@@ -27,10 +27,11 @@ class NotificationDataSourceImpl extends NotificationDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return NotificationDetailModel.fromJson(response.data);
       } else {
-        final error = ErrorModel.fromJson(response.data);
+        final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
-          statusCode: response.statusCode!,
+          statusCode: error.statusCode,
           errorMessage: error.message,
+          error: error.error,
         );
       }
     } on DioException catch (e) {
@@ -54,8 +55,12 @@ class NotificationDataSourceImpl extends NotificationDataSource {
           (p0) => NotificationModel.fromJson(p0 as Map<String, dynamic>),
         );
       } else {
-        final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: response.statusCode!, errorMessage: error.message);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;
@@ -74,7 +79,12 @@ class NotificationDataSourceImpl extends NotificationDataSource {
         data: {"seen_all": true},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
-        throw ServerException(statusCode: response.statusCode!, errorMessage: response.data.toString());
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;
@@ -93,7 +103,12 @@ class NotificationDataSourceImpl extends NotificationDataSource {
         data: {"enabled": enabled},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
-        throw ServerException(statusCode: response.statusCode!, errorMessage: response.data.toString());
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;

@@ -32,7 +32,7 @@ class CarNumber4 extends StatelessWidget {
               "${number.substring(0, 3)} ${number.substring(3, 5)}-${number.substring(5, 7)}",
               style: context.textTheme.titleLarge?.copyWith(
                 fontFamily: 'UZBauto',
-                fontSize: 20,
+                fontSize: 22,
                 color: AppColors.white,
               ),
             ),

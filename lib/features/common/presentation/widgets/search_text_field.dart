@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/clear_field_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/default_text_field.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -16,6 +17,7 @@ class SearchField extends StatefulWidget {
   final bool focus;
   final double height;
   final double? width;
+  final String searchIcon;
 
   const SearchField({
     this.focusNode,
@@ -27,6 +29,7 @@ class SearchField extends StatefulWidget {
     this.focus = false,
     this.height = 40,
     this.width,
+    this.searchIcon = AppIcons.chevronLeftGrey,
   });
 
   @override
@@ -75,7 +78,7 @@ class _SearchFieldState extends State<SearchField> {
         },
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: SvgPicture.asset(AppIcons.chevronLeftGrey),
+          child: SvgPicture.asset(widget.searchIcon),
         ),
       ),
       hintText: LocaleKeys.input_for_search.tr(),
@@ -87,15 +90,12 @@ class _SearchFieldState extends State<SearchField> {
             child: child ?? const SizedBox.shrink(),
           );
         },
-        child: WScaleAnimation(
-          onTap: widget.onClear ??
+        child: ClearFieldButton(
+          onClear: widget.onClear ??
               () {
                 _controller.clear();
+                widget.onChanged('');
               },
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(AppIcons.clearRounded),
-          ),
         ),
       ),
     );

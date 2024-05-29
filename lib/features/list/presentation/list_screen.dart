@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/core/config/storage_keys.dart';
+import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
 import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
@@ -29,9 +31,13 @@ class _ListScreenState extends State<ListScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    print('didChangeDependencies ${context.locale.languageCode}');
-    chargeLocationsBloc.add(const GetChargeLocationsEvent());
+  Future<void> didChangeDependencies() async {
+    final previousLocale = StorageRepository.getString(StorageKeys.previousLanguage);
+    final currentLocale = context.locale.languageCode;
+    if (previousLocale != currentLocale) {
+      chargeLocationsBloc.add(const GetChargeLocationsEvent());
+      await StorageRepository.putString(StorageKeys.previousLanguage, currentLocale);
+    }
     super.didChangeDependencies();
   }
 

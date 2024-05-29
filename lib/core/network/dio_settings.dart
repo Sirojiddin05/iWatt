@@ -13,7 +13,7 @@ class DioSettings {
     receiveTimeout: const Duration(seconds: 33),
     followRedirects: false,
     headers: <String, dynamic>{
-      'Accept-Language': StorageRepository.getString(StorageKeys.language, defValue: 'uz'),
+      'Accept-Language': StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'uz'),
     },
     validateStatus: (status) => status != null && status <= 500,
   );

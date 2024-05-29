@@ -5,12 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
-import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
-import 'package:i_watt_app/features/common/domain/usecases/get_connector_types_usecase.dart';
-import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/pages/search_page.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_Icon_card.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_sheet.dart';
@@ -18,7 +12,6 @@ import 'package:i_watt_app/features/common/presentation/widgets/search_filter_wr
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_controller_provider.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
-import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SearchFilterContainer extends StatefulWidget {
@@ -32,13 +25,8 @@ class SearchFilterContainer extends StatefulWidget {
 }
 
 class _SearchFilterContainerState extends State<SearchFilterContainer> {
-  late final ConnectorTypesBloc connectorTypesBloc;
-  late final PowerTypesBloc powerTypesBloc;
-
   @override
   void initState() {
-    connectorTypesBloc = ConnectorTypesBloc(GetConnectorTypesUseCase(serviceLocator<ConnectorTypesRepositoryImpl>()))..add(GetConnectorTypesEvent());
-    powerTypesBloc = PowerTypesBloc(GetPowerTypesUseCase(serviceLocator<PowerTypesRepositoryImpl>()))..add(GetPowerTypesEvent());
     super.initState();
   }
 
@@ -95,27 +83,18 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        useRootNavigator: true,
                         backgroundColor: Colors.transparent,
+                        useRootNavigator: true,
                         isScrollControlled: true,
+                        constraints: BoxConstraints(maxHeight: context.sizeOf.height - kToolbarHeight),
                         builder: (ctx) {
-                          return MultiBlocProvider(
-                            providers: [
-                              BlocProvider.value(
-                                value: connectorTypesBloc,
-                              ),
-                              BlocProvider.value(
-                                value: powerTypesBloc,
-                              ),
-                            ],
-                            child: FilterSheet(
-                              onChanged: (List<int> powerTypes, List<int> connectorType) {
-                                context.read<ChargeLocationsBloc>().add(SetFilterEvent(powerTypes: powerTypes, connectorTypes: connectorType));
-                                Navigator.pop(ctx);
-                              },
-                              selectedPowerTypes: state.selectedPowerTypes,
-                              selectedConnectorTypes: state.selectedConnectorTypes,
-                            ),
+                          return FilterSheet(
+                            onChanged: (List<int> powerTypes, List<int> connectorType) {
+                              context.read<ChargeLocationsBloc>().add(SetFilterEvent(powerTypes: powerTypes, connectorTypes: connectorType));
+                              Navigator.pop(ctx);
+                            },
+                            selectedPowerTypes: state.selectedPowerTypes,
+                            selectedConnectorTypes: state.selectedConnectorTypes,
                           );
                         },
                       );

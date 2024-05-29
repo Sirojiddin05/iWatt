@@ -8,6 +8,7 @@ class SignInState extends Equatable {
     this.verifyCodeErrorMessage = '',
     this.verifiedPhone = '',
     this.tempPhone = '',
+    this.session = '',
     this.otp = '',
     this.codeAvailableTime = 60,
     this.isUserBlocked = false,
@@ -20,6 +21,7 @@ class SignInState extends Equatable {
   final String verifyCodeErrorMessage;
   final String verifiedPhone;
   final String tempPhone;
+  final String session;
   final String otp;
   final int codeAvailableTime;
   final bool isUserBlocked;
@@ -32,6 +34,7 @@ class SignInState extends Equatable {
     String? verifyCodeErrorMessage,
     String? verifiedPhone,
     String? tempPhone,
+    String? session,
     String? otp,
     int? codeAvailableTime,
     bool? isUserBlocked,
@@ -44,6 +47,7 @@ class SignInState extends Equatable {
       verifyCodeErrorMessage: verifyCodeErrorMessage ?? this.verifyCodeErrorMessage,
       verifiedPhone: verifiedPhone ?? this.verifiedPhone,
       tempPhone: tempPhone ?? this.tempPhone,
+      session: session ?? this.session,
       otp: otp ?? this.otp,
       codeAvailableTime: codeAvailableTime ?? this.codeAvailableTime,
       isUserBlocked: isUserBlocked ?? this.isUserBlocked,
@@ -59,9 +63,10 @@ class SignInState extends Equatable {
         verifyCodeErrorMessage,
         verifiedPhone,
         tempPhone,
+        session,
+        otp,
         codeAvailableTime,
         isUserBlocked,
         isNewUser,
-        otp,
       ];
 }

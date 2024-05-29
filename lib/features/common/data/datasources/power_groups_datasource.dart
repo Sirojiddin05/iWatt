@@ -20,8 +20,12 @@ class PowerTypesDataSourceImpl extends PowerTypesDataSource {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(response.data, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
       } else {
-        final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: response.statusCode ?? 0,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;

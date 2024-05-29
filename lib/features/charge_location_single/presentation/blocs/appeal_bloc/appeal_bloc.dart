@@ -5,6 +5,7 @@ import 'package:i_watt_app/features/charge_location_single/domain/entities/appea
 import 'package:i_watt_app/features/charge_location_single/domain/entities/send_appeal_param_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/usecases/get_appeals_usecase.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/usecases/send_appeal_usecase.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 part 'appeal_event.dart';
 part 'appeal_state.dart';
@@ -18,8 +19,10 @@ class AppealBloc extends Bloc<AppealEvent, AppealState> {
 
       final result = await getAppealsUseCase.call('');
       if (result.isRight) {
-        //TODO : edit LocaleKeys.other.tr()
-        final newList = [...result.right.results, const AppealEntity().copyWith(title: 'LocaleKeys.other.tr()', id: 0)];
+        final newList = [
+          ...result.right.results,
+          const AppealEntity().copyWith(title: LocaleKeys.other_neuter, id: 0),
+        ];
 
         emit(state.copyWith(
           getAppealsStatus: FormzSubmissionStatus.success,

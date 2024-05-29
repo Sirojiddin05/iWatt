@@ -4,7 +4,8 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 
 class SheetCloseButton extends StatelessWidget {
   final VoidCallback onTap;
-  const SheetCloseButton({super.key, required this.onTap});
+  final EdgeInsets? padding;
+  const SheetCloseButton({super.key, required this.onTap, this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class SheetCloseButton extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        padding: padding ?? const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: SvgPicture.asset(AppIcons.closeBoldGrey),
       ),
     );

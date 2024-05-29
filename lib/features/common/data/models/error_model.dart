@@ -1,16 +1,19 @@
+import 'package:i_watt_app/features/common/data/models/error_message_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'error_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-class ErrorModel {
-  final String message;
-  final int code;
+@JsonSerializable(genericArgumentFactories: true)
+class GenericErrorModel {
+  @JsonKey(name: 'status_code', defaultValue: -1)
+  final int statusCode;
+  @JsonKey(name: 'error', defaultValue: [])
+  final List<ErrorMessageModel> errors;
 
-  const ErrorModel({
-    this.message = '',
-    this.code = -1,
-  });
+  const GenericErrorModel({this.statusCode = -1, this.errors = const []});
 
-  factory ErrorModel.fromJson(Map<String, dynamic> json) => _$ErrorModelFromJson(json);
+  factory GenericErrorModel.fromJson(Map<String, dynamic> json) => _$GenericErrorModelFromJson(json);
+
+  String get message => errors.map((e) => e.message).join('\n');
+  String get error => errors.map((e) => e.error).join('\n');
 }

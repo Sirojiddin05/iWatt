@@ -10,18 +10,19 @@ class CarItem extends StatelessWidget {
   CarItem({
     super.key,
     required this.model,
-    required this.manafactur,
+    required this.manufacturer,
     required this.number,
     required this.type,
     required this.onTap,
   }) : numberType = MyFunctions.carNumberType(number);
 
   final String model;
-  final String manafactur;
+  final String manufacturer;
   final String number;
   final VoidCallback onTap;
   final List<String> type;
   final int numberType;
+
   @override
   Widget build(BuildContext context) {
     return WCustomTappableButton(
@@ -32,6 +33,7 @@ class CarItem extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.white,
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 6),
@@ -46,7 +48,7 @@ class CarItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  manafactur,
+                  manufacturer,
                   style: context.textTheme.titleSmall!.copyWith(
                     color: AppColors.deepFir,
                     fontWeight: FontWeight.w500,
@@ -75,11 +77,11 @@ class CarItem extends StatelessWidget {
                 CarNumberSwitcher(numberType: numberType, number: number),
                 const Spacer(),
                 if (type.length > 1) ...{
-                  ConnectorTitleWidget(type: (type.length - 1).toString()),
+                  ConnectorTitleWidget(type: '+${type.length - 1}'),
                   const SizedBox(width: 4),
                 },
                 if (type.isNotEmpty) ...{
-                  ConnectorTitleWidget(type: type[0]),
+                  ConnectorTitleWidget(type: type.first),
                 }
               ],
             )

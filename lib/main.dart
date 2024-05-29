@@ -14,20 +14,26 @@ import 'package:i_watt_app/features/authorization/data/repositories_impl/authent
 import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/about_us_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/notifications_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_all_search_histories.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_single_search_history.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_about_usecase.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_connector_types_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_notification.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_notification_detail.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_search_history.dart';
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
@@ -66,6 +72,22 @@ class App extends StatelessWidget {
             GetAuthenticationStatusUseCase(repository: serviceLocator<AuthenticationRepositoryImpl>()),
           ),
         ),
+        BlocProvider(
+          create: (context) => ConnectorTypesBloc(
+            GetConnectorTypesUseCase(
+              serviceLocator<ConnectorTypesRepositoryImpl>(),
+            ),
+          )..add(GetConnectorTypesEvent()),
+        ),
+        BlocProvider(
+          create: (context) => PowerTypesBloc(
+            GetPowerTypesUseCase(
+              serviceLocator<PowerTypesRepositoryImpl>(),
+            ),
+          )..add(GetPowerTypesEvent()),
+        ),
+        // connectorTypesBloc = ConnectorTypesBloc(GetConnectorTypesUseCase(serviceLocator<ConnectorTypesRepositoryImpl>()))..add(GetConnectorTypesEvent());
+        // powerTypesBloc = PowerTypesBloc(GetPowerTypesUseCase(serviceLocator<PowerTypesRepositoryImpl>()))..add(GetPowerTypesEvent());
         BlocProvider(
           create: (context) => AboutUsBloc(
             GetAboutUsUseCase(serviceLocator<AboutUsRepositoryImpl>()),
@@ -108,8 +130,8 @@ class App extends StatelessWidget {
           Locale('en'),
           Locale('ru'),
         ],
-        fallbackLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'ru')),
-        startLocale: Locale(StorageRepository.getString(StorageKeys.language, defValue: 'ru')),
+        fallbackLocale: Locale(StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'ru')),
+        startLocale: Locale(StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'ru')),
         saveLocale: true,
         child: const MyApp(),
       ),
@@ -133,12 +155,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    print('Locale changed: ${EasyLocalization.of(context)?.currentLocale?.languageCode}');
-    super.didChangeDependencies();
   }
 
   @override

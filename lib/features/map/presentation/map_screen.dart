@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/core/config/storage_keys.dart';
+import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
@@ -38,9 +41,14 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
+    final previousLocale = StorageRepository.getString(StorageKeys.previousLanguage);
+    final currentLocale = context.locale.languageCode;
+    if (previousLocale != currentLocale) {
+      chargeLocationsBloc.add(const GetChargeLocationsEvent());
+      await StorageRepository.putString(StorageKeys.previousLanguage, currentLocale);
+    }
     super.didChangeDependencies();
-    chargeLocationsBloc.add(const GetChargeLocationsEvent());
   }
 
   @override

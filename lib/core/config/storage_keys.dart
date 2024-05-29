@@ -4,7 +4,8 @@ class StorageKeys {
   static const accessToken = 'access_token';
   static const refreshToken = 'refresh_token';
   static const themeMode = 'theme_mode';
-  static const language = 'language';
+  static const currentLanguage = 'language';
+  static const previousLanguage = 'previous_language';
   static const latitude = 'lat';
   static const longitude = 'long';
   static const isRegisteredOnce = 'is_registered_once';

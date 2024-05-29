@@ -9,5 +9,3 @@ class DeleteCarEvent extends CarsEvent {
   final int carId;
   DeleteCarEvent(this.carId);
 }
-
-class AddCarEvent extends CarsEvent {}

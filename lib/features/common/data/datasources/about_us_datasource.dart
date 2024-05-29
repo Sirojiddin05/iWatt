@@ -19,8 +19,12 @@ class AboutUsDataSourceImpl implements AboutUsDataSource {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return AboutUsModel.fromJson(response.data['data']);
       } else {
-        final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;

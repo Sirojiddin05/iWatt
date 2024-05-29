@@ -1,5 +1,9 @@
 {
-  "other": "Другое",
+  "other":{
+    "masculine": "Другой",
+    "feminine": "Другая",
+    "neuter": "Другое"
+  },
   "map": "Карта",
   "stations": "Станции",
   "charging_processes": "Зарядки",
@@ -100,5 +104,35 @@
   "sport_car": "Спорткар",
   "white_suv": "Белый внедорожник",
   "add_car": "Добавить машину",
-  "no_number": "Номер не указан"
+  "no_number": "Номер не указан",
+  "you_have_no_cars_yet": "У вас еще нет машины",
+  "you_have_not_added_any_cars_yet": "Вы еще не добавили машину",
+  "there_are_no_saved_stations": "Нет сохраненных станций",
+  "you_have_not_save_stations_yet": "Вы еще не сохраняли станции",
+  "delete": "Удалить",
+  "edit": "Редактировать",
+  "connector_types": "Типы коннекторов",
+  "choose_model": "Выберите модель",
+  "choose_brand": "Выберите марку",
+  "connector_type": "Тип коннектора",
+  "additional_information": "Доп. информация",
+  "government_number_of_car": "Гос. номер машины",
+  "further": "Далее",
+  "helpful_information": "Полезная информация",
+  "brand": {
+    "capital": "Марка",
+    "small": "марка"
+  },
+  "model": {
+    "capital": "Модель",
+    "small": "модель"
+  },
+  "car_mark_name": "Название марки автомобиля",
+  "car_model_name": "Название модели",
+  "input_mark": "Введите марку",
+  "input_model": "Введите модель",
+  "connector_type_limit": "Количество типов коннектора не может быть больше трёх",
+  "if_you_enter_your_car_number_you_will_have_additional_conveniences": "Если вы введете номер своего автомобиля, у вас появятся дополнительные удобства",
+  "edit_car": "Редактировать машину",
+  "save": "Сохранить"
 }

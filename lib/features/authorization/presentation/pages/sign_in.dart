@@ -5,12 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/authorization/data/repositories_impl/sign_in_repository_impl.dart';
+import 'package:i_watt_app/features/authorization/domain/usecases/login_usecase.dart';
+import 'package:i_watt_app/features/authorization/domain/usecases/verify_code_usecase.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/code_verification_page.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/base_auth_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/phone_text_field.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SignInPage extends StatefulWidget {
@@ -28,7 +32,14 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    signInBloc = SignInBloc();
+    signInBloc = SignInBloc(
+      loginUseCase: LoginUseCase(
+        serviceLocator<SignInRepositoryImpl>(),
+      ),
+      verifyCodeUseCase: VerifyCodeUseCase(
+        serviceLocator<SignInRepositoryImpl>(),
+      ),
+    );
     phoneController = TextEditingController();
     phoneFieldHasError = ValueNotifier<bool>(false);
   }

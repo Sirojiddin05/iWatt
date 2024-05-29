@@ -19,8 +19,12 @@ class VersionCheckDataSourceImpl implements VersionCheckDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return VersionModel.fromJson(response.data);
       } else {
-        final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;

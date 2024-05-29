@@ -6,17 +6,19 @@ class ConnectorTitleWidget extends StatelessWidget {
   const ConnectorTitleWidget({
     super.key,
     required this.type,
+    this.isSmall = true,
   });
 
   final String type;
+  final bool isSmall;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: isSmall ? const EdgeInsets.symmetric(horizontal: 8, vertical: 2) : const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.lillyWhite,
-        borderRadius: BorderRadius.circular(4),
+        color: AppColors.zircon,
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         type,

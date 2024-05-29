@@ -33,7 +33,12 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(response.data, (p0) => ChargeLocationModel.fromJson(p0 as Map<String, dynamic>));
       } else {
-        throw ServerException(statusCode: response.statusCode!, errorMessage: response.data.toString());
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;
@@ -52,10 +57,11 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
         data: {'address_id': id},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
-        final error = ErrorModel.fromJson(response.data);
+        final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
-          statusCode: error.code,
+          statusCode: error.statusCode,
           errorMessage: error.message,
+          error: error.error,
         );
       }
     } on DioException catch (e) {

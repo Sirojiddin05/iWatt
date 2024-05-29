@@ -30,6 +30,7 @@ class AppColors {
   static const slateGrey = Color(0xff768194);
   static const ebonyClay = Color(0xff32363E);
   static const conifer = Color(0xffCAE160);
+  static const conifer2 = Color(0xffCAE161);
   static const fruitSalad = Color(0xff54B057);
   static const freeSpeechBlue = Color(0xff4048C4);
   static const kournikova = Color(0xffF7CB48);

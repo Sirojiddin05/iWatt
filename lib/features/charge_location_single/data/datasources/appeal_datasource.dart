@@ -26,8 +26,12 @@ class AppealDataSourceImpl extends AppealDataSource {
     try {
       final response = await dio.post('core/chargers/appeals/', data: data);
       if (!(response.statusCode! >= 200 && response.statusCode! < 300)) {
-        final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;
@@ -47,8 +51,12 @@ class AppealDataSourceImpl extends AppealDataSource {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(response.data, (p0) => AppealModel.fromJson(p0 as Map<String, dynamic>));
       } else {
-        final error = ErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: response.statusCode ?? 0, errorMessage: error.message);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on DioException catch (e) {
       final type = e.type;

@@ -7,7 +7,8 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({required super.errorMessage});
+  final String error;
+  const ServerFailure({required super.errorMessage, this.error = ''});
 }
 
 class DioFailure extends Failure {
