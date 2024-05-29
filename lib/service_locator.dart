@@ -20,9 +20,9 @@ import 'package:i_watt_app/features/navigation/data/datasources/version_check_da
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/datasources/car_brands_datasource.dart';
 import 'package:i_watt_app/features/profile/data/datasources/cars_datasource.dart';
+import 'package:i_watt_app/features/profile/data/datasources/payments_data_source.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/car_brands_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/cars_repository_impl.dart';
-import 'package:i_watt_app/features/profile/data/datasources/payments_data_source.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/change_language_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/payments_repository_impl.dart';
 
@@ -59,8 +59,7 @@ Future<void> setupLocator() async {
   // serviceLocator.registerLazySingleton(() => NotificationDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => NotificationRepositoryImpl(dataSource: serviceLocator<NotificationDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => PaymentsDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => PaymentsRepositoryImpl(dataSource: serviceLocator<PaymentsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => PaymentsRepositoryImpl(dataSource: serviceLocator<PaymentsDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => AppealDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => AppealRepositoryImpl(dataSource: serviceLocator<AppealDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => InstructionDataSourceImpl(serviceLocator<DioSettings>().dio));

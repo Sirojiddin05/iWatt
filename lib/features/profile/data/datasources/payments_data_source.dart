@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/error/exception_handler.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/features/common/data/models/error_model.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 import 'package:i_watt_app/features/profile/data/models/credit_card_model.dart';
 import 'package:i_watt_app/features/profile/data/models/payment_status_model.dart';
@@ -137,8 +138,12 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(response.data, (p0) => CreditCardModel.fromJson(p0 as Map<String, dynamic>));
       } else {
+        final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
-            statusCode: response.statusCode!, errorMessage: PaymentStatusModel.fromJson(response.data).status);
+          statusCode: error.statusCode,
+          errorMessage: PaymentStatusModel.fromJson(response.data).status,
+          error: '',
+        );
       }
     } on ServerException {
       rethrow;
@@ -161,14 +166,17 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
         return response.data['otp_sent_phone'] as String;
       } else {
         String errorMessage = '';
-        if (response.data is Map &&
-            response.data.containsKey("error") &&
-            response.data["error"].containsKey("message")) {
+        if (response.data is Map && response.data.containsKey("error") && response.data["error"].containsKey("message")) {
           errorMessage = response.data["error"]["message"];
         } else if (response.data is Map && response.data.containsKey("detail")) {
           errorMessage = response.data["detail"];
         }
-        throw ServerException(statusCode: response.statusCode!, errorMessage: errorMessage);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          error: error.error,
+          statusCode: response.statusCode!,
+          errorMessage: errorMessage,
+        );
       }
     } on ServerException {
       rethrow;
@@ -193,7 +201,12 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
         String errorMessage = response.data["error"]["message"];
-        throw ServerException(statusCode: response.statusCode!, errorMessage: errorMessage);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on ServerException {
       rethrow;
@@ -217,7 +230,12 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
         String errorMessage = '';
-        throw ServerException(statusCode: response.statusCode!, errorMessage: errorMessage);
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on ServerException {
       rethrow;
@@ -239,10 +257,8 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
         String errorMessage = response.data["error"]["message"];
-        throw ServerException(
-          statusCode: response.statusCode!,
-          errorMessage: errorMessage,
-        );
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(statusCode: error.statusCode, errorMessage: error.message, error: error.error);
       }
     } on ServerException {
       rethrow;

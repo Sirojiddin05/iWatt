@@ -150,9 +150,29 @@ class CodegenLoader extends AssetLoader{
   "connector_type_limit": "Количество типов коннектора не может быть больше трёх",
   "if_you_enter_your_car_number_you_will_have_additional_conveniences": "Если вы введете номер своего автомобиля, у вас появятся дополнительные удобства",
   "edit_car": "Редактировать машину",
-  "save": "Сохранить"
+  "save": "Сохранить",
+  "cancel": "Отменить",
+  "mark_everything_as_read": "Отметить все  прочитанными?",
+  "mark_everything_as_read_description": "Данное действие поменяет статус всех непрочитаных уведомлений на прочитанных",
+  "mark": "Отметить",
+  "yesterday": "Вчера",
+  "product_is_developed_by_company": "Продукт разработан компанией",
+  "there_was_a_problem_with_the_server_adding_the_card": "Возникла проблема с сервером, добавляющим карту.",
+  "rate_app": "Оцените приложение",
+  "card_added": "Карта добавлена",
+  "card_not_found": "Карта не найдена",
+  "card_expired": "Срок действия карты истек",
+  "enter_card_correctly": "Вводите данные правильно!",
+  "verification_not_right": "Код верификации введен неверно",
+  "remove": "Удалить",
+  "select_card": "Bыберите карту",
+  "start": "Начать"
 };
-static const Map<String,dynamic> en = {};
-static const Map<String,dynamic> uz = {};
+static const Map<String,dynamic> en = {
+  "cancel": "Cancel"
+};
+static const Map<String,dynamic> uz = {
+  "cancel": "Bekor qilish"
+};
 static const Map<String, Map<String,dynamic>> mapLocales = {"ru": ru, "en": en, "uz": uz};
 }
