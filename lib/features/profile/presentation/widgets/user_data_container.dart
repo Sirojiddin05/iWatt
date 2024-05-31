@@ -36,10 +36,11 @@ class UserDataContainer extends StatelessWidget {
         ),
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
+            final user = state.user;
             return Row(
               children: [
                 WImage(
-                  imageUrl: '${state.user.avatar}',
+                  imageUrl: state.user.photo,
                   fit: BoxFit.fill,
                   width: 48,
                   height: 48,
@@ -52,18 +53,20 @@ class UserDataContainer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        state.user.fullName,
+                        user.fullName.isEmpty ? 'User ${user.id}' : user.fullName,
                         style: context.textTheme.headlineLarge?.copyWith(fontSize: 18),
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        state.user.phone,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          fontSize: 12,
-                          //TODO theme
-                          color: AppColors.taxBreak,
+                      if (user.phone.isNotEmpty) ...{
+                        Text(
+                          user.phone,
+                          style: context.textTheme.titleMedium?.copyWith(
+                            fontSize: 12,
+                            //TODO theme
+                            color: AppColors.taxBreak,
+                          ),
                         ),
-                      ),
+                      }
                     ],
                   ),
                 ),

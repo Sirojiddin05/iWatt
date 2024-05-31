@@ -10,32 +10,39 @@ ChargeLocationModel _$ChargeLocationModelFromJson(Map<String, dynamic> json) =>
     ChargeLocationModel(
       longitude: json['longitude'] as String? ?? '',
       latitude: json['latitude'] as String? ?? '',
-      chargePoints: (json['charge_points'] as List<dynamic>?)
-              ?.map((e) =>
-                  const StationConverter().fromJson(e as Map<String, dynamic>))
+      id: (json['id'] as num?)?.toInt() ?? -1,
+      address: json['address'] as String? ?? '',
+      connectorsCount: (json['connectors_count'] as num?)?.toInt() ?? 0,
+      connectorsStatus: (json['connectors_status'] as List<dynamic>?)
+              ?.map((e) => e as String)
               .toList() ??
           const [],
-      id: (json['id'] as num?)?.toInt() ?? -1,
-      region: (json['region'] as num?)?.toInt() ?? -1,
-      name: json['name'] as String? ?? '',
-      address: json['address'] as String? ?? '',
-      landmark: json['landmark'] as String? ?? '',
-      regionName: json['region_name'] as String? ?? '',
+      distance: (json['distance'] as num?)?.toDouble() ?? -1,
+      vendorName: json['vendor_name'] as String? ?? '',
+      locationName: json['location_name'] as String? ?? '',
       isFavorite: json['is_favorite'] as bool? ?? false,
+      chargersCount: (json['chargers_count'] as num?)?.toInt() ?? -1,
+      logo: json['logo'] as String? ?? '',
+      maxElectricPowers: (json['max_electric_powers'] as List<dynamic>?)
+              ?.map((e) => e as num)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$ChargeLocationModelToJson(
         ChargeLocationModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'region': instance.region,
-      'region_name': instance.regionName,
-      'name': instance.name,
-      'address': instance.address,
-      'landmark': instance.landmark,
-      'longitude': instance.longitude,
       'latitude': instance.latitude,
-      'charge_points':
-          instance.chargePoints.map(const StationConverter().toJson).toList(),
+      'longitude': instance.longitude,
+      'address': instance.address,
+      'connectors_count': instance.connectorsCount,
+      'connectors_status': instance.connectorsStatus,
+      'vendor_name': instance.vendorName,
+      'location_name': instance.locationName,
+      'distance': instance.distance,
       'is_favorite': instance.isFavorite,
+      'max_electric_powers': instance.maxElectricPowers,
+      'logo': instance.logo,
+      'chargers_count': instance.chargersCount,
     };

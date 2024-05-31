@@ -4,10 +4,11 @@ import 'package:json_annotation/json_annotation.dart';
 class IdNameEntity {
   final int id;
   final String name;
+  @JsonKey(name: '_type', defaultValue: '')
   final String type;
   final String icon;
 
-  const IdNameEntity({this.id = -1, this.name = '', this.type = '', this.icon = ''});
+  const IdNameEntity({this.id = -1, this.name = '', this.icon = '', this.type = ''});
 }
 
 class IdNameConverter implements JsonConverter<IdNameEntity, Map<String, dynamic>> {

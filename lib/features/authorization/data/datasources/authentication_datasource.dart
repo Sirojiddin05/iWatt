@@ -27,6 +27,8 @@ class AuthenticationDatasourceImpl extends AuthenticationDatasource {
           error: model.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/save_unsave_bloc/save_un_save_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/usecases/save_unave_location_usecase.dart';
@@ -13,9 +16,10 @@ import 'package:i_watt_app/service_locator.dart';
 import 'package:vibration/vibration.dart';
 
 class SavedUnSaveButton extends StatelessWidget {
+  final double size;
   final ChargeLocationEntity location;
 
-  const SavedUnSaveButton({super.key, required this.location});
+  const SavedUnSaveButton({super.key, required this.location, this.size = 20});
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +41,23 @@ class SavedUnSaveButton extends StatelessWidget {
               } else if (Platform.isIOS) {
                 HapticFeedback.lightImpact();
               }
-              // if (context.read<AuthenticationBloc>().state.authenticationStatus != AuthenticationStatus.authenticated) {
-              //   //TODO: show login dialog
-              //   // showLoginDialog(context);
-              // } else {
-              context.read<SaveUnSaveBloc>().add(const SaveEvent());
-              // }
+              if (context.read<AuthenticationBloc>().state.authenticationStatus.isUnAuthenticated) {
+                showLoginDialog(
+                  context,
+                  onConfirm: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInPage()));
+                  },
+                );
+              } else {
+                context.read<SaveUnSaveBloc>().add(const SaveEvent());
+              }
             },
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: SvgPicture.asset(
                 state.location.isFavorite ? AppIcons.saved : AppIcons.unSaved,
+                height: size,
+                width: size,
               ),
             ),
           );

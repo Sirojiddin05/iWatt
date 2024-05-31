@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/saved_icon_container.dart';
@@ -13,6 +14,7 @@ import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.
 import 'package:i_watt_app/features/list/presentation/widgets/location_card_data_row.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_connector_statuses_widget.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_data_divider_circle.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class ChargeLocationCard extends StatelessWidget {
   final ChargeLocationEntity location;
@@ -91,7 +93,13 @@ class ChargeLocationCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
                   child: LocationStatusesWidget(
-                    connectorStatuses: MyFunctions.getConnectorStatuses(location),
+                    connectorStatuses: List.generate(
+                      location.connectorsStatus.length,
+                      (index) {
+                        final status = location.connectorsStatus[index];
+                        return ConnectorStatus.fromString(status);
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -106,7 +114,7 @@ class ChargeLocationCard extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
                               child: HighlightedText(
-                                allText: location.name,
+                                allText: "${location.locationName} ${location.vendorName}",
                                 highlightedText: highlightedTitle,
                                 textAlign: TextAlign.left,
                                 maxLines: 2,
@@ -115,13 +123,15 @@ class ChargeLocationCard extends StatelessWidget {
                           ),
                           if (hasSavedIcon) ...{
                             SavedUnSaveButton(
-                              location: location,
+                              location: location.copyWith(isFavorite: true),
                             ),
                           }
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      WImage(width: 76, height: 18, imageUrl: location.logo),
+                      if (location.logo.isNotEmpty) ...{
+                        const SizedBox(height: 8),
+                        WImage(width: 76, height: 18, imageUrl: location.logo),
+                      }
                     ],
                   ),
                 ),
@@ -142,7 +152,7 @@ class ChargeLocationCard extends StatelessWidget {
                 const LocationDataDividerCircle(),
                 LocationCardDataRow(
                   icon: context.themedIcons.station,
-                  value: "$stationsCount ${MyFunctions.getStationDueToQuantity(stationsCount).tr()}",
+                  value: "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
                 ),
                 if (location.distance != -1) ...{
                   const LocationDataDividerCircle(),
@@ -160,15 +170,12 @@ class ChargeLocationCard extends StatelessWidget {
   }
 
   String get powerTypes {
-    final powerTypes = location.chargePoints.map((e) => e.type).toList();
-    powerTypes.retainWhere((e) => e.isNotEmpty);
+    final powerTypes = location.maxElectricPowers.map((e) => '$e ${LocaleKeys.kW.tr()}').toList();
     return powerTypes.join(', ');
   }
 
-  int get stationsCount => location.chargePoints.length;
-
   String get distanceValue {
     final distance = location.distance;
-    return '${location.distance} km';
+    return '${location.distance} ${LocaleKeys.km.tr()}';
   }
 }

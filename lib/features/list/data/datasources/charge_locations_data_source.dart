@@ -21,9 +21,11 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
     if (paramEntity.next.isNotEmpty) {
       baseUrl = paramEntity.next;
     } else if (paramEntity.zoom != -1) {
-      baseUrl = 'core/charge-point-list/';
+      baseUrl = 'chargers/MapLocationList/';
+    } else if (paramEntity.isFavourite) {
+      baseUrl = 'chargers/SavedLocationList/';
     } else {
-      baseUrl = 'core/charge-point-list/';
+      baseUrl = 'chargers/LocationList/';
     }
     try {
       final response = await _dio.get(
@@ -40,6 +42,8 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -53,8 +57,8 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
   Future<void> saveUnSaveChargeLocation({required int id}) async {
     try {
       final response = await _dio.post(
-        'core/favorite-charge-points-addres/',
-        data: {'address_id': id},
+        'common/SavedLocation/',
+        data: {'location': id},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = GenericErrorModel.fromJson(response.data);
@@ -64,6 +68,8 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

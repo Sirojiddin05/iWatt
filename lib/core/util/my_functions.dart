@@ -12,13 +12,32 @@ import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/enums/app_theme.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
-import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static String getBalanceMessage(String myBalance) {
+    String balance = myBalance.replaceAll(' ', '');
+    balance = balance.replaceAll('-', '');
+    balance = balance.split('.').first;
+    return '-${formatNumber(balance)}';
+  }
+
+  static String formatNumber(String number) {
+    final rNumber = number.replaceAll(' ', '').replaceAll('.', '').split('').reversed.join();
+    String formatted = '';
+    for (int i = 0; i < rNumber.length; i++) {
+      if ((i + 1) % 3 == 0 && i != rNumber.length - 1) {
+        formatted = ' ${rNumber[i]}$formatted';
+      } else {
+        formatted = rNumber[i] + formatted;
+      }
+    }
+    return formatted;
+  }
 
   static String getNameOfCar(String name, String customName) {
     if (name.isNotEmpty) {
@@ -187,28 +206,27 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
-    final distance = Geolocator.distanceBetween(
-        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
-  static List<ConnectorStatus> getConnectorStatuses(ChargeLocationEntity location) {
-    final stations = location.chargePoints;
-    final connectors = stations.expand((element) => element.connectors).toList();
-    final List<ConnectorStatus?> listOfConnectorStatuses = List.generate(connectors.length, (i) {
-      final status = getConnectorStatus(connectors[i].status);
-      if (status != null && status.isBooked) {
-        return ConnectorStatus.busy;
-      }
-      return status;
-    });
-    listOfConnectorStatuses.retainWhere((element) => element != null);
-    final List<ConnectorStatus> list =
-        List.generate(listOfConnectorStatuses.length, (index) => listOfConnectorStatuses[index]!);
-    return list;
-  }
+  // static List<ConnectorStatus> getConnectorStatuses(ChargeLocationEntity location) {
+  //   final stations = location.chargePoints;
+  //   final connectors = stations.expand((element) => element.connectors).toList();
+  //   final List<ConnectorStatus?> listOfConnectorStatuses = List.generate(connectors.length, (i) {
+  //     final status = getConnectorStatus(connectors[i].status);
+  //     if (status != null && status.isBooked) {
+  //       return ConnectorStatus.busy;
+  //     }
+  //     return status;
+  //   });
+  //   listOfConnectorStatuses.retainWhere((element) => element != null);
+  //   final List<ConnectorStatus> list =
+  //       List.generate(listOfConnectorStatuses.length, (index) => listOfConnectorStatuses[index]!);
+  //   return list;
+  // }
 
-  static ConnectorStatus? getConnectorStatus(String? status) {
+  static ConnectorStatus getConnectorStatus(String? status) {
     switch (status) {
       case 'Available':
         return ConnectorStatus.free;
@@ -228,8 +246,6 @@ class MyFunctions {
         return ConnectorStatus.free;
       case 'Unavailable':
         return ConnectorStatus.notWorking;
-      case null:
-        return null;
       default:
         return ConnectorStatus.notWorking;
     }
@@ -255,8 +271,7 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(
-        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

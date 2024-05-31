@@ -101,7 +101,7 @@ class _CustomModelItemState extends State<CustomModelItem> with SingleTickerProv
                 child: ClearFieldButton(
                   onClear: () {
                     controller.clear();
-                    context.read<AddCarBloc>().add(SetCustomModel(''));
+                    context.read<AddCarBloc>().add(SetOtherModel(''));
                   },
                 ),
               ),

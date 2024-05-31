@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +17,6 @@ import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_con
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigation_bar_widget.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
-import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:vibration/vibration.dart';
 
@@ -31,7 +29,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, WidgetsBindingObserver {
   late final TabController _tabController;
-  late final bool isUnAuthenticated;
   late final ValueNotifier<int> _currentIndex;
   late final VersionCheckBloc _versionCheckBloc;
 
@@ -56,8 +53,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   void initState() {
     super.initState();
     _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))..add(GetVersionEvent());
-    final userAuthStatus = context.read<AuthenticationBloc>().state.authenticationStatus;
-    isUnAuthenticated = userAuthStatus.isUnAuthenticated;
+
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
       ..addListener(() => _currentIndex.value = _tabController.index);
@@ -138,16 +134,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
       );
 
   Future<void> _onTabChange(index) async {
-    if ((index == 2 || index == 3) && isUnAuthenticated) {
-      showCustomAdaptiveDialog(
-        context,
-        title: LocaleKeys.you_need_to_login_to_do_this_action.tr(),
-        cancelText: LocaleKeys.cancel.tr(),
-        confirmText: LocaleKeys.login.tr(),
-        onConfirm: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInPage()));
-        },
-      );
+    final userAuthStatus = context.read<AuthenticationBloc>().state.authenticationStatus;
+    final isUnAuthenticated = userAuthStatus.isUnAuthenticated;
+    if (index == 2 && isUnAuthenticated) {
+      showLoginDialog(context, onConfirm: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInPage()));
+      },);
     } else {
       _tabController.animateTo(index);
     }

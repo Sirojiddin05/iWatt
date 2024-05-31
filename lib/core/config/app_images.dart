@@ -27,4 +27,5 @@ class AppImages {
   static const humo = 'assets/images/humo.png';
   static const masterCard = 'assets/images/master_card.png';
   static const uzcard = 'assets/images/uzcard.png';
+  static const locationSingleHeaderBg = 'assets/images/location_single_header_bg.png';
 }

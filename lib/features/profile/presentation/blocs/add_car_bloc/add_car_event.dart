@@ -4,8 +4,8 @@ part of 'add_car_bloc.dart';
 abstract class AddCarEvent {}
 
 class SetManufacturer extends AddCarEvent {
-  final int id;
-  SetManufacturer(this.id);
+  final IdNameEntity manufacturer;
+  SetManufacturer(this.manufacturer);
 }
 
 class SetModel extends AddCarEvent {
@@ -14,16 +14,6 @@ class SetModel extends AddCarEvent {
 
 class SetConnectorTypes extends AddCarEvent {
   SetConnectorTypes();
-}
-
-class SetCustomManufacturer extends AddCarEvent {
-  final String manufacturer;
-  SetCustomManufacturer(this.manufacturer);
-}
-
-class SetCustomModel extends AddCarEvent {
-  final String model;
-  SetCustomModel(this.model);
 }
 
 class SetCarNumber extends AddCarEvent {
@@ -41,13 +31,23 @@ class SwitchToNextStep extends AddCarEvent {}
 class SwitchToPreviousStep extends AddCarEvent {}
 
 class SetTemporaryModel extends AddCarEvent {
-  final int id;
-  SetTemporaryModel(this.id);
+  final IdNameEntity model;
+  SetTemporaryModel(this.model);
 }
 
 class SetTemporaryConnectorTypes extends AddCarEvent {
   final List<int> ids;
   SetTemporaryConnectorTypes(this.ids);
+}
+
+class SetOtherMark extends AddCarEvent {
+  final String mark;
+  SetOtherMark(this.mark);
+}
+
+class SetOtherModel extends AddCarEvent {
+  final String model;
+  SetOtherModel(this.model);
 }
 
 class AddCar extends AddCarEvent {}

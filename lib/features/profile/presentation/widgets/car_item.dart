@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_number_switcher.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/connector_name_widget.dart';
@@ -12,7 +13,7 @@ class CarItem extends StatelessWidget {
     required this.model,
     required this.manufacturer,
     required this.number,
-    required this.type,
+    required this.connectorTypes,
     required this.onTap,
   }) : numberType = MyFunctions.carNumberType(number);
 
@@ -20,7 +21,7 @@ class CarItem extends StatelessWidget {
   final String manufacturer;
   final String number;
   final VoidCallback onTap;
-  final List<String> type;
+  final List<IdNameEntity> connectorTypes;
   final int numberType;
 
   @override
@@ -76,12 +77,12 @@ class CarItem extends StatelessWidget {
               children: [
                 CarNumberSwitcher(numberType: numberType, number: number),
                 const Spacer(),
-                if (type.length > 1) ...{
-                  ConnectorTitleWidget(type: '+${type.length - 1}'),
+                if (connectorTypes.length > 1) ...{
+                  ConnectorTitleWidget(type: '+${connectorTypes.length - 1}'),
                   const SizedBox(width: 4),
                 },
-                if (type.isNotEmpty) ...{
-                  ConnectorTitleWidget(type: type.first),
+                if (connectorTypes.isNotEmpty) ...{
+                  ConnectorTitleWidget(type: connectorTypes.first.name),
                 }
               ],
             )

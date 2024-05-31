@@ -1,7 +1,6 @@
 class SendAppealParams {
-  final int id;
   final int location;
-  final String otherAppeal;
+  final String appeal;
 
-  SendAppealParams({required this.id, required this.location, this.otherAppeal = ''});
+  SendAppealParams({required this.location, required this.appeal});
 }

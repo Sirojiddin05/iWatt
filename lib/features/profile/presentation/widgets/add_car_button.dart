@@ -40,8 +40,8 @@ class _AddCarBottomButtonState extends State<AddCarBottomButton> with TickerProv
           sizeFactor: bottomButtonController,
           child: WButton(
             onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
               if (state.currentStep == 1) {
+                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
                 context.read<AddCarBloc>().add(SetModel());
               } else if (state.currentStep == 2) {
                 if (state.temporaryConnectorTypes.length > 3) {
@@ -54,6 +54,7 @@ class _AddCarBottomButtonState extends State<AddCarBottomButton> with TickerProv
                   context.read<AddCarBloc>().add(SetConnectorTypes());
                 }
               } else if (state.currentStep == 3) {
+                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
                 context.read<AddCarBloc>().add(AddCar());
               }
             },
@@ -76,16 +77,20 @@ class _AddCarBottomButtonState extends State<AddCarBottomButton> with TickerProv
 
   bool isDisabled(AddCarState state) {
     final car = state.car;
+    final temporaryManufacturer = state.temporaryManufacturer;
+    final otherManufacturer = state.otherMark;
     final temporaryModel = state.temporaryModel;
+    final otherModel = state.otherModel;
     final temporaryConnectorTypes = state.temporaryConnectorTypes;
+    final manufacturer = car.manufacturer;
     if (state.currentStep == 1) {
-      if (car.manufacturer == 0) {
-        return car.customModel.isEmpty || car.customManufacturer.isEmpty;
+      if (temporaryManufacturer.id == 0) {
+        return otherModel.isEmpty || otherManufacturer.isEmpty;
       }
-      if (temporaryModel == 0) {
-        return car.customModel.isEmpty;
+      if (temporaryModel.id == 0) {
+        return otherModel.isEmpty;
       }
-      return temporaryModel == -1;
+      return temporaryModel.id == -1;
     }
     if (state.currentStep == 2) {
       return temporaryConnectorTypes.isEmpty;

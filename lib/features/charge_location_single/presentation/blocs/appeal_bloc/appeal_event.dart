@@ -19,12 +19,10 @@ class AddAppeal extends AppealEvent {
 
 class SendAppealEvent extends AppealEvent {
   final int location;
-  final int title;
   final String text;
 
   const SendAppealEvent({
     required this.location,
-    required this.title,
     this.text = '',
   });
 }

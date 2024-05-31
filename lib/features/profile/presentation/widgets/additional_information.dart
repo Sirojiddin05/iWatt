@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/info_container.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/add_car_bloc/add_car_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_number_textfield.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -46,26 +47,28 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Spacer(),
-        Text(
-          LocaleKeys.government_number_of_car.tr(),
-          style: context.textTheme.headlineSmall?.copyWith(color: AppColors.taxBreak),
-        ),
-        const SizedBox(height: 8),
-        CarNumberField(
-          regionTextEditingController: regionTextEditingController,
-          numberTextEditingController: numberTextEditingController,
-          context: context,
-          numberType: 0,
-        ),
-        const Spacer(),
-        InfoContainer(
-          infoText: LocaleKeys.if_you_enter_your_car_number_you_will_have_additional_conveniences.tr(),
-          title: LocaleKeys.helpful_information.tr(),
-        ),
-      ],
+    return WKeyboardDismisser(
+      child: Column(
+        children: [
+          const Spacer(),
+          Text(
+            LocaleKeys.government_number_of_car.tr(),
+            style: context.textTheme.headlineSmall?.copyWith(color: AppColors.taxBreak),
+          ),
+          const SizedBox(height: 8),
+          CarNumberField(
+            regionTextEditingController: regionTextEditingController,
+            numberTextEditingController: numberTextEditingController,
+            context: context,
+            numberType: 0,
+          ),
+          const Spacer(),
+          InfoContainer(
+            infoText: LocaleKeys.if_you_enter_your_car_number_you_will_have_additional_conveniences.tr(),
+            title: LocaleKeys.helpful_information.tr(),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -28,6 +28,8 @@ class VersionCheckDataSourceImpl implements VersionCheckDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

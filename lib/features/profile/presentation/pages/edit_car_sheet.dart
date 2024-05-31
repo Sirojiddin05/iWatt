@@ -44,14 +44,14 @@ class _EditCarSheetState extends State<EditCarSheet> {
                   BlocBuilder<EditCarBloc, EditCarState>(
                     buildWhen: (o, n) {
                       final isManufacturerChanged = o.car.manufacturer != n.car.manufacturer;
-                      final isCustomManufacturerChanged = o.car.customManufacturer != n.car.customManufacturer;
+                      final isCustomManufacturerChanged = o.car.manufacturer != n.car.manufacturer;
                       return isManufacturerChanged || isCustomManufacturerChanged;
                     },
                     builder: (context, state) {
                       return OptionContainer(
                         title: LocaleKeys.brand_capital.tr(),
                         content: Text(
-                          getManufacturerName(state),
+                          state.car.manufacturer,
                           style: context.textTheme.titleLarge?.copyWith(
                             fontSize: 16,
                           ),
@@ -70,14 +70,13 @@ class _EditCarSheetState extends State<EditCarSheet> {
                   BlocBuilder<EditCarBloc, EditCarState>(
                     buildWhen: (o, n) {
                       final isModelChanged = o.car.model != n.car.model;
-                      final isCustomModelChanged = o.car.customModel != n.car.customModel;
-                      return isCustomModelChanged || isModelChanged;
+                      return isModelChanged;
                     },
                     builder: (context, state) {
                       return OptionContainer(
                         title: LocaleKeys.model_capital.tr(),
                         content: Text(
-                          getModelName(state),
+                          state.car.model,
                           style: context.textTheme.titleLarge?.copyWith(
                             fontSize: 16,
                           ),
@@ -109,21 +108,5 @@ class _EditCarSheetState extends State<EditCarSheet> {
         ),
       ),
     );
-  }
-
-  String getManufacturerName(EditCarState state) {
-    if (state.car.customManufacturer.isNotEmpty) {
-      return state.car.customManufacturer;
-    } else {
-      return state.car.brand;
-    }
-  }
-
-  String getModelName(EditCarState state) {
-    if (state.car.customManufacturer.isNotEmpty) {
-      return state.car.customManufacturer;
-    } else {
-      return state.car.brand;
-    }
   }
 }

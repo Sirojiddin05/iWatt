@@ -1,0 +1,138 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/util/enums/connector_status.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/charge_location_single/domain/entities/charger_entity.dart';
+import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/connector_status_container.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
+
+class ChargingPointsCard extends StatefulWidget {
+  final List<ChargerEntity> chargers;
+  const ChargingPointsCard({
+    super.key,
+    required this.chargers,
+  });
+
+  @override
+  State<ChargingPointsCard> createState() => _ChargingPointsCardState();
+}
+
+class _ChargingPointsCardState extends State<ChargingPointsCard> {
+  final List<ConnectorEntity> allConnectors = [];
+  @override
+  void initState() {
+    super.initState();
+    for (final charger in widget.chargers) {
+      allConnectors.addAll(charger.connectors);
+    }
+    print('allConnectors.length ${allConnectors.length}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LocationSingleCardWrapper(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: List.generate(
+          allConnectors.length,
+          (index) => WCustomTappableButton(
+            onTap: () {},
+            borderRadius: getBorderRadius(index),
+            rippleColor: AppColors.primaryRipple30,
+            child: Padding(
+              padding: index == 0 ? const EdgeInsets.fromLTRB(16, 16, 12, 10) : const EdgeInsets.fromLTRB(16, 10, 12, 10),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    allConnectors[index].standard.icon,
+                    width: 32,
+                    height: 32,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          allConnectors[index].name,
+                          style: context.textTheme.headlineMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          allConnectors[index].standard.maxVoltage.toString(),
+                          style: context.textTheme.labelMedium!.copyWith(
+                            color: AppColors.blueBayoux,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+                    buildWhen: (o, n) {
+                      final oldAllConnectors = o.allConnectors;
+                      final newAllConnectors = n.allConnectors;
+                      return oldAllConnectors[index].status != newAllConnectors[index].status;
+                    },
+                    builder: (ctx, state) {
+                      print('inside are ${state.allConnectors}');
+                      final status = ConnectorStatus.fromString(state.allConnectors[index].status);
+                      return ConnectorStatusContainer(status: status);
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    getPrice(allConnectors[index].id),
+                    style: context.textTheme.bodyLarge,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    "UZS",
+                    style: context.textTheme.titleMedium!.copyWith(
+                      color: AppColors.blueBayoux,
+                      fontSize: 10,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String getPrice(int id) {
+    for (final charger in widget.chargers) {
+      final connectorIds = List.generate(charger.connectors.length, (index) => charger.connectors[index].id);
+      if (connectorIds.contains(id)) {
+        return MyFunctions.formatNumber(charger.price.toString().split('.').first);
+      }
+    }
+    return '';
+  }
+
+  BorderRadius getBorderRadius(index) {
+    if (index == 0) {
+      if (allConnectors.length != 1) {
+        return const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        );
+      }
+      return BorderRadius.circular(16);
+    } else if (allConnectors.length - 1 == index) {
+      return const BorderRadius.only(
+        bottomRight: Radius.circular(16),
+        bottomLeft: Radius.circular(16),
+      );
+    }
+    return BorderRadius.zero;
+  }
+}

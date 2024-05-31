@@ -16,7 +16,7 @@ class CarBrandsDatasourceImpl extends CarBrandsDatasource {
 
   @override
   Future<GenericPagination<IdNameModel>> getManufacturers({String next = '', String searchQuery = ''}) async {
-    final baseUrl = next.isNotEmpty ? next : 'core/manufacturers/';
+    final baseUrl = next.isNotEmpty ? next : 'common/ManufacturerList/';
     final params = next.isEmpty ? {'search': searchQuery} : null;
     try {
       final response = await _dio.get(
@@ -25,7 +25,7 @@ class CarBrandsDatasourceImpl extends CarBrandsDatasource {
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(
-          {"results": response.data['data']},
+          response.data,
           (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>),
         );
       } else {
@@ -36,6 +36,8 @@ class CarBrandsDatasourceImpl extends CarBrandsDatasource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -47,7 +49,7 @@ class CarBrandsDatasourceImpl extends CarBrandsDatasource {
 
   @override
   Future<GenericPagination<IdNameModel>> getModels({String next = '', required int manufacturerId}) async {
-    final baseUrl = next.isNotEmpty ? next : 'core/car-models/';
+    final baseUrl = next.isNotEmpty ? next : 'common/CarModelList/';
     final params = next.isEmpty ? {'manufacturer': manufacturerId} : null;
     try {
       final response = await _dio.get(
@@ -55,7 +57,7 @@ class CarBrandsDatasourceImpl extends CarBrandsDatasource {
         queryParameters: params,
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson({"results": response.data['data']}, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
+        return GenericPagination.fromJson(response.data, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
@@ -64,6 +66,8 @@ class CarBrandsDatasourceImpl extends CarBrandsDatasource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

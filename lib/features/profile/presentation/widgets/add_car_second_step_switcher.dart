@@ -14,7 +14,7 @@ class SecondStepSwitcher extends StatelessWidget {
         return o.car.manufacturer != n.car.manufacturer;
       },
       builder: (ctx, state) {
-        if (state.car.manufacturer == 0) {
+        if (state.temporaryManufacturer.id == 0) {
           return const CustomModelMarkStep();
         } else {
           return const AddCarModelsList();

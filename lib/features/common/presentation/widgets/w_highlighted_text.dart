@@ -102,16 +102,18 @@ class HighlightedText extends StatelessWidget {
         }
       }
     }
-
-    return RichText(
-      maxLines: maxLines,
-      overflow: overflow,
-      text: TextSpan(
-        children: children,
-        style: textStyle,
+    return Padding(
+      padding: const EdgeInsets.only(top: 3),
+      child: RichText(
+        maxLines: maxLines,
+        overflow: overflow,
+        text: TextSpan(
+          children: children,
+          style: textStyle,
+        ),
+        textAlign: textAlign,
+        textScaler: MediaQuery.of(context).textScaler,
       ),
-      textAlign: textAlign,
-      textScaler: MediaQuery.of(context).textScaler,
     );
   }
 }

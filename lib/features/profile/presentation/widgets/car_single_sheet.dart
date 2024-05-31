@@ -70,7 +70,7 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
           Padding(
             padding: const EdgeInsets.only(left: 16.0),
             child: Text(
-              MyFunctions.getNameOfCar(car.manufacturerName, car.customManufacturer),
+              car.manufacturer,
               style: context.textTheme.headlineSmall!.copyWith(fontSize: 16),
             ),
           ),
@@ -78,12 +78,12 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
           Padding(
             padding: const EdgeInsets.only(left: 16.0),
             child: Text(
-              MyFunctions.getNameOfCar(car.modelName, car.customModel),
+              car.model,
               style: context.textTheme.displayLarge,
             ),
           ),
           const SizedBox(height: 16),
-          if (car.chargingTypeName.isNotEmpty) ...{
+          if (car.connectorType.isNotEmpty) ...{
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Text(
@@ -93,7 +93,7 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
             ),
             const SizedBox(height: 8),
             ...List.generate(
-              car.chargingTypeName.length,
+              car.connectorType.length,
               (index) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
@@ -101,11 +101,13 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
                   children: [
                     const SizedBox(width: 16),
                     SvgPicture.asset(
-                      MyFunctions.getChargeTypeIconByStatus(car.chargingTypeName[index]),
+                      car.connectorType[index].icon,
+                      width: 32,
+                      height: 32,
                     ),
                     const SizedBox(width: 6),
                     ConnectorTitleWidget(
-                      type: car.chargingTypeName[index],
+                      type: car.connectorType[index].name,
                       isSmall: false,
                     )
                   ],

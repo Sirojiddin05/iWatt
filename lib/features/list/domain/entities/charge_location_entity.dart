@@ -1,72 +1,68 @@
-import 'package:equatable/equatable.dart';
 import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
-import 'package:i_watt_app/features/list/domain/entities/station_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-class ChargeLocationEntity extends Equatable {
+class ChargeLocationEntity {
   final int id;
-  final int region;
-  final String regionName;
-  final String name;
-  final String address;
-  final String landmark;
-  final String longitude;
   final String latitude;
-  @StationConverter()
-  final List<StationEntity> chargePoints;
-  final bool isFavorite;
+  final String longitude;
+  final String address;
+  final int connectorsCount;
+  final List<String> connectorsStatus;
+  final String vendorName;
+  final String locationName;
   final double distance;
+  final bool isFavorite;
+  final List<num> maxElectricPowers;
   final String logo;
+  final int chargersCount;
 
   const ChargeLocationEntity({
     this.id = -1,
-    this.region = -1,
-    this.regionName = '',
-    this.name = '',
     this.address = '',
-    this.landmark = '',
     this.longitude = '',
     this.latitude = '',
-    this.chargePoints = const [],
-    this.isFavorite = false,
+    this.connectorsCount = 0,
+    this.connectorsStatus = const [],
     this.distance = -1,
+    this.vendorName = '',
+    this.locationName = '',
+    this.isFavorite = false,
+    this.maxElectricPowers = const [],
     this.logo = '',
+    this.chargersCount = -1,
   });
 
   ChargeLocationEntity copyWith({
+    int? id,
+    String? latitude,
+    String? longitude,
+    String? address,
+    int? connectorsCount,
+    List<String>? connectorsStatus,
+    double? distance,
+    String? vendorName,
+    String? locationName,
     bool? isFavorite,
+    List<num>? maxElectricPowers,
+    String? logo,
+    int? chargersCount,
   }) {
     return ChargeLocationEntity(
-      id: id,
-      name: name,
-      address: address,
-      chargePoints: chargePoints,
+      id: id ?? this.id,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      address: address ?? this.address,
+      connectorsCount: connectorsCount ?? this.connectorsCount,
+      connectorsStatus: connectorsStatus ?? this.connectorsStatus,
+      distance: distance ?? this.distance,
+      vendorName: vendorName ?? this.vendorName,
+      locationName: locationName ?? this.locationName,
       isFavorite: isFavorite ?? this.isFavorite,
-      landmark: landmark,
-      latitude: latitude,
-      longitude: longitude,
-      region: region,
-      regionName: regionName,
-      distance: distance,
-      logo: logo,
+      maxElectricPowers: maxElectricPowers ?? this.maxElectricPowers,
+      logo: logo ?? this.logo,
+      chargersCount: chargersCount ?? this.chargersCount,
     );
   }
-
-  @override
-  List<Object?> get props => [
-        id,
-        region,
-        regionName,
-        name,
-        address,
-        landmark,
-        longitude,
-        latitude,
-        chargePoints,
-        isFavorite,
-        distance,
-        logo,
-      ];
 }
 
 class ChargeLocationConverter<S> implements JsonConverter<ChargeLocationEntity, Map<String, dynamic>?> {
@@ -78,14 +74,14 @@ class ChargeLocationConverter<S> implements JsonConverter<ChargeLocationEntity, 
   @override
   Map<String, dynamic> toJson(ChargeLocationEntity object) => ChargeLocationModel(
         id: object.id,
-        chargePoints: object.chargePoints,
-        name: object.name,
         latitude: object.latitude,
         longitude: object.longitude,
-        landmark: object.landmark,
-        region: object.region,
         address: object.address,
+        connectorsCount: object.connectorsCount,
+        connectorsStatus: object.connectorsStatus,
+        distance: object.distance,
+        vendorName: object.vendorName,
+        locationName: object.locationName,
         isFavorite: object.isFavorite,
-        regionName: object.regionName,
       ).toJson();
 }

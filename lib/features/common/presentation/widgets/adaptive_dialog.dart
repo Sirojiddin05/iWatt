@@ -37,6 +37,19 @@ Future showCustomAdaptiveDialog(
   );
 }
 
+Future showLoginDialog(
+  BuildContext context, {
+  required Function() onConfirm,
+}) async {
+  return await showCustomAdaptiveDialog(
+    context,
+    title: LocaleKeys.you_need_to_login_to_do_this_action.tr(),
+    cancelText: LocaleKeys.cancel.tr(),
+    confirmText: LocaleKeys.login.tr(),
+    onConfirm: onConfirm,
+  );
+}
+
 class CustomAdaptiveDialog extends StatelessWidget {
   final String title;
   final TextStyle? titleStyle;
@@ -86,7 +99,10 @@ class CustomAdaptiveDialog extends StatelessWidget {
             child: Text(cancelText ?? LocaleKeys.cancel.tr()),
           ),
           CupertinoDialogAction(
-            onPressed: onConfirm,
+            onPressed: () {
+              Navigator.pop(context);
+              onConfirm();
+            },
             textStyle: confirmStyle?.copyWith(fontFamily: 'SFProText') ??
                 context.textTheme.headlineLarge?.copyWith(color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
             child: Text(confirmText),

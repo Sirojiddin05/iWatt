@@ -6,24 +6,33 @@ class AddCarState extends Equatable {
     this.error = '',
     this.car = const CarEntity(),
     this.currentStep = 0,
-    this.temporaryModel = -1,
+    this.temporaryModel = const IdNameEntity(),
+    this.temporaryManufacturer = const IdNameEntity(),
     this.temporaryConnectorTypes = const [],
+    this.otherMark = '',
+    this.otherModel = '',
   });
 
   final FormzSubmissionStatus status;
   final String error;
   final CarEntity car;
   final int currentStep;
-  final int temporaryModel;
+  final IdNameEntity temporaryModel;
+  final IdNameEntity temporaryManufacturer;
   final List<int> temporaryConnectorTypes;
+  final String otherMark;
+  final String otherModel;
 
   AddCarState copyWith({
     FormzSubmissionStatus? status,
     String? error,
     CarEntity? car,
     int? currentStep,
-    int? temporaryModel,
+    IdNameEntity? temporaryModel,
+    IdNameEntity? temporaryManufacturer,
     List<int>? temporaryConnectorTypes,
+    String? otherMark,
+    String? otherModel,
   }) {
     return AddCarState(
       status: status ?? this.status,
@@ -32,6 +41,9 @@ class AddCarState extends Equatable {
       currentStep: currentStep ?? this.currentStep,
       temporaryModel: temporaryModel ?? this.temporaryModel,
       temporaryConnectorTypes: temporaryConnectorTypes ?? this.temporaryConnectorTypes,
+      otherMark: otherMark ?? this.otherMark,
+      otherModel: otherModel ?? this.otherModel,
+      temporaryManufacturer: temporaryManufacturer ?? this.temporaryManufacturer,
     );
   }
 
@@ -42,6 +54,9 @@ class AddCarState extends Equatable {
         car,
         currentStep,
         temporaryModel,
+        temporaryManufacturer,
         temporaryConnectorTypes,
+        otherMark,
+        otherModel,
       ];
 }

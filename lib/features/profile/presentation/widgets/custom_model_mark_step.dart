@@ -20,8 +20,8 @@ class _CustomModelMarkStepState extends State<CustomModelMarkStep> {
   void initState() {
     super.initState();
     final state = context.read<AddCarBloc>().state;
-    markController = TextEditingController(text: state.car.customManufacturer);
-    modelController = TextEditingController(text: state.car.customModel);
+    markController = TextEditingController(text: state.otherMark);
+    modelController = TextEditingController(text: state.otherModel);
   }
 
   @override
@@ -35,7 +35,7 @@ class _CustomModelMarkStepState extends State<CustomModelMarkStep> {
             hintText: LocaleKeys.input_mark.tr(),
             controller: markController,
             onChanged: (v) {
-              context.read<AddCarBloc>().add(SetCustomManufacturer(v));
+              context.read<AddCarBloc>().add(SetOtherMark(v));
             },
             onSubmitted: (String value) {},
           ),
@@ -47,7 +47,7 @@ class _CustomModelMarkStepState extends State<CustomModelMarkStep> {
             hintText: LocaleKeys.input_model.tr(),
             controller: modelController,
             onChanged: (v) {
-              context.read<AddCarBloc>().add(SetCustomModel(v));
+              context.read<AddCarBloc>().add(SetOtherModel(v));
             },
             onSubmitted: (String value) {},
           ),

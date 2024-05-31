@@ -21,11 +21,16 @@ class SaveUnSaveBloc extends Bloc<SaveUnSaveEvent, SaveUnSaveState> {
         ),
       );
       final result = await saveChargeLocationUseCase(location);
+
       if (result.isRight) {
+        print('result.right is ${result.left}');
+
         emit(
           const SaveUnSaveState(status: FormzSubmissionStatus.success),
         );
       } else {
+        print('result.left is ${result.left}');
+
         emit(
           SaveUnSaveState(
             location: location.copyWith(isFavorite: location.isFavorite),

@@ -10,10 +10,6 @@ class SendAppealsUseCase implements UseCase<void, SendAppealParams> {
 
   @override
   Future<Either<Failure, void>> call(SendAppealParams params) async {
-    return await repo.sendAppeal(
-      id: params.id,
-      location: params.location,
-      otherAppeal: params.otherAppeal,
-    );
+    return await repo.sendAppeal(location: params.location, appeal: params.appeal);
   }
 }

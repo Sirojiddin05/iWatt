@@ -33,7 +33,6 @@ class ChargeLocationsRepositoryImpl implements ChargeLocationsRepository {
   @override
   Future<Either<Failure, void>> saveUnSaveChargeLocation({required ChargeLocationEntity location}) async {
     try {
-      print('saveUnSaveChargeLocation: ${!location.isFavorite}');
       _chargeLocationController.add(location.copyWith(isFavorite: !location.isFavorite));
       final result = await _datasource.saveUnSaveChargeLocation(id: location.id);
       return Right(result);

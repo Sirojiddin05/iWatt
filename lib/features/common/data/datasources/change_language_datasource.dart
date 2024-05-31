@@ -14,8 +14,8 @@ class ChangeLanguageDataSourceImpl implements ChangeLanguageDataSource {
   @override
   Future<void> changeLanguage({required String languageCode}) async {
     try {
-      final response = await _dio.post(
-        'account/change-language/',
+      final response = await _dio.patch(
+        'users/profile-update/',
         data: {'language': languageCode},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
@@ -26,6 +26,10 @@ class ChangeLanguageDataSourceImpl implements ChangeLanguageDataSource {
           error: error.error,
         );
       }
+      print('ChangeLanguageDataSourceImpl: changeLanguage: success');
+      return;
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

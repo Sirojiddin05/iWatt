@@ -4,13 +4,11 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
-import 'package:i_watt_app/features/profile/presentation/pages/settings_page.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/help_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/login_to_system_container.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class UnAuthedUserBody extends StatelessWidget {
   final ScrollController controller;
@@ -27,18 +25,18 @@ class UnAuthedUserBody extends StatelessWidget {
           WhiteWrapperContainer(
             child: Column(
               children: [
-                IconTextButton(
-                  title: LocaleKeys.settings.tr(),
-                  icon: AppIcons.settings,
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                  onTap: () => Navigator.of(context, rootNavigator: true).push(
-                    MaterialWithModalsPageRoute(
-                      builder: (ctx) => const SettingsPage(),
-                    ),
-                  ),
-                ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                // IconTextButton(
+                //   title: LocaleKeys.settings.tr(),
+                //   icon: AppIcons.settings,
+                //   padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+                //   borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                //   onTap: () => Navigator.of(context, rootNavigator: true).push(
+                //     MaterialWithModalsPageRoute(
+                //       builder: (ctx) => const SettingsPage(),
+                //     ),
+                //   ),
+                // ),
+                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.usage_instructions.tr(),
                   icon: AppIcons.doc,

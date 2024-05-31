@@ -137,7 +137,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final location = locations[i];
       if (location.id == event.locationId) {
         final toSelect = state.selectedLocation.id != event.locationId;
-        final statuses = MyFunctions.getConnectorStatuses(location);
+        final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
         final newAppearance = await _getLocationAppearance(stationStatuses: statuses, isSelected: toSelect, withLuminosity: state.hasLuminosity);
         oldPLaceMarks[i] = oldPLaceMarks[i].copyWith(icon: getIcon(newAppearance));
         final oldCluster = state.locationsMapObjects!;
@@ -194,7 +194,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future<PlacemarkMapObject> _getPlaceMarkObject(
       {required ValueChanged<ChargeLocationEntity> onTap, required ChargeLocationEntity location, required bool withLuminosity}) async {
     final point = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
-    final statuses = MyFunctions.getConnectorStatuses(location);
+    final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
     final locationAppearance = await _getLocationAppearance(stationStatuses: statuses, withLuminosity: withLuminosity);
     return PlacemarkMapObject(
       opacity: 1,

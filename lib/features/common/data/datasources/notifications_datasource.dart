@@ -34,6 +34,8 @@ class NotificationDataSourceImpl extends NotificationDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -62,6 +64,8 @@ class NotificationDataSourceImpl extends NotificationDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -86,6 +90,8 @@ class NotificationDataSourceImpl extends NotificationDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -98,9 +104,9 @@ class NotificationDataSourceImpl extends NotificationDataSource {
   @override
   Future<void> notificationOnOff({required bool enabled}) async {
     try {
-      final response = await _dio.post(
-        'account/notifications/',
-        data: {"enabled": enabled},
+      final response = await _dio.patch(
+        'users/profile-update/',
+        data: {"is_notification_enabled": enabled},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = GenericErrorModel.fromJson(response.data);
@@ -110,6 +116,8 @@ class NotificationDataSourceImpl extends NotificationDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

@@ -3,7 +3,7 @@ part of 'appeal_bloc.dart';
 class AppealState extends Equatable {
   final FormzSubmissionStatus getAppealsStatus;
   final FormzSubmissionStatus sendAppealStatus;
-  final List<AppealEntity> appeals;
+  final List<IdNameEntity> appeals;
   final String? next;
   final bool fetchMore;
   final String sendErrorMessage;
@@ -23,8 +23,7 @@ class AppealState extends Equatable {
     FormzSubmissionStatus? getAppealsStatus,
     FormzSubmissionStatus? appealDetailStatus,
     FormzSubmissionStatus? sendAppealStatus,
-    List<AppealEntity>? appeals,
-    AppealEntity? appeal,
+    List<IdNameEntity>? appeals,
     String? next,
     bool? fetchMore,
     String? sendErrorMessage,

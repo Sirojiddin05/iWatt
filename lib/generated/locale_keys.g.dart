@@ -149,5 +149,27 @@ abstract class  LocaleKeys {
   static const select_card = 'select_card';
   static const start = 'start';
   static const you_need_to_login_to_do_this_action = 'you_need_to_login_to_do_this_action';
+  static const log_out_from_account = 'log_out_from_account';
+  static const are_you_sure_you_want_to_log_out = 'are_you_sure_you_want_to_log_out';
+  static const kW = 'kW';
+  static const minimum_balance_to_start = 'minimum_balance_to_start';
+  static const car_is_successfully_added = 'car_is_successfully_added';
+  static const did_not_manage_to_do_your_request = 'did_not_manage_to_do_your_request';
+  static const try_again = 'try_again';
+  static const pay = 'pay';
+  static const you_owe = 'you_owe';
+  static const charge = 'charge';
+  static const action = 'action';
+  static const share = 'share';
+  static const to_complain = 'to_complain';
+  static const send = 'send';
+  static const input_appeal_reason = 'input_appeal_reason';
+  static const appeal_successfully_sent = 'appeal_successfully_sent';
+  static const facilities = 'facilities';
+  static const all = 'all';
+  static const contacts = 'contacts';
+  static const show_phone_number = 'show_phone_number';
+  static const show_email = 'show_email';
+  static const show_web_address = 'show_web_address';
 
 }

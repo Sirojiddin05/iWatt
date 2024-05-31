@@ -16,9 +16,11 @@ class ConnectorTypesDataSourceImpl extends ConnectorTypesDataSource {
   @override
   Future<GenericPagination<IdNameModel>> getConnectorTypes() async {
     try {
-      final response = await _dio.get('core/type-connections/');
+      final response = await _dio.get(
+        'common/ConnectTypeList/',
+      );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson({"results": response.data}, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
+        return GenericPagination.fromJson(response.data, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
@@ -30,7 +32,10 @@ class ConnectorTypesDataSourceImpl extends ConnectorTypesDataSource {
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
-      throw CustomDioException(errorMessage: message, type: type);
+      throw CustomDioException(
+        errorMessage: message,
+        type: type,
+      );
     } on Exception catch (e) {
       throw ParsingException(errorMessage: e.toString());
     }

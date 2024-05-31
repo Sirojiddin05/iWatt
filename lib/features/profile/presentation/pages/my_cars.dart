@@ -64,8 +64,8 @@ class _MyCarsPageState extends State<MyCarsPage> {
                   itemBuilder: (context, index) {
                     final car = state.cars[index];
                     return CarItem(
-                      model: getName(car.modelName, car.customModel),
-                      manufacturer: getName(car.manufacturerName, car.customManufacturer),
+                      model: car.model,
+                      manufacturer: car.manufacturer,
                       number: car.stateNumber,
                       onTap: () {
                         showModalBottomSheet(
@@ -80,7 +80,7 @@ class _MyCarsPageState extends State<MyCarsPage> {
                           },
                         );
                       },
-                      type: car.chargingTypeName,
+                      connectorTypes: car.connectorType,
                     );
                   },
                   separatorBuilder: (context, index) {

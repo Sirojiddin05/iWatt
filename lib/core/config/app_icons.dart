@@ -20,6 +20,7 @@ class AppIcons {
   static const myLocationCenter = 'assets/icons/ic_my_location_center.svg';
   static const qrScan = 'assets/icons/ic_qr_scan.svg';
   static const plus = 'assets/icons/ic_plus.svg';
+  static const plusWhite = 'assets/icons/ic_plus_white.svg';
   static const minus = 'assets/icons/ic_minus.svg';
   static const info = 'assets/icons/ic_info.svg';
   static const locationCardIcon = 'assets/icons/ic_location_card_icon.svg';
@@ -27,6 +28,7 @@ class AppIcons {
   static const powerDark = 'assets/icons/ic_power_dark.svg';
   static const station = 'assets/icons/ic_station.svg';
   static const stationDark = 'assets/icons/ic_station_dark.svg';
+  static const stationWhite = 'assets/icons/ic_station_white.svg';
   static const runner = 'assets/icons/ic_runner.svg';
   static const runnerDark = 'assets/icons/ic_runner_dark.svg';
   static const union = 'assets/icons/ic_union.svg';
@@ -38,6 +40,7 @@ class AppIcons {
   static const historyIcon = 'assets/icons/ic_history_icon.svg';
   static const phoneEdit = 'assets/icons/ic_phone_edit.svg';
   static const phone = 'assets/icons/ic_phone.svg';
+  static const phoneFill = 'assets/icons/ic_phone_fill.svg';
   static const resend = 'assets/icons/ic_resend.svg';
   static const closeBoldGrey = 'assets/icons/ic_close_bold_grey.svg';
   static const calendar = 'assets/icons/ic_calendar.svg';
@@ -90,5 +93,11 @@ class AppIcons {
   static const questionMark = 'assets/icons/ic_question.svg';
   static const star = 'assets/icons/ic_star.svg';
   static const checks = 'assets/icons/ic_checks.svg';
-  static const edit = 'assets/icons/edit.svg';
+  static const edit = 'assets/icons/ic_edit.svg';
+  static const circleClose = 'assets/icons/circle_close.svg';
+  static const share = 'assets/icons/ic_share.svg';
+  static const alert = 'assets/icons/ic_alert.svg';
+  static const dotsHorizontal = 'assets/icons/ic_dots_horizontal.svg';
+  static const logoPlaceholder = 'assets/icons/ic_logo_placeholder.svg';
+  static const globe = 'assets/icons/globe.svg';
 }

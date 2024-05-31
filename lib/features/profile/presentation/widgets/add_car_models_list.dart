@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/add_car_bloc/add_car_bloc.dart';
@@ -63,22 +64,22 @@ class _AddCarModelsListState extends State<AddCarModelsList> with TickerProvider
                     return CustomModelItem(
                       title: model.name,
                       onTap: () {
-                        context.read<AddCarBloc>().add(SetTemporaryModel(model.id));
+                        context.read<AddCarBloc>().add(SetTemporaryModel(const IdNameEntity(id: 0)));
                       },
-                      groupValue: addCarState.temporaryModel,
+                      groupValue: addCarState.temporaryModel.id,
                       value: model.id,
-                      customModel: addCarState.car.customModel,
+                      customModel: addCarState.otherModel,
                       onChanged: (String value) {
-                        context.read<AddCarBloc>().add(SetCustomModel(value));
+                        context.read<AddCarBloc>().add(SetOtherModel(value));
                       },
                     );
                   }
                   return ModelItem(
                     title: model.name,
                     onTap: () {
-                      context.read<AddCarBloc>().add(SetTemporaryModel(model.id));
+                      context.read<AddCarBloc>().add(SetTemporaryModel(model));
                     },
-                    groupValue: addCarState.temporaryModel,
+                    groupValue: addCarState.temporaryModel.id,
                     value: model.id,
                   );
                 },

@@ -111,115 +111,112 @@ class _CarNumberFieldState extends State<CarNumberField> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Stack(
-        children: [
-          ValueListenableBuilder<int>(
-            valueListenable: autoType,
-            builder: (context, type, otherChild) {
-              return FieldWrapper(
-                backgroundColor: getBackgroundColor(type),
-                scala: scala,
-                type: type,
-                borderColor: getColor(),
-              );
-            },
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ValueListenableBuilder<int>(
-                valueListenable: autoType,
-                builder: (ctx, type, child) {
-                  return Padding(
-                    padding: EdgeInsets.only(top: 3 * scala + 2, bottom: 3 * scala + 2, left: 3 * scala + 2),
-                    child: AnimatedSize(
-                      duration: const Duration(milliseconds: 200),
-                      child: SizedBox(
-                        width: (type == 2 || type == 3 || type == 4) ? 248 : 60,
-                        child: RegionNumberField(
-                          textStyle: TextStyle(
-                            fontSize: fontSize * 1.3,
-                            fontWeight: FontWeight.w500,
-                            color: getColor(),
-                            fontFamily: "UZBauto",
-                            letterSpacing: 2,
-                          ),
-                          focusNode: nodeRegion,
-                          fieldLength: fieldLength(),
-                          cursorColor: getColor(),
-                          controller: regionController,
-                          backgroundColor: type == 0 || type == 1 ? AppColors.conifer2 : null,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ValueListenableBuilder<int>(
-                valueListenable: autoType,
-                builder: (ctx, type, child) {
-                  if (type == 6 || type == 5 || type == 0 || type == 1) {
-                    return NumberDivider(
-                      scala: scala,
-                      color: getColor(),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-              const SizedBox(width: 14),
-              ValueListenableBuilder<int>(
-                valueListenable: autoType,
-                builder: (ctx, type, child) {
-                  return AnimatedSize(
-                    duration: const Duration(milliseconds: 200),
-                    child: type == 2 || type == 3 || type == 4
-                        ? const SizedBox.shrink()
-                        : SizedBox(
-                            width: 140,
-                            child: NumberField(
-                              controller: numberController,
-                              cursorColor: getColor(),
-                              style: TextStyle(
-                                fontSize: fontSize * 1.3,
-                                fontWeight: FontWeight.w500,
-                                color: getColor(),
-                                fontFamily: "UZBauto",
-                                letterSpacing: 2,
-                              ),
-                              focusNode: nodeNumber,
-                              fieldLength: type != 6 && type != 5 ? 6 : 7,
-                            ),
-                          ),
-                  );
-                },
-              )
-            ],
-          ),
-          Positioned(
-            right: 3 * scala + 12,
-            bottom: 3 * scala,
-            top: 3 * scala,
-            child: ValueListenableBuilder<int>(
+    return Stack(
+      children: [
+        ValueListenableBuilder<int>(
+          valueListenable: autoType,
+          builder: (context, type, otherChild) {
+            return FieldWrapper(
+              backgroundColor: getBackgroundColor(type),
+              scala: scala,
+              type: type,
+              borderColor: getColor(),
+            );
+          },
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ValueListenableBuilder<int>(
               valueListenable: autoType,
               builder: (ctx, type, child) {
-                return AnimatedCrossFade(
-                  alignment: Alignment.centerRight,
-                  firstChild: child ?? const SizedBox.shrink(),
-                  secondChild: const SizedBox(height: 20),
-                  crossFadeState: type == 0 || type == 1 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                  duration: const Duration(milliseconds: 200),
+                return Padding(
+                  padding: EdgeInsets.only(top: 3 * scala + 2, bottom: 3 * scala + 2, left: 3 * scala + 2),
+                  child: AnimatedSize(
+                    duration: const Duration(milliseconds: 200),
+                    child: SizedBox(
+                      width: (type == 2 || type == 3 || type == 4) ? 248 : 60,
+                      child: RegionNumberField(
+                        textStyle: TextStyle(
+                          fontSize: fontSize * 1.3,
+                          fontWeight: FontWeight.w500,
+                          color: getColor(),
+                          fontFamily: "UZBauto",
+                          letterSpacing: 2,
+                        ),
+                        focusNode: nodeRegion,
+                        fieldLength: fieldLength(),
+                        cursorColor: getColor(),
+                        controller: regionController,
+                        backgroundColor: type == 0 || type == 1 ? AppColors.conifer2 : null,
+                      ),
+                    ),
+                  ),
                 );
               },
-              child: const UzColumn(),
             ),
-          )
-        ],
-      ),
+            ValueListenableBuilder<int>(
+              valueListenable: autoType,
+              builder: (ctx, type, child) {
+                if (type == 6 || type == 5 || type == 0 || type == 1) {
+                  return NumberDivider(
+                    scala: scala,
+                    color: getColor(),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            const SizedBox(width: 14),
+            ValueListenableBuilder<int>(
+              valueListenable: autoType,
+              builder: (ctx, type, child) {
+                return AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  child: type == 2 || type == 3 || type == 4
+                      ? const SizedBox.shrink()
+                      : SizedBox(
+                          width: 140,
+                          child: NumberField(
+                            controller: numberController,
+                            cursorColor: getColor(),
+                            style: TextStyle(
+                              fontSize: fontSize * 1.3,
+                              fontWeight: FontWeight.w500,
+                              color: getColor(),
+                              fontFamily: "UZBauto",
+                              letterSpacing: 2,
+                            ),
+                            focusNode: nodeNumber,
+                            fieldLength: type != 6 && type != 5 ? 6 : 7,
+                          ),
+                        ),
+                );
+              },
+            )
+          ],
+        ),
+        Positioned(
+          right: 3 * scala + 12,
+          bottom: 3 * scala,
+          top: 3 * scala,
+          child: ValueListenableBuilder<int>(
+            valueListenable: autoType,
+            builder: (ctx, type, child) {
+              return AnimatedCrossFade(
+                alignment: Alignment.centerRight,
+                firstChild: child ?? const SizedBox.shrink(),
+                secondChild: const SizedBox(height: 20),
+                crossFadeState: type == 0 || type == 1 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                duration: const Duration(milliseconds: 200),
+              );
+            },
+            child: const UzColumn(),
+          ),
+        )
+      ],
     );
   }
 

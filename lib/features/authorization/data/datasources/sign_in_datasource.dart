@@ -18,14 +18,12 @@ class SignInDataSourceImpl extends SignInDataSource {
     try {
       final response = await _dio.post(
         'users/login/',
-        data: {'phone': '+998$phone'},
+        data: {'phone': '+998${phone.replaceAll(' ', '')}'},
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return response.data['session'];
       } else {
-        print('errorerror ${response.data}');
         final error = GenericErrorModel.fromJson(response.data);
-        print('errorerror ${error.error}');
         throw ServerException(
           statusCode: error.statusCode,
           errorMessage: error.message,
@@ -34,6 +32,8 @@ class SignInDataSourceImpl extends SignInDataSource {
       }
     } on ServerException catch (e) {
       print('ServerException $e');
+      rethrow;
+    } on ServerException {
       rethrow;
     } on DioException catch (e) {
       final type = e.type;
@@ -56,7 +56,7 @@ class SignInDataSourceImpl extends SignInDataSource {
         'users/login/confirm/',
         data: {
           "type_": type,
-          "phone": "+998$phone",
+          "phone": "+998${phone.replaceAll(' ', '')}",
           "code": code,
           "session": session,
         },

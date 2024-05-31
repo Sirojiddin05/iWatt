@@ -1,3 +1,4 @@
+import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/profile/domain/entities/car_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -7,26 +8,12 @@ part 'car_model.g.dart';
 class CarModel extends CarEntity {
   const CarModel({
     super.id,
-    super.name,
     super.model,
-    super.typeStateNumber,
-    super.chargingType,
-    super.vehicleType,
+    super.stateNumberType,
     super.vin,
     super.manufacturer,
     super.stateNumber,
-    super.customManufacturer,
-    super.chargingTypeName,
-    super.vehicleTypeName,
-    super.usableBatterySize,
-    super.brand,
-    super.releaseYear,
-    super.variant,
-    super.modelName,
-    super.version,
-    super.icon,
-    super.manufacturerName,
-    super.customModel,
+    super.connectorType,
   });
   factory CarModel.fromJson(Map<String, dynamic> json) => _$CarModelFromJson(json);
   Map<String, dynamic> toJson() => _$CarModelToJson(this);

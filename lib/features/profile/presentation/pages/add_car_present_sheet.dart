@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -20,6 +21,7 @@ import 'package:i_watt_app/features/profile/presentation/widgets/add_car_manufac
 import 'package:i_watt_app/features/profile/presentation/widgets/add_car_second_step_switcher.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/add_car_sheet_header.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/additional_information.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
 
 class AddCarPresentSheet extends StatefulWidget {
@@ -71,41 +73,46 @@ class _AddCarPresentSheetState extends State<AddCarPresentSheet> {
             listener: (context, state) {
               if (state.status.isFailure) {
                 context.showPopUp(context, PopUpStatus.failure, message: state.error);
+              } else if (state.status.isSuccess) {
+                Navigator.of(context).pop();
+                context.showPopUp(
+                  context,
+                  PopUpStatus.success,
+                  message: LocaleKeys.car_is_successfully_added.tr(),
+                );
               }
             },
           ),
         ],
-        child: WKeyboardDismisser(
-          child: Scaffold(
-            body: SheetWrapper(
-              child: Column(
-                children: [
-                  const AddCarSheetHeader(),
-                  Expanded(
-                    child: PageView(
-                      controller: pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        const AddCarManufacturersList(),
-                        const SecondStepSwitcher(),
-                        BlocBuilder<AddCarBloc, AddCarState>(
-                          buildWhen: (o, n) => o.temporaryConnectorTypes != n.temporaryConnectorTypes,
-                          builder: (context, state) {
-                            return ConnectorTypesList(
-                              defaultSelectedTypes: state.temporaryConnectorTypes,
-                              onChanged: (list) {
-                                addCarBloc.add(SetTemporaryConnectorTypes(list));
-                              },
-                            );
-                          },
-                        ),
-                        const AdditionalInformation()
-                      ],
-                    ),
+        child: Scaffold(
+          body: SheetWrapper(
+            child: Column(
+              children: [
+                const AddCarSheetHeader(),
+                Expanded(
+                  child: PageView(
+                    controller: pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      const AddCarManufacturersList(),
+                      const SecondStepSwitcher(),
+                      BlocBuilder<AddCarBloc, AddCarState>(
+                        buildWhen: (o, n) => o.temporaryConnectorTypes != n.temporaryConnectorTypes,
+                        builder: (context, state) {
+                          return ConnectorTypesList(
+                            defaultSelectedTypes: state.temporaryConnectorTypes,
+                            onChanged: (list) {
+                              addCarBloc.add(SetTemporaryConnectorTypes(list));
+                            },
+                          );
+                        },
+                      ),
+                      const AdditionalInformation()
+                    ],
                   ),
-                  const AddCarBottomButton()
-                ],
-              ),
+                ),
+                const AddCarBottomButton()
+              ],
             ),
           ),
         ),

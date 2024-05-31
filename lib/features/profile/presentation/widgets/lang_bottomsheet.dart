@@ -14,6 +14,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_radio_tile.dar
 import 'package:i_watt_app/features/profile/data/repositories_impl/change_language_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/entities/language_entity.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/change_language_bloc/change_language_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/service_locator.dart';
 
 class LanguageBottomSheet extends StatefulWidget {
@@ -81,6 +82,8 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
               listenWhen: (o, n) => o.changeLanguageStatus != n.changeLanguageStatus,
               listener: (context, state) {
                 if (state.changeLanguageStatus.isSuccess) {
+                  final languageCode = language.locale.languageCode;
+                  context.read<ProfileBloc>().add(UpdateProfileLocally(language: languageCode));
                   Navigator.pop(context);
                 }
               },

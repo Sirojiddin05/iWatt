@@ -37,7 +37,11 @@ import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/p
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
+import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
+import 'package:i_watt_app/features/profile/domain/usecases/get_user_data_usecase.dart';
+import 'package:i_watt_app/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -124,6 +128,12 @@ class App extends StatelessWidget {
               serviceLocator<SearchHistoryRepositoryImpl>(),
             ),
           ),
+        ),
+        BlocProvider(
+          create: (context) => ProfileBloc(
+            GetUserDataUseCase(serviceLocator<ProfileRepositoryImpl>()),
+            UpdateProfileDataUseCase(serviceLocator<ProfileRepositoryImpl>()),
+          )..add(GetUserData()),
         ),
       ],
       child: EasyLocalization(

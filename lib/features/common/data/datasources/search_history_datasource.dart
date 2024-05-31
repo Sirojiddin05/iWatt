@@ -29,6 +29,8 @@ class SearchHistoryDataSourceImpl extends SearchHistoryDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -50,6 +52,8 @@ class SearchHistoryDataSourceImpl extends SearchHistoryDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -71,6 +75,8 @@ class SearchHistoryDataSourceImpl extends SearchHistoryDataSource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

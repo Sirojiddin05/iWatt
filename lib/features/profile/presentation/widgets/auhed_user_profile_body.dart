@@ -5,8 +5,8 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/pages/notifications_page.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/about_us.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/my_cars.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/saved_locations.dart';
@@ -38,7 +38,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
       child: Column(
         children: [
           const UserDataContainer(),
-          const BalanceMessage(message: '-48 000 UZS'),
+          const BalanceMessage(),
           const SizedBox(height: 16),
           WhiteWrapperContainer(
             child: Column(
@@ -63,14 +63,12 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   title: LocaleKeys.notifications.tr(),
                   icon: AppIcons.notificationsBlue,
                   actions: [
-                    BlocBuilder<NotificationBloc, NotificationState>(
-                      buildWhen: (o, n) => o.unReadNotificationsCount != n.unReadNotificationsCount,
+                    BlocBuilder<ProfileBloc, ProfileState>(
+                      buildWhen: (o, n) => o.user.notificationCount != n.user.notificationCount,
                       builder: (ctx, state) {
-                        final count = state.unReadNotificationsCount;
+                        final count = state.user.notificationCount;
                         if (count > 0) {
-                          return NotificationCountBadge(
-                            count: count,
-                          );
+                          return NotificationCountBadge(count: count);
                         }
                         return const SizedBox.shrink();
                       },
@@ -108,17 +106,20 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   icon: AppIcons.settings,
                   onTap: () => Navigator.of(context, rootNavigator: true).push(
                     MaterialWithModalsPageRoute(
-                      builder: (ctx) => const SettingsPage(),
+                      builder: (ctx) => BlocProvider.value(
+                        value: BlocProvider.of<ProfileBloc>(context),
+                        child: const SettingsPage(),
+                      ),
                     ),
                   ),
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
-                IconTextButton(
-                  title: LocaleKeys.my_stations.tr(),
-                  onTap: () {},
-                  icon: AppIcons.myStations,
-                ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                // IconTextButton(
+                //   title: LocaleKeys.my_stations.tr(),
+                //   onTap: () {},
+                //   icon: AppIcons.myStations,
+                // ),
+                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.usage_instructions.tr(),
                   onTap: () {},
@@ -141,8 +142,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   title: LocaleKeys.about_us.tr(),
                   icon: AppIcons.aboutUs,
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  borderRadius:
-                      const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                   actions: [
                     Text(
                       MyFunctions.getCurrentVersionSync(),

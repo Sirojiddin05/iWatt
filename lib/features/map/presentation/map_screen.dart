@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
@@ -98,12 +100,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                         onLocationTap: (location) {
                           headerSizeController.reverse();
                           showModalBottomSheet(
-                              backgroundColor: Colors.black,
                               context: context,
-                              enableDrag: false,
+                              useRootNavigator: true,
+                              isScrollControlled: true,
+                              backgroundColor: AppColors.black.withOpacity(.001),
+                              barrierColor: AppColors.black.withOpacity(.001),
                               builder: (ctx) {
-                                //TODO: Implement location
-                                return Container();
+                                return LocationSingleSheet(
+                                  id: location.id,
+                                  title: '${location.vendorName} "${location.locationName}"',
+                                  address: location.address,
+                                  distance: location.distance.toString(),
+                                );
                               }).then((value) {
                             headerSizeController.forward();
                             mapBloc.add(SelectUnSelectMapObject(locationId: location.id));

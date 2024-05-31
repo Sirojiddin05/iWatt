@@ -5,6 +5,10 @@ import 'package:i_watt_app/features/authorization/data/datasources/authenticatio
 import 'package:i_watt_app/features/authorization/data/datasources/sign_in_datasource.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/sign_in_repository_impl.dart';
+import 'package:i_watt_app/features/charge_location_single/data/datasources/appeal_datasource.dart';
+import 'package:i_watt_app/features/charge_location_single/data/datasources/charge_location_single_datasource.dart';
+import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/appeal_repository_impl.dart';
+import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/charge_location_single_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/datasources/about_us_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/change_language_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/connector_types_datasource.dart';
@@ -23,10 +27,12 @@ import 'package:i_watt_app/features/navigation/data/repositories_impl/version_ch
 import 'package:i_watt_app/features/profile/data/datasources/car_brands_datasource.dart';
 import 'package:i_watt_app/features/profile/data/datasources/cars_datasource.dart';
 import 'package:i_watt_app/features/profile/data/datasources/payments_data_source.dart';
+import 'package:i_watt_app/features/profile/data/datasources/profile_datasource.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/car_brands_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/cars_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/change_language_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/payments_repository_impl.dart';
+import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
 
 final serviceLocator = GetIt.I;
 
@@ -38,6 +44,8 @@ Future<void> setupLocator() async {
   serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(serviceLocator<AuthenticationDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => SignInDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => SignInRepositoryImpl(serviceLocator<SignInDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ProfileDatasourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => ProfileRepositoryImpl(serviceLocator<ProfileDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ConnectorTypesDataSourceImpl(serviceLocator<DioSettings>().dio));
@@ -58,6 +66,10 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => CarsRepositoryImpl(serviceLocator<CarsDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => CarBrandsDatasourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => CarBrandsRepositoryImpl(serviceLocator<CarBrandsDatasourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChargeLocationSingleDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => ChargeLocationSingleRepositoryImpl(serviceLocator<ChargeLocationSingleDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => AppealDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => AppealRepositoryImpl(serviceLocator<AppealDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => BalanceDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => BalanceRepositoryImplement(dataSource: serviceLocator<BalanceDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => NotificationDataSourceImpl(dio: serviceLocator<DioSettings>().dio));

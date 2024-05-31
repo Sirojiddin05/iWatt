@@ -67,6 +67,7 @@ class _AddCarSheetHeaderState extends State<AddCarSheetHeader> with TickerProvid
                           onTap: () {
                             if (step > 0) {
                               context.read<AddCarBloc>().add(SwitchToPreviousStep());
+                              WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
                             }
                           },
                           behavior: HitTestBehavior.opaque,
@@ -85,6 +86,7 @@ class _AddCarSheetHeaderState extends State<AddCarSheetHeader> with TickerProvid
                   onTap: () {
                     if (step > 0) {
                       context.read<AddCarBloc>().add(SwitchToPreviousStep());
+                      WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
                     }
                   },
                   behavior: HitTestBehavior.opaque,

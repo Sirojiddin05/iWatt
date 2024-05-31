@@ -158,6 +158,7 @@ abstract class LightTheme {
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppColors.cyprus,
+    letterSpacing: 0,
   );
   static const bodyMedium = TextStyle(
     fontSize: 16,

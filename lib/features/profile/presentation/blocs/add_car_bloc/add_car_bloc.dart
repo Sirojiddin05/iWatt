@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/profile/domain/entities/car_entity.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/add_car_usecase.dart';
 import 'package:meta/meta.dart';
@@ -19,10 +20,10 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
     on<SetManufacturer>(_setManufacturer);
     on<SetModel>(_setModel);
     on<SetTemporaryModel>(_setTemporaryModel);
+    on<SetOtherModel>(_setOtherModel);
+    on<SetOtherMark>(_setOtherMark);
     on<SetConnectorTypes>(_setConnectorTypes);
     on<SetTemporaryConnectorTypes>(_setTemporaryConnectorTypes);
-    on<SetCustomManufacturer>(_setCustomManufacturer);
-    on<SetCustomModel>(_setCustomModel);
     on<SetCarNumber>(_setCarNumber);
     on<AddCar>(_addCar);
   }
@@ -32,7 +33,6 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
   }
 
   void _switchToNextStep(SwitchToNextStep event, Emitter<AddCarState> emit) {
-    print('_switchToNextStep');
     emit(state.copyWith(currentStep: state.currentStep + 1));
   }
 
@@ -41,25 +41,34 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
   }
 
   void _setManufacturer(SetManufacturer event, Emitter<AddCarState> emit) {
-    late final int temporaryModel;
-    if (event.id == 0) {
-      temporaryModel = 0;
-    } else if (event.id != state.car.manufacturer) {
-      temporaryModel = -1;
-    } else {
+    late final IdNameEntity temporaryModel;
+    if (event.manufacturer.name == state.car.manufacturer) {
       temporaryModel = state.temporaryModel;
+    } else if (event.manufacturer.id == 0) {
+      temporaryModel = const IdNameEntity(id: 0, name: '');
+    } else if (event.manufacturer.name != state.car.manufacturer) {
+      temporaryModel = const IdNameEntity(id: -1, name: '');
     }
-    final car = state.car.copyWith(manufacturer: event.id);
-    emit(state.copyWith(car: car, temporaryModel: temporaryModel));
+    final car = state.car.copyWith(manufacturer: event.manufacturer.name);
+    emit(state.copyWith(car: car, temporaryModel: temporaryModel, temporaryManufacturer: event.manufacturer));
     add(SwitchToNextStep());
   }
 
   void _setTemporaryModel(SetTemporaryModel event, Emitter<AddCarState> emit) {
-    emit(state.copyWith(temporaryModel: event.id));
+    emit(state.copyWith(temporaryModel: event.model));
+  }
+
+  void _setOtherModel(SetOtherModel event, Emitter<AddCarState> emit) {
+    emit(state.copyWith(otherModel: event.model));
+  }
+
+  void _setOtherMark(SetOtherMark event, Emitter<AddCarState> emit) {
+    emit(state.copyWith(otherMark: event.mark));
   }
 
   void _setModel(SetModel event, Emitter<AddCarState> emit) {
-    final car = state.car.copyWith(model: state.temporaryModel);
+    final name = state.temporaryModel.id == 0 ? state.otherModel : state.temporaryModel.name;
+    final car = state.car.copyWith(model: name);
     emit(state.copyWith(car: car));
     add(SwitchToNextStep());
   }
@@ -69,31 +78,26 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
   }
 
   void _setConnectorTypes(SetConnectorTypes event, Emitter<AddCarState> emit) {
-    final car = state.car.copyWith(chargingType: state.temporaryConnectorTypes);
+    final car = state.car.copyWith(
+      connectorType: state.temporaryConnectorTypes.map((e) => IdNameEntity(id: e)).toList(),
+    );
     emit(state.copyWith(car: car));
     add(SwitchToNextStep());
-  }
-
-  void _setCustomManufacturer(SetCustomManufacturer event, Emitter<AddCarState> emit) {
-    final car = state.car.copyWith(customManufacturer: event.manufacturer);
-    emit(state.copyWith(car: car));
-  }
-
-  void _setCustomModel(SetCustomModel event, Emitter<AddCarState> emit) {
-    final car = state.car.copyWith(customModel: event.model);
-    emit(state.copyWith(car: car));
   }
 
   void _setCarNumber(SetCarNumber event, Emitter<AddCarState> emit) {
     final number = event.number;
     final numberType = MyFunctions.carNumberType(number);
-    final car = state.car.copyWith(stateNumber: event.number, typeStateNumber: numberType);
+    final car = state.car.copyWith(stateNumber: event.number, stateNumberType: numberType);
     emit(state.copyWith(car: car));
   }
 
   Future<void> _addCar(AddCar event, Emitter<AddCarState> emit) async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    final result = await addCarUseCase(state.car);
+    final car = state.car.copyWith(
+      manufacturer: state.temporaryManufacturer.id == 0 ? state.otherMark : null,
+    );
+    final result = await addCarUseCase(car);
     if (result.isRight) {
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } else {

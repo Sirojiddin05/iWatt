@@ -37,7 +37,12 @@ class TokenRefreshInterceptor implements Interceptor {
 
   @override
   Future<void> onResponse(Response response, ResponseInterceptorHandler handler) async {
+    final refreshToken = StorageRepository.getString(StorageKeys.refreshToken);
     if (response.statusCode == 403) {
+      if (refreshToken.isEmpty) {
+        handler.next(response);
+        return;
+      }
       await _refreshToken(response.requestOptions.baseUrl);
       final accessToken = StorageRepository.getString(StorageKeys.accessToken);
       final isTokenRefreshed = accessToken.replaceAll('Bearer', '').trim().isNotEmpty;
@@ -55,15 +60,16 @@ class TokenRefreshInterceptor implements Interceptor {
     if (StorageRepository.getString(StorageKeys.refreshToken).isNotEmpty) {
       final refreshToken = StorageRepository.getString(StorageKeys.refreshToken);
       final response = await dio.post(
-        '$baseUrl/users/TokenRefresh/',
-        data: {
-          "refresh": refreshToken,
-        },
+        '${baseUrl}users/token/refresh/',
+        data: {"refresh": refreshToken},
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-        await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data['access']}');
+        await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data[StorageKeys.accessToken]}');
       } else {
         await StorageRepository.deleteString(StorageKeys.accessToken);
+        if (response.statusCode == 401) {
+          await StorageRepository.deleteString(StorageKeys.refreshToken);
+        }
       }
     }
   }

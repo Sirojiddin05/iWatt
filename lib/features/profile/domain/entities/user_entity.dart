@@ -1,28 +1,48 @@
 class UserEntity {
   const UserEntity({
+    this.id = -1,
     this.fullName = '',
-    this.birthDate = '',
+    this.dateOfBirth = '',
     this.phone = '',
-    this.avatar = '',
+    this.photo = '',
     this.gender = '',
-    this.areNotificationsOn = false,
+    this.isNotificationEnabled = false,
+    this.notificationCount = 0,
+    this.language = 'uz',
+    this.balance = '',
   });
 
+  final int id;
   final String fullName;
-  final String birthDate;
+  final String photo;
   final String phone;
-  final String avatar;
+  final String balance;
+  final String dateOfBirth;
+  final String language;
+  final int notificationCount;
   final String gender;
-  final bool areNotificationsOn;
+  final bool isNotificationEnabled;
 
-  UserEntity copyWith({String? fullName, String? birthDate, String? phone, String? avatar, String? gender, bool? areNotificationsOn}) {
+  UserEntity copyWith({
+    String? fullName,
+    String? photo,
+    String? phone,
+    String? balance,
+    String? dateOfBirth,
+    String? language,
+    int? notificationCount,
+    bool? isNotificationEnabled,
+  }) {
     return UserEntity(
+      id: id,
       fullName: fullName ?? this.fullName,
-      birthDate: birthDate ?? this.birthDate,
+      photo: photo ?? this.photo,
       phone: phone ?? this.phone,
-      avatar: avatar ?? this.avatar,
-      gender: gender ?? this.gender,
-      areNotificationsOn: areNotificationsOn ?? this.areNotificationsOn,
+      balance: balance ?? this.balance,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      language: language ?? this.language,
+      notificationCount: notificationCount ?? this.notificationCount,
+      isNotificationEnabled: isNotificationEnabled ?? this.isNotificationEnabled,
     );
   }
 }

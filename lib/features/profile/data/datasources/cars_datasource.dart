@@ -21,7 +21,7 @@ class CarsDatasourceImpl extends CarsDatasource {
   Future<GenericPagination<CarModel>> getCars() async {
     try {
       final response = await _dio.get(
-        'core/cars/',
+        'common/UserCarList/',
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson({'results': response.data['data']}, (p0) => CarModel.fromJson(p0 as Map<String, dynamic>));
@@ -33,6 +33,8 @@ class CarsDatasourceImpl extends CarsDatasource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -47,7 +49,7 @@ class CarsDatasourceImpl extends CarsDatasource {
     Map<String, dynamic> data = car.toApi();
     try {
       final response = await _dio.post(
-        'core/cars/',
+        'common/UserCarAdd/',
         data: data,
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -60,6 +62,8 @@ class CarsDatasourceImpl extends CarsDatasource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -73,7 +77,7 @@ class CarsDatasourceImpl extends CarsDatasource {
   Future<CarModel> editCar({required CarEntity car}) async {
     try {
       final response = await _dio.put(
-        'core/cars/edit/${car.id}/',
+        'common/UserCarEdit/${car.id}/',
         data: car.toApi(),
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -87,6 +91,8 @@ class CarsDatasourceImpl extends CarsDatasource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';
@@ -99,9 +105,8 @@ class CarsDatasourceImpl extends CarsDatasource {
   @override
   Future<void> deleteCar({required int id}) async {
     try {
-      final response = await _dio.post(
-        'core/car/delete/',
-        data: {"car_id": id},
+      final response = await _dio.delete(
+        'common/UserCarDelete/$id/',
       );
       if (!(response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = GenericErrorModel.fromJson(response.data);
@@ -111,6 +116,8 @@ class CarsDatasourceImpl extends CarsDatasource {
           error: error.error,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       final type = e.type;
       final message = e.message ?? '';

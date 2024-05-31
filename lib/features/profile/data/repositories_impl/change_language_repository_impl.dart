@@ -14,6 +14,7 @@ class ChangeLanguageRepositoryImpl implements ChangeLanguageRepository {
   Future<Either<Failure, void>> changeLanguage({required String languageCode}) async {
     try {
       final result = await _dataSource.changeLanguage(languageCode: languageCode);
+      print('ChangeLanguageRepositoryImpl: changeLanguage: success');
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));
