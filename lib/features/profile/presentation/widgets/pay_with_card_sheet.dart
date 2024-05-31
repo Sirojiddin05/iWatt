@@ -69,40 +69,44 @@ class _PayWithCardSheetState extends State<PayWithCardSheet> {
               PayWithCardSheetHeader(
                 onEditTap: () => setState(() => editing = !editing),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
-                child: Column(
-                  children: [
-                    ...(cards.map(
-                      (e) => CreditCardItem(
-                        card: e,
-                        editing: editing,
-                        selectedId: selectedId,
-                        selected: ids.contains(e.id),
-                        onTap: !editing
-                            ? () => setState(() => selectedId = e.id)
-                            : () {
-                                setState(() {
-                                  if (ids.contains(e.id)) {
-                                    ids = [...ids.where((id) => id != e.id)];
-                                  } else {
-                                    ids = [...ids, e.id];
-                                  }
-                                });
-                              },
-                      ),
-                    )),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 26.0),
-                      child: AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 150),
-                        crossFadeState: editing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                        alignment: Alignment.bottomCenter,
-                        firstChild: const PayWithCardSheetBottom(),
-                        secondChild: const RemoveCreditCardButton(),
-                      ),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
+                    child: Column(
+                      children: [
+                        ...(cards.map(
+                          (e) => CreditCardItem(
+                            card: e,
+                            editing: editing,
+                            selectedId: selectedId,
+                            selected: ids.contains(e.id),
+                            onTap: !editing
+                                ? () => setState(() => selectedId = e.id)
+                                : () {
+                                    setState(() {
+                                      if (ids.contains(e.id)) {
+                                        ids = [...ids.where((id) => id != e.id)];
+                                      } else {
+                                        ids = [...ids, e.id];
+                                      }
+                                    });
+                                  },
+                          ),
+                        )),
+                      ],
                     ),
-                  ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                child: AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 150),
+                  crossFadeState: editing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                  alignment: Alignment.bottomCenter,
+                  firstChild: const PayWithCardSheetBottom(),
+                  secondChild: const RemoveCreditCardButton(),
                 ),
               ),
             ],
