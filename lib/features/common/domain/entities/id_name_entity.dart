@@ -7,8 +7,15 @@ class IdNameEntity {
   @JsonKey(name: '_type', defaultValue: '')
   final String type;
   final String icon;
+  final List<String> description;
 
-  const IdNameEntity({this.id = -1, this.name = '', this.icon = '', this.type = ''});
+  const IdNameEntity({
+    this.id = -1,
+    this.name = '',
+    this.icon = '',
+    this.type = '',
+    this.description = const [],
+  });
 }
 
 class IdNameConverter implements JsonConverter<IdNameEntity, Map<String, dynamic>> {

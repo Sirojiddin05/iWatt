@@ -7,7 +7,9 @@ import 'package:i_watt_app/features/charge_location_single/domain/usecases/get_c
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/background_image.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/charging_points_card.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/contacts_card.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/draggable_head.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/facilities_card.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/header_address.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/header_top.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_body_wrapper.dart';
@@ -89,8 +91,10 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with SingleTi
                           child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
                             buildWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
                             builder: (context, state) {
-                              final vendor = state.location.vendor;
-                              final chargers = state.location.chargers;
+                              final location = state.location;
+                              final vendor = location.vendor;
+                              final chargers = location.chargers;
+                              final facilities = location.facilities;
                               return CustomScrollView(
                                 physics: const BouncingScrollPhysics(),
                                 controller: controller,
@@ -115,17 +119,16 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with SingleTi
                                   SliverList.list(
                                     children: [
                                       if (state.getSingleStatus.isSuccess) ...{
-                                        Column(
-                                          children: [
-                                            if (vendor.minimumBalance.isNotEmpty) ...{
-                                              MinBalanceCard(minBalance: vendor.minimumBalance),
-                                            },
-                                            ChargingPointsCard(
-                                              chargers: chargers,
-                                            ),
-                                            // FacilitiesCard(),
-                                            // const ContactsCard(),
-                                          ],
+                                        if (vendor.minimumBalance.isNotEmpty) ...{
+                                          MinBalanceCard(minBalance: vendor.minimumBalance),
+                                        },
+                                        ChargingPointsCard(chargers: chargers),
+                                        FacilitiesCard(facilities: facilities),
+                                        ContactsCard(
+                                          email: vendor.name,
+                                          phone: vendor.phone,
+                                          website: vendor.website,
+                                          socialMedia: [],
                                         ),
                                         // LoaderSwitcherWidget(
                                         //   loading: state.getSingleChargeLocationStatus ==

@@ -40,6 +40,8 @@ class AppColors {
   static const lavender = Color(0xffECF3FA);
   static const shuttleGrey = Color(0xff596066);
   static const solitude2 = Color(0xffF5F6F7);
+  static const aliceBlue = Color(0xffE8F0FE);
+  static const prussianBlue = Color(0xff022F5E);
   static final cyprusRipple30 = AppColors.cyprus.withAlpha(30);
   static final primaryRipple30 = AppColors.dodgerBlue.withAlpha(30);
 

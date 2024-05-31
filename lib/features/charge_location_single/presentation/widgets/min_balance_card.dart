@@ -29,7 +29,7 @@ class MinBalanceCard extends StatelessWidget {
                 ),
               ),
               Text(
-                MyFunctions.formatNumber(minBalance.split('.').first),
+                '${MyFunctions.formatNumber(minBalance.split('.').first)} UZS',
                 style: context.textTheme.displaySmall!.copyWith(
                   fontSize: 13,
                   color: context.colorScheme.primary,

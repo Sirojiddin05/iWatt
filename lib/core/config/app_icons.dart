@@ -99,5 +99,6 @@ class AppIcons {
   static const alert = 'assets/icons/ic_alert.svg';
   static const dotsHorizontal = 'assets/icons/ic_dots_horizontal.svg';
   static const logoPlaceholder = 'assets/icons/ic_logo_placeholder.svg';
-  static const globe = 'assets/icons/globe.svg';
+  static const globe = 'assets/icons/ic_globe.svg';
+  static const sms = 'assets/icons/ic_sms.svg';
 }

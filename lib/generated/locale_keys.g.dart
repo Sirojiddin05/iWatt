@@ -171,5 +171,6 @@ abstract class  LocaleKeys {
   static const show_phone_number = 'show_phone_number';
   static const show_email = 'show_email';
   static const show_web_address = 'show_web_address';
+  static const copied_to_clipboard = 'copied_to_clipboard';
 
 }

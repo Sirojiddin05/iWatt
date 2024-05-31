@@ -189,7 +189,8 @@ class CodegenLoader extends AssetLoader{
   "contacts": "Контакты",
   "show_phone_number": "Показать номер телефона",
   "show_email": "Показать адрес электронной почты",
-  "show_web_address": "Показать адрес веб сайта"
+  "show_web_address": "Показать адрес веб сайта",
+  "copied_to_clipboard": "Скопировано в буфер обмена"
 };
 static const Map<String,dynamic> en = {
   "cancel": "Cancel"
