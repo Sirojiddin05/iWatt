@@ -6,6 +6,7 @@ import 'package:i_watt_app/features/common/data/models/error_model.dart';
 
 abstract class SignInDataSource {
   Future<String> login({required String phone});
+
   Future<bool> verifyCode({required String code, required String phone, required String session, required String type});
 }
 
@@ -13,6 +14,7 @@ class SignInDataSourceImpl extends SignInDataSource {
   final Dio _dio;
 
   SignInDataSourceImpl(this._dio);
+
   @override
   Future<String> login({required String phone}) async {
     try {
@@ -32,8 +34,6 @@ class SignInDataSourceImpl extends SignInDataSource {
       }
     } on ServerException catch (e) {
       print('ServerException $e');
-      rethrow;
-    } on ServerException {
       rethrow;
     } on DioException catch (e) {
       final type = e.type;
@@ -63,7 +63,8 @@ class SignInDataSourceImpl extends SignInDataSource {
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data[StorageKeys.accessToken]}');
-        await StorageRepository.putString(StorageKeys.refreshToken, 'Bearer ${response.data[StorageKeys.refreshToken]}');
+        await StorageRepository.putString(
+            StorageKeys.refreshToken, 'Bearer ${response.data[StorageKeys.refreshToken]}');
         return response.data["is_new"];
       } else {
         final error = GenericErrorModel.fromJson(response.data);

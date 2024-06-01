@@ -28,4 +28,5 @@ class AppImages {
   static const masterCard = 'assets/images/master_card.png';
   static const uzcard = 'assets/images/uzcard.png';
   static const locationSingleHeaderBg = 'assets/images/location_single_header_bg.png';
+  static const creditCards = 'assets/images/credit_cards.svg';
 }

@@ -32,6 +32,7 @@ class UserEntity {
     String? language,
     int? notificationCount,
     bool? isNotificationEnabled,
+    String? gender,
   }) {
     return UserEntity(
       id: id,
@@ -43,6 +44,7 @@ class UserEntity {
       language: language ?? this.language,
       notificationCount: notificationCount ?? this.notificationCount,
       isNotificationEnabled: isNotificationEnabled ?? this.isNotificationEnabled,
+      gender: gender ?? this.gender,
     );
   }
 }

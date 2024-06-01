@@ -14,6 +14,7 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetUserDataUseCase getUserDataUseCase;
   final UpdateProfileDataUseCase updateProfileDataUseCase;
+
   ProfileBloc(this.getUserDataUseCase, this.updateProfileDataUseCase) : super(const ProfileState()) {
     on<GetUserData>((event, emit) async {
       emit(state.copyWith(getUserDataStatus: FormzSubmissionStatus.inProgress));
@@ -43,6 +44,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         language: event.language,
         phone: event.phone,
         photo: event.photo,
+        gender: event.gender,
       );
       emit(state.copyWith(
         getUserDataStatus: FormzSubmissionStatus.inProgress,
@@ -52,6 +54,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         fullName: newUser.fullName,
         phone: newUser.phone,
         photo: newUser.photo,
+        gender: newUser.gender,
         dateOfBirth: newUser.dateOfBirth,
         language: newUser.language,
         notificationCount: newUser.notificationCount,
@@ -61,6 +64,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if (result.isRight) {
         emit(
           state.copyWith(
+            updateProfileStatus: FormzSubmissionStatus.success,
             getUserDataStatus: FormzSubmissionStatus.success,
           ),
         );

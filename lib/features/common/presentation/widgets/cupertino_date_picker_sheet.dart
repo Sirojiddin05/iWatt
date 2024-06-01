@@ -7,8 +7,14 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class CupertinoDatePickerSheet extends StatefulWidget {
+  final DateTime? initialDate;
   final ValueChanged<DateTime> onDateTimeChanged;
-  const CupertinoDatePickerSheet({super.key, required this.onDateTimeChanged});
+
+  const CupertinoDatePickerSheet({
+    super.key,
+    required this.onDateTimeChanged,
+    this.initialDate,
+  });
 
   @override
   State<CupertinoDatePickerSheet> createState() => _CupertinoDatePickerSheetState();
@@ -16,10 +22,11 @@ class CupertinoDatePickerSheet extends StatefulWidget {
 
 class _CupertinoDatePickerSheetState extends State<CupertinoDatePickerSheet> {
   late DateTime dateTime;
+
   @override
   void initState() {
     super.initState();
-    dateTime = getEighteenYearsAgo();
+    dateTime = widget.initialDate ?? getEighteenYearsAgo();
   }
 
   @override
@@ -38,7 +45,7 @@ class _CupertinoDatePickerSheetState extends State<CupertinoDatePickerSheet> {
               minimumYear: get125YearsAgo().year,
               mode: CupertinoDatePickerMode.date,
               onDateTimeChanged: (DateTime value) => dateTime = value,
-              initialDateTime: getEighteenYearsAgo(),
+              initialDateTime: widget.initialDate ?? getEighteenYearsAgo(),
             ),
           ),
           WButton(

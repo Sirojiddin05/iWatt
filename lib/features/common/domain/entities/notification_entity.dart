@@ -5,23 +5,29 @@ class NotificationEntity {
   const NotificationEntity({
     this.id = -1,
     this.title = '',
-    this.seenTime = '',
-    this.addTime = '',
+    this.description = '',
+    this.photo = '',
+    this.createdAt = '',
+    this.isRead = false,
   });
 
   final int id;
   final String title;
-  final String addTime;
-  final String seenTime;
+  final String description;
+  final String photo;
+  final String createdAt;
+  final bool isRead;
 
   NotificationEntity copyWith({
-    String? seenTime,
+    bool? isRead,
   }) {
     return NotificationEntity(
       id: id,
       title: title,
-      addTime: addTime,
-      seenTime: seenTime ?? this.seenTime,
+      description: description,
+      photo: photo,
+      createdAt: createdAt,
+      isRead: isRead ?? this.isRead,
     );
   }
 }

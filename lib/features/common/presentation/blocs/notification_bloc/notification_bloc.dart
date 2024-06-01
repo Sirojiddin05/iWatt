@@ -37,7 +37,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     if (result.isRight) {
       int unReadNotificationsCount = 0;
       for (var item in result.right.results) {
-        if (item.seenTime.isEmpty) {
+        if (!item.isRead) {
           unReadNotificationsCount++;
         }
       }
@@ -61,7 +61,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     if (result.isRight) {
       int unReadNotificationsCount = 0;
       for (var item in result.right.results) {
-        if (item.seenTime.isEmpty) {
+        if (!item.isRead) {
           unReadNotificationsCount++;
         }
       }
@@ -99,8 +99,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     if (result.isRight) {
       final oldList = [...state.notifications];
       for (int i = 0; i < oldList.length; i++) {
-        if (oldList[i].seenTime.isEmpty) {
-          oldList[i] = oldList[i].copyWith(seenTime: DateTime.now().toLocal().toString());
+        if (!oldList[i].isRead) {
+          oldList[i] = oldList[i].copyWith(isRead: true);
         }
       }
       final newList = [...oldList];
@@ -137,7 +137,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     final oldList = [...state.notifications];
     for (int i = 0; i < oldList.length; i++) {
       if (oldList[i].id == id) {
-        oldList[i] = oldList[i].copyWith(seenTime: DateTime.now().toLocal().toString());
+        oldList[i] = oldList[i].copyWith(isRead: true);
         break;
       }
     }

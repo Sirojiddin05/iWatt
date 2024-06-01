@@ -132,7 +132,7 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
   Future<GenericPagination<CreditCardModel>> getCreditCards({String? next}) async {
     try {
       final response = await dio.get(
-        next ?? 'payments/paylov/get-user-card-list/',
+        next ?? 'payment/UserCardList/',
         options: Options(headers: {"Authorization": "Bearer ${StorageRepository.getString('token')}"}),
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -158,30 +158,26 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
   Future<String> createCreditCard({required String cardNumber, required String expireDate}) async {
     try {
       final response = await dio.post(
-        'payments/paylov/create-user-card/',
+        '/payment/CardCreate/',
         data: {"card_number": cardNumber, "expire_date": expireDate},
         options: Options(headers: {"Authorization": "Bearer ${StorageRepository.getString('token')}"}),
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return response.data['otp_sent_phone'] as String;
       } else {
-        String errorMessage = '';
-        if (response.data is Map && response.data.containsKey("error") && response.data["error"].containsKey("message")) {
-          errorMessage = response.data["error"]["message"];
-        } else if (response.data is Map && response.data.containsKey("detail")) {
-          errorMessage = response.data["detail"];
-        }
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
           error: error.error,
-          statusCode: response.statusCode!,
-          errorMessage: errorMessage,
         );
       }
     } on ServerException {
       rethrow;
-    } on DioException {
-      rethrow;
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
     } on Exception catch (e) {
       throw ParsingException(errorMessage: e.toString());
     }
@@ -200,7 +196,6 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
-        String errorMessage = response.data["error"]["message"];
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
           statusCode: error.statusCode,
@@ -210,8 +205,10 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       }
     } on ServerException {
       rethrow;
-    } on DioException {
-      rethrow;
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
     } on Exception catch (e) {
       throw ParsingException(errorMessage: e.toString());
     }
@@ -229,7 +226,6 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
-        String errorMessage = '';
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
           statusCode: error.statusCode,
@@ -239,8 +235,10 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       }
     } on ServerException {
       rethrow;
-    } on DioException {
-      rethrow;
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
     } on Exception catch (e) {
       throw ParsingException(errorMessage: e.toString());
     }
@@ -256,14 +254,19 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       } else {
-        String errorMessage = response.data["error"]["message"];
         final error = GenericErrorModel.fromJson(response.data);
-        throw ServerException(statusCode: error.statusCode, errorMessage: error.message, error: error.error);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
       }
     } on ServerException {
       rethrow;
-    } on DioException {
-      rethrow;
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
     } on Exception catch (e) {
       throw ParsingException(errorMessage: e.toString());
     }

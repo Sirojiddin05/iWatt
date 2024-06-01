@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -11,7 +10,6 @@ import 'package:i_watt_app/features/profile/domain/usecases/confirm_credit_card_
 import 'package:i_watt_app/features/profile/domain/usecases/create_credit_card_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/delete_credit_card_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/get_credit_cards_usecase.dart';
-import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
 
 part 'credit_cards_event.dart';
@@ -48,28 +46,15 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
       final result = await createCreditCardUseCase
           .call(CreateCardParams(cardNumber: event.cardNumber, expireDate: event.expireDate));
       if (result.isRight) {
-        emit(state.copyWith(otpSentPhone: result.right, createCardStatus: FormzSubmissionStatus.success));
-        event.onSuccess(60);
+        emit(state.copyWith(
+          otpSentPhone: result.right,
+          createCardStatus: FormzSubmissionStatus.success,
+        ));
       } else {
-        String error = '';
-        if (result.left is ServerFailure) {
-          if (result.left.errorMessage.toString().contains("card_not_found")) {
-            error = LocaleKeys.card_not_found.tr();
-          }
-          if (result.left.errorMessage.toString().contains("card_expired")) {
-            error = LocaleKeys.card_expired.tr();
-          } else if (result.left.errorMessage != null) {
-            error = error;
-          }
-        } else if (result.left is ParsingFailure) {
-          error = LocaleKeys.there_was_a_problem_with_the_server_adding_the_card.tr();
-        } else if (result.left is DioFailure) {
-          error = LocaleKeys.there_was_a_problem_with_the_server_adding_the_card.tr();
-        } else {
-          error = LocaleKeys.there_was_a_problem_with_the_server_adding_the_card.tr();
-        }
-        emit(state.copyWith(createCardStatus: FormzSubmissionStatus.failure));
-        event.onError(error);
+        emit(state.copyWith(
+          createCardStatus: FormzSubmissionStatus.failure,
+          errorMessage: result.left.errorMessage,
+        ));
       }
     });
     on<ConfirmCreditCardEvent>((event, emit) async {
@@ -77,14 +62,8 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
       final result = await confirmCreditCardUseCase.call((cardNumber: event.cardNumber, otp: event.otp));
       if (result.isRight) {
         emit(state.copyWith(confirmCardStatus: FormzSubmissionStatus.success));
-        event.onSuccess();
       } else {
-        emit(state.copyWith(confirmCardStatus: FormzSubmissionStatus.failure));
-        if (result.left.errorMessage.toString().contains('otp_is_not_correct')) {
-          event.onError(LocaleKeys.verification_not_right.tr());
-        } else {
-          event.onError(result.left.errorMessage.toString());
-        }
+        emit(state.copyWith(confirmCardStatus: FormzSubmissionStatus.failure, errorMessage: result.left.errorMessage));
       }
     });
     on<GetCreditCards>((event, emit) async {

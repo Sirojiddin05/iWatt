@@ -171,5 +171,27 @@ abstract class  LocaleKeys {
   static const show_phone_number = 'show_phone_number';
   static const show_email = 'show_email';
   static const show_web_address = 'show_web_address';
+  static const you_dont_have_a_card = 'you_dont_have_a_card';
+  static const add_your_card_to_make_payment = 'add_your_card_to_make_payment';
+  static const by_clicking_add_you_agree_to_the_privacy_policy = 'by_clicking_add_you_agree_to_the_privacy_policy';
+  static const add = 'add';
+  static const supported_cards = 'supported_cards';
+  static const cvv_code = 'cvv_code';
+  static const card_name = 'card_name';
+  static const enter_card_name = 'enter_card_name';
+  static const card_number = 'card_number';
+  static const validity = 'validity';
+  static const mm_yy = 'mm_yy';
+  static const there_is_no_notifications_yet = 'there_is_no_notifications_yet';
+  static const notifications_empty_subtitle = 'notifications_empty_subtitle';
+  static const edit_profile = 'edit_profile';
+  static const phone_number = 'phone_number';
+  static const birthday = 'birthday';
+  static const gender = 'gender';
+  static const delete_photo = 'delete_photo';
+  static const do_you_really_want_to_delete_your_account = 'do_you_really_want_to_delete_your_account';
+  static const change_profile_photo = 'change_profile_photo';
+  static const camera = 'camera';
+  static const gallery = 'gallery';
 
 }

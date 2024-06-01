@@ -82,7 +82,8 @@ class CustomAdaptiveDialog extends StatelessWidget {
       return CupertinoAlertDialog(
         title: Text(
           title,
-          style: titleStyle?.copyWith(fontFamily: 'SFProText') ?? context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SFProText'),
+          style: titleStyle?.copyWith(fontFamily: 'SFProText') ??
+              context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SFProText'),
         ),
         content: description == null
             ? null
@@ -95,7 +96,8 @@ class CustomAdaptiveDialog extends StatelessWidget {
           CupertinoDialogAction(
             onPressed: onCancel ?? () => Navigator.pop(context),
             textStyle: cancelStyle?.copyWith(fontFamily: 'SFProText') ??
-                context.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
+                context.textTheme.headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.w400, color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
             child: Text(cancelText ?? LocaleKeys.cancel.tr()),
           ),
           CupertinoDialogAction(
@@ -110,6 +112,62 @@ class CustomAdaptiveDialog extends StatelessWidget {
         ],
       );
     }
-    return AlertDialog();
+    return AlertDialog(
+      title: Text(
+        title,
+        style: titleStyle?.copyWith(fontFamily: 'SFProText') ??
+            context.textTheme.headlineLarge?.copyWith(
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
+            ),
+      ),
+      content: description == null
+          ? const SizedBox()
+          : Text(
+              description!,
+              style: descriptionStyle?.copyWith(fontFamily: 'SFProText') ??
+                  context.textTheme.headlineLarge?.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xff49454F),
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+      actions: [
+        Theme(
+          data: ThemeData(useMaterial3: true),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              MaterialButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                onPressed: onCancel ?? () => Navigator.pop(context),
+                child: Text(
+                  cancelText ?? LocaleKeys.cancel.tr(),
+                  style: cancelStyle ??
+                      context.textTheme.headlineSmall?.copyWith(
+                        color: context.textTheme.titleSmall?.color,
+                      ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              MaterialButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                onPressed: () {
+                  Navigator.pop(context);
+                  onConfirm();
+                },
+                child: Text(
+                  confirmText,
+                  style: confirmStyle ??
+                      context.textTheme.headlineSmall?.copyWith(
+                        color: context.theme.primaryColor,
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

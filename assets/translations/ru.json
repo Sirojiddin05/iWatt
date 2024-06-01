@@ -1,5 +1,5 @@
 {
-  "other":{
+  "other": {
     "masculine": "Другой",
     "feminine": "Другая",
     "neuter": "Другое"
@@ -173,5 +173,27 @@
   "contacts": "Контакты",
   "show_phone_number": "Показать номер телефона",
   "show_email": "Показать адрес электронной почты",
-  "show_web_address": "Показать адрес веб сайта"
+  "show_web_address": "Показать адрес веб сайта",
+  "you_dont_have_a_card": "У вас нет карты",
+  "add_your_card_to_make_payment": "Добавьте свою карту чтобы совершать оплату",
+  "by_clicking_add_you_agree_to_the_privacy_policy": "Нажимая “Добавить”, вы даете Согласие на политику конфеденциальности",
+  "add": "Добавить",
+  "supported_cards": "Поддерживаемые карты:",
+  "cvv_code": "CVV код",
+  "card_name": "Называния карты",
+  "enter_card_name": "Введите названия карты",
+  "card_number": "Номер карты",
+  "validity": "Срок действия",
+  "mm_yy": "мм/гг",
+  "there_is_no_notifications_yet": "Уведомлений пока нет",
+  "notifications_empty_subtitle": "Вы еще не получали никаких уведомлений",
+  "edit_profile": "Редактировать профиль",
+  "phone_number": "Номер телефона",
+  "birthday": "День рождение",
+  "gender": "Пол",
+  "delete_photo": "Удалить фото",
+  "do_you_really_want_to_delete_your_account": "Вы действительно хотите удалить этот аккаунт?",
+  "change_profile_photo": "Изменить фото профиля",
+  "camera": "Камера",
+  "gallery": "Галерея"
 }

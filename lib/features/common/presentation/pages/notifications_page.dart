@@ -5,12 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/notification_item.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/notifications_empty_view.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
@@ -34,6 +35,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotificationBloc, NotificationState>(
       builder: (context, state) => Scaffold(
+          backgroundColor: context.appBarTheme.backgroundColor,
           appBar: AppBarWrapper(
             hasBackButton: true,
             title: LocaleKeys.notifications.tr(),
@@ -46,10 +48,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     description: LocaleKeys.mark_everything_as_read_description.tr(),
                     cancelText: LocaleKeys.cancel.tr(),
                     confirmText: LocaleKeys.mark.tr(),
-                    onConfirm: () {
-                      bloc.add(const ReadAllNotifications());
-                      Navigator.pop(context);
-                    },
+                    onConfirm: () => bloc.add(const ReadAllNotifications()),
                   );
                 },
                 icon: SvgPicture.asset(AppIcons.checks),
@@ -63,7 +62,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
             },
             child: state.getNotificationsStatus.isSuccess
                 ? state.notifications.isEmpty
-                    ? const NotificationsEmptyView()
+                    ? const EmptyStateWidget(
+                        icon: AppImages.notificationsEmpty,
+                        title: LocaleKeys.there_is_no_notifications_yet,
+                        subtitle: LocaleKeys.notifications_empty_subtitle,
+                      )
                     : Paginator(
                         fetchMoreFunction: () {},
                         paginatorStatus: state.getNotificationsStatus,

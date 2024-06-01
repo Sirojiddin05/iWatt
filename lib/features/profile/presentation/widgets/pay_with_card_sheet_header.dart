@@ -9,9 +9,10 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animatio
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class PayWithCardSheetHeader extends StatelessWidget {
+  final bool hasCards;
   final Function() onEditTap;
 
-  const PayWithCardSheetHeader({super.key, required this.onEditTap});
+  const PayWithCardSheetHeader({super.key, required this.onEditTap, required this.hasCards});
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +22,28 @@ class PayWithCardSheetHeader extends StatelessWidget {
         child: Row(
           children: [
             Text(LocaleKeys.select_card.tr(), style: Theme.of(context).textTheme.displayMedium),
-            const SizedBox(width: 6),
-            WScaleAnimation(
-              onTap: onEditTap,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColors.dodgerBlue.withOpacity(.1),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.edit),
-                    const SizedBox(width: 4),
-                    Text(
-                      LocaleKeys.edit.tr(),
-                      style: context.textTheme.labelLarge?.copyWith(color: AppColors.dodgerBlue),
-                    ),
-                  ],
+            if (hasCards) const SizedBox(width: 6),
+            if (hasCards)
+              WScaleAnimation(
+                onTap: onEditTap,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.dodgerBlue.withOpacity(.1),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.edit),
+                      const SizedBox(width: 4),
+                      Text(
+                        LocaleKeys.edit.tr(),
+                        style: context.textTheme.labelLarge?.copyWith(color: AppColors.dodgerBlue),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
