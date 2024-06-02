@@ -107,7 +107,6 @@ class AppIcons {
   static const preparingStatusIcon = 'assets/icons/ic_preparing.svg';
   static const notWorkingStatusIcon = 'assets/icons/ic_notworking_status.svg';
   static const nearStationStatusIcon = 'assets/icons/ic_connect.svg';
-  static const globe = 'assets/icons/globe.svg';
   static const card = 'assets/icons/ic_card.svg';
   static const uzcard = 'assets/icons/ic_uzcard.svg';
   static const humo = 'assets/icons/ic_humo.svg';
