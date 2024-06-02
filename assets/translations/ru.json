@@ -193,7 +193,16 @@
   "gender": "Пол",
   "delete_photo": "Удалить фото",
   "do_you_really_want_to_delete_your_account": "Вы действительно хотите удалить этот аккаунт?",
+  "do_you_really_want_to_delete_profile_photo": "Вы действительно хотите удалить фото профиля?",
   "change_profile_photo": "Изменить фото профиля",
   "camera": "Камера",
-  "gallery": "Галерея"
+  "gallery": "Галерея",
+  "clear_search_history": "Очистить историю поиска",
+  "delete_single_from_search_history": "Удалить {} из истории поиска?",
+  "search_histories": "История поиска",
+  "update": "Обновить",
+  "update_app": "Обновите приложение",
+  "update_app_subtitle": "Уважаемый клиент, чтобы продолжить использовать приложение, просим вам обновиться до оптимальной версии",
+  "update_app_subtitle_2": "Уважаемый клиент, доступно новое обновление",
+  "skip": "Пропустить"
 }

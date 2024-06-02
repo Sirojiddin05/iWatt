@@ -52,7 +52,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   @override
   void initState() {
     super.initState();
-    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))..add(GetVersionEvent());
+    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))
+      ..add(GetVersionEvent());
 
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
@@ -73,10 +74,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   Widget build(BuildContext context) => BlocProvider.value(
         value: _versionCheckBloc,
         child: BlocListener<VersionCheckBloc, VersionCheckState>(
-          listenWhen: (o, n) => o.version != n.version,
+          listenWhen: (o, n) => o.version == n.version,
           listener: (context, state) async {
             final needToUpdate = await MyFunctions.needToUpdate(state.version);
-            if (needToUpdate) {
+            if (!needToUpdate) {
               updateAppDialog(state.isRequired, context);
             }
           },
@@ -84,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             controller: _tabController,
             child: PopScope(
               onPopInvoked: (bool didPop) async {
-                final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
+                final isFirstRouteInCurrentTab =
+                    !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
                 if (isFirstRouteInCurrentTab) {
                   _changePage(0);
                 }
@@ -107,7 +109,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                     color: context.bottomNavigationBarTheme.backgroundColor,
                     border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
                     boxShadow: [
-                      BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
+                      BoxShadow(
+                          color: context.appBarTheme.shadowColor!,
+                          spreadRadius: 0,
+                          blurRadius: 40,
+                          offset: const Offset(0, -2)),
                     ],
                   ),
                   child: Row(
@@ -137,9 +143,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     final userAuthStatus = context.read<AuthenticationBloc>().state.authenticationStatus;
     final isUnAuthenticated = userAuthStatus.isUnAuthenticated;
     if (index == 2 && isUnAuthenticated) {
-      showLoginDialog(context, onConfirm: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInPage()));
-      },);
+      showLoginDialog(
+        context,
+        onConfirm: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInPage()));
+        },
+      );
     } else {
       _tabController.animateTo(index);
     }
@@ -150,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     }
   }
 
-  Widget _buildPageNavigator(NavItemEnum tabItem) => TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
+  Widget _buildPageNavigator(NavItemEnum tabItem) =>
+      TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
 
   Future<void> _changePage(int index) async {
     _tabController.animateTo(index);

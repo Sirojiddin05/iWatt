@@ -20,13 +20,15 @@ import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_r
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_all_search_histories.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_single_search_history.dart';
-import 'package:i_watt_app/features/common/domain/usecases/get_about_usecase.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_about_us_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_connector_types_usecase.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_help_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_notification.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_notification_detail.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_search_history.dart';
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
+import 'package:i_watt_app/features/common/domain/usecases/post_search_history_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
@@ -38,6 +40,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/search_history_blo
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
+import 'package:i_watt_app/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/get_user_data_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
@@ -97,6 +100,7 @@ class App extends StatelessWidget {
         // powerTypesBloc = PowerTypesBloc(GetPowerTypesUseCase(serviceLocator<PowerTypesRepositoryImpl>()))..add(GetPowerTypesEvent());
         BlocProvider(
           create: (context) => AboutUsBloc(
+            GetHelpUseCase(serviceLocator<AboutUsRepositoryImpl>()),
             GetAboutUsUseCase(serviceLocator<AboutUsRepositoryImpl>()),
           ),
         ),
@@ -127,12 +131,16 @@ class App extends StatelessWidget {
             deleteSingleSearchHistoryUseCase: DeleteSingleSearchHistoryUseCase(
               serviceLocator<SearchHistoryRepositoryImpl>(),
             ),
-          ),
+            postSearchHistoryUseCase: PostSearchHistoryUseCase(
+              serviceLocator<SearchHistoryRepositoryImpl>(),
+            ),
+          )..add(GetSearchHistoryEvent()),
         ),
         BlocProvider(
           create: (context) => ProfileBloc(
             GetUserDataUseCase(serviceLocator<ProfileRepositoryImpl>()),
             UpdateProfileDataUseCase(serviceLocator<ProfileRepositoryImpl>()),
+            DeleteAccountUseCase(serviceLocator<ProfileRepositoryImpl>()),
           )..add(GetUserData()),
         ),
       ],

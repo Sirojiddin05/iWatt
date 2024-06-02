@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/map_search_app_bar.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
@@ -16,6 +17,7 @@ import 'package:i_watt_app/service_locator.dart';
 
 class SearchPage extends StatefulWidget {
   final bool isForMap;
+
   const SearchPage({super.key, required this.isForMap});
 
   @override
@@ -25,9 +27,12 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   late FocusNode focusNode;
   late ChargeLocationsBloc chargeLocationsBloc;
+  late TextEditingController _searchController;
+
   @override
   void initState() {
     super.initState();
+    _searchController = TextEditingController();
     focusNode = FocusNode()..requestFocus();
     chargeLocationsBloc = chargeLocationsBloc = ChargeLocationsBloc(
       getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
@@ -50,7 +55,7 @@ class _SearchPageState extends State<SearchPage> {
           resizeToAvoidBottomInset: false,
           body: Column(
             children: [
-              SearchAppBar(focusNode: focusNode),
+              SearchAppBar(focusNode: focusNode, controller: _searchController),
               BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
                   buildWhen: (o, n) =>
                       o.searchPattern != n.searchPattern ||
@@ -58,7 +63,12 @@ class _SearchPageState extends State<SearchPage> {
                       o.getChargeLocationsStatus != n.getChargeLocationsStatus,
                   builder: (context, state) {
                     if (state.searchPattern.isEmpty) {
-                      return const SearchHistoryWidget();
+                      return SearchHistoryWidget(
+                        onTap: (String value) {
+                          _searchController.text = value;
+                          context.read<ChargeLocationsBloc>().add(SetSearchPatternEvent(value));
+                        },
+                      );
                     } else {
                       if (state.getChargeLocationsStatus.isSuccess) {
                         if (state.chargeLocations.isEmpty) {
@@ -74,6 +84,8 @@ class _SearchPageState extends State<SearchPage> {
                                 location: location,
                                 highlightedTitle: state.searchPattern,
                                 onTap: () {
+                                  context.read<SearchHistoryBloc>().add(PostSearchHistoryEvent(location.id));
+                                  // todo: implement
                                   // showCupertinoModalBottomSheet(
                                   //   isDismissible: true,
                                   //   context: context,

@@ -1,42 +1,29 @@
 import 'package:equatable/equatable.dart';
-import 'package:i_watt_app/features/common/data/models/about_data_model.dart';
+import 'package:i_watt_app/features/common/data/models/about_us_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class AboutUsEntity extends Equatable {
   final String title;
-  final String description;
-  final String phone;
-  final String email;
-  final String botUsername;
+  final String content;
 
   const AboutUsEntity({
-    this.phone = "",
-    this.email = "",
-    this.botUsername = "",
-    this.description = "",
-    this.title = "",
+    this.title = '',
+    this.content = '',
   });
 
   @override
-  List<Object?> get props => [
-        phone,
-        description,
-        title,
-      ];
+  List<Object?> get props => [title, content];
 }
 
-class AboutUsConverter<S> implements JsonConverter<AboutUsEntity, Map<String, dynamic>?> {
-  const AboutUsConverter();
+class HelpConverter<S> implements JsonConverter<AboutUsEntity, Map<String, dynamic>?> {
+  const HelpConverter();
 
   @override
   AboutUsModel fromJson(Map<String, dynamic>? json) => AboutUsModel.fromJson(json ?? {});
 
   @override
   Map<String, dynamic> toJson(AboutUsEntity object) => AboutUsModel(
-        botUsername: object.botUsername,
-        email: object.email,
         title: object.title,
-        description: object.description,
-        phone: object.phone,
+        content: object.content,
       ).toJson();
 }

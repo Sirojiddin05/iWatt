@@ -82,8 +82,8 @@ class CustomAdaptiveDialog extends StatelessWidget {
       return CupertinoAlertDialog(
         title: Text(
           title,
-          style: titleStyle?.copyWith(fontFamily: 'SFProText') ??
-              context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SFProText'),
+          style: titleStyle?.copyWith(fontFamily: 'SFProText', letterSpacing: 0) ??
+              context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SFProText', letterSpacing: 0),
         ),
         content: description == null
             ? null

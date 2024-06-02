@@ -109,4 +109,5 @@ class AppIcons {
   static const camera = 'assets/icons/ic_camera.svg';
   static const penSquare = 'assets/icons/ic_pen_square.svg';
   static const imageSquare = 'assets/icons/ic_image_square.svg';
+  static const loaderIndicator = 'assets/icons/ic_loader_indicator.svg';
 }

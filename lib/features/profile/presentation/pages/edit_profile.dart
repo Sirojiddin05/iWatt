@@ -5,17 +5,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/gender.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/common_loader_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/cupertino_date_picker_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/default_text_field.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
-import 'package:i_watt_app/features/profile/domain/entities/user_entity.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/edit_profile_photo_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/edit_profile_radio_container.dart';
@@ -29,250 +33,299 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  UserEntity _userEntity = const UserEntity();
-  TextEditingController fullName = TextEditingController();
-  TextEditingController phone = TextEditingController();
+  late final TextEditingController fullNameController;
+  late ValueNotifier<String> gender;
+  late ValueNotifier<String> dateOfBirth;
+  late ValueNotifier<String> photo;
+  late ValueNotifier<String> fullName;
 
   @override
   void initState() {
     super.initState();
-    _userEntity = context.read<ProfileBloc>().state.user;
-    fullName.text = _userEntity.fullName;
-    phone.text = _userEntity.phone;
+    final user = context.read<ProfileBloc>().state.user;
+    fullNameController = TextEditingController(text: user.fullName);
+    fullName = ValueNotifier(user.fullName);
+    gender = ValueNotifier(user.gender);
+    dateOfBirth = ValueNotifier(user.dateOfBirth);
+    photo = ValueNotifier(user.photo);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: context.appBarTheme.backgroundColor,
-          appBar: AppBarWrapper(
-            title: LocaleKeys.edit_profile.tr(),
-            hasBackButton: true,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(0),
-              child: Divider(height: 0, thickness: 1, color: context.theme.dividerColor),
-            ),
-            actions: [
-              WScaleAnimation(
-                onTap: () {
-                  showCustomAdaptiveDialog(
-                    context,
-                    title: LocaleKeys.do_you_really_want_to_delete_your_account.tr(),
-                    cancelStyle: context.textTheme.headlineLarge?.copyWith(
-                      fontSize: 17,
-                      color: AppColors.dodgerBlue,
-                    ),
-                    confirmText: LocaleKeys.delete.tr(),
-                    confirmStyle: context.textTheme.titleLarge?.copyWith(
-                      fontSize: 17,
-                      color: AppColors.amaranth,
-                    ),
-                    onConfirm: () {},
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: SvgPicture.asset(AppIcons.trash),
-                ),
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16.0),
-            child: Column(
-              children: [
-                EditProfilePhotoWidget(
-                  photo: _userEntity.photo,
-                  onChanged: (value) {
-                    setState(() {
-                      _userEntity = _userEntity.copyWith(photo: value);
-                    });
+    return Scaffold(
+      backgroundColor: context.appBarTheme.backgroundColor,
+      appBar: AppBarWrapper(
+        title: LocaleKeys.edit_profile.tr(),
+        hasBackButton: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(0),
+          child: Divider(height: 0, thickness: 1, color: context.theme.dividerColor),
+        ),
+        actions: [
+          BlocListener<ProfileBloc, ProfileState>(
+            listener: (context, state) {
+              if (state.deleteAccountStatus.isSuccess) {
+                context
+                    .read<AuthenticationBloc>()
+                    .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
+                Navigator.pop(context);
+                Navigator.pop(context);
+              } else if (state.deleteAccountStatus.isFailure) {
+                context.showPopUp(
+                  context,
+                  PopUpStatus.failure,
+                  message: state.deleteAccountErrorMessage,
+                );
+                Navigator.pop(context);
+                Navigator.pop(context);
+              } else if (state.deleteAccountStatus.isInProgress) {
+                showCommonLoaderDialog(context);
+              }
+            },
+            child: WScaleAnimation(
+              onTap: () {
+                showCustomAdaptiveDialog(
+                  context,
+                  title: LocaleKeys.delete_account.tr(),
+                  description: LocaleKeys.do_you_really_want_to_delete_your_account.tr(),
+                  cancelStyle: context.textTheme.headlineLarge?.copyWith(
+                    fontSize: 17,
+                    color: AppColors.dodgerBlue,
+                  ),
+                  confirmText: LocaleKeys.delete.tr(),
+                  confirmStyle: context.textTheme.titleLarge?.copyWith(
+                    fontSize: 17,
+                    color: AppColors.amaranth,
+                  ),
+                  onConfirm: () {
+                    context.read<ProfileBloc>().add(DeleteAccount());
                   },
-                ),
-                if (_userEntity.photo.isEmpty)
-                  const SizedBox(height: 32)
-                else
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4, bottom: 16),
-                    child: WScaleAnimation(
-                      onTap: () {
-                        showCustomAdaptiveDialog(
-                          context,
-                          title: LocaleKeys.delete_photo.tr(),
-                          cancelStyle: context.textTheme.headlineLarge?.copyWith(
-                            fontSize: 17,
-                            color: AppColors.dodgerBlue,
-                          ),
-                          confirmText: LocaleKeys.delete.tr(),
-                          confirmStyle: context.textTheme.titleLarge?.copyWith(
-                            fontSize: 17,
-                            color: AppColors.amaranth,
-                          ),
-                          onConfirm: () {
-                            setState(() {
-                              _userEntity = _userEntity.copyWith(photo: '');
-                            });
-                          },
-                        );
-                      },
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: SvgPicture.asset(AppIcons.trash),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16.0),
+        child: Column(
+          children: [
+            ValueListenableBuilder(
+                valueListenable: photo,
+                builder: (context, value, child) {
+                  return EditProfilePhotoWidget(
+                    photo: value,
+                    onChanged: (newValue) {
+                      photo.value = newValue;
+                      setState(() {});
+                    },
+                  );
+                }),
+            ValueListenableBuilder(
+                valueListenable: photo,
+                builder: (context, value, child) {
+                  return AnimatedCrossFade(
+                    duration: AppConstants.animationDuration,
+                    crossFadeState: value.isEmpty ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    firstChild: const SizedBox(height: 32, width: double.infinity),
+                    secondChild: Align(
+                      alignment: Alignment.center,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-                        child: Text(
-                          LocaleKeys.delete_photo.tr(),
-                          style: context.textTheme.titleSmall?.copyWith(color: AppColors.amaranth),
+                        padding: const EdgeInsets.only(top: 4),
+                        child: WCustomTappableButton(
+                          rippleColor: AppColors.amaranth.withAlpha(30),
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {
+                            showCustomAdaptiveDialog(
+                              context,
+                              title: LocaleKeys.delete_photo.tr(),
+                              description: LocaleKeys.do_you_really_want_to_delete_profile_photo.tr(),
+                              cancelStyle: context.textTheme.headlineLarge?.copyWith(
+                                fontSize: 17,
+                                color: AppColors.dodgerBlue,
+                              ),
+                              confirmText: LocaleKeys.delete.tr(),
+                              confirmStyle: context.textTheme.titleLarge?.copyWith(
+                                fontSize: 17,
+                                color: AppColors.amaranth,
+                              ),
+                              onConfirm: () {
+                                photo.value = '';
+                                setState(() {});
+                              },
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                            child: Text(
+                              LocaleKeys.delete_photo.tr(),
+                              style: context.textTheme.titleSmall?.copyWith(color: AppColors.amaranth),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                DefaultTextField(
-                  title: '${LocaleKeys.full_name.tr()} *',
-                  maxLines: 1,
-                  textInputAction: TextInputAction.done,
-                  controller: fullName,
-                  onChanged: (value) {
-                    setState(() {
-                      _userEntity = _userEntity.copyWith(fullName: value);
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                DefaultTextField(
-                  title: '${LocaleKeys.phone_number.tr()} *',
-                  controller: phone,
-                  onChanged: (value) {
-                    setState(() {
-                      _userEntity = _userEntity.copyWith(fullName: value);
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    LocaleKeys.birthday.tr(),
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontSize: 12,
-                      color: AppColors.darkGray,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (ctx) {
-                        return CupertinoDatePickerSheet(
-                          initialDate: DateFormat("yyyy-MM-dd").tryParse(_userEntity.dateOfBirth),
-                          onDateTimeChanged: (value) {
-                            setState(() {
-                              _userEntity = _userEntity.copyWith(dateOfBirth: DateFormat("yyyy-MM-dd").format(value));
-                            });
-                            Navigator.pop(ctx);
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.fieldBorderZircon, width: 1),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _userEntity.dateOfBirth,
-                            style: context.textTheme.bodyMedium,
-                          ),
-                        ),
-                        SvgPicture.asset(AppIcons.calendar),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    LocaleKeys.gender.tr(),
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontSize: 12,
-                      color: AppColors.darkGray,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                EditProfileRadioContainer(
-                  label: Gender.male.title.tr(),
-                  value: Gender.male,
-                  groupValue: Gender.values.firstWhereOrNull(
-                    (e) => e.name == _userEntity.gender.toLowerCase(),
-                  ),
-                  onTap: () {
-                    if (_userEntity.gender.toLowerCase() != Gender.male.name) {
-                      setState(() {
-                        _userEntity = _userEntity.copyWith(gender: Gender.male.name);
-                      });
-                    }
-                  },
-                ),
-                const SizedBox(height: 8),
-                EditProfileRadioContainer(
-                  label: Gender.female.title.tr(),
-                  value: Gender.female,
-                  groupValue: Gender.values.firstWhereOrNull(
-                    (e) => e.name == _userEntity.gender.toLowerCase(),
-                  ),
-                  onTap: () {
-                    if (_userEntity.gender.toLowerCase() != Gender.female.name) {
-                      setState(() {
-                        _userEntity = _userEntity.copyWith(gender: Gender.female.name);
-                      });
-                    }
-                  },
-                ),
-                const Spacer(),
-                BlocListener<ProfileBloc, ProfileState>(
-                  listener: (context, state) {
-                    if (state.updateProfileStatus.isSuccess) {
-                      context.showPopUp(
-                        context,
-                        PopUpStatus.success,
-                        message: "Your profile updated successfully!",
-                      );
-                    } else if (state.updateProfileStatus.isFailure) {
-                      context.showPopUp(
-                        context,
-                        PopUpStatus.failure,
-                        message: state.updateErrorMessage,
-                      );
-                    }
-                  },
-                  child: WButton(
-                    onTap: () {
-                      context.read<ProfileBloc>().add(UpdateProfile(
-                            fullName: _userEntity.fullName,
-                            gender: _userEntity.gender,
-                            dateOfBirth: _userEntity.dateOfBirth,
-                            photo: _userEntity.photo,
-                          ));
-                    },
-                    text: LocaleKeys.save.tr(),
-                    isDisabled: _userEntity == state.user,
-                  ),
-                ),
-                const SizedBox(height: 24),
-              ],
+                  );
+                }),
+            DefaultTextField(
+              title: '${LocaleKeys.full_name.tr()} *',
+              maxLines: 1,
+              textInputAction: TextInputAction.done,
+              controller: fullNameController,
+              onChanged: (value) {
+                fullName.value = value;
+                setState(() {});
+              },
             ),
-          ),
-        );
-      },
+            // const SizedBox(height: 16),
+            // DefaultTextField(
+            //   title: '${LocaleKeys.phone_number.tr()} *',
+            //   controller: phone,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       _userEntity = _userEntity.copyWith(fullName: value);
+            //     });
+            //   },
+            // ),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                LocaleKeys.birthday.tr(),
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontSize: 12,
+                  color: AppColors.darkGray,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            ValueListenableBuilder(
+                valueListenable: dateOfBirth,
+                builder: (context, value, child) {
+                  return GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (ctx) {
+                          return CupertinoDatePickerSheet(
+                            initialDate: DateFormat("yyyy-MM-dd").tryParse(value),
+                            onDateTimeChanged: (newValue) {
+                              dateOfBirth.value = DateFormat("yyyy-MM-dd").format(newValue);
+                              setState(() {});
+                              Navigator.pop(ctx);
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppColors.fieldBorderZircon, width: 1),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(child: Text(value, style: context.textTheme.bodyMedium)),
+                          SvgPicture.asset(AppIcons.calendar),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                LocaleKeys.gender.tr(),
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontSize: 12,
+                  color: AppColors.darkGray,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            ValueListenableBuilder(
+                valueListenable: gender,
+                builder: (context, value, child) {
+                  return EditProfileRadioContainer(
+                    label: Gender.male.title.tr(),
+                    value: Gender.male,
+                    groupValue: Gender.values.firstWhereOrNull(
+                      (e) => e.name == value.toLowerCase(),
+                    ),
+                    onTap: () {
+                      if (value.toLowerCase() != Gender.male.name) {
+                        gender.value = Gender.male.name.toUpperCase();
+                        setState(() {});
+                      }
+                    },
+                  );
+                }),
+            const SizedBox(height: 8),
+            ValueListenableBuilder(
+                valueListenable: gender,
+                builder: (context, value, child) {
+                  return EditProfileRadioContainer(
+                    label: Gender.female.title.tr(),
+                    value: Gender.female,
+                    groupValue: Gender.values.firstWhereOrNull(
+                      (e) => e.name == value.toLowerCase(),
+                    ),
+                    onTap: () {
+                      if (value.toLowerCase() != Gender.female.name) {
+                        setState(() {
+                          gender.value = Gender.female.name.toUpperCase();
+                        });
+                      }
+                    },
+                  );
+                }),
+            const Spacer(),
+            BlocConsumer<ProfileBloc, ProfileState>(
+              listenWhen: (previous, next) => previous.updateProfileStatus != next.updateProfileStatus,
+              listener: (context, state) {
+                if (state.updateProfileStatus.isSuccess) {
+                  context.showPopUp(
+                    context,
+                    PopUpStatus.success,
+                    message: "Your profile updated successfully!",
+                  );
+                  Navigator.pop(context);
+                } else if (state.updateProfileStatus.isFailure) {
+                  context.showPopUp(
+                    context,
+                    PopUpStatus.failure,
+                    message: state.updateErrorMessage,
+                  );
+                }
+              },
+              builder: (context, state) => WButton(
+                onTap: () {
+                  context.read<ProfileBloc>().add(UpdateProfile(
+                        fullName: fullName.value,
+                        gender: gender.value.toUpperCase(),
+                        dateOfBirth: dateOfBirth.value,
+                        photo: photo.value,
+                      ));
+                },
+                text: LocaleKeys.save.tr(),
+                isDisabled: state.user.fullName == fullName.value &&
+                    state.user.photo == photo.value &&
+                    state.user.dateOfBirth == dateOfBirth.value &&
+                    state.user.gender == gender.value,
+                isLoading: state.updateProfileStatus.isInProgress,
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
     );
   }
 }

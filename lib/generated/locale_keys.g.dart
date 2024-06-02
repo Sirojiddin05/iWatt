@@ -190,8 +190,17 @@ abstract class  LocaleKeys {
   static const gender = 'gender';
   static const delete_photo = 'delete_photo';
   static const do_you_really_want_to_delete_your_account = 'do_you_really_want_to_delete_your_account';
+  static const do_you_really_want_to_delete_profile_photo = 'do_you_really_want_to_delete_profile_photo';
   static const change_profile_photo = 'change_profile_photo';
   static const camera = 'camera';
   static const gallery = 'gallery';
+  static const clear_search_history = 'clear_search_history';
+  static const delete_single_from_search_history = 'delete_single_from_search_history';
+  static const search_histories = 'search_histories';
+  static const update = 'update';
+  static const update_app = 'update_app';
+  static const update_app_subtitle = 'update_app_subtitle';
+  static const update_app_subtitle_2 = 'update_app_subtitle_2';
+  static const skip = 'skip';
 
 }
