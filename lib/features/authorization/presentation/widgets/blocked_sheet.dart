@@ -41,7 +41,7 @@ class BlockedSheet extends StatelessWidget {
           ),
           BlocBuilder<AboutUsBloc, AboutUsState>(
             builder: (context, state) {
-              return PhoneNumberContainer(phoneNumber: state.aboutUs.phone);
+              return PhoneNumberContainer(phoneNumber: state.help.helpPhoneNumber);
             },
           ),
           Padding(

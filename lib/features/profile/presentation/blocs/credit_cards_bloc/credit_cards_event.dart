@@ -24,27 +24,19 @@ class DeleteCreditCardEvent extends CreditCardsEvent {
 class CreateCreditCard extends CreditCardsEvent {
   final String cardNumber;
   final String expireDate;
-  final ValueChanged<int> onSuccess;
-  final ValueChanged<String> onError;
 
   const CreateCreditCard({
     required this.cardNumber,
     required this.expireDate,
-    required this.onError,
-    required this.onSuccess,
   });
 }
 
 class ConfirmCreditCardEvent extends CreditCardsEvent {
   final String cardNumber;
   final String otp;
-  final VoidCallback onSuccess;
-  final ValueChanged<String> onError;
 
   const ConfirmCreditCardEvent({
     required this.cardNumber,
-    required this.onSuccess,
-    required this.onError,
     required this.otp,
   });
 }

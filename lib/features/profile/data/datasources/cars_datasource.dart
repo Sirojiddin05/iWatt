@@ -7,8 +7,11 @@ import 'package:i_watt_app/features/profile/domain/entities/car_entity.dart';
 
 abstract class CarsDatasource {
   Future<int> addCar({required CarEntity car});
+
   Future<void> deleteCar({required int id});
+
   Future<void> editCar({required CarEntity car});
+
   Future<GenericPagination<CarEntity>> getCars();
 }
 
@@ -24,12 +27,13 @@ class CarsDatasourceImpl extends CarsDatasource {
         'common/UserCarList/',
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson({'results': response.data['data']}, (p0) => CarModel.fromJson(p0 as Map<String, dynamic>));
+        return GenericPagination.fromJson(
+            {'results': response.data['data']}, (p0) => CarModel.fromJson(p0 as Map<String, dynamic>));
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
           statusCode: error.statusCode,
-          errorMessage: error.error,
+          errorMessage: error.message,
           error: error.error,
         );
       }

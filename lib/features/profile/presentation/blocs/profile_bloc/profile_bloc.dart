@@ -4,6 +4,7 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/usecases/base_usecase.dart';
 import 'package:i_watt_app/features/profile/data/models/user_model.dart';
 import 'package:i_watt_app/features/profile/domain/entities/user_entity.dart';
+import 'package:i_watt_app/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/get_user_data_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:meta/meta.dart';
@@ -14,7 +15,13 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetUserDataUseCase getUserDataUseCase;
   final UpdateProfileDataUseCase updateProfileDataUseCase;
-  ProfileBloc(this.getUserDataUseCase, this.updateProfileDataUseCase) : super(const ProfileState()) {
+  final DeleteAccountUseCase deleteAccountUseCase;
+
+  ProfileBloc(
+    this.getUserDataUseCase,
+    this.updateProfileDataUseCase,
+    this.deleteAccountUseCase,
+  ) : super(const ProfileState()) {
     on<GetUserData>((event, emit) async {
       emit(state.copyWith(getUserDataStatus: FormzSubmissionStatus.inProgress));
       final result = await getUserDataUseCase.call(NoParams());
@@ -34,6 +41,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         );
       }
     });
+    on<DeleteAccount>((event, emit) async {
+      emit(state.copyWith(deleteAccountStatus: FormzSubmissionStatus.inProgress));
+      final result = await deleteAccountUseCase.call(NoParams());
+      if (result.isRight) {
+        emit(state.copyWith(deleteAccountStatus: FormzSubmissionStatus.success));
+      } else if (result.isLeft) {
+        emit(state.copyWith(
+          deleteAccountStatus: FormzSubmissionStatus.failure,
+          deleteAccountErrorMessage: result.left.errorMessage,
+        ));
+      }
+    });
     on<UpdateProfile>((event, emit) async {
       final oldUser = state.user;
       final newUser = state.user.copyWith(
@@ -43,15 +62,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         language: event.language,
         phone: event.phone,
         photo: event.photo,
+        gender: event.gender,
       );
       emit(state.copyWith(
-        getUserDataStatus: FormzSubmissionStatus.inProgress,
+        updateProfileStatus: FormzSubmissionStatus.inProgress,
         user: newUser,
       ));
       final result = await updateProfileDataUseCase.call(UserModel(
         fullName: newUser.fullName,
         phone: newUser.phone,
         photo: newUser.photo,
+        gender: newUser.gender,
         dateOfBirth: newUser.dateOfBirth,
         language: newUser.language,
         notificationCount: newUser.notificationCount,
@@ -61,7 +82,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if (result.isRight) {
         emit(
           state.copyWith(
+            updateProfileStatus: FormzSubmissionStatus.success,
             getUserDataStatus: FormzSubmissionStatus.success,
+            user: newUser.copyWith(photo: result.right.photo),
           ),
         );
       } else {

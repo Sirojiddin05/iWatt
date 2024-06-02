@@ -28,7 +28,7 @@ class NotificationItem extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(16, 16, 10, 16),
             decoration: ShapeDecoration(
               shape: const OvalBorder(),
-              color: notification.seenTime.isNotEmpty ? Colors.transparent : AppColors.dodgerBlue,
+              color: notification.isRead ? Colors.transparent : AppColors.dodgerBlue,
             ),
           ),
           Padding(
@@ -44,7 +44,7 @@ class NotificationItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  MyFunctions.getFormattedTime(DateTime.parse(notification.addTime)),
+                  MyFunctions.getFormattedTime(DateTime.parse(notification.createdAt)),
                   style: context.textTheme.titleSmall?.copyWith(fontSize: 12),
                 ),
               ],

@@ -6,7 +6,9 @@ import 'package:i_watt_app/features/common/domain/repositories/about_us_reposito
 
 class GetAboutUsUseCase implements UseCase<AboutUsEntity, NoParams> {
   final AboutUsRepository repository;
+
   GetAboutUsUseCase(this.repository);
+
   @override
-  Future<Either<Failure, AboutUsEntity>> call(NoParams params) async => await repository.getAbout();
+  Future<Either<Failure, AboutUsEntity>> call(NoParams params) async => await repository.getAboutUs();
 }

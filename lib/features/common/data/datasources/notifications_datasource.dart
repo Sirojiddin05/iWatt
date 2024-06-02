@@ -7,8 +7,11 @@ import 'package:i_watt_app/features/common/data/models/notification_model.dart';
 
 abstract class NotificationDataSource {
   Future<GenericPagination<NotificationModel>> getNotifications({String? next});
+
   Future<NotificationDetailModel> getNotificationDetail({required int id});
+
   Future<void> readAllNotifications();
+
   Future<void> notificationOnOff({required bool enabled});
 }
 
@@ -21,8 +24,7 @@ class NotificationDataSourceImpl extends NotificationDataSource {
   Future<NotificationDetailModel> getNotificationDetail({required int id}) async {
     try {
       final response = await _dio.get(
-        'core/notifications/',
-        queryParameters: {'id': id},
+        '/notification/UserNotificationDetail/$id/',
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return NotificationDetailModel.fromJson(response.data);
@@ -49,7 +51,7 @@ class NotificationDataSourceImpl extends NotificationDataSource {
   Future<GenericPagination<NotificationModel>> getNotifications({String? next}) async {
     try {
       final response = await _dio.get(
-        next ?? 'core/notifications/',
+        next ?? '/notification/UserNotificationList/',
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(
@@ -78,10 +80,7 @@ class NotificationDataSourceImpl extends NotificationDataSource {
   @override
   Future<void> readAllNotifications() async {
     try {
-      final response = await _dio.post(
-        'core/notifications/',
-        data: {"seen_all": true},
-      );
+      final response = await _dio.post('/notification/UserNotificationReadAll/');
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(

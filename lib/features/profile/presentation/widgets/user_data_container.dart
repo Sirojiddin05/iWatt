@@ -8,7 +8,9 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_image.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/pages/edit_profile.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/user_image_placeholder.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class UserDataContainer extends StatelessWidget {
   const UserDataContainer({
@@ -18,7 +20,11 @@ class UserDataContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WCustomTappableButton(
-      onTap: () {},
+      onTap: () => Navigator.of(context, rootNavigator: true).push(
+        MaterialWithModalsPageRoute(
+          builder: (ctx) => const EditProfilePage(),
+        ),
+      ),
       borderRadius: BorderRadius.circular(12),
       rippleColor: AppColors.cyprusRipple30,
       child: Container(

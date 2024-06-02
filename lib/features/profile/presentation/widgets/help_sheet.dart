@@ -22,8 +22,8 @@ class HelpSheet extends StatelessWidget {
       color: context.theme.scaffoldBackgroundColor,
       child: BlocBuilder<AboutUsBloc, AboutUsState>(
         builder: (context, state) {
-          if (state.getAboutUsStatus.isInitial) {
-            context.read<AboutUsBloc>().add(GetAboutUsEvent());
+          if (state.getHelpStatus.isInitial) {
+            context.read<AboutUsBloc>().add(GetHelpEvent());
           }
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -40,38 +40,41 @@ class HelpSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    if (state.getAboutUsStatus.isInProgress) ...{
+                    if (state.getHelpStatus.isInProgress) ...{
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 32),
-                        child: CircularProgressIndicator.adaptive(),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
                       )
-                    } else if (state.getAboutUsStatus.isSuccess) ...{
+                    } else if (state.getHelpStatus.isSuccess) ...{
                       IconTextButton(
-                        title: state.aboutUs.phone,
+                        title: state.help.helpPhoneNumber,
                         icon: AppIcons.phoneSmall,
                         padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                        onTap: () => launchUrlString('tel:${state.aboutUs.phone}'),
+                        onTap: () => launchUrlString('tel:${state.help.helpPhoneNumber}'),
                       ),
                       Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
                       IconTextButton(
-                        title: state.aboutUs.email,
+                        title: state.help.helpEmail,
                         icon: AppIcons.mail,
                         padding: const EdgeInsets.all(12),
                         onTap: () => launchUrlString(
-                          "mailto:${state.aboutUs.email}",
+                          "mailto:${state.help.helpEmail}",
                           mode: LaunchMode.externalApplication,
                         ),
                       ),
                       Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
                       IconTextButton(
-                        title: state.aboutUs.botUsername,
+                        title: state.help.helpTelegramLink,
                         icon: AppIcons.telegram,
                         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
                         padding: const EdgeInsets.all(12),
-                        onTap: () => launchUrlString('https://${state.aboutUs.phone}'),
+                        onTap: () => launchUrlString(state.help.helpTelegramLink),
                       ),
-                    } else if (state.getAboutUsStatus.isFailure) ...{
+                    } else if (state.getHelpStatus.isFailure) ...{
                       const ErrorStateTextWidget()
                     }
                   ],

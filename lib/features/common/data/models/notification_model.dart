@@ -8,8 +8,10 @@ class NotificationModel extends NotificationEntity {
   const NotificationModel({
     super.id,
     super.title,
-    super.addTime,
-    super.seenTime,
+    super.description,
+    super.photo,
+    super.isRead,
+    super.createdAt,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) => _$NotificationModelFromJson(json);

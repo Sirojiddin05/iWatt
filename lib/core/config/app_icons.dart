@@ -107,4 +107,15 @@ class AppIcons {
   static const preparingStatusIcon = 'assets/icons/ic_preparing.svg';
   static const notWorkingStatusIcon = 'assets/icons/ic_notworking_status.svg';
   static const nearStationStatusIcon = 'assets/icons/ic_connect.svg';
+  static const globe = 'assets/icons/globe.svg';
+  static const card = 'assets/icons/ic_card.svg';
+  static const uzcard = 'assets/icons/ic_uzcard.svg';
+  static const humo = 'assets/icons/ic_humo.svg';
+  static const visa = 'assets/icons/ic_visa.svg';
+  static const masterCard = 'assets/icons/ic_mastercard.svg';
+  static const paylovIcon = 'assets/icons/ic_paylov_icon.svg';
+  static const camera = 'assets/icons/ic_camera.svg';
+  static const penSquare = 'assets/icons/ic_pen_square.svg';
+  static const imageSquare = 'assets/icons/ic_image_square.svg';
+  static const loaderIndicator = 'assets/icons/ic_loader_indicator.svg';
 }

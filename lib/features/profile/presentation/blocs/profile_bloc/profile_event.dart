@@ -5,6 +5,8 @@ abstract class ProfileEvent {}
 
 class GetUserData extends ProfileEvent {}
 
+class DeleteAccount extends ProfileEvent {}
+
 class UpdateProfile extends ProfileEvent {
   final String? fullName;
   final String? photo;

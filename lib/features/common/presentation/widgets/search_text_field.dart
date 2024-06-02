@@ -39,6 +39,7 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
   late TextEditingController _controller;
   late final ValueNotifier<bool> suffixVisibility;
+
   @override
   void initState() {
     suffixVisibility = ValueNotifier(false);
@@ -50,7 +51,7 @@ class _SearchFieldState extends State<SearchField> {
   void checkVisibilitySuffix() {
     if (_controller.text.isEmpty) {
       suffixVisibility.value = false;
-    } else if (_controller.text.length == 1) {
+    } else if (_controller.text.isNotEmpty) {
       suffixVisibility.value = true;
     }
   }

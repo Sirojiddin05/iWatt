@@ -41,4 +41,19 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(ParsingFailure(errorMessage: e.errorMessage));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteAccount() async {
+    try {
+      final result = await datasource.deleteAccount();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errorMessage: e.errorMessage));
+    } on CustomDioException catch (e) {
+      final message = e.type.message;
+      return Left(DioFailure(errorMessage: message));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    }
+  }
 }

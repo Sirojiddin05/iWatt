@@ -9,9 +9,11 @@ class SearchAppBar extends StatelessWidget {
   const SearchAppBar({
     super.key,
     required this.focusNode,
+    required this.controller,
   });
 
   final FocusNode focusNode;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class SearchAppBar extends StatelessWidget {
         ],
       ),
       child: SearchField(
+        controller: controller,
         onChanged: (v) {
           if (v.length >= 3 || v.isEmpty) {
             context.read<ChargeLocationsBloc>().add(SetSearchPatternEvent(v));
