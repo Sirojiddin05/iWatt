@@ -13,6 +13,7 @@ import 'package:i_watt_app/features/charge_location_single/presentation/widgets/
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/header_address.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/header_top.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_body_wrapper.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_loader_view.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_sheet_bottom_widget.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/min_balance_card.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/socket_repository_impl.dart';
@@ -30,6 +31,7 @@ class LocationSingleSheet extends StatefulWidget {
   final int id;
   final String latitude;
   final String longitude;
+
   const LocationSingleSheet({
     super.key,
     this.midSize = false,
@@ -168,8 +170,8 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with SingleTi
                                           //   child: const ContactsCard(),
                                           // ),
                                           const SizedBox(height: 70),
-                                        } else ...{
-                                          const CircularProgressIndicator.adaptive()
+                                        } else if (state.getSingleStatus.isInProgress) ...{
+                                          const LocationSingleLoaderView()
                                         }
                                       ],
                                     ),

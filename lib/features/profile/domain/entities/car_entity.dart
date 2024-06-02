@@ -7,7 +7,7 @@ class CarEntity extends Equatable {
   final int id;
   final String manufacturer;
   final String model;
-  final int stateNumberType;
+  final String stateNumberType;
   final String stateNumber;
   @IdNameConverter()
   final List<IdNameEntity> connectorType;
@@ -16,7 +16,7 @@ class CarEntity extends Equatable {
   const CarEntity({
     this.id = -1,
     this.model = '',
-    this.stateNumberType = -1,
+    this.stateNumberType = '',
     this.connectorType = const [],
     this.manufacturer = '',
     this.vin = '',
@@ -27,7 +27,7 @@ class CarEntity extends Equatable {
     int? id,
     String? model,
     String? manufacturer,
-    int? stateNumberType,
+    String? stateNumberType,
     List<IdNameEntity>? connectorType,
     String? vin,
     String? stateNumber,
@@ -47,9 +47,10 @@ class CarEntity extends Equatable {
         'model': model,
         'manufacturer': manufacturer,
         'state_number': stateNumber,
-        'state_number_type': stateNumberType > 0 ? stateNumberType : null,
+        'state_number_type': stateNumberType.isNotEmpty ? stateNumberType : null,
         'vin': vin.isNotEmpty ? vin : null,
-        for (int i = 0; i < connectorType.length; i++) 'connector_type[$i]': connectorType[i].id,
+        'connector_type': connectorType.map((e) => e.id).toList(),
+        // for (int i = 0; i < connectorType.length; i++) 'connector_type[$i]': connectorType[i].id,
       };
 
   @override

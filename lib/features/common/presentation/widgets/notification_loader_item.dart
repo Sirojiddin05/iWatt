@@ -16,9 +16,9 @@ class NotificationLoaderItem extends StatelessWidget {
             width: 8,
             height: 8,
             margin: const EdgeInsets.fromLTRB(16, 16, 10, 16),
-            decoration: const ShapeDecoration(
-              shape: OvalBorder(),
-              color: Colors.black,
+            decoration: ShapeDecoration(
+              shape: const OvalBorder(),
+              color: context.appBarTheme.backgroundColor,
             ),
           ),
           Padding(
@@ -31,7 +31,7 @@ class NotificationLoaderItem extends StatelessWidget {
                   width: context.sizeOf.width * .34,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.black,
+                    color: context.appBarTheme.backgroundColor,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -40,7 +40,7 @@ class NotificationLoaderItem extends StatelessWidget {
                   width: context.sizeOf.width * .87,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.black,
+                    color: context.appBarTheme.backgroundColor,
                   ),
                 ),
               ],

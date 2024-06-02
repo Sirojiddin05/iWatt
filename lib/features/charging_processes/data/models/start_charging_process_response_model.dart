@@ -9,5 +9,6 @@ class CommandResultResponseModel extends CommandResultResponseEntity {
     super.id,
     super.isDelivered,
   });
-  factory CommandResultResponseModel.fromJson(Map<String, dynamic> json) => _$StartChargingResponseModelFromJson(json);
+
+  factory CommandResultResponseModel.fromJson(Map<String, dynamic> json) => _$CommandResultResponseModelFromJson(json);
 }

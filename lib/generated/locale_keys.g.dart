@@ -194,8 +194,10 @@ abstract class  LocaleKeys {
   static const birthday = 'birthday';
   static const gender = 'gender';
   static const delete_photo = 'delete_photo';
+  static const delete_car = 'delete_car';
   static const do_you_really_want_to_delete_your_account = 'do_you_really_want_to_delete_your_account';
   static const do_you_really_want_to_delete_profile_photo = 'do_you_really_want_to_delete_profile_photo';
+  static const do_you_really_want_to_delete_this_car = 'do_you_really_want_to_delete_this_car';
   static const change_profile_photo = 'change_profile_photo';
   static const camera = 'camera';
   static const gallery = 'gallery';

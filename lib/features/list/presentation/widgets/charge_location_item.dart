@@ -152,7 +152,8 @@ class ChargeLocationCard extends StatelessWidget {
                 const LocationDataDividerCircle(),
                 LocationCardDataRow(
                   icon: context.themedIcons.station,
-                  value: "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
+                  value:
+                      "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
                 ),
                 if (location.distance != -1) ...{
                   const LocationDataDividerCircle(),

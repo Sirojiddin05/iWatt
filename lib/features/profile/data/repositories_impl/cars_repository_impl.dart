@@ -58,7 +58,7 @@ class CarsRepositoryImpl extends CarsRepository {
   }
 
   @override
-  Future<Either<Failure, int>> addCar({required CarEntity car}) async {
+  Future<Either<Failure, void>> addCar({required CarEntity car}) async {
     try {
       final result = await datasource.addCar(car: car);
       return Right(result);

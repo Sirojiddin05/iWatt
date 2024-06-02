@@ -13,6 +13,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/info_container.d
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
+import 'package:i_watt_app/features/list/presentation/widgets/charge_location_cards_loader.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/charge_location_item.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
@@ -58,10 +59,11 @@ class LocationsList extends StatelessWidget {
         ),
         Expanded(
           child: BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
-            buildWhen: (o, n) => o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
+            buildWhen: (o, n) =>
+                o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
             builder: (context, state) {
               if (state.getChargeLocationsStatus.isInProgress) {
-                return const Center(child: CircularProgressIndicator.adaptive());
+                return const ChargeLocationCardsLoader();
               } else if (state.getChargeLocationsStatus.isSuccess) {
                 if (state.chargeLocations.isEmpty) {
                   return Center(

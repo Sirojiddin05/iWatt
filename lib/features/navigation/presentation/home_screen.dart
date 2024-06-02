@@ -74,10 +74,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   Widget build(BuildContext context) => BlocProvider.value(
         value: _versionCheckBloc,
         child: BlocListener<VersionCheckBloc, VersionCheckState>(
-          listenWhen: (o, n) => o.version == n.version,
+          listenWhen: (o, n) => o.version != n.version,
           listener: (context, state) async {
             final needToUpdate = await MyFunctions.needToUpdate(state.version);
-            if (!needToUpdate) {
+            if (needToUpdate) {
               updateAppDialog(state.isRequired, context);
             }
           },

@@ -13,6 +13,7 @@ part 'add_car_state.dart';
 
 class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
   final AddCarUseCase addCarUseCase;
+
   AddCarBloc(this.addCarUseCase) : super(const AddCarState()) {
     on<SwitchToStep>(_switchStep);
     on<SwitchToNextStep>(_switchToNextStep);
@@ -87,7 +88,7 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
 
   void _setCarNumber(SetCarNumber event, Emitter<AddCarState> emit) {
     final number = event.number;
-    final numberType = MyFunctions.carNumberType(number);
+    final numberType = MyFunctions.getCarNumberType(MyFunctions.carNumberType(number));
     final car = state.car.copyWith(stateNumber: event.number, stateNumberType: numberType);
     emit(state.copyWith(car: car));
   }
@@ -97,14 +98,18 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
     final car = state.car.copyWith(
       manufacturer: state.temporaryManufacturer.id == 0 ? state.otherMark : null,
     );
-    final result = await addCarUseCase(car);
-    if (result.isRight) {
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
-    } else {
-      emit(state.copyWith(
-        status: FormzSubmissionStatus.failure,
-        error: result.left.errorMessage,
-      ));
+    try {
+      final result = await addCarUseCase.call(car);
+      if (result.isRight) {
+        emit(state.copyWith(status: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+          status: FormzSubmissionStatus.failure,
+          error: result.left.errorMessage,
+        ));
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

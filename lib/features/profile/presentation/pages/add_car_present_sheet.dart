@@ -7,13 +7,13 @@ import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/connector_types_list.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_wrapper.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/car_brands_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/cars_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/add_car_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/get_manufacturers_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/get_models_usecase.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/add_car_bloc/add_car_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/cars_bloc/cars_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/manufacturers_bloc/manufacturers_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/models_bloc/models_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/add_car_button.dart';
@@ -65,7 +65,8 @@ class _AddCarPresentSheetState extends State<AddCarPresentSheet> {
           BlocListener<AddCarBloc, AddCarState>(
             listenWhen: (o, n) => o.currentStep != n.currentStep,
             listener: (context, state) {
-              pageController.animateToPage(state.currentStep, duration: AppConstants.animationDuration, curve: Curves.linear);
+              pageController.animateToPage(state.currentStep,
+                  duration: AppConstants.animationDuration, curve: Curves.linear);
             },
           ),
           BlocListener<AddCarBloc, AddCarState>(
@@ -75,6 +76,7 @@ class _AddCarPresentSheetState extends State<AddCarPresentSheet> {
                 context.showPopUp(context, PopUpStatus.failure, message: state.error);
               } else if (state.status.isSuccess) {
                 Navigator.of(context).pop();
+                context.read<CarsBloc>().add(GetCarsEvent());
                 context.showPopUp(
                   context,
                   PopUpStatus.success,

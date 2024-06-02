@@ -111,7 +111,10 @@ class _MyCarsPageState extends State<MyCarsPage> {
             showCupertinoModalBottomSheet(
               context: context,
               isDismissible: false,
-              builder: (c) => const AddCarPresentSheet(),
+              builder: (c) => BlocProvider.value(
+                value: carsBloc,
+                child: const AddCarPresentSheet(),
+              ),
             );
           },
           margin: EdgeInsets.fromLTRB(16, 8, 16, context.padding.bottom),
