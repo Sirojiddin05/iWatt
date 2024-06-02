@@ -13,11 +13,16 @@ import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/charging_processes/data/repositories_impl/charging_process_repository_impl.dart';
+import 'package:i_watt_app/features/charging_processes/domain/usecases/start_charging_process_usecase.dart';
+import 'package:i_watt_app/features/charging_processes/domain/usecases/stop_charging_process_usecase.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/about_us_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/notifications_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/socket_repository_impl.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_all_search_histories.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_single_search_history.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_about_usecase.dart';
@@ -26,6 +31,7 @@ import 'package:i_watt_app/features/common/domain/usecases/get_notification.dart
 import 'package:i_watt_app/features/common/domain/usecases/get_notification_detail.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_search_history.dart';
+import 'package:i_watt_app/features/common/domain/usecases/meter_value_stream_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
@@ -77,6 +83,19 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthenticationBloc(
             GetAuthenticationStatusUseCase(repository: serviceLocator<AuthenticationRepositoryImpl>()),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ChargingProcessBloc(
+            startChargingProcessUseCase: StartChargingProcessUseCase(
+              serviceLocator<ChargingProcessRepositoryImpl>(),
+            ),
+            stopChargingProcessUseCase: StopChargingProcessUseCase(
+              serviceLocator<ChargingProcessRepositoryImpl>(),
+            ),
+            meterValueStreamUseCase: MeterValueStreamUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
+            ),
           ),
         ),
         BlocProvider(

@@ -25,4 +25,26 @@ class ChargeLocationSingleEntity {
     this.vendor = const VendorEntity(),
     this.facilities = const [],
   });
+
+  ChargeLocationSingleEntity copyWith({
+    int? id,
+    String? name,
+    double? distance,
+    String? address,
+    List<ChargerEntity>? chargers,
+    bool? isFavorite,
+    VendorEntity? vendor,
+    List<IdNameEntity>? facilities,
+  }) {
+    return ChargeLocationSingleEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      distance: distance ?? this.distance,
+      address: address ?? this.address,
+      chargers: chargers ?? this.chargers,
+      isFavorite: isFavorite ?? this.isFavorite,
+      vendor: vendor ?? this.vendor,
+      facilities: facilities ?? this.facilities,
+    );
+  }
 }

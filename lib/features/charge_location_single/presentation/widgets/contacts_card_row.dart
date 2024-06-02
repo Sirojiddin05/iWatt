@@ -40,17 +40,20 @@ class _ContactsCardRowState extends State<ContactsCardRow> {
           const SizedBox(width: 12),
           Builder(builder: (ctx) {
             if (show) {
-              return SelectableText(
-                widget.value,
-                style: context.textTheme.headlineMedium!.copyWith(color: AppColors.cyprus),
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: widget.value));
-                  context.showPopUp(
-                    context,
-                    PopUpStatus.success,
-                    message: LocaleKeys.copied_to_clipboard.tr(),
-                  );
-                },
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.5),
+                child: SelectableText(
+                  widget.value,
+                  style: context.textTheme.headlineMedium!.copyWith(color: AppColors.cyprus),
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: widget.value));
+                    context.showPopUp(
+                      context,
+                      PopUpStatus.success,
+                      message: LocaleKeys.copied_to_clipboard.tr(),
+                    );
+                  },
+                ),
               );
             }
             return Container(

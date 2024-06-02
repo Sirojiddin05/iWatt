@@ -173,7 +173,7 @@ class CodegenLoader extends AssetLoader{
   "kW": "кВт",
   "minimum_balance_to_start": "Минимум баланс для старта",
   "car_is_successfully_added": "Машина успешно добавлена",
-  "did_not_manage_to_do_your_request": "Не удалось выполнить ваше запрос.",
+  "did_not_manage_to_do_your_request": "Не удалось выполнить ваш запрос.",
   "try_again": "Попробуйте снова!",
   "pay": "Оплатить",
   "you_owe": "У вас есть задолженность",
@@ -190,7 +190,11 @@ class CodegenLoader extends AssetLoader{
   "show_phone_number": "Показать номер телефона",
   "show_email": "Показать адрес электронной почты",
   "show_web_address": "Показать адрес веб сайта",
-  "copied_to_clipboard": "Скопировано в буфер обмена"
+  "copied_to_clipboard": "Скопировано в буфер обмена",
+  "charging_stations": "Зарядные станции",
+  "select_station": "Выберите станцию",
+  "start_charging": "Начать зарядку",
+  "connect_car": "Подключите авто"
 };
 static const Map<String,dynamic> en = {
   "cancel": "Cancel"

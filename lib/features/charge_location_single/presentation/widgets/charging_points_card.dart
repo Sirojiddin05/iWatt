@@ -8,9 +8,11 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/charger_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/charging_stations_sheet.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/connector_status_container.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ChargingPointsCard extends StatefulWidget {
   final List<ChargerEntity> chargers;
@@ -31,7 +33,6 @@ class _ChargingPointsCardState extends State<ChargingPointsCard> {
     for (final charger in widget.chargers) {
       allConnectors.addAll(charger.connectors);
     }
-    print('allConnectors.length ${allConnectors.length}');
   }
 
   @override
@@ -42,7 +43,19 @@ class _ChargingPointsCardState extends State<ChargingPointsCard> {
         children: List.generate(
           allConnectors.length,
           (index) => WCustomTappableButton(
-            onTap: () {},
+            onTap: () {
+              context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
+              showCupertinoModalBottomSheet(
+                context: context,
+                backgroundColor: AppColors.white,
+                builder: (ctx) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<ChargeLocationSingleBloc>(context),
+                    child: const StationSingleSheet(),
+                  );
+                },
+              );
+            },
             borderRadius: getBorderRadius(index),
             rippleColor: AppColors.primaryRipple30,
             child: Padding(
@@ -81,7 +94,6 @@ class _ChargingPointsCardState extends State<ChargingPointsCard> {
                       return oldAllConnectors[index].status != newAllConnectors[index].status;
                     },
                     builder: (ctx, state) {
-                      print('inside are ${state.allConnectors}');
                       final status = ConnectorStatus.fromString(state.allConnectors[index].status);
                       return ConnectorStatusContainer(status: status);
                     },

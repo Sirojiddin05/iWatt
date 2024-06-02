@@ -105,6 +105,8 @@ class LocationsList extends StatelessWidget {
                                 distance: location.distance.toString(),
                                 midSize: true,
                                 id: location.id,
+                                latitude: location.latitude,
+                                longitude: location.longitude,
                               );
                             },
                           );

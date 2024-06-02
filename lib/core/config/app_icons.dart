@@ -101,4 +101,10 @@ class AppIcons {
   static const logoPlaceholder = 'assets/icons/ic_logo_placeholder.svg';
   static const globe = 'assets/icons/ic_globe.svg';
   static const sms = 'assets/icons/ic_sms.svg';
+  static const iconPlaceHolder = 'assets/icons/ic_icon_placeholder.svg';
+  static const list = 'assets/icons/ic_list.svg';
+  static const freeStatusIcon = 'assets/icons/ic_free_status.svg';
+  static const preparingStatusIcon = 'assets/icons/ic_preparing.svg';
+  static const notWorkingStatusIcon = 'assets/icons/ic_notworking_status.svg';
+  static const nearStationStatusIcon = 'assets/icons/ic_connect.svg';
 }

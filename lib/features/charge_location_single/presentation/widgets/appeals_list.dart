@@ -67,6 +67,7 @@ class _AppealsListState extends State<AppealsList> {
             if (state.sendAppealStatus.isFailure) {
               context.showPopUp(context, PopUpStatus.failure, message: state.sendErrorMessage);
             } else if (state.sendAppealStatus.isSuccess) {
+              Navigator.pop(context);
               context.showPopUp(context, PopUpStatus.success, message: LocaleKeys.appeal_successfully_sent.tr());
             }
           },
@@ -163,7 +164,7 @@ class _AppealsListState extends State<AppealsList> {
                     valueListenable: appealNotifier,
                     builder: (BuildContext context, value, Widget? child) {
                       return WButton(
-                        isLoading: state.getAppealsStatus.isInProgress,
+                        isLoading: state.sendAppealStatus.isInProgress,
                         margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
                         isDisabled: appealController.text.isEmpty && appealNotifier.value == state.appeals.length - 1,
                         text: LocaleKeys.send.tr(),

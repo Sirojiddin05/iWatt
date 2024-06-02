@@ -111,6 +111,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                                   title: '${location.vendorName} "${location.locationName}"',
                                   address: location.address,
                                   distance: location.distance.toString(),
+                                  latitude: location.latitude,
+                                  longitude: location.longitude,
                                 );
                               }).then((value) {
                             headerSizeController.forward();

@@ -81,8 +81,14 @@ class FacilitiesCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.network(facilities[index].icon, width: 16, height: 16),
-                      const SizedBox(width: 4),
+                      if (facilities[index].icon.isNotEmpty &&
+                          facilities[index].icon.contains("https") &&
+                          facilities[index].icon.contains("svg")) ...{
+                        SvgPicture.network(facilities[index].icon, width: 16, height: 16),
+                        const SizedBox(width: 4),
+                      } else ...{
+                        SvgPicture.asset(AppIcons.iconPlaceHolder, width: 16, height: 16),
+                      },
                       Text(
                         facilities[index].name,
                         style: context.textTheme.titleSmall!.copyWith(
