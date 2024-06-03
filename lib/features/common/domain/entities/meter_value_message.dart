@@ -14,4 +14,22 @@ class MeterValueMessageEntity {
     this.consumedKwh = -1,
     this.status = '',
   });
+
+  MeterValueMessageEntity copyWith({
+    int? startCommandId,
+    int? transactionId,
+    String? money,
+    int? batteryPercent,
+    double? consumedKwh,
+    String? status,
+  }) {
+    return MeterValueMessageEntity(
+      startCommandId: startCommandId ?? this.startCommandId,
+      transactionId: transactionId ?? this.transactionId,
+      money: money ?? this.money,
+      batteryPercent: batteryPercent ?? this.batteryPercent,
+      consumedKwh: consumedKwh ?? this.consumedKwh,
+      status: status ?? this.status,
+    );
+  }
 }

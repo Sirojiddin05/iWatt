@@ -8,6 +8,7 @@ import 'package:i_watt_app/core/usecases/base_usecase.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/charging_processes/domain/entities/charging_process_entity.dart';
 import 'package:i_watt_app/features/charging_processes/domain/entities/start_process_param_entity.dart';
+import 'package:i_watt_app/features/charging_processes/domain/usecases/get_charging_processes.dart';
 import 'package:i_watt_app/features/charging_processes/domain/usecases/start_charging_process_usecase.dart';
 import 'package:i_watt_app/features/charging_processes/domain/usecases/stop_charging_process_usecase.dart';
 import 'package:i_watt_app/features/common/domain/entities/meter_value_message.dart';
@@ -28,6 +29,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
   final MeterValueStreamUseCase meterValueStreamUseCase;
   final StartChargingProcessUseCase startChargingProcessUseCase;
   final StopChargingProcessUseCase stopChargingProcessUseCase;
+  final GetChargingProcessUseCase getChargingProcessUseCase;
   late final StreamSubscription<MeterValueMessageEntity> meterValueStreamSubscription;
   late final StreamSubscription<TransactionMessageEntity> transactionMessageStreamSubscription;
   ChargingProcessBloc({
@@ -37,6 +39,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     required this.connectToSocketUseCase,
     required this.disconnectFromSocketUseCase,
     required this.transactionChequeStreamUseCase,
+    required this.getChargingProcessUseCase,
   }) : super(const ChargingProcessState()) {
     meterValueStreamSubscription = meterValueStreamUseCase(NoParams()).listen((event) {
       add(UpdateMeterValueOfProcess(event));
@@ -57,6 +60,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     on<CreateTransactionCheque>(_createTransactionCheque);
     on<ConnectToSocketEvent>(_connectToSocket);
     on<DisconnectFromSocketEvent>(_disconnectFromSocket);
+    on<GetChargingProcessesEvent>(_getChargingProcesses);
   }
 
   void _onStartChargingProcessEvent(StartChargingProcessEvent event, Emitter<ChargingProcessState> emit) async {
@@ -137,5 +141,28 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     final list = [...state.processes];
     list.removeAt(event.index);
     emit(state.copyWith(processes: [...list]));
+  }
+
+  Future<void> _getChargingProcesses(GetChargingProcessesEvent event, Emitter<ChargingProcessState> emit) async {
+    emit(state.copyWith(getChargingProcesses: FormzSubmissionStatus.inProgress));
+    final result = await getChargingProcessUseCase.call(NoParams());
+    if (result.isRight) {
+      final processes = result.right.results
+          .map((e) => ChargingProcessEntity(
+                connector: e.connector,
+                startCommandId: e.startCommandId,
+                transactionId: e.id,
+                locationName: '${e.vendorName} "${e.locationName}"',
+                meterValueMessage: const MeterValueMessageEntity().copyWith(
+                  batteryPercent: e.batteryPercent,
+                  consumedKwh: e.consumedKwh,
+                  money: e.money,
+                ),
+              ))
+          .toList();
+      emit(state.copyWith(getChargingProcesses: FormzSubmissionStatus.success, processes: processes));
+    } else {
+      emit(state.copyWith(getChargingProcesses: FormzSubmissionStatus.failure));
+    }
   }
 }

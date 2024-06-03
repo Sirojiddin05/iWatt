@@ -46,3 +46,7 @@ class ConnectToSocketEvent extends ChargingProcessEvent {
 class DisconnectFromSocketEvent extends ChargingProcessEvent {
   DisconnectFromSocketEvent();
 }
+
+class GetChargingProcessesEvent extends ChargingProcessEvent {
+  GetChargingProcessesEvent();
+}

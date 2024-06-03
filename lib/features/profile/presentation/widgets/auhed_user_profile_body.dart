@@ -53,12 +53,12 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   },
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
-                IconTextButton(
-                  title: LocaleKeys.you_saved.tr(),
-                  icon: AppIcons.savings,
-                  onTap: () {},
-                ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                // IconTextButton(
+                //   title: LocaleKeys.you_saved.tr(),
+                //   icon: AppIcons.savings,
+                //   onTap: () {},
+                // ),hayfsan
+                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.notifications.tr(),
                   icon: AppIcons.notificationsBlue,

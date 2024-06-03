@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/charging_stations_bottom_widget.dart';
@@ -53,6 +55,9 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                 Expanded(
                   child: Stack(
                     children: [
+                      Positioned.fill(
+                        child: SvgPicture.asset(AppIcons.stationBackground),
+                      ),
                       Positioned.fill(
                         child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
                           builder: (ctx, state) {

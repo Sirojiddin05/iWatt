@@ -4,6 +4,8 @@ class ChargingProcessState extends Equatable {
   final FormzSubmissionStatus startProcessStatus;
   final String startProcessErrorMessage;
   final FormzSubmissionStatus stopProcessStatus;
+  final FormzSubmissionStatus getChargingProcesses;
+  final String getChargingProcessErrorMessage;
   final String stopProcessErrorMessage;
   final List<ChargingProcessEntity> processes;
   final TransactionMessageEntity transactionCheque;
@@ -14,7 +16,9 @@ class ChargingProcessState extends Equatable {
     this.stopProcessStatus = FormzSubmissionStatus.initial,
     this.startProcessErrorMessage = '',
     this.stopProcessErrorMessage = '',
+    this.getChargingProcessErrorMessage = '',
     this.transactionCheque = const TransactionMessageEntity(),
+    this.getChargingProcesses = FormzSubmissionStatus.initial,
   });
 
   ChargingProcessState copyWith({
@@ -23,7 +27,9 @@ class ChargingProcessState extends Equatable {
     FormzSubmissionStatus? stopProcessStatus,
     String? startProcessErrorMessage,
     String? stopProcessErrorMessage,
+    String? getChargingProcessErrorMessage,
     TransactionMessageEntity? transactionCheque,
+    FormzSubmissionStatus? getChargingProcesses,
   }) {
     return ChargingProcessState(
       processes: processes ?? this.processes,
@@ -32,6 +38,8 @@ class ChargingProcessState extends Equatable {
       startProcessErrorMessage: startProcessErrorMessage ?? this.startProcessErrorMessage,
       stopProcessErrorMessage: stopProcessErrorMessage ?? this.stopProcessErrorMessage,
       transactionCheque: transactionCheque ?? this.transactionCheque,
+      getChargingProcesses: getChargingProcesses ?? this.getChargingProcesses,
+      getChargingProcessErrorMessage: getChargingProcessErrorMessage ?? this.getChargingProcessErrorMessage,
     );
   }
 
@@ -43,5 +51,7 @@ class ChargingProcessState extends Equatable {
         stopProcessErrorMessage,
         processes,
         transactionCheque,
+        getChargingProcesses,
+        getChargingProcessErrorMessage,
       ];
 }

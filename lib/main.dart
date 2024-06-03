@@ -14,6 +14,7 @@ import 'package:i_watt_app/features/authorization/data/repositories_impl/authent
 import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/charging_processes/data/repositories_impl/charging_process_repository_impl.dart';
+import 'package:i_watt_app/features/charging_processes/domain/usecases/get_charging_processes.dart';
 import 'package:i_watt_app/features/charging_processes/domain/usecases/start_charging_process_usecase.dart';
 import 'package:i_watt_app/features/charging_processes/domain/usecases/stop_charging_process_usecase.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
@@ -111,7 +112,10 @@ class App extends StatelessWidget {
             disconnectFromSocketUseCase: DisconnectFromSocketUseCase(
               serviceLocator<SocketRepositoryImpl>(),
             ),
-          ),
+            getChargingProcessUseCase: GetChargingProcessUseCase(
+              serviceLocator<ChargingProcessRepositoryImpl>(),
+            ),
+          )..add(GetChargingProcessesEvent()),
         ),
         BlocProvider(
           create: (context) => ConnectorTypesBloc(

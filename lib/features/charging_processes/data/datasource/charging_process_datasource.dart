@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/error/exception_handler.dart';
-import 'package:i_watt_app/features/charge_location_single/domain/entities/in_progress_charing_entity.dart';
 import 'package:i_watt_app/features/charging_processes/data/models/in_progress_charging_model.dart';
 import 'package:i_watt_app/features/charging_processes/data/models/start_charging_process_response_model.dart';
 import 'package:i_watt_app/features/charging_processes/domain/entities/start_process_param_entity.dart';
@@ -10,7 +9,7 @@ import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 abstract class ChargingProcessDataSource {
   Future<CommandResultResponseModel> startChargingProcess({required StartProcessParamEntity params});
   Future<CommandResultResponseModel> stopChargingProcess({required int transactionId});
-  Future<GenericPagination<InProgressCharingEntity>> getChargingProcesses();
+  Future<GenericPagination<InProgressChargingModel>> getChargingProcesses();
 }
 
 class ChargingProcessDataSourceImpl implements ChargingProcessDataSource {
@@ -72,7 +71,7 @@ class ChargingProcessDataSourceImpl implements ChargingProcessDataSource {
   }
 
   @override
-  Future<GenericPagination<InProgressCharingEntity>> getChargingProcesses() async {
+  Future<GenericPagination<InProgressChargingModel>> getChargingProcesses() async {
     try {
       final response = await _dio.get('chargers/InProgressChargingTransactionList/');
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
