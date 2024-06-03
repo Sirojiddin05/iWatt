@@ -44,6 +44,9 @@ import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
+import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
+import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/delete_account_usecase.dart';
@@ -82,6 +85,9 @@ class App extends StatelessWidget {
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
+        BlocProvider(
+            create: (context) =>
+                InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(

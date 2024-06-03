@@ -6,10 +6,11 @@ part 'version_model.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class VersionModel extends VersionEntity {
   const VersionModel({
-    super.androidRequired,
-    super.androidVersion,
-    super.iosRequired,
-    super.iosVersion,
+    super.id,
+    super.number,
+    super.platformType,
+    super.isForceUpdate,
   });
+
   factory VersionModel.fromJson(Map<String, dynamic> json) => _$VersionModelFromJson(json);
 }

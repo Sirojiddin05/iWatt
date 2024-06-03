@@ -81,9 +81,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with SingleTi
       child: WKeyboardDismisser(
         child: Stack(
           children: [
-            BackgroundImage(
-              headerOpacity: headerOpacity,
-            ),
+            BackgroundImage(headerOpacity: headerOpacity),
             Positioned.fill(
               top: MediaQueryData.fromView(View.of(context)).padding.top,
               child: DraggableScrollableSheet(

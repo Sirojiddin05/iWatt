@@ -11,4 +11,6 @@ class StorageKeys {
   static const isRegisteredOnce = 'is_registered_once';
   static const currentAppVersion = 'current_app_version';
   static const carOnMap = 'car_on_map';
+  static const versionFeatures = 'version_features';
+  static const onBoarding = 'on_boarding';
 }

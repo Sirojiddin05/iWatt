@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
+import 'package:i_watt_app/core/config/storage_keys.dart';
+import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
@@ -11,12 +15,15 @@ import 'package:i_watt_app/features/authorization/presentation/blocs/authenticat
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
+import 'package:i_watt_app/features/navigation/domain/usecases/get_version_features_usecase.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_usecase.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/version_check_bloc/version_check_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_controller_provider.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigation_bar_widget.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
+import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:vibration/vibration.dart';
 
@@ -31,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   late final TabController _tabController;
   late final ValueNotifier<int> _currentIndex;
   late final VersionCheckBloc _versionCheckBloc;
+  late final InstructionsBloc _instructionsBloc;
 
   final Map<NavItemEnum, GlobalKey<NavigatorState>> _navigatorKeys = {
     NavItemEnum.map: GlobalKey<NavigatorState>(),
@@ -52,12 +60,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   @override
   void initState() {
     super.initState();
-    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))
-      ..add(GetVersionEvent());
+    _instructionsBloc = context.read<InstructionsBloc>();
+    _versionCheckBloc = VersionCheckBloc(
+      GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()),
+      GetVersionFeaturesUseCase(serviceLocator<VersionCheckRepositoryImpl>()),
+    )..add(GetVersionEvent());
 
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
       ..addListener(() => _currentIndex.value = _tabController.index);
+
+    bool onBoarding = StorageRepository.getBool(StorageKeys.onBoarding);
+
+    if (onBoarding) {
+      _instructionsBloc.add(GetInstructionsEvent(InstructionsType.onboarding.name));
+    }
 
     //TODO
     // context.read<LoginBloc>().add(GetUserDataEvent());
@@ -71,16 +88,68 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   }
 
   @override
-  Widget build(BuildContext context) => BlocProvider.value(
-        value: _versionCheckBloc,
-        child: BlocListener<VersionCheckBloc, VersionCheckState>(
-          listenWhen: (o, n) => o.version != n.version,
-          listener: (context, state) async {
-            final needToUpdate = await MyFunctions.needToUpdate(state.version);
-            if (needToUpdate) {
-              updateAppDialog(state.isRequired, context);
-            }
-          },
+  Widget build(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: _versionCheckBloc),
+        ],
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<InstructionsBloc, InstructionsState>(
+              listenWhen: (o, n) => o.getOnBoardingStatus != n.getOnBoardingStatus,
+              listener: (context, state) {
+                if (state.getOnBoardingStatus.isSuccess) {
+                  StorageRepository.putBool(key: StorageKeys.onBoarding, value: true);
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    useRootNavigator: true,
+                    backgroundColor: Colors.transparent,
+                    constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
+                    builder: (context) => BlocProvider.value(
+                      value: _instructionsBloc,
+                      child: BlocBuilder<InstructionsBloc, InstructionsState>(
+                        builder: (context, state) {
+                          return VersionFeaturesSheet(list: state.onBoarding);
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+            BlocListener<VersionCheckBloc, VersionCheckState>(
+              listenWhen: (o, n) => o.version != n.version,
+              listener: (context, state) async {
+                final needToUpdate = await MyFunctions.needToUpdate(state.version);
+                if (needToUpdate) {
+                  // updateAppDialog(state.isRequired, context);
+                }
+              },
+            ),
+            BlocListener<VersionCheckBloc, VersionCheckState>(
+              listenWhen: (o, n) => o.getVersionFeaturesStatus != n.getVersionFeaturesStatus,
+              listener: (context, state) async {
+                if (state.getVersionFeaturesStatus.isSuccess) {
+                  StorageRepository.putList(StorageKeys.versionFeatures,
+                      [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    useRootNavigator: true,
+                    backgroundColor: Colors.transparent,
+                    constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
+                    builder: (context) => BlocBuilder<VersionCheckBloc, VersionCheckState>(
+                      builder: (context, state) {
+                        return VersionFeaturesSheet(list: state.versionFeatures);
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
           child: HomeTabControllerProvider(
             controller: _tabController,
             child: PopScope(

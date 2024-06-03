@@ -227,7 +227,9 @@ class CodegenLoader extends AssetLoader{
   "update_app": "Обновите приложение",
   "update_app_subtitle": "Уважаемый клиент, чтобы продолжить использовать приложение, просим вам обновиться до оптимальной версии",
   "update_app_subtitle_2": "Уважаемый клиент, доступно новое обновление",
-  "skip": "Пропустить"
+  "skip": "Пропустить",
+  "close": "Закрыть",
+  "next": "Далее"
 };
 static const Map<String,dynamic> en = {
   "cancel": "Cancel"

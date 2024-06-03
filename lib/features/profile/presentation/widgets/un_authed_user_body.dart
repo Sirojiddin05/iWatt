@@ -1,19 +1,30 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
+import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/help_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/login_to_system_container.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
-class UnAuthedUserBody extends StatelessWidget {
+class UnAuthedUserBody extends StatefulWidget {
   final ScrollController controller;
+
   const UnAuthedUserBody({super.key, required this.controller});
 
+  @override
+  State<UnAuthedUserBody> createState() => _UnAuthedUserBodyState();
+}
+
+class _UnAuthedUserBodyState extends State<UnAuthedUserBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -37,10 +48,31 @@ class UnAuthedUserBody extends StatelessWidget {
                 //   ),
                 // ),
                 // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
-                IconTextButton(
-                  title: LocaleKeys.usage_instructions.tr(),
-                  icon: AppIcons.doc,
-                  onTap: () {},
+                BlocListener<InstructionsBloc, InstructionsState>(
+                  listener: (context, state) {
+                    if (state.getInstructionsStatus.isSuccess) {
+                      showModalBottomSheet(
+                        context: context,
+                        useSafeArea: true,
+                        isScrollControlled: true,
+                        useRootNavigator: true,
+                        backgroundColor: Colors.transparent,
+                        constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
+                        builder: (context) => BlocBuilder<InstructionsBloc, InstructionsState>(
+                          builder: (context, state) {
+                            return VersionFeaturesSheet(list: state.instructions);
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  child: IconTextButton(
+                    title: LocaleKeys.usage_instructions.tr(),
+                    onTap: () {
+                      context.read<InstructionsBloc>().add(GetInstructionsEvent(InstructionsType.instruction.name));
+                    },
+                    icon: AppIcons.doc,
+                  ),
                 ),
                 Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
@@ -59,7 +91,8 @@ class UnAuthedUserBody extends StatelessWidget {
                   title: LocaleKeys.about_us.tr(),
                   icon: AppIcons.aboutUs,
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                   actions: [
                     Text(
                       MyFunctions.getCurrentVersionSync(),

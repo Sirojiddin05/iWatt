@@ -209,5 +209,7 @@ abstract class  LocaleKeys {
   static const update_app_subtitle = 'update_app_subtitle';
   static const update_app_subtitle_2 = 'update_app_subtitle_2';
   static const skip = 'skip';
+  static const close = 'close';
+  static const next = 'next';
 
 }
