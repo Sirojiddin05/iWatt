@@ -24,7 +24,7 @@ class EditProfileRadioContainer extends StatelessWidget {
     return WCustomTappableButton(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
-      rippleColor: context.textTheme.bodyMedium!.color!.withAlpha(50),
+      rippleColor: AppColors.dodgerBlue.withAlpha(50),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 13),
         decoration: BoxDecoration(

@@ -8,6 +8,9 @@ class ConnectorEntity {
     this.name = '',
     this.status = '',
     this.standard = const ConnectorStandardEntity(),
+    this.price = -1,
+    this.parkingPrice = -1,
+    this.maxPower = -1,
   });
 
   final int id;
@@ -15,17 +18,26 @@ class ConnectorEntity {
   final String status;
   @ConnectorStandardConverter()
   final ConnectorStandardEntity standard;
+  final double price;
+  final double parkingPrice;
+  final int maxPower;
 
   ConnectorEntity copyWith({
     String? name,
     String? status,
     ConnectorStandardEntity? standard,
+    double? price,
+    double? parkingPrice,
+    int? maxPower,
   }) {
     return ConnectorEntity(
       id: id,
       name: name ?? this.name,
       status: status ?? this.status,
       standard: standard ?? this.standard,
+      price: price ?? this.price,
+      maxPower: maxPower ?? this.maxPower,
+      parkingPrice: parkingPrice ?? this.parkingPrice,
     );
   }
 }

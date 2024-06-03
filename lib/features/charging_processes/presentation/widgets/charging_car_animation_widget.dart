@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+import 'package:highlight_text/highlight_text.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_images.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/widgets/battery_container.dart';
+
+class ChargingCarAnimationWidget extends StatelessWidget {
+  final double? scale;
+  final int percentage;
+  const ChargingCarAnimationWidget({super.key, this.scale, required this.percentage});
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: scale ?? 1,
+      child: Material(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            Center(child: Image.asset(AppImages.transparentCar)),
+            Positioned(
+              top: 0,
+              bottom: -3,
+              right: 0,
+              left: 0,
+              child: UnconstrainedBox(
+                alignment: Alignment.center,
+                child: Transform.scale(
+                  scale: 1.7,
+                  child: BatteryContainer(
+                    percent: getPercent(),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: -20,
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: Center(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(0, 3),
+                        blurRadius: 8,
+                        color: AppColors.black.withOpacity(.15),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      TextHighlight(
+                        text: '${getPercent().toString()}%',
+                        textAlign: TextAlign.end,
+                        words: {
+                          getPercent().toString(): HighlightedWord(
+                            textStyle: context.textTheme.titleSmall!.copyWith(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              height: 1,
+                              letterSpacing: 0,
+                              color: AppColors.cyprus,
+                            ),
+                          ),
+                          '%': HighlightedWord(
+                            textStyle: context.textTheme.titleSmall!.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              height: 1,
+                              letterSpacing: 0,
+                              color: AppColors.cyprus,
+                            ),
+                          ),
+                        },
+                      ),
+                      TextHighlight(
+                        text: '${getPercent().toString()}%',
+                        textAlign: TextAlign.end,
+                        words: {
+                          getPercent().toString(): HighlightedWord(
+                            textStyle: context.textTheme.titleSmall!.copyWith(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              height: 1,
+                              letterSpacing: 0,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 1.4
+                                ..color = AppColors.white,
+                            ),
+                          ),
+                          '%': HighlightedWord(
+                            textStyle: context.textTheme.titleSmall!.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              height: 1,
+                              letterSpacing: 0,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 0.8
+                                ..color = AppColors.white,
+                            ),
+                          ),
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  int getPercent() {
+    if (percentage == -1) {
+      return 0;
+    }
+    return percentage;
+  }
+}

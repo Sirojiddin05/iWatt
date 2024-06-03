@@ -42,6 +42,10 @@ class AppColors {
   static const solitude2 = Color(0xffF5F6F7);
   static const aliceBlue = Color(0xffE8F0FE);
   static const prussianBlue = Color(0xff022F5E);
+  static const lightSlateGrey = Color(0xff7B979C);
+  static const amazon = Color(0xff347143);
+  static const himalaya = Color(0xff716334);
+
   static final cyprusRipple30 = AppColors.cyprus.withAlpha(30);
   static final primaryRipple30 = AppColors.dodgerBlue.withAlpha(30);
   static const List<Color> stationActiveGradient = [

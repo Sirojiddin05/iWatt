@@ -3,7 +3,7 @@ part of 'charging_process_bloc.dart';
 abstract class ChargingProcessEvent {}
 
 class CreateChargingProcessEvent extends ChargingProcessEvent {
-  final int connector;
+  final ConnectorEntity connector;
 
   CreateChargingProcessEvent(this.connector);
 }
@@ -31,4 +31,18 @@ class StopChargingProcessEvent extends ChargingProcessEvent {
   final int transactionId;
 
   StopChargingProcessEvent({required this.transactionId});
+}
+
+class CreateTransactionCheque extends ChargingProcessEvent {
+  final TransactionMessageEntity transactionCheque;
+
+  CreateTransactionCheque(this.transactionCheque);
+}
+
+class ConnectToSocketEvent extends ChargingProcessEvent {
+  ConnectToSocketEvent();
+}
+
+class DisconnectFromSocketEvent extends ChargingProcessEvent {
+  DisconnectFromSocketEvent();
 }

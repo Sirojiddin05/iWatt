@@ -23,8 +23,10 @@ import 'package:i_watt_app/features/common/data/repositories_impl/notifications_
 import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/socket_repository_impl.dart';
+import 'package:i_watt_app/features/common/domain/usecases/connect_to_socket_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_all_search_histories.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_single_search_history.dart';
+import 'package:i_watt_app/features/common/domain/usecases/disconnect_from_socket.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_about_us_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_connector_types_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_help_usecase.dart';
@@ -36,6 +38,7 @@ import 'package:i_watt_app/features/common/domain/usecases/meter_value_stream_us
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
 import 'package:i_watt_app/features/common/domain/usecases/post_search_history_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
+import 'package:i_watt_app/features/common/domain/usecases/transaction_cheque_stream_usecase.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
@@ -81,7 +84,7 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
-        BlocProvider(create: (context) => InternetBloc(Connectivity())),
+        BlocProvider(create: (context) => InternetBloc(Connectivity())..add(CheckConnectionEvent())),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(
@@ -97,6 +100,15 @@ class App extends StatelessWidget {
               serviceLocator<ChargingProcessRepositoryImpl>(),
             ),
             meterValueStreamUseCase: MeterValueStreamUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
+            ),
+            transactionChequeStreamUseCase: TransactionChequeStreamUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
+            ),
+            connectToSocketUseCase: ConnectToSocketUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
+            ),
+            disconnectFromSocketUseCase: DisconnectFromSocketUseCase(
               serviceLocator<SocketRepositoryImpl>(),
             ),
           ),
@@ -219,7 +231,9 @@ class _MyAppState extends State<MyApp> {
                 listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
                 listener: (context, state) async {
                   _navigator.pushAndRemoveUntil(
-                    MaterialWithModalsPageRoute(builder: (context) => const HomeScreen()),
+                    MaterialWithModalsPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
                     (route) => false,
                   );
                 },

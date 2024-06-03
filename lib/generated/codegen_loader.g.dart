@@ -225,7 +225,22 @@ class CodegenLoader extends AssetLoader{
   "update_app": "Обновите приложение",
   "update_app_subtitle": "Уважаемый клиент, чтобы продолжить использовать приложение, просим вам обновиться до оптимальной версии",
   "update_app_subtitle_2": "Уважаемый клиент, доступно новое обновление",
-  "skip": "Пропустить"
+  "skip": "Пропустить",
+  "you_sure_you_want_start_charging": "Вы уверены, что хотите начать зарядку?",
+  "charing": "Зарядка",
+  "max_power": "Макс. мощность",
+  "price": "Цена",
+  "charging_is_starting": "Зарядка начинается",
+  "charging_is_ended": "Зарядка завершена",
+  "charging": "Заряжается",
+  "current_power": "Текущая мощность",
+  "time_left": "Оставшееся время",
+  "charged": "Заряжен",
+  "payed": "Оплачено",
+  "sum": "сум",
+  "stop_charging": "Завершить зарядку",
+  "with_this_action_you_stop_charging": "Данным действием вы подтверждаете завершение процесса зарядки автомобиля",
+  "finish": "Завершить"
 };
 static const Map<String,dynamic> en = {
   "cancel": "Cancel"

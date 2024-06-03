@@ -65,9 +65,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           BlocListener<ProfileBloc, ProfileState>(
             listener: (context, state) {
               if (state.deleteAccountStatus.isSuccess) {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
+                context.read<AuthenticationBloc>().add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
                 Navigator.pop(context);
                 Navigator.pop(context);
               } else if (state.deleteAccountStatus.isFailure) {
@@ -76,7 +74,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   PopUpStatus.failure,
                   message: state.deleteAccountErrorMessage,
                 );
-                Navigator.pop(context);
                 Navigator.pop(context);
               } else if (state.deleteAccountStatus.isInProgress) {
                 showCommonLoaderDialog(context);

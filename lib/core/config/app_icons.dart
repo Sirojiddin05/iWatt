@@ -116,5 +116,14 @@ class AppIcons {
   static const camera = 'assets/icons/ic_camera.svg';
   static const penSquare = 'assets/icons/ic_pen_square.svg';
   static const imageSquare = 'assets/icons/ic_image_square.svg';
+  static const flash = 'assets/icons/ic_flash.svg';
+  static const tagPrice = 'assets/icons/ic_tag_price.svg';
   static const loaderIndicator = 'assets/icons/ic_loader_indicator.svg';
+  static const plugCircle = 'assets/icons/ic_circle_plug.svg';
+  static const parking = 'assets/icons/ic_parking.svg';
+  static const plugRight = 'assets/icons/ic_plug_right.svg';
+  static const timerYellow = 'assets/icons/ic_timer_yellow.svg';
+  static const batteryChargeMinimalistic = 'assets/icons/ic_batteryChargeMinimalistic.svg';
+  static const billCheck = 'assets/icons/ic_check_bill.svg';
+  static const stopCharging = 'assets/icons/ic_stop.svg';
 }

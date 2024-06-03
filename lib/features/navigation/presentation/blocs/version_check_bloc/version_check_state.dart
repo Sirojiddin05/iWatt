@@ -6,14 +6,19 @@ class VersionCheckState extends Equatable {
   final bool needToUpdate;
   final String version;
 
-  const VersionCheckState(
-      {this.getVersionStatus = FormzSubmissionStatus.initial,
-      this.isRequired = false,
-      this.needToUpdate = false,
-      this.version = ''});
+  const VersionCheckState({
+    this.getVersionStatus = FormzSubmissionStatus.initial,
+    this.isRequired = false,
+    this.needToUpdate = false,
+    this.version = '',
+  });
 
-  VersionCheckState copyWith(
-      {FormzSubmissionStatus? getVersionStatus, bool? isRequired, bool? needToUpdate, String? version}) {
+  VersionCheckState copyWith({
+    FormzSubmissionStatus? getVersionStatus,
+    bool? isRequired,
+    bool? needToUpdate,
+    String? version,
+  }) {
     return VersionCheckState(
       getVersionStatus: getVersionStatus ?? this.getVersionStatus,
       isRequired: isRequired ?? this.isRequired,

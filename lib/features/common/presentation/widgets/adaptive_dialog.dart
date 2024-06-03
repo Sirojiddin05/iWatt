@@ -89,24 +89,44 @@ class CustomAdaptiveDialog extends StatelessWidget {
             ? null
             : Text(
                 description!,
-                style: descriptionStyle?.copyWith(fontFamily: 'SFProText') ??
-                    context.textTheme.titleLarge?.copyWith(fontSize: 13, fontFamily: 'SFProText'),
+                style: descriptionStyle?.copyWith(fontFamily: 'SFProText', letterSpacing: 0) ??
+                    context.textTheme.titleLarge?.copyWith(
+                      fontSize: 13,
+                      fontFamily: 'SFProText',
+                      letterSpacing: 0,
+                    ),
               ),
         actions: [
           CupertinoDialogAction(
             onPressed: onCancel ?? () => Navigator.pop(context),
-            textStyle: cancelStyle?.copyWith(fontFamily: 'SFProText') ??
-                context.textTheme.headlineLarge
-                    ?.copyWith(fontWeight: FontWeight.w400, color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
-            child: Text(cancelText ?? LocaleKeys.cancel.tr()),
+            textStyle: cancelStyle?.copyWith(
+                  fontFamily: 'SFProText',
+                  letterSpacing: 0,
+                ) ??
+                context.textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.dodgerBlue,
+                  fontFamily: 'SFProText',
+                  letterSpacing: 0,
+                ),
+            child: Text(
+              cancelText ?? LocaleKeys.cancel.tr(),
+            ),
           ),
           CupertinoDialogAction(
             onPressed: () {
               Navigator.pop(context);
               onConfirm();
             },
-            textStyle: confirmStyle?.copyWith(fontFamily: 'SFProText') ??
-                context.textTheme.headlineLarge?.copyWith(color: AppColors.dodgerBlue, fontFamily: 'SFProText'),
+            textStyle: confirmStyle?.copyWith(
+                  fontFamily: 'SFProText',
+                  letterSpacing: 0,
+                ) ??
+                context.textTheme.headlineLarge?.copyWith(
+                  color: AppColors.dodgerBlue,
+                  fontFamily: 'SFProText',
+                  letterSpacing: 0,
+                ),
             child: Text(confirmText),
           ),
         ],

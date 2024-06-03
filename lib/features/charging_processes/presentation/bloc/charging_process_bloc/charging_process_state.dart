@@ -5,8 +5,8 @@ class ChargingProcessState extends Equatable {
   final String startProcessErrorMessage;
   final FormzSubmissionStatus stopProcessStatus;
   final String stopProcessErrorMessage;
-
   final List<ChargingProcessEntity> processes;
+  final TransactionMessageEntity transactionCheque;
 
   const ChargingProcessState({
     this.processes = const [],
@@ -14,6 +14,7 @@ class ChargingProcessState extends Equatable {
     this.stopProcessStatus = FormzSubmissionStatus.initial,
     this.startProcessErrorMessage = '',
     this.stopProcessErrorMessage = '',
+    this.transactionCheque = const TransactionMessageEntity(),
   });
 
   ChargingProcessState copyWith({
@@ -22,6 +23,7 @@ class ChargingProcessState extends Equatable {
     FormzSubmissionStatus? stopProcessStatus,
     String? startProcessErrorMessage,
     String? stopProcessErrorMessage,
+    TransactionMessageEntity? transactionCheque,
   }) {
     return ChargingProcessState(
       processes: processes ?? this.processes,
@@ -29,6 +31,7 @@ class ChargingProcessState extends Equatable {
       stopProcessStatus: stopProcessStatus ?? this.stopProcessStatus,
       startProcessErrorMessage: startProcessErrorMessage ?? this.startProcessErrorMessage,
       stopProcessErrorMessage: stopProcessErrorMessage ?? this.stopProcessErrorMessage,
+      transactionCheque: transactionCheque ?? this.transactionCheque,
     );
   }
 
@@ -39,5 +42,6 @@ class ChargingProcessState extends Equatable {
         stopProcessStatus,
         stopProcessErrorMessage,
         processes,
+        transactionCheque,
       ];
 }

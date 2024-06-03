@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/usecases/base_usecase.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_usecase.dart';
 
 part 'version_check_event.dart';
@@ -26,9 +27,20 @@ class VersionCheckBloc extends Bloc<VersionCheckEvent, VersionCheckState> {
           version = result.right.androidVersion;
           isRequired = result.right.androidRequired;
         }
-        emit(state.copyWith(getVersionStatus: FormzSubmissionStatus.success, isRequired: isRequired, version: version));
+        final needToUpdate = await MyFunctions.needToUpdate(version);
+        emit(
+          state.copyWith(
+            getVersionStatus: FormzSubmissionStatus.success,
+            isRequired: isRequired,
+            version: version,
+            needToUpdate: needToUpdate,
+          ),
+        );
       } else {
-        emit(state.copyWith(getVersionStatus: FormzSubmissionStatus.failure));
+        emit(state.copyWith(
+          getVersionStatus: FormzSubmissionStatus.failure,
+          needToUpdate: false,
+        ));
       }
     });
   }

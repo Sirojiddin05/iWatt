@@ -207,5 +207,20 @@ abstract class  LocaleKeys {
   static const update_app_subtitle = 'update_app_subtitle';
   static const update_app_subtitle_2 = 'update_app_subtitle_2';
   static const skip = 'skip';
+  static const you_sure_you_want_start_charging = 'you_sure_you_want_start_charging';
+  static const charing = 'charing';
+  static const max_power = 'max_power';
+  static const price = 'price';
+  static const charging_is_starting = 'charging_is_starting';
+  static const charging_is_ended = 'charging_is_ended';
+  static const charging = 'charging';
+  static const current_power = 'current_power';
+  static const time_left = 'time_left';
+  static const charged = 'charged';
+  static const payed = 'payed';
+  static const sum = 'sum';
+  static const stop_charging = 'stop_charging';
+  static const with_this_action_you_stop_charging = 'with_this_action_you_stop_charging';
+  static const finish = 'finish';
 
 }

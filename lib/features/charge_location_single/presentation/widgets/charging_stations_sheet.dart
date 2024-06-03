@@ -82,6 +82,7 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                                         connector: connector,
                                         price: station.price,
                                         isNearToStation: state.isNearToStation,
+                                        locationName: '${state.location.vendor.name} "${state.location.name}"',
                                       );
                                     }),
                                   );
@@ -91,53 +92,6 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                           },
                         ),
                       ),
-                      // Positioned.fill(
-                      //   child: Row(
-                      //     children: [
-                      //       Expanded(
-                      //         child: GestureDetector(
-                      //           onTap: () {
-                      //             carouselController.previousPage();
-                      //           },
-                      //           child: Container(
-                      //             height: 450,
-                      //             decoration: BoxDecoration(
-                      //               gradient: LinearGradient(
-                      //                 begin: Alignment.centerLeft,
-                      //                 end: Alignment.centerRight,
-                      //                 colors: [
-                      //                   AppColors.solitude.withOpacity(.8),
-                      //                   AppColors.solitude.withOpacity(0),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       const SizedBox(width: 200),
-                      //       Expanded(
-                      //         child: GestureDetector(
-                      //           onTap: () {
-                      //             carouselController.nextPage();
-                      //           },
-                      //           child: Container(
-                      //             height: 450,
-                      //             decoration: BoxDecoration(
-                      //               gradient: LinearGradient(
-                      //                 begin: Alignment.centerRight,
-                      //                 end: Alignment.centerLeft,
-                      //                 colors: [
-                      //                   AppColors.solitude.withOpacity(.8),
-                      //                   AppColors.solitude.withOpacity(0),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_usecase.dart';
@@ -52,8 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   @override
   void initState() {
     super.initState();
-    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))
-      ..add(GetVersionEvent());
+    _versionCheckBloc = VersionCheckBloc(GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()))..add(GetVersionEvent());
 
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
@@ -73,20 +72,51 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   @override
   Widget build(BuildContext context) => BlocProvider.value(
         value: _versionCheckBloc,
-        child: BlocListener<VersionCheckBloc, VersionCheckState>(
-          listenWhen: (o, n) => o.version == n.version,
-          listener: (context, state) async {
-            final needToUpdate = await MyFunctions.needToUpdate(state.version);
-            if (!needToUpdate) {
-              updateAppDialog(state.isRequired, context);
-            }
-          },
+        child: MultiBlocListener(
+          listeners: [
+            // BlocListener<InternetBloc, InternetState>(
+            //     listenWhen: (state1, state2) => state1.isConnected != state2.isConnected,
+            //     listener: (context, state) {
+            //       final isConnected = state.isConnected;
+            //       if (!isConnected) {
+            //         showNoInternetBottomSheet(context);
+            //       }
+            //     }),
+            BlocListener<VersionCheckBloc, VersionCheckState>(
+              listenWhen: (o, n) => o.version == n.version,
+              listener: (context, state) async {
+                if (state.needToUpdate) {
+                  updateAppDialog(state.isRequired, context);
+                }
+              },
+            ),
+            BlocListener<ChargingProcessBloc, ChargingProcessState>(
+              listenWhen: (o, n) => o.transactionCheque != n.transactionCheque,
+              listener: (context, state) {
+                // showCupertinoModalBottomSheet(
+                //   context: context,
+                //   builder: (context) {
+                //     return const TransactionChequeWidget();
+                //   },
+                // );
+              },
+            ),
+            BlocListener<AuthenticationBloc, AuthenticationState>(
+              listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus,
+              listener: (context, state) {
+                if (state.authenticationStatus.isAuthenticated) {
+                  context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
+                } else {
+                  context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
+                }
+              },
+            ),
+          ],
           child: HomeTabControllerProvider(
             controller: _tabController,
             child: PopScope(
               onPopInvoked: (bool didPop) async {
-                final isFirstRouteInCurrentTab =
-                    !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
+                final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
                 if (isFirstRouteInCurrentTab) {
                   _changePage(0);
                 }
@@ -109,11 +139,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                     color: context.bottomNavigationBarTheme.backgroundColor,
                     border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
                     boxShadow: [
-                      BoxShadow(
-                          color: context.appBarTheme.shadowColor!,
-                          spreadRadius: 0,
-                          blurRadius: 40,
-                          offset: const Offset(0, -2)),
+                      BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
                     ],
                   ),
                   child: Row(
@@ -159,8 +185,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     }
   }
 
-  Widget _buildPageNavigator(NavItemEnum tabItem) =>
-      TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
+  Widget _buildPageNavigator(NavItemEnum tabItem) => TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
 
   Future<void> _changePage(int index) async {
     _tabController.animateTo(index);

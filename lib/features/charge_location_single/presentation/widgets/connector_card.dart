@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
@@ -9,21 +10,28 @@ import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/pages/charging_process_sheet.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ConnectorCard extends StatelessWidget {
   final ConnectorEntity connector;
   final String price;
   final bool isNearToStation;
+  final String locationName;
 
   const ConnectorCard({
     super.key,
     required this.connector,
     required this.price,
     required this.isNearToStation,
+    required this.locationName,
   });
 
   @override
@@ -119,58 +127,86 @@ class ConnectorCard extends StatelessWidget {
           const Spacer(),
           IgnorePointer(
             ignoring: !(connector.status == 'Preparing' && isNearToStation),
-            child: BlocConsumer<ChargingProcessBloc, ChargingProcessState>(
-              listenWhen: (o, n) {
-                return o.startProcessStatus != n.startProcessStatus;
-              },
-              listener: (BuildContext context, ChargingProcessState state) {
-                if (state.startProcessStatus.isFailure) {
-                  context.showPopUp(
-                    context,
-                    PopUpStatus.failure,
-                    message: state.startProcessErrorMessage,
-                  );
-                }
-                // if (state.startProcessStatus) {
-                //   showCupertinoModalBottomSheet(
-                //     context: context,
-                //     builder: () {},
-                //   );
-                // }
-              },
-              buildWhen: (o, n) {
-                return o.startProcessStatus != n.startProcessStatus;
-              },
-              builder: (context, state) {
-                return WButton(
-                  height: 32,
-                  borderRadius: 10,
-                  color: getColor().withOpacity(0.1),
-                  rippleColor: AppColors.dodgerBlue.withAlpha(30),
-                  isLoading: connector.status == 'Preparing' && isNearToStation && state.startProcessStatus.isInProgress,
-                  loadingWidget: CupertinoActivityIndicator(
-                    color: context.theme.primaryColor,
-                    radius: 9,
-                  ),
-                  onTap: () {
-                    if (connector.status == 'Preparing' && isNearToStation) {
-                      context.read<ChargingProcessBloc>().add(CreateChargingProcessEvent(connector.id));
+            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, authState) {
+                return BlocConsumer<ChargingProcessBloc, ChargingProcessState>(
+                  listenWhen: (o, n) {
+                    return o.startProcessStatus != n.startProcessStatus;
+                  },
+                  listener: (BuildContext context, ChargingProcessState state) {
+                    if (state.startProcessStatus.isFailure) {
+                      context.showPopUp(
+                        context,
+                        PopUpStatus.failure,
+                        message: state.startProcessErrorMessage,
+                      );
+                    } else if (state.startProcessStatus.isSuccess) {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        backgroundColor: AppColors.white,
+                        builder: (ctx) {
+                          return ChargingProcessSheet(
+                            connector: connector,
+                            locationName: locationName,
+                          );
+                        },
+                      );
                     }
                   },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      getIcon(),
-                      const SizedBox(width: 4),
-                      Text(
-                        getText(),
-                        style: context.textTheme.labelLarge!.copyWith(
-                          color: getColor(),
-                          fontWeight: FontWeight.w600,
-                        ),
+                  buildWhen: (o, n) {
+                    return o.startProcessStatus != n.startProcessStatus;
+                  },
+                  builder: (context, state) {
+                    return WButton(
+                      height: 32,
+                      borderRadius: 10,
+                      color: getColor().withOpacity(0.1),
+                      rippleColor: AppColors.dodgerBlue.withAlpha(30),
+                      isLoading: connector.status == 'Preparing' && isNearToStation && state.startProcessStatus.isInProgress,
+                      loadingWidget: CupertinoActivityIndicator(
+                        color: context.theme.primaryColor,
+                        radius: 9,
                       ),
-                    ],
-                  ),
+                      onTap: () {
+                        if (authState.authenticationStatus.isAuthenticated) {
+                          if (connector.status == 'Preparing' && isNearToStation) {
+                            showCustomAdaptiveDialog(
+                              context,
+                              title: LocaleKeys.start_charging.tr(),
+                              description: LocaleKeys.you_sure_you_want_start_charging.tr(),
+                              confirmText: LocaleKeys.start.tr(),
+                              onConfirm: () {
+                                context.read<ChargingProcessBloc>().add(CreateChargingProcessEvent(connector));
+                              },
+                            );
+                          }
+                        } else {
+                          showLoginDialog(context, onConfirm: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SignInPage(),
+                              ),
+                            );
+                          });
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          getIcon(),
+                          const SizedBox(width: 4),
+                          Text(
+                            getText(),
+                            style: context.textTheme.labelLarge!.copyWith(
+                              color: getColor(),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 );
               },
             ),

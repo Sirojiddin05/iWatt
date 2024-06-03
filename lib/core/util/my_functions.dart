@@ -117,10 +117,7 @@ class MyFunctions {
       return false;
     }
     final isGreater = await isNewVersionGreater(newVersion);
-    if (isGreater) {
-      return true;
-    }
-    return false;
+    return isGreater;
   }
 
   static bool isValidVersionNumber(String newVersion) => RegExp('^[0-9].[0-9].[0-9]').hasMatch(newVersion);

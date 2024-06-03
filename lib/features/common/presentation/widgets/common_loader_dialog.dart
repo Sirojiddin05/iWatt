@@ -6,14 +6,15 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 
 showCommonLoaderDialog(BuildContext context) {
   showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const PopScope(
-          canPop: false,
-          child: Center(child: AnimatedLoaderIndicator()),
-        );
-      });
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return const PopScope(
+        canPop: false,
+        child: Center(child: AnimatedLoaderIndicator()),
+      );
+    },
+  );
 }
 
 class AnimatedLoaderIndicator extends StatefulWidget {

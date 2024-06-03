@@ -134,10 +134,9 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
               context
                   .read<AuthenticationBloc>()
                   .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.authenticated, isRebuild: false));
-              Navigator.popUntil(
-                context,
-                (route) => route.isFirst,
-              );
+              Navigator.of(context)
+                ..pop()
+                ..pop();
             }
           },
           buildWhen: (o, n) {

@@ -30,4 +30,5 @@ class AppImages {
   static const locationSingleHeaderBg = 'assets/images/location_single_header_bg.png';
   static const creditCards = 'assets/images/credit_cards.svg';
   static const updateDialogVector = 'assets/images/update_dialog_vector.svg';
+  static const transparentCar = 'assets/images/transparent_car.png';
 }
