@@ -8,6 +8,7 @@ class CommandResultMessageModel extends CommandResultMessageEntity {
   const CommandResultMessageModel({
     super.commandId,
     super.status,
+    super.commandType,
   });
 
   factory CommandResultMessageModel.fromJson(Map<String, dynamic> json) => _$CommandResultMessageModelFromJson(json);

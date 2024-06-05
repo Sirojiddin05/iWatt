@@ -20,6 +20,9 @@ InProgressChargingModel _$InProgressChargingModelFromJson(
       money: json['money'] as String? ?? '',
       startCommandId: (json['start_command_id'] as num?)?.toInt() ?? -1,
       vendorName: json['vendor_name'] as String? ?? '',
+      freeParkingMinutes: (json['free_parking_minutes'] as num?)?.toInt() ?? -1,
+      parkingPrice: json['parking_price'] as String? ?? '',
+      parkingStartTime: json['parking_start_time'] as String? ?? '',
     );
 
 Map<String, dynamic> _$InProgressChargingModelToJson(
@@ -30,6 +33,9 @@ Map<String, dynamic> _$InProgressChargingModelToJson(
       'battery_percent': instance.batteryPercent,
       'money': instance.money,
       'consumed_kwh': instance.consumedKwh,
+      'parking_start_time': instance.parkingStartTime,
+      'parking_price': instance.parkingPrice,
+      'free_parking_minutes': instance.freeParkingMinutes,
       'start_command_id': instance.startCommandId,
       'vendor_name': instance.vendorName,
       'location_name': instance.locationName,

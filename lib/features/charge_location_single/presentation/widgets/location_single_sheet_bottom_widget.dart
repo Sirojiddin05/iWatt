@@ -7,16 +7,15 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/action_sheet.dart';
-import 'package:i_watt_app/features/charge_location_single/presentation/widgets/charging_stations_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/saved_icon_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class LocationSingleSheetBottomWidget extends StatelessWidget {
-  const LocationSingleSheetBottomWidget({super.key});
+  final VoidCallback onChargeTap;
+  const LocationSingleSheetBottomWidget({super.key, required this.onChargeTap});
 
   @override
   Widget build(BuildContext context) {
@@ -64,18 +63,7 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                     borderRadius: 20,
                     color: AppColors.limeGreen,
                     rippleColor: AppColors.white.withAlpha(30),
-                    onTap: () {
-                      showCupertinoModalBottomSheet(
-                        context: context,
-                        backgroundColor: AppColors.white,
-                        builder: (ctx) {
-                          return BlocProvider.value(
-                            value: BlocProvider.of<ChargeLocationSingleBloc>(context),
-                            child: const StationSingleSheet(),
-                          );
-                        },
-                      );
-                    },
+                    onTap: onChargeTap,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -104,7 +92,7 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 24, 20),
+                    padding: const EdgeInsets.fromLTRB(12, 20, 16, 20),
                     child: SvgPicture.asset(
                       AppIcons.dotsHorizontal,
                     ),

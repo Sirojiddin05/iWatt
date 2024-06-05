@@ -3,6 +3,7 @@ import 'package:i_watt_app/core/util/either.dart';
 import 'package:i_watt_app/features/common/domain/entities/command_result_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/connector_status_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/meter_value_message.dart';
+import 'package:i_watt_app/features/common/domain/entities/parking_data_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/transaction_message.dart';
 
 abstract class SocketRepository {
@@ -11,6 +12,7 @@ abstract class SocketRepository {
   Stream<ConnectorStatusMessageEntity> connectorStatusStream();
   Stream<CommandResultMessageEntity> startCommandResultStream();
   Stream<MeterValueMessageEntity> meterValueStream();
+  Stream<ParkingDataMessageEntity> parkingDataStream();
   Stream<CommandResultMessageEntity> stopCommandResult();
   Stream<TransactionMessageEntity> transactionChequeStream();
 }

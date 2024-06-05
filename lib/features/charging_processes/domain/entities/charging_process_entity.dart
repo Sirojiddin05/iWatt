@@ -1,22 +1,25 @@
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/common/domain/entities/meter_value_message.dart';
+import 'package:i_watt_app/features/common/domain/entities/parking_data_message.dart';
 
 class ChargingProcessEntity {
   final ConnectorEntity connector;
   final int startCommandId;
   final int stopCommandId;
   final int transactionId;
-  final MeterValueMessageEntity meterValueMessage;
+  final MeterValueMessageEntity meterValue;
   final String status;
   final String locationName;
   final String estimatedTime;
+  final ParkingDataMessageEntity parkingData;
 
   ChargingProcessEntity({
     this.connector = const ConnectorEntity(),
     this.startCommandId = -1,
     this.stopCommandId = -1,
     this.transactionId = -1,
-    this.meterValueMessage = const MeterValueMessageEntity(),
+    this.meterValue = const MeterValueMessageEntity(),
+    this.parkingData = const ParkingDataMessageEntity(),
     this.status = '',
     this.locationName = '',
     this.estimatedTime = '',
@@ -28,7 +31,8 @@ class ChargingProcessEntity {
     int? startCommandId,
     int? stopCommandId,
     int? transactionId,
-    MeterValueMessageEntity? meterValueMessage,
+    MeterValueMessageEntity? meterValue,
+    ParkingDataMessageEntity? parkingData,
     String? status,
     String? locationName,
     String? estimatedTime,
@@ -38,10 +42,11 @@ class ChargingProcessEntity {
       startCommandId: startCommandId ?? this.startCommandId,
       stopCommandId: stopCommandId ?? this.stopCommandId,
       transactionId: transactionId ?? this.transactionId,
-      meterValueMessage: meterValueMessage ?? this.meterValueMessage,
+      meterValue: meterValue ?? this.meterValue,
       status: status ?? this.status,
       locationName: locationName ?? this.locationName,
       estimatedTime: estimatedTime ?? this.estimatedTime,
+      parkingData: parkingData ?? this.parkingData,
     );
   }
 }

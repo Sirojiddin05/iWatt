@@ -12,6 +12,12 @@ class TransactionMessageModel extends TransactionMessageEntity {
     super.consumedKwh,
     super.locationName,
     super.totalPrice,
+    super.chargingHasEndedAt,
+    super.chargingPrice,
+    super.parkingEndTime,
+    super.parkingPrice,
+    super.parkingStartTime,
+    super.vendorName,
   });
   factory TransactionMessageModel.fromJson(Map<String, dynamic> json) => _$TransactionMessageModelFromJson(json);
 }

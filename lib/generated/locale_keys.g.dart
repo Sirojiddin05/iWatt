@@ -34,6 +34,7 @@ abstract class  LocaleKeys {
   static const station_singular = 'station.singular';
   static const station_plural_nominative = 'station.plural_nominative';
   static const station_plural_genitive = 'station.plural_genitive';
+  static const station_cpital = 'station.cpital';
   static const station = 'station';
   static const search_stations = 'search_stations';
   static const input_for_search = 'input_for_search';
@@ -147,7 +148,6 @@ abstract class  LocaleKeys {
   static const verification_not_right = 'verification_not_right';
   static const remove = 'remove';
   static const select_card = 'select_card';
-  static const start = 'start';
   static const you_need_to_login_to_do_this_action = 'you_need_to_login_to_do_this_action';
   static const log_out_from_account = 'log_out_from_account';
   static const are_you_sure_you_want_to_log_out = 'are_you_sure_you_want_to_log_out';
@@ -221,6 +221,38 @@ abstract class  LocaleKeys {
   static const sum = 'sum';
   static const stop_charging = 'stop_charging';
   static const with_this_action_you_stop_charging = 'with_this_action_you_stop_charging';
+  static const start = 'start';
   static const finish = 'finish';
+  static const cheque = 'cheque';
+  static const charging_id = 'charging_id';
+  static const charging_start_time = 'charging_start_time';
+  static const charging_end_time = 'charging_end_time';
+  static const consumed = 'consumed';
+  static const parking_price = 'parking_price';
+  static const paid_parking = 'paid_parking';
+  static const day_singular_nominative = 'day.singular_nominative';
+  static const day_singular_genitive = 'day.singular_genitive';
+  static const day_plural_nominative = 'day.plural_nominative';
+  static const day_plural_genitive = 'day.plural_genitive';
+  static const day = 'day';
+  static const hour_singular_nominative = 'hour.singular_nominative';
+  static const hour_singular_genitive = 'hour.singular_genitive';
+  static const hour_plural_nominative = 'hour.plural_nominative';
+  static const hour_plural_genitive = 'hour.plural_genitive';
+  static const hour = 'hour';
+  static const minute_singular_nominative = 'minute.singular_nominative';
+  static const minute_plural_nominative = 'minute.plural_nominative';
+  static const minute_plural_genitive = 'minute.plural_genitive';
+  static const minute = 'minute';
+  static const second_singular_nominative = 'second.singular_nominative';
+  static const second_plural_nominative = 'second.plural_nominative';
+  static const second_plural_genitive = 'second.plural_genitive';
+  static const second = 'second';
+  static const total_charging_price = 'total_charging_price';
+  static const to_back = 'to_back';
+  static const payed_parking_will_start = 'payed_parking_will_start';
+  static const payed_parking_is_going = 'payed_parking_is_going';
+  static const time_passed = 'time_passed';
+  static const total = 'total';
 
 }

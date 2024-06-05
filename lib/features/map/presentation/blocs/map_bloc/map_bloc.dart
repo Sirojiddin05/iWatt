@@ -63,11 +63,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           await StorageRepository.putDouble(StorageKeys.latitude, value.latitude);
           await StorageRepository.putDouble(StorageKeys.longitude, value.longitude);
           final newMarker = await MyFunctions.getMyIcon(
-            context: context,
-            value: Point(latitude: value.latitude, longitude: value.longitude),
-            onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 18),
-            userIcon: CarOnMap.defineType(StorageRepository.getString(StorageKeys.carOnMap)).imageOnMap,
-          );
+              context: context,
+              value: Point(latitude: value.latitude, longitude: value.longitude),
+              onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 18),
+              // userIcon: CarOnMap.defineType(StorageRepository.getString(StorageKeys.carOnMap)).imageOnMap,
+              userIcon: AppImages.taxiCar);
           emit(state.copyWith(
             userLocationObject: newMarker,
             userLocationAccessingStatus: FormzSubmissionStatus.success,
@@ -78,7 +78,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         } else {
           emit(state.copyWith(userLocationAccessingStatus: FormzSubmissionStatus.success));
         }
-        await _moveMapCamera(value.latitude, value.longitude, 18);
+        await _moveMapCamera(value.latitude, value.longitude, 16);
       }
     } else {
       add(SetLocationAccessStateEvent(status: locationStatus));

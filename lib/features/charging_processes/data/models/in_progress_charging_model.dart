@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'in_progress_charging_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class InProgressChargingModel extends InProgressCharingEntity {
+class InProgressChargingModel extends InProgressChargingEntity {
   const InProgressChargingModel({
     super.batteryPercent,
     super.connector,
@@ -15,6 +15,9 @@ class InProgressChargingModel extends InProgressCharingEntity {
     super.money,
     super.startCommandId,
     super.vendorName,
+    super.freeParkingMinutes,
+    super.parkingPrice,
+    super.parkingStartTime,
   });
 
   factory InProgressChargingModel.fromJson(Map<String, dynamic> json) => _$InProgressChargingModelFromJson(json);

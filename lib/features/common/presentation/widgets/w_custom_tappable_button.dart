@@ -21,9 +21,8 @@ class _WCustomTappableButtonState extends State<WCustomTappableButton> {
   @override
   Widget build(BuildContext context) {
     return TouchRipple(
-      rippleColor: widget.rippleColor,
       borderRadius: widget.borderRadius,
-      tapableDuration: const Duration(milliseconds: 120),
+      rippleColor: widget.rippleColor,
       onTap: () {
         if (isTappable) {
           isTappable = false;

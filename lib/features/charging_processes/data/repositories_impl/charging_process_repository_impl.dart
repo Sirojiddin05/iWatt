@@ -44,7 +44,7 @@ class ChargingProcessRepositoryImpl extends ChargingProcessRepository {
   }
 
   @override
-  Future<Either<Failure, GenericPagination<InProgressCharingEntity>>> getChargingProcesses() async {
+  Future<Either<Failure, GenericPagination<InProgressChargingEntity>>> getChargingProcesses() async {
     try {
       final result = await dataSource.getChargingProcesses();
       return Right(result);

@@ -11,6 +11,7 @@ CommandResultMessageModel _$CommandResultMessageModelFromJson(
     CommandResultMessageModel(
       commandId: (json['command_id'] as num?)?.toInt() ?? -1,
       status: json['status'] as bool? ?? false,
+      commandType: json['command_type'] as String? ?? '',
     );
 
 Map<String, dynamic> _$CommandResultMessageModelToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$CommandResultMessageModelToJson(
     <String, dynamic>{
       'command_id': instance.commandId,
       'status': instance.status,
+      'command_type': instance.commandType,
     };

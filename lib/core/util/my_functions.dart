@@ -18,6 +18,107 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+  static String getPrice(String price) {
+    final p = price.split('.').toList().first.split(',').toList().first;
+    return '${formatNumber(p)} UZS';
+  }
+
+  static String getParkingTitle(String startTime, int freeMinutes) {
+    final start = DateTime.parse(startTime);
+    final now = DateTime.now();
+    final difference = now.difference(start);
+    final minutes = difference.inMinutes;
+    if (minutes < freeMinutes) {
+      return LocaleKeys.payed_parking_will_start;
+    } else {
+      return LocaleKeys.payed_parking_is_going;
+    }
+  }
+
+  static List<int> getDifferenceBetweenTwoDates(String firstDate, String secondDate) {
+    final time = List<int>.filled(5, 0);
+    final first = DateTime.parse(firstDate);
+    final second = DateTime.parse(secondDate);
+    final difference = second.difference(first);
+    final days = difference.inDays;
+    final hours = difference.inHours;
+    final minutes = difference.inMinutes - hours * 60;
+    final seconds = difference.inSeconds - hours * 3600 - minutes * 60;
+    final milliseconds = difference.inMilliseconds - hours * 3600000 - minutes * 60000 - seconds * 1000;
+    time[0] = days;
+    time[1] = hours;
+    time[2] = minutes;
+    time[3] = seconds;
+    time[4] = milliseconds;
+    return time;
+  }
+
+  static String getDaysDueToQuantity(int quantity) {
+    final isLastDigitOne = quantity % 10 == 1;
+    if (isLastDigitOne && quantity != 11) {
+      return LocaleKeys.day_singular_nominative;
+    }
+    final isLastDigitTwo = quantity % 10 == 2;
+    final isLastDigitThree = quantity % 10 == 3;
+    final isLastDigitFour = quantity % 10 == 4;
+    final isBetweenTenAndTwenty = quantity > 10 && quantity < 20;
+    if ((isLastDigitTwo || isLastDigitThree || isLastDigitFour) && !isBetweenTenAndTwenty) {
+      return LocaleKeys.day_singular_genitive;
+    }
+    return LocaleKeys.day_plural_genitive;
+  }
+
+  static String getHoursDueToQuantity(int quantity) {
+    final isLastDigitOne = quantity % 10 == 1;
+    if (isLastDigitOne && quantity != 11) {
+      return LocaleKeys.hour_singular_nominative;
+    }
+    final isLastDigitTwo = quantity % 10 == 2;
+    final isLastDigitThree = quantity % 10 == 3;
+    final isLastDigitFour = quantity % 10 == 4;
+    final isBetweenTenAndTwenty = quantity > 10 && quantity < 20;
+    if ((isLastDigitTwo || isLastDigitThree || isLastDigitFour) && !isBetweenTenAndTwenty) {
+      return LocaleKeys.hour_singular_genitive;
+    }
+    return LocaleKeys.hour_plural_genitive;
+  }
+
+  static String getMinutesDueToQuantity(int quantity) {
+    final isLastDigitOne = quantity % 10 == 1;
+    if (isLastDigitOne && quantity != 11) {
+      return LocaleKeys.minute_singular_nominative;
+    }
+    final isLastDigitTwo = quantity % 10 == 2;
+    final isLastDigitThree = quantity % 10 == 3;
+    final isLastDigitFour = quantity % 10 == 4;
+    final isBetweenTenAndTwenty = quantity > 10 && quantity < 20;
+    if ((isLastDigitTwo || isLastDigitThree || isLastDigitFour) && !isBetweenTenAndTwenty) {
+      return LocaleKeys.minute_plural_nominative;
+    }
+    return LocaleKeys.minute_plural_genitive;
+  }
+
+  static String getSecondsDueToQuantity(int quantity) {
+    final isLastDigitOne = quantity % 10 == 1;
+    if (isLastDigitOne && quantity != 11) {
+      return LocaleKeys.second_singular_nominative;
+    }
+    final isLastDigitTwo = quantity % 10 == 2;
+    final isLastDigitThree = quantity % 10 == 3;
+    final isLastDigitFour = quantity % 10 == 4;
+    final isBetweenTenAndTwenty = quantity > 10 && quantity < 20;
+    if ((isLastDigitTwo || isLastDigitThree || isLastDigitFour) && !isBetweenTenAndTwenty) {
+      return LocaleKeys.second_plural_nominative;
+    }
+    return LocaleKeys.second_plural_genitive;
+  }
+
+  static String getEventTime(String dateTime) {
+    final parsed = DateTime.parse(dateTime);
+    final time = DateFormat("hh:mm").format(parsed).toString();
+    final date = DateFormat("dd.MM.yyyy").format(parsed).toString();
+    return '$time, $date';
+  }
 
   static String getBalanceMessage(String myBalance) {
     String balance = myBalance.replaceAll(' ', '');
@@ -27,7 +128,7 @@ class MyFunctions {
   }
 
   static String formatNumber(String number) {
-    final rNumber = number.replaceAll(' ', '').replaceAll('.', '').split('').reversed.join();
+    final rNumber = number.replaceAll(' ', '').replaceAll('.', '').replaceAll(',', '').split('').reversed.join();
     String formatted = '';
     for (int i = 0; i < rNumber.length; i++) {
       if ((i + 1) % 3 == 0 && i != rNumber.length - 1) {

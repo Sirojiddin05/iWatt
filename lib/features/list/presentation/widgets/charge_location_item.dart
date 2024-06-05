@@ -129,8 +129,12 @@ class ChargeLocationCard extends StatelessWidget {
                         ],
                       ),
                       if (location.logo.isNotEmpty) ...{
-                        const SizedBox(height: 8),
-                        WImage(width: 76, height: 18, imageUrl: location.logo),
+                        const SizedBox(height: 6),
+                        WImage(
+                          height: 20,
+                          imageUrl: location.logo,
+                          placeholder: const SizedBox(height: 20),
+                        ),
                       }
                     ],
                   ),

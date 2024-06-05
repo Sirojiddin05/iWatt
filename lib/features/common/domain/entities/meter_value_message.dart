@@ -3,7 +3,7 @@ class MeterValueMessageEntity {
   final int transactionId;
   final String money;
   final int batteryPercent;
-  final double consumedKwh;
+  final String consumedKwh;
   final String status;
 
   const MeterValueMessageEntity({
@@ -11,7 +11,7 @@ class MeterValueMessageEntity {
     this.transactionId = -1,
     this.money = '',
     this.batteryPercent = -1,
-    this.consumedKwh = -1,
+    this.consumedKwh = '',
     this.status = '',
   });
 
@@ -20,7 +20,7 @@ class MeterValueMessageEntity {
     int? transactionId,
     String? money,
     int? batteryPercent,
-    double? consumedKwh,
+    String? consumedKwh,
     String? status,
   }) {
     return MeterValueMessageEntity(

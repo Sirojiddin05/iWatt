@@ -5,12 +5,12 @@ import 'package:i_watt_app/features/charge_location_single/domain/entities/in_pr
 import 'package:i_watt_app/features/charging_processes/domain/repositories/charging_process_repository.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 
-class GetChargingProcessUseCase implements UseCase<GenericPagination<InProgressCharingEntity>, NoParams> {
+class GetChargingProcessUseCase implements UseCase<GenericPagination<InProgressChargingEntity>, NoParams> {
   final ChargingProcessRepository repo;
   const GetChargingProcessUseCase(this.repo);
 
   @override
-  Future<Either<Failure, GenericPagination<InProgressCharingEntity>>> call(NoParams params) async {
+  Future<Either<Failure, GenericPagination<InProgressChargingEntity>>> call(NoParams params) async {
     return await repo.getChargingProcesses();
   }
 }

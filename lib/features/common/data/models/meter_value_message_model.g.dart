@@ -12,7 +12,7 @@ MeterValueMessageModel _$MeterValueMessageModelFromJson(
       transactionId: (json['transaction_id'] as num?)?.toInt() ?? -1,
       startCommandId: (json['start_command_id'] as num?)?.toInt() ?? -1,
       batteryPercent: (json['battery_percent'] as num?)?.toInt() ?? -1,
-      consumedKwh: (json['consumed_kwh'] as num?)?.toDouble() ?? -1,
+      consumedKwh: json['consumed_kwh'] as String? ?? '',
       money: json['money'] as String? ?? '',
       status: json['status'] as String? ?? '',
     );

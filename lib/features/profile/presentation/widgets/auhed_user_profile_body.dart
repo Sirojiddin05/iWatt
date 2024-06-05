@@ -52,13 +52,15 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                     showMyCardsSheet(context);
                   },
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 // IconTextButton(
                 //   title: LocaleKeys.you_saved.tr(),
                 //   icon: AppIcons.savings,
-                //   onTap: () {},
-                // ),hayfsan
-                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                //   onTap: () {
+                //
+                //   },
+                // ),
+                // Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.notifications.tr(),
                   icon: AppIcons.notificationsBlue,
@@ -80,7 +82,12 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                     ),
                   ),
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(
+                  height: 0,
+                  thickness: 1,
+                  color: context.theme.dividerColor,
+                  indent: 48,
+                ),
                 IconTextButton(
                   title: LocaleKeys.saved_stations.tr(),
                   icon: AppIcons.savedOutlined,
@@ -90,7 +97,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                     ),
                   ),
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.my_cars.tr(),
                   icon: AppIcons.carBlue,
@@ -100,7 +107,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                     ),
                   ),
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.settings.tr(),
                   icon: AppIcons.settings,
@@ -113,19 +120,19 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                     ),
                   ),
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 // IconTextButton(
                 //   title: LocaleKeys.my_stations.tr(),
                 //   onTap: () {},
                 //   icon: AppIcons.myStations,
                 // ),
-                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                // Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.usage_instructions.tr(),
                   onTap: () {},
                   icon: AppIcons.doc,
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.help.tr(),
                   icon: AppIcons.help,
@@ -137,7 +144,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                     );
                   },
                 ),
-                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.about_us.tr(),
                   icon: AppIcons.aboutUs,

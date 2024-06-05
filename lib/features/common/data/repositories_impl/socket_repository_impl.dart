@@ -6,6 +6,7 @@ import 'package:i_watt_app/features/common/data/datasources/socket_datasource.da
 import 'package:i_watt_app/features/common/domain/entities/command_result_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/connector_status_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/meter_value_message.dart';
+import 'package:i_watt_app/features/common/domain/entities/parking_data_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/transaction_message.dart';
 import 'package:i_watt_app/features/common/domain/repositories/socket_repository.dart';
 
@@ -66,5 +67,10 @@ class SocketRepositoryImpl extends SocketRepository {
   @override
   Stream<TransactionMessageEntity> transactionChequeStream() async* {
     yield* _dataSource.transactionChequeStream();
+  }
+
+  @override
+  Stream<ParkingDataMessageEntity> parkingDataStream() async* {
+    yield* _dataSource.parkingDataStream();
   }
 }

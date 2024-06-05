@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
-import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
@@ -37,8 +36,11 @@ import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usec
 import 'package:i_watt_app/features/common/domain/usecases/get_search_history.dart';
 import 'package:i_watt_app/features/common/domain/usecases/meter_value_stream_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
+import 'package:i_watt_app/features/common/domain/usecases/parking_data_stream_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/post_search_history_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
+import 'package:i_watt_app/features/common/domain/usecases/start_command_result_usecase.dart';
+import 'package:i_watt_app/features/common/domain/usecases/stop_command_result_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/transaction_cheque_stream_usecase.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
@@ -47,7 +49,6 @@ import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/inte
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/delete_account_usecase.dart';
@@ -84,7 +85,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => CarOnMapBloc()),
-        BlocProvider(create: (context) => ThemeSwitcherBloc()),
+        // BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())..add(CheckConnectionEvent())),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
@@ -114,6 +115,15 @@ class App extends StatelessWidget {
             ),
             getChargingProcessUseCase: GetChargingProcessUseCase(
               serviceLocator<ChargingProcessRepositoryImpl>(),
+            ),
+            startCommandResultStreamUseCase: StartCommandResultStreamUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
+            ),
+            stopCommandResultStreamUseCase: StopCommandResultStreamUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
+            ),
+            parkingDataStreamUseCase: ParkingDataStreamUseCase(
+              serviceLocator<SocketRepositoryImpl>(),
             ),
           )..add(GetChargingProcessesEvent()),
         ),
@@ -217,30 +227,26 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-      child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
-        builder: (context, themeState) {
-          return MaterialApp(
-            title: 'I WATT',
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            navigatorKey: _navigatorKey,
-            theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            themeAnimationDuration: AppConstants.animationDuration,
-            onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
-            builder: (context, child) {
-              return BlocListener<AuthenticationBloc, AuthenticationState>(
-                child: child,
-                listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
-                listener: (context, state) async {
-                  _navigator.pushAndRemoveUntil(
-                    MaterialWithModalsPageRoute(
-                      builder: (context) => const HomeScreen(),
-                    ),
-                    (route) => false,
-                  );
-                },
+      child: MaterialApp(
+        title: 'I WATT',
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        navigatorKey: _navigatorKey,
+        theme: LightTheme.theme(),
+        themeAnimationDuration: AppConstants.animationDuration,
+        onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
+        builder: (context, child) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            child: child,
+            listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
+            listener: (context, state) async {
+              _navigator.pushAndRemoveUntil(
+                MaterialWithModalsPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ),
+                (route) => false,
               );
             },
           );

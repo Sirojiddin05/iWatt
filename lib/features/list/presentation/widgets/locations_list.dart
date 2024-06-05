@@ -78,7 +78,7 @@ class LocationsList extends StatelessWidget {
                     context.read<ChargeLocationsBloc>().add(const GetChargeLocationsEvent());
                   },
                   child: Paginator(
-                    physics: const BouncingScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     padding: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom),
                     paginatorStatus: FormzSubmissionStatus.success,
                     itemCount: itemNumber,

@@ -7,6 +7,7 @@ import 'package:i_watt_app/core/util/enums/socket_message_type.dart';
 import 'package:i_watt_app/features/common/data/models/command_result_message_model.dart';
 import 'package:i_watt_app/features/common/data/models/connector_status_message_model.dart';
 import 'package:i_watt_app/features/common/data/models/meter_value_message_model.dart';
+import 'package:i_watt_app/features/common/data/models/parking_data_message_model.dart';
 import 'package:i_watt_app/features/common/data/models/transaction_message_model.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -16,6 +17,7 @@ abstract class SocketDataSource {
   Stream<ConnectorStatusMessageModel> connectorStatusStream();
   Stream<CommandResultMessageModel> startCommandResultStream();
   Stream<MeterValueMessageModel> meterValueStream();
+  Stream<ParkingDataMessageModel> parkingDataStream();
   Stream<CommandResultMessageModel> stopCommandResult();
   Stream<TransactionMessageModel> transactionChequeStream();
 }
@@ -24,16 +26,21 @@ class SocketDataSourceImpl implements SocketDataSource {
   final StreamController<ConnectorStatusMessageModel> _connectorStatusStream = StreamController.broadcast(sync: true);
   final StreamController<CommandResultMessageModel> _startCommandResultStream = StreamController.broadcast(sync: true);
   final StreamController<MeterValueMessageModel> _meterValueStream = StreamController.broadcast(sync: true);
+  final StreamController<ParkingDataMessageModel> _parkingDataStream = StreamController.broadcast(sync: true);
   final StreamController<CommandResultMessageModel> _stopCommandResultStream = StreamController.broadcast(sync: true);
   final StreamController<TransactionMessageModel> _transactionChequeStream = StreamController.broadcast(sync: true);
 
   WebSocketChannel? _channel;
 
-  SocketDataSourceImpl();
+  SocketDataSourceImpl() {
+    connectToSocket();
+  }
 
   @override
   Future<void> connectToSocket() async {
+    print('Connecting to socket');
     final token = StorageRepository.getString(StorageKeys.accessToken).replaceAll('Bearer ', '');
+    print('token: $token');
     final url = "wss://app.i-watt.uz/ws/v1/mobile/?token=$token";
     final wsUrl = Uri.parse(url);
     _channel = WebSocketChannel.connect(wsUrl);
@@ -45,17 +52,20 @@ class SocketDataSourceImpl implements SocketDataSource {
       if (messageType == SocketType.connector.name) {
         final connectorResult = ConnectorStatusMessageModel.fromJson(messageData);
         _connectorStatusStream.add(connectorResult);
-      }
-      if (messageType == SocketType.command_result.name) {
+      } else if (messageType == SocketType.command_result.name) {
         final commandResult = CommandResultMessageModel.fromJson(messageData);
-        _startCommandResultStream.add(commandResult);
-        _stopCommandResultStream.add(commandResult);
-      }
-      if (messageType == SocketType.meter_values_data.name) {
+        if (commandResult.commandType == 'REMOTE_START_TRANSACTION') {
+          _startCommandResultStream.add(commandResult);
+        } else if (commandResult.commandType == 'REMOTE_STOP_TRANSACTION') {
+          _stopCommandResultStream.add(commandResult);
+        }
+      } else if (messageType == SocketType.meter_values_data.name) {
         final meterValue = MeterValueMessageModel.fromJson(messageData);
         _meterValueStream.add(meterValue);
-      }
-      if (messageType == SocketType.transaction_cheque.name) {
+      } else if (messageType == SocketType.parking_data.name) {
+        final parkingData = ParkingDataMessageModel.fromJson(messageData);
+        _parkingDataStream.add(parkingData);
+      } else if (messageType == SocketType.transaction_cheque.name) {
         final transactionCheque = TransactionMessageModel.fromJson(messageData);
         _transactionChequeStream.add(transactionCheque);
       }
@@ -75,6 +85,11 @@ class SocketDataSourceImpl implements SocketDataSource {
   @override
   Stream<MeterValueMessageModel> meterValueStream() async* {
     yield* _meterValueStream.stream;
+  }
+
+  @override
+  Stream<ParkingDataMessageModel> parkingDataStream() async* {
+    yield* _parkingDataStream.stream;
   }
 
   @override

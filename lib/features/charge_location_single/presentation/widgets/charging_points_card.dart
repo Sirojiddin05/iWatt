@@ -51,7 +51,9 @@ class _ChargingPointsCardState extends State<ChargingPointsCard> {
                 builder: (ctx) {
                   return BlocProvider.value(
                     value: BlocProvider.of<ChargeLocationSingleBloc>(context),
-                    child: const StationSingleSheet(),
+                    child: StationSingleSheet(
+                      onClose: () {},
+                    ),
                   );
                 },
               );

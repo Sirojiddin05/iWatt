@@ -53,5 +53,5 @@ class AppColors {
     Color(0xff2A83FF),
   ];
 
-  // static const brightSun = Color(0xffEBC032);
+  static const brightSun2 = Color(0xffEBC032);
 }

@@ -25,20 +25,22 @@ class ChargingStationsBottomWidget extends StatelessWidget {
         builder: (context, state) {
           return Row(
             children: [
-              IgnorePointer(
-                ignoring: state.selectedStationIndex == 0,
-                child: LocationSingleActionsWrapper(
-                  onTap: () {
-                    if (state.selectedStationIndex != 0) {
-                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(state.selectedStationIndex - 1));
-                    }
-                  },
-                  child: SvgPicture.asset(
-                    AppIcons.chevronLeftBlack,
-                    color: state.selectedStationIndex == 0 ? AppColors.blueBayoux.withOpacity(.5) : null,
+              if (state.location.chargers.length > 1) ...{
+                IgnorePointer(
+                  ignoring: state.selectedStationIndex == 0,
+                  child: LocationSingleActionsWrapper(
+                    onTap: () {
+                      if (state.selectedStationIndex != 0) {
+                        context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(state.selectedStationIndex - 1));
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      AppIcons.chevronLeftBlack,
+                      color: state.selectedStationIndex == 0 ? AppColors.blueBayoux.withOpacity(.5) : null,
+                    ),
                   ),
                 ),
-              ),
+              },
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -59,12 +61,12 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                       children: [
                         SvgPicture.asset(AppIcons.stationWhite, color: AppColors.limeGreen),
                         const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            state.location.chargers[state.selectedStationIndex].name,
-                            style: context.textTheme.headlineLarge,
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: Text(
+                        //     state.location.chargers[state.selectedStationIndex].name,
+                        //     style: context.textTheme.headlineLarge,
+                        //   ),
+                        // ),
                         const SizedBox(width: 8),
                         SvgPicture.asset(AppIcons.list),
                       ],
@@ -72,23 +74,25 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              IgnorePointer(
-                ignoring: state.selectedStationIndex == (state.location.chargers.length - 1),
-                child: LocationSingleActionsWrapper(
-                  onTap: () {
-                    if (state.selectedStationIndex != (state.location.chargers.length - 1)) {
-                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(state.selectedStationIndex + 1));
-                    }
-                  },
-                  child: SvgPicture.asset(
-                    AppIcons.chevronRightGrey,
-                    height: 24,
-                    width: 24,
-                    color:
-                        state.selectedStationIndex == (state.location.chargers.length - 1) ? AppColors.blueBayoux.withOpacity(.5) : AppColors.black,
+              if (state.location.chargers.length > 1) ...{
+                IgnorePointer(
+                  ignoring: state.selectedStationIndex == (state.location.chargers.length - 1),
+                  child: LocationSingleActionsWrapper(
+                    onTap: () {
+                      if (state.selectedStationIndex != (state.location.chargers.length - 1)) {
+                        context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(state.selectedStationIndex + 1));
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      AppIcons.chevronRightGrey,
+                      height: 24,
+                      width: 24,
+                      color:
+                          state.selectedStationIndex == (state.location.chargers.length - 1) ? AppColors.blueBayoux.withOpacity(.5) : AppColors.black,
+                    ),
                   ),
                 ),
-              ),
+              }
             ],
           );
         },

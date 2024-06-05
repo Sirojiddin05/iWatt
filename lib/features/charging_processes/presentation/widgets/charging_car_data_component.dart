@@ -111,11 +111,11 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
                       // paid: meterValue.money.isEmpty ? '-' : "${meterValue.money} ${LocaleKeys.sum.tr()}",
                       // IconDataRow(icon: AppIcons.timerYellow, value: widget.process.estimatedTime),
                       const SizedBox(height: 10),
-                      IconDataRow(icon: AppIcons.batteryChargeMinimalistic, value: "${widget.process.meterValueMessage.batteryPercent}%"),
+                      IconDataRow(icon: AppIcons.batteryChargeMinimalistic, value: "${widget.process.meterValue.batteryPercent}%"),
                       const SizedBox(height: 10),
-                      IconDataRow(icon: AppIcons.flash, value: "${widget.process.meterValueMessage.consumedKwh} ${LocaleKeys.kW.tr()}"),
+                      IconDataRow(icon: AppIcons.flash, value: "${widget.process.meterValue.consumedKwh} ${LocaleKeys.kW.tr()}"),
                       const SizedBox(height: 10),
-                      IconDataRow(icon: AppIcons.billCheck, value: '${widget.process.meterValueMessage.money} ${LocaleKeys.sum.tr()}'),
+                      IconDataRow(icon: AppIcons.billCheck, value: '${widget.process.meterValue.money} ${LocaleKeys.sum.tr()}'),
                       const SizedBox(height: 10),
                       IconDataRow(icon: AppIcons.parking, value: '${widget.process.connector.parkingPrice} ${LocaleKeys.sum}'),
                     ],
@@ -124,7 +124,7 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
                 Flexible(
                   flex: 3,
                   child: ChargingCarAnimationWidget(
-                    percentage: widget.process.meterValueMessage.batteryPercent,
+                    percentage: widget.process.meterValue.batteryPercent,
                     scale: 0.6,
                   ),
                 ),

@@ -11,6 +11,8 @@ class IconTextButton extends StatelessWidget {
   final BorderRadius borderRadius;
   final EdgeInsets padding;
   final Color? rippleColor;
+  final bool includeTopDivider;
+  final bool includeBottomDivider;
   const IconTextButton({
     required this.title,
     required this.onTap,
@@ -20,6 +22,8 @@ class IconTextButton extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
     super.key,
     this.rippleColor,
+    this.includeTopDivider = false,
+    this.includeBottomDivider = false,
   });
 
   @override
@@ -28,21 +32,41 @@ class IconTextButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: borderRadius,
       rippleColor: rippleColor ?? context.theme.primaryColor.withAlpha(30),
-      child: Padding(
-        padding: padding,
-        child: Row(
-          children: [
-            SvgPicture.asset(icon),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                title,
-                style: context.textTheme.headlineSmall,
-              ),
+      child: Column(
+        children: [
+          if (includeTopDivider) ...{
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: context.theme.dividerColor,
+              indent: 48,
             ),
-            ...actions,
-          ],
-        ),
+          },
+          Padding(
+            padding: padding,
+            child: Row(
+              children: [
+                SvgPicture.asset(icon),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: context.textTheme.headlineSmall,
+                  ),
+                ),
+                ...actions,
+              ],
+            ),
+          ),
+          if (includeBottomDivider) ...{
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: context.theme.dividerColor,
+              indent: 48,
+            ),
+          },
+        ],
       ),
     );
   }

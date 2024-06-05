@@ -10,12 +10,14 @@ import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_cupertino_switch.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/lang_bottomsheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -115,39 +117,38 @@ class _SettingsPageState extends State<SettingsPage> {
                       final isAuthenticated = state.authenticationStatus.isAuthenticated;
                       return Column(
                         children: [
-                          //TODO next version
-                          // IconTextButton(
-                          //   title: LocaleKeys.car_on_map.tr(),
-                          //   icon: AppIcons.carOnMap,
-                          //   rippleColor: context.theme.splashColor,
-                          //   padding:
-                          //       !isAuthenticated ? const EdgeInsets.fromLTRB(12, 8, 12, 12) : const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                          //   borderRadius: !isAuthenticated
-                          //       ? const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
-                          //       : BorderRadius.zero,
-                          //   actions: [
-                          //     BlocBuilder<CarOnMapBloc, CarOnMapState>(
-                          //       buildWhen: (o, n) => o.carOnMap != n.carOnMap,
-                          //       builder: (context, state) {
-                          //         return Text(
-                          //           state.carOnMap.title.tr(),
-                          //           style: context.theme.textTheme.titleMedium?.copyWith(
-                          //             color: AppColors.taxBreak,
-                          //             fontSize: 12,
-                          //           ),
-                          //         );
-                          //       },
-                          //     ),
-                          //   ],
-                          //   onTap: () {
-                          //     showModalBottomSheet(
-                          //         context: context,
-                          //         isScrollControlled: true,
-                          //         builder: (ctx) {
-                          //           return const CarOnMapSheet();
-                          //         });
-                          //   },
-                          // ),
+                          IconTextButton(
+                            title: LocaleKeys.car_on_map.tr(),
+                            icon: AppIcons.carOnMap,
+                            rippleColor: context.theme.splashColor,
+                            padding:
+                                !isAuthenticated ? const EdgeInsets.fromLTRB(12, 8, 12, 12) : const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            borderRadius: !isAuthenticated
+                                ? const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
+                                : BorderRadius.zero,
+                            actions: [
+                              BlocBuilder<CarOnMapBloc, CarOnMapState>(
+                                buildWhen: (o, n) => o.carOnMap != n.carOnMap,
+                                builder: (context, state) {
+                                  return Text(
+                                    state.carOnMap.title.tr(),
+                                    style: context.theme.textTheme.titleMedium?.copyWith(
+                                      color: AppColors.taxBreak,
+                                      fontSize: 12,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (ctx) {
+                                    return const CarOnMapSheet();
+                                  });
+                            },
+                          ),
                           if (isAuthenticated) ...{
                             Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                             BlocConsumer<ProfileBloc, ProfileState>(

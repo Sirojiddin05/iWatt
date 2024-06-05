@@ -28,7 +28,7 @@ class PresentSheetHeader extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: paddingOfCloseIcon ?? const EdgeInsets.all(16),
-                  child: SvgPicture.asset(AppIcons.close),
+                  child: SvgPicture.asset(AppIcons.closeBoldGrey),
                 ),
               ),
             ),

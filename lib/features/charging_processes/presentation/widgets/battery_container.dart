@@ -20,10 +20,11 @@ class _BatteryContainerState extends State<BatteryContainer> {
   final Color colorBackground2 = AppColors.amazon;
   final Color colorForeground2 = AppColors.limeGreen;
   final Color colorBackground3 = AppColors.himalaya;
-  final Color colorForeground3 = AppColors.brightSun;
+  final Color colorForeground3 = AppColors.brightSun2;
 
   @override
   void initState() {
+    super.initState();
     if (widget.percent == 24) {
       colorBackground = colorBackground1;
       colorForeground = colorForeground1;
@@ -34,7 +35,6 @@ class _BatteryContainerState extends State<BatteryContainer> {
       colorBackground = colorBackground2;
       colorForeground = colorForeground2;
     }
-    super.initState();
   }
 
   @override
@@ -138,29 +138,27 @@ class _BatteryContainerState extends State<BatteryContainer> {
                   ),
                 ),
               ),
-              if (widget.percent >= 0) ...{
-                Positioned(
-                  top: 1.7,
-                  left: 3,
-                  child: Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.009)
-                      ..rotateX(-.8),
-                    alignment: FractionalOffset.center,
-                    child: Container(
-                      width: 65,
+              Positioned(
+                top: 1.7,
+                left: 3,
+                child: Transform(
+                  transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.009)
+                    ..rotateX(-.8),
+                  alignment: FractionalOffset.center,
+                  child: Container(
+                    width: 65,
+                    height: 22,
+                    alignment: Alignment.centerLeft,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
                       height: 22,
-                      alignment: Alignment.centerLeft,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        height: 22,
-                        width: 65 * (widget.percent / 100),
-                        decoration: BoxDecoration(color: colorForeground),
-                      ),
+                      width: 65 * (widget.percent / 100),
+                      decoration: BoxDecoration(color: colorForeground),
                     ),
                   ),
                 ),
-              },
+              ),
               Positioned(
                 bottom: .3,
                 child: AnimatedContainer(

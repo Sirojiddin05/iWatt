@@ -8,5 +8,5 @@ import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 abstract class ChargingProcessRepository {
   Future<Either<Failure, CommandResultResponseEntity>> startChargingProcess({required StartProcessParamEntity params});
   Future<Either<Failure, CommandResultResponseEntity>> stopChargingProcess({required int transaction});
-  Future<Either<Failure, GenericPagination<InProgressCharingEntity>>> getChargingProcesses();
+  Future<Either<Failure, GenericPagination<InProgressChargingEntity>>> getChargingProcesses();
 }

@@ -126,5 +126,5 @@ class AppIcons {
   static const batteryChargeMinimalistic = 'assets/icons/ic_batteryChargeMinimalistic.svg';
   static const billCheck = 'assets/icons/ic_check_bill.svg';
   static const stopCharging = 'assets/icons/ic_stop.svg';
-  static const stationBackground = 'assets/icons/ic_stop.svg';
+  static const stationBackground = 'assets/icons/ic_station_back.svg';
 }

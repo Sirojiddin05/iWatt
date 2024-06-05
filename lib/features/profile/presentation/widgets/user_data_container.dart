@@ -47,7 +47,7 @@ class UserDataContainer extends StatelessWidget {
               children: [
                 WImage(
                   imageUrl: state.user.photo,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   width: 48,
                   height: 48,
                   borderRadius: BorderRadius.circular(10),

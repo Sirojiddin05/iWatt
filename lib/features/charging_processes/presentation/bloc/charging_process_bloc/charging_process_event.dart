@@ -50,3 +50,21 @@ class DisconnectFromSocketEvent extends ChargingProcessEvent {
 class GetChargingProcessesEvent extends ChargingProcessEvent {
   GetChargingProcessesEvent();
 }
+
+class ChargingProcessStartedEvent extends ChargingProcessEvent {
+  final CommandResultMessageEntity commandMessage;
+
+  ChargingProcessStartedEvent(this.commandMessage);
+}
+
+class ChargingProcessStoppedEvent extends ChargingProcessEvent {
+  final CommandResultMessageEntity commandMessage;
+
+  ChargingProcessStoppedEvent(this.commandMessage);
+}
+
+class SetParkingStateOfChargingProcess extends ChargingProcessEvent {
+  final ParkingDataMessageEntity parkingData;
+
+  SetParkingStateOfChargingProcess(this.parkingData);
+}

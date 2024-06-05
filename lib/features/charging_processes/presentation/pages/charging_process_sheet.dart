@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/charging_process_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
@@ -14,6 +15,7 @@ import 'package:i_watt_app/features/charging_processes/presentation/widgets/char
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/charging_car_animation_widget.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/grid_Info_cards_widget.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/max_power_and_price_widget.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/widgets/parking_card.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/common_loader_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/present_sheet_header.dart';
@@ -117,7 +119,7 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                 return const SizedBox.expand();
               }
               final process = state.processes[processIndex];
-              final meterValue = process.meterValueMessage;
+              final meterValue = process.meterValue;
               return Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(top: 16),
@@ -185,6 +187,13 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                                   paid: meterValue.money.isEmpty ? '-' : "${meterValue.money} ${LocaleKeys.sum.tr()}",
                                 ),
                                 const SizedBox(height: 12),
+                                if (process.status == ChargingProcessStatus.PARKING.name) ...{
+                                  ParkingCard(
+                                    parkingStartTime: process.parkingData.parkingStartTime,
+                                    freeParkingMinutes: process.parkingData.freeParkingMinutes,
+                                    parkingPrice: process.parkingData.parkingPrice,
+                                  )
+                                }
                               ],
                             ),
                           ),
