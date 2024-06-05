@@ -127,4 +127,5 @@ class AppIcons {
   static const billCheck = 'assets/icons/ic_check_bill.svg';
   static const stopCharging = 'assets/icons/ic_stop.svg';
   static const stationBackground = 'assets/icons/ic_station_back.svg';
+  static const tick = 'assets/icons/ic_tick.svg';
 }

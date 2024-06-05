@@ -7,5 +7,12 @@ class GetCarsEvent extends CarsEvent {}
 
 class DeleteCarEvent extends CarsEvent {
   final int carId;
+
   DeleteCarEvent(this.carId);
+}
+
+class AddCarLocallyEvent extends CarsEvent {
+  final CarEntity car;
+
+  AddCarLocallyEvent(this.car);
 }

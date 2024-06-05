@@ -1,11 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/pages/notifications_page.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
+import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/about_us.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/my_cars.dart';
@@ -126,11 +130,32 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                 //   onTap: () {},
                 //   icon: AppIcons.myStations,
                 // ),
-                // Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
-                IconTextButton(
-                  title: LocaleKeys.usage_instructions.tr(),
-                  onTap: () {},
-                  icon: AppIcons.doc,
+                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                BlocListener<InstructionsBloc, InstructionsState>(
+                  listener: (context, state) {
+                    if (state.getInstructionsStatus.isSuccess) {
+                      showModalBottomSheet(
+                        context: context,
+                        useSafeArea: true,
+                        isScrollControlled: true,
+                        useRootNavigator: true,
+                        backgroundColor: Colors.transparent,
+                        constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
+                        builder: (context) => BlocBuilder<InstructionsBloc, InstructionsState>(
+                          builder: (context, state) {
+                            return VersionFeaturesSheet(list: state.instructions);
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  child: IconTextButton(
+                    title: LocaleKeys.usage_instructions.tr(),
+                    onTap: () {
+                      context.read<InstructionsBloc>().add(GetInstructionsEvent(InstructionsType.instruction.name));
+                    },
+                    icon: AppIcons.doc,
+                  ),
                 ),
                 Divider(height: 0, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(

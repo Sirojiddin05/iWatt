@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 const _shimmerGradient = LinearGradient(
   colors: [
-    Color(0xFFEBEBF4),
-    Color(0xFFF4F4F4),
-    Color(0xFFEBEBF4),
+    Color(0x297E8386),
+    Color(0x667E8386),
+    Color(0x297E8386),
   ],
   stops: [
     0.1,
@@ -171,6 +172,31 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
         );
       },
       child: widget.child,
+    );
+  }
+}
+
+class ShimmerContainer extends StatelessWidget {
+  final double? width;
+  final double? height;
+  final double? borderRadius;
+
+  const ShimmerContainer({
+    super.key,
+    this.width,
+    this.height,
+    this.borderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width ?? 36,
+      height: height ?? 36,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius ?? 8),
+        color: context.theme.appBarTheme.backgroundColor,
+      ),
     );
   }
 }

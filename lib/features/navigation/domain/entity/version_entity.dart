@@ -1,9 +1,13 @@
 class VersionEntity {
-  final String androidVersion;
-  final bool androidRequired;
-  final String iosVersion;
-  final bool iosRequired;
+  final int id;
+  final String number;
+  final String platformType;
+  final bool isForceUpdate;
 
-  const VersionEntity(
-      {this.androidVersion = '', this.androidRequired = false, this.iosVersion = '', this.iosRequired = false});
+  const VersionEntity({
+    this.id = -1,
+    this.number = '',
+    this.platformType = '',
+    this.isForceUpdate = false,
+  });
 }

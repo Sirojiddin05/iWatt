@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/enums/app_theme.dart';
+import 'package:i_watt_app/core/util/enums/car_number_type.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -166,6 +168,9 @@ class MyFunctions {
     return 0;
   }
 
+  static String getCarNumberType(int type) =>
+      CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
+
   static String getFormattedDate(DateTime dateTime) {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
   }
@@ -304,7 +309,8 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
-    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(
+        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -369,7 +375,8 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(
+        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

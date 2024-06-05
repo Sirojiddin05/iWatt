@@ -7,14 +7,14 @@ class IdNameEntity {
   @JsonKey(name: '_type', defaultValue: '')
   final String type;
   final String icon;
-  final List<String> description;
+  final List<String> descriptions;
 
   const IdNameEntity({
     this.id = -1,
     this.name = '',
     this.icon = '',
     this.type = '',
-    this.description = const [],
+    this.descriptions = const [],
   });
 }
 

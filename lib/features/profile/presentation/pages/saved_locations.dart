@@ -12,6 +12,7 @@ import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_r
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
 import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
+import 'package:i_watt_app/features/list/presentation/widgets/charge_location_cards_loader.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/charge_location_item.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
@@ -49,10 +50,11 @@ class _SavedLocationsState extends State<SavedLocations> {
             title: LocaleKeys.saved_stations.tr(),
           ),
           body: BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
-            buildWhen: (o, n) => o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
+            buildWhen: (o, n) =>
+                o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
             builder: (context, state) {
               if (state.getChargeLocationsStatus.isInProgress) {
-                return const Center(child: CircularProgressIndicator.adaptive());
+                return const ChargeLocationCardsLoader();
               } else if (state.getChargeLocationsStatus.isSuccess) {
                 if (state.chargeLocations.isEmpty) {
                   return Center(

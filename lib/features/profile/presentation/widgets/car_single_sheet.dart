@@ -2,17 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_close_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_header_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/profile/domain/entities/car_entity.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/cars_bloc/cars_bloc.dart';
-import 'package:i_watt_app/features/profile/presentation/pages/edit_car_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_number_switcher.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/connector_name_widget.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -28,6 +30,7 @@ class CarSingleSheet extends StatefulWidget {
 
 class _CarSingleSheetState extends State<CarSingleSheet> {
   late final CarEntity car;
+
   @override
   void initState() {
     super.initState();
@@ -117,31 +120,65 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
           },
           const SizedBox(height: 12),
           Divider(height: 1, thickness: 1, color: context.theme.dividerColor),
-          WButton(
-            text: LocaleKeys.edit.tr(),
-            color: AppColors.solitude,
-            rippleColor: context.theme.shadowColor,
-            textStyle: context.textTheme.headlineLarge!.copyWith(fontSize: 15),
-            margin: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (ctx) {
-                  return const EditCarSheet();
-                },
-              );
-            },
-          ),
+          // WButton(
+          //   text: LocaleKeys.edit.tr(),
+          //   color: AppColors.solitude,
+          //   rippleColor: context.theme.shadowColor,
+          //   textStyle: context.textTheme.headlineLarge!.copyWith(fontSize: 15),
+          //   margin: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+          //   onTap: () {
+          //     showModalBottomSheet(
+          //       context: context,
+          //       isScrollControlled: true,
+          //       builder: (ctx) {
+          //         return const EditCarSheet();
+          //       },
+          //     );
+          //   },
+          // ),
           const SizedBox(height: 12),
-          WButton(
-            text: LocaleKeys.delete.tr(),
-            rippleColor: AppColors.amaranth.withAlpha(30),
-            border: Border.all(color: AppColors.amaranth),
-            color: context.colorScheme.background,
-            textStyle: context.textTheme.headlineLarge!.copyWith(fontSize: 15),
-            margin: EdgeInsets.fromLTRB(16, 0, 16, context.padding.bottom + 4),
-            onTap: () {},
+          BlocConsumer<CarsBloc, CarsState>(
+            buildWhen: (previous, next) => previous.deleteCarStatus != next.deleteCarStatus,
+            listenWhen: (previous, next) => previous.deleteCarStatus != next.deleteCarStatus,
+            listener: (context, state) {
+              if (state.deleteCarStatus.isSuccess) {
+                Navigator.pop(context);
+              } else if (state.deleteCarStatus.isFailure) {
+                context.showPopUp(
+                  context,
+                  PopUpStatus.failure,
+                  message: state.deleteCarErrorMessage,
+                );
+              }
+            },
+            builder: (context, state) => WButton(
+              text: LocaleKeys.delete.tr(),
+              rippleColor: AppColors.amaranth.withAlpha(30),
+              border: Border.all(color: AppColors.amaranth),
+              color: context.colorScheme.background,
+              textStyle: context.textTheme.headlineLarge!.copyWith(fontSize: 15),
+              margin: EdgeInsets.fromLTRB(16, 0, 16, context.padding.bottom + 4),
+              isLoading: state.deleteCarStatus.isInProgress,
+              onTap: () {
+                showCustomAdaptiveDialog(
+                  context,
+                  title: LocaleKeys.delete_car.tr(),
+                  description: LocaleKeys.do_you_really_want_to_delete_this_car.tr(),
+                  cancelStyle: context.textTheme.headlineLarge?.copyWith(
+                    fontSize: 17,
+                    color: AppColors.dodgerBlue,
+                  ),
+                  confirmText: LocaleKeys.delete.tr(),
+                  confirmStyle: context.textTheme.titleLarge?.copyWith(
+                    fontSize: 17,
+                    color: AppColors.amaranth,
+                  ),
+                  onConfirm: () {
+                    context.read<CarsBloc>().add(DeleteCarEvent(car.id));
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),

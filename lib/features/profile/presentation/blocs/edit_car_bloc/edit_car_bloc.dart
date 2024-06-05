@@ -9,8 +9,6 @@ part 'edit_car_state.dart';
 
 class EditCarBloc extends Bloc<EditCarEvent, EditCarState> {
   EditCarBloc() : super(const EditCarState()) {
-    on<EditCarEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<EditCarEvent>((event, emit) {});
   }
 }

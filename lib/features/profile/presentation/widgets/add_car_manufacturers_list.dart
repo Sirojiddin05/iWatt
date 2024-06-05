@@ -17,9 +17,7 @@ import 'package:i_watt_app/features/profile/presentation/widgets/manufacturer_it
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class AddCarManufacturersList extends StatefulWidget {
-  const AddCarManufacturersList({
-    super.key,
-  });
+  const AddCarManufacturersList({super.key});
 
   @override
   State<AddCarManufacturersList> createState() => _AddCarManufacturersListState();
@@ -27,6 +25,7 @@ class AddCarManufacturersList extends StatefulWidget {
 
 class _AddCarManufacturersListState extends State<AddCarManufacturersList> with TickerProviderStateMixin {
   late TextEditingController controller;
+
   @override
   void initState() {
     super.initState();

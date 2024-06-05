@@ -6,7 +6,7 @@ import 'package:i_watt_app/features/profile/data/models/car_model.dart';
 import 'package:i_watt_app/features/profile/domain/entities/car_entity.dart';
 
 abstract class CarsDatasource {
-  Future<int> addCar({required CarEntity car});
+  Future<void> addCar({required CarEntity car});
 
   Future<void> deleteCar({required int id});
 
@@ -27,8 +27,7 @@ class CarsDatasourceImpl extends CarsDatasource {
         'common/UserCarList/',
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson(
-            {'results': response.data['data']}, (p0) => CarModel.fromJson(p0 as Map<String, dynamic>));
+        return GenericPagination.fromJson(response.data, (p0) => CarModel.fromJson(p0 as Map<String, dynamic>));
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
@@ -49,7 +48,7 @@ class CarsDatasourceImpl extends CarsDatasource {
   }
 
   @override
-  Future<int> addCar({required CarEntity car}) async {
+  Future<void> addCar({required CarEntity car}) async {
     Map<String, dynamic> data = car.toApi();
     try {
       final response = await _dio.post(
@@ -57,7 +56,7 @@ class CarsDatasourceImpl extends CarsDatasource {
         data: data,
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return response.data['id'];
+        // return CarModel.fromJson(response.data);
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(

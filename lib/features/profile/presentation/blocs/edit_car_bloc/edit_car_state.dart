@@ -6,6 +6,8 @@ class EditCarState extends Equatable {
   final int temporaryManufacturer;
   final int temporaryModel;
   final List<int> temporaryConnectorTypes;
+  final String otherModel;
+  final String otherManufacturer;
 
   const EditCarState({
     this.status = FormzSubmissionStatus.initial,
@@ -13,6 +15,8 @@ class EditCarState extends Equatable {
     this.temporaryManufacturer = -1,
     this.temporaryModel = -1,
     this.temporaryConnectorTypes = const [],
+    this.otherManufacturer = '',
+    this.otherModel = '',
   });
 
   EditCarState copyWith({
@@ -21,6 +25,8 @@ class EditCarState extends Equatable {
     int? temporaryManufacturer,
     int? temporaryModel,
     List<int>? temporaryConnectorTypes,
+    String? otherManufacturer,
+    String? otherModel,
   }) {
     return EditCarState(
       status: status ?? this.status,
@@ -28,6 +34,8 @@ class EditCarState extends Equatable {
       temporaryManufacturer: temporaryManufacturer ?? this.temporaryManufacturer,
       temporaryModel: temporaryModel ?? this.temporaryModel,
       temporaryConnectorTypes: temporaryConnectorTypes ?? this.temporaryConnectorTypes,
+      otherManufacturer: otherManufacturer ?? this.otherManufacturer,
+      otherModel: otherModel ?? this.otherModel,
     );
   }
 
@@ -38,5 +46,7 @@ class EditCarState extends Equatable {
         temporaryManufacturer,
         temporaryModel,
         temporaryConnectorTypes,
+        otherManufacturer,
+        otherModel,
       ];
 }
