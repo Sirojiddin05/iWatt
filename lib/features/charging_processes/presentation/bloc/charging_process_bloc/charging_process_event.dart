@@ -68,3 +68,32 @@ class SetParkingStateOfChargingProcess extends ChargingProcessEvent {
 
   SetParkingStateOfChargingProcess(this.parkingData);
 }
+
+class UpdatePayedParkingTimeEvent extends ChargingProcessEvent {
+  final int transactionId;
+  final int payedParkingTime;
+  final int? price;
+
+  UpdatePayedParkingTimeEvent({required this.payedParkingTime, required this.transactionId, this.price});
+}
+
+class UpdateFreeParkingTimeEvent extends ChargingProcessEvent {
+  final int payedParkingWillStartAfter;
+  final int transactionId;
+
+  UpdateFreeParkingTimeEvent(this.payedParkingWillStartAfter, this.transactionId);
+}
+
+class SetFreeParkingPeriodTimer extends ChargingProcessEvent {
+  final int transactionId;
+  final int leftSeconds;
+
+  SetFreeParkingPeriodTimer(this.leftSeconds, this.transactionId);
+}
+
+class SetPayedParkingPeriodTimer extends ChargingProcessEvent {
+  final int transactionId;
+  final int leftSeconds;
+
+  SetPayedParkingPeriodTimer(this.transactionId, this.leftSeconds);
+}

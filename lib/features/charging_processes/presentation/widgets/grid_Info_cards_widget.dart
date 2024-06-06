@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/charging_info_card.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
@@ -31,7 +32,7 @@ class GridInfoCardsWidget extends StatelessWidget {
                 child: ChargingInfoCard(
                   backgroundColor: AppColors.solitude,
                   label: LocaleKeys.current_power.tr(),
-                  value: charged,
+                  value: currentPower,
                   icon: AppIcons.flash,
                   iconColor: context.theme.primaryColor,
                   valueTextStyle: context.textTheme.headlineMedium,
@@ -56,7 +57,7 @@ class GridInfoCardsWidget extends StatelessWidget {
                 child: ChargingInfoCard(
                   backgroundColor: AppColors.solitude,
                   label: LocaleKeys.charged.tr(),
-                  value: currentPower,
+                  value: charged,
                   icon: AppIcons.batteryChargeMinimalistic,
                   valueTextStyle: context.textTheme.headlineMedium,
                 ),
@@ -66,7 +67,7 @@ class GridInfoCardsWidget extends StatelessWidget {
                 child: ChargingInfoCard(
                   backgroundColor: AppColors.solitude,
                   label: LocaleKeys.payed.tr(),
-                  value: paid,
+                  value: MyFunctions.getPrice(paid),
                   icon: AppIcons.billCheck,
                   valueTextStyle: context.textTheme.headlineMedium,
                 ),

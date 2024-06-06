@@ -7,18 +7,21 @@ class ChargeLocationCardsLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Shimmer(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
+    return Shimmer(
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            ChargeLocationCardLoader(),
-            SizedBox(height: 16),
-            ChargeLocationCardLoader(),
-            SizedBox(height: 16),
-            ChargeLocationCardLoader(),
-          ],
+          children: List.generate(10, (index) {
+            return const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ChargeLocationCardLoader(),
+                SizedBox(height: 16),
+              ],
+            );
+          }),
         ),
       ),
     );

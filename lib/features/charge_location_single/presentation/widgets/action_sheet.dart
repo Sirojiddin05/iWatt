@@ -44,6 +44,7 @@ class ActionSheet extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(12, 14, 12, 8),
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   onTap: () async {
+                    Navigator.pop(context);
                     await Share.share('${location.vendor.name} "${location.name}"\napp.i-watt.uz/location/${location.id}');
                   },
                 ),

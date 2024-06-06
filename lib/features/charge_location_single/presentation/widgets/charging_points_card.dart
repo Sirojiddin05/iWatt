@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,24 +9,25 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/charger_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
-import 'package:i_watt_app/features/charge_location_single/presentation/widgets/charging_stations_sheet.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/connector_status_container.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
-class ChargingPointsCard extends StatefulWidget {
+class ConnectorsCard extends StatefulWidget {
   final List<ChargerEntity> chargers;
-  const ChargingPointsCard({
+  final VoidCallback onTap;
+  const ConnectorsCard({
     super.key,
     required this.chargers,
+    required this.onTap,
   });
 
   @override
-  State<ChargingPointsCard> createState() => _ChargingPointsCardState();
+  State<ConnectorsCard> createState() => _ConnectorsCardState();
 }
 
-class _ChargingPointsCardState extends State<ChargingPointsCard> {
+class _ConnectorsCardState extends State<ConnectorsCard> {
   final List<ConnectorEntity> allConnectors = [];
   @override
   void initState() {
@@ -45,18 +47,19 @@ class _ChargingPointsCardState extends State<ChargingPointsCard> {
           (index) => WCustomTappableButton(
             onTap: () {
               context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
-              showCupertinoModalBottomSheet(
-                context: context,
-                backgroundColor: AppColors.white,
-                builder: (ctx) {
-                  return BlocProvider.value(
-                    value: BlocProvider.of<ChargeLocationSingleBloc>(context),
-                    child: StationSingleSheet(
-                      onClose: () {},
-                    ),
-                  );
-                },
-              );
+              widget.onTap();
+              // showCupertinoModalBottomSheet(
+              //   context: context,
+              //   backgroundColor: AppColors.white,
+              //   builder: (ctx) {
+              //     return BlocProvider.value(
+              //       value: BlocProvider.of<ChargeLocationSingleBloc>(context),
+              //       child: StationSingleSheet(
+              //         onClose: widget.onTap,
+              //       ),
+              //     );
+              //   },
+              // );
             },
             borderRadius: getBorderRadius(index),
             rippleColor: AppColors.primaryRipple30,
@@ -80,7 +83,7 @@ class _ChargingPointsCardState extends State<ChargingPointsCard> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          allConnectors[index].standard.maxVoltage.toString(),
+                          '${allConnectors[index].standard.maxVoltage} ${LocaleKeys.kW.tr()}',
                           style: context.textTheme.labelMedium!.copyWith(
                             color: AppColors.blueBayoux,
                             fontSize: 12,

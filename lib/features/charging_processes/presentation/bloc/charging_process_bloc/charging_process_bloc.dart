@@ -66,6 +66,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
       add(ChargingProcessStoppedEvent(commandResult));
     });
     parkingDataStreamSubscription = parkingDataStreamUseCase(NoParams()).listen((parkingData) {
+      print('parkingDataStreamSubscription [${parkingData.transactionId}]');
       add(SetParkingStateOfChargingProcess(parkingData));
     });
     transactionMessageStreamSubscription = transactionChequeStreamUseCase(NoParams()).listen((cheque) {
@@ -83,11 +84,15 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     on<DeleteChargingProcessEvent>(_onDeleteChargingProcessEvent);
     on<DisconnectFromSocketEvent>(_disconnectFromSocket);
     on<SetParkingStateOfChargingProcess>(_setParkingStateOfChargingProcess);
+    on<SetFreeParkingPeriodTimer>(_setTimerForFreeParking);
+    on<SetPayedParkingPeriodTimer>(_setTimerForPayedParking);
+    on<UpdatePayedParkingTimeEvent>(_updatePayedParkingTimeOfProcess);
+    on<UpdateFreeParkingTimeEvent>(_updateFreeParkingTimeOfProcess);
   }
 
   void _onCreateChargingProcessEvent(CreateChargingProcessEvent event, Emitter<ChargingProcessState> emit) {
     final list = [...state.processes];
-    list.add(ChargingProcessEntity().copyWith(connector: event.connector));
+    list.add(const ChargingProcessEntity().copyWith(connector: event.connector));
     emit(state.copyWith(processes: [...list]));
     add(StartChargingProcessEvent(connectionId: event.connector.id));
   }
@@ -114,7 +119,11 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     final list = [...state.processes];
     for (int i = 0; i < list.length; i++) {
       if (list[i].startCommandId == event.meterValue.startCommandId) {
-        list[i] = list[i].copyWith(meterValue: event.meterValue);
+        list[i] = list[i].copyWith(
+          meterValue: event.meterValue,
+          estimatedTime: event.meterValue.estimatedTime,
+          transactionId: event.meterValue.transactionId,
+        );
         emit(state.copyWith(processes: [...list]));
         break;
       }
@@ -138,14 +147,17 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     }
   }
 
-  void _createTransactionCheque(CreateTransactionCheque event, Emitter<ChargingProcessState> emit) {
+  void _createTransactionCheque(CreateTransactionCheque event, Emitter<ChargingProcessState> emit) async {
     final list = [...state.processes];
     for (int i = 0; i < list.length; i++) {
       if (list[i].transactionId == event.transactionCheque.transactionId) {
+        list[i].payedParkingTimer?.cancel();
+        list[i].freeParkingTimer?.cancel();
         list.removeAt(i);
+        emit(state.copyWith(processes: [...list]));
+        await Future.delayed(const Duration(milliseconds: 200));
         emit(
           state.copyWith(
-            processes: [...list],
             transactionCheque: event.transactionCheque,
             stopProcessStatus: FormzSubmissionStatus.success,
           ),
@@ -156,11 +168,11 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
   }
 
   void _connectToSocket(ConnectToSocketEvent event, Emitter<ChargingProcessState> emit) async {
-    await connectToSocketUseCase(NoParams());
+    await connectToSocketUseCase.call(NoParams());
   }
 
   void _disconnectFromSocket(DisconnectFromSocketEvent event, Emitter<ChargingProcessState> emit) async {
-    await disconnectFromSocketUseCase(NoParams());
+    await disconnectFromSocketUseCase.call(NoParams());
   }
 
   void _onDeleteChargingProcessEvent(DeleteChargingProcessEvent event, Emitter<ChargingProcessState> emit) async {
@@ -181,16 +193,17 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
   }
 
   void _chargingProcessStopedEvent(ChargingProcessStoppedEvent event, Emitter<ChargingProcessState> emit) {
-    final list = [...state.processes];
-    for (int i = 0; i < list.length; i++) {
-      if (list[i].stopCommandId == event.commandMessage.commandId) {
-        emit(state.copyWith(stopProcessStatus: FormzSubmissionStatus.success));
-        break;
-      }
-    }
+    // final list = [...state.processes];
+    // for (int i = 0; i < list.length; i++) {
+    //   if (list[i].stopCommandId == event.commandMessage.commandId) {
+    //     emit(state.copyWith(stopProcessStatus: FormzSubmissionStatus.success));
+    //     break;
+    //   }
+    // }
   }
 
   void _setParkingStateOfChargingProcess(SetParkingStateOfChargingProcess event, Emitter<ChargingProcessState> emit) {
+    print('parking_data _setParkingStateOfChargingProcess ${event.parkingData.transactionId}');
     final list = [...state.processes];
     for (int i = 0; i < list.length; i++) {
       if (list[i].transactionId == event.parkingData.transactionId) {
@@ -198,13 +211,29 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
           parkingData: event.parkingData,
           status: ChargingProcessStatus.PARKING.name,
         );
-        emit(state.copyWith(processes: [...list]));
+        print('parking_data bloc ${list[i].transactionId}');
+        emit(
+          state.copyWith(
+            processes: [...list],
+            stopProcessStatus: FormzSubmissionStatus.success,
+          ),
+        );
+        print('parking_data bloc');
+        final freeParkingSeconds = event.parkingData.freeParkingMinutes * 60;
+        final DateTime startTime = DateTime.parse(event.parkingData.parkingStartTime);
+        final DateTime now = DateTime.now();
+        final int difference = now.difference(startTime).inSeconds;
+        if (difference < freeParkingSeconds) {
+          add(SetFreeParkingPeriodTimer(freeParkingSeconds - difference, event.parkingData.transactionId));
+        } else {
+          add(SetPayedParkingPeriodTimer(event.parkingData.transactionId, difference - freeParkingSeconds));
+        }
         break;
       }
     }
   }
 
-  Future<void> _getChargingProcesses(GetChargingProcessesEvent event, Emitter<ChargingProcessState> emit) async {
+  void _getChargingProcesses(GetChargingProcessesEvent event, Emitter<ChargingProcessState> emit) async {
     emit(state.copyWith(getChargingProcesses: FormzSubmissionStatus.inProgress));
     final result = await getChargingProcessUseCase.call(NoParams());
     if (result.isRight) {
@@ -223,9 +252,109 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
             ),
           )
           .toList();
-      emit(state.copyWith(getChargingProcesses: FormzSubmissionStatus.success, processes: processes));
+      emit(
+        state.copyWith(
+          getChargingProcesses: FormzSubmissionStatus.success,
+          processes: [
+            ...processes,
+            ChargingProcessEntity(
+              transactionId: 1,
+              connector: const ConnectorEntity(
+                id: 1,
+                name: 'Connector 1',
+              ),
+              locationName: 'Location 1',
+              meterValue: const MeterValueMessageEntity().copyWith(
+                batteryPercent: 20,
+                consumedKwh: '0',
+              ),
+            ),
+          ],
+        ),
+      );
     } else {
       emit(state.copyWith(getChargingProcesses: FormzSubmissionStatus.failure));
+    }
+  }
+
+  void _setTimerForFreeParking(SetFreeParkingPeriodTimer event, Emitter<ChargingProcessState> emit) {
+    int leftSeconds = event.leftSeconds;
+    final list = [...state.processes];
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].transactionId == event.transactionId) {
+        list[i] = list[i].copyWith(
+          freeParkingTimer: Timer.periodic(
+            const Duration(seconds: 1),
+            (timer) {
+              if (leftSeconds >= 0) {
+                leftSeconds--;
+                add(UpdateFreeParkingTimeEvent(leftSeconds, event.transactionId));
+              } else {
+                timer.cancel();
+                add(SetPayedParkingPeriodTimer(event.transactionId, 1));
+              }
+            },
+          ),
+        );
+        emit(state.copyWith(processes: [...list]));
+        break;
+      }
+    }
+  }
+
+  void _updateFreeParkingTimeOfProcess(UpdateFreeParkingTimeEvent event, Emitter<ChargingProcessState> emit) {
+    final list = [...state.processes];
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].transactionId == event.transactionId) {
+        list[i] = list[i].copyWith(
+          payedParkingWillStartAfter: event.payedParkingWillStartAfter,
+          isPayedParkingStarted: false,
+        );
+        emit(state.copyWith(processes: [...list]));
+        break;
+      }
+    }
+  }
+
+  void _setTimerForPayedParking(SetPayedParkingPeriodTimer event, Emitter<ChargingProcessState> emit) {
+    final list = [...state.processes];
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].transactionId == event.transactionId) {
+        final parkingPricePerMinute = double.tryParse(list[i].parkingData.parkingPrice.replaceAll(',', '.')) ?? 0;
+        int leftSeconds = event.leftSeconds;
+        int price = 0;
+        list[i] = list[i].copyWith(
+            payedParkingTimer: Timer.periodic(const Duration(seconds: 1), (timer) {
+          leftSeconds++;
+          if (timer.tick == 1 || timer.tick % 60 == 0) {
+            price = (leftSeconds * parkingPricePerMinute).toInt();
+          }
+          add(
+            UpdatePayedParkingTimeEvent(
+              payedParkingTime: leftSeconds,
+              transactionId: event.transactionId,
+              price: price,
+            ),
+          );
+        }));
+        emit(state.copyWith(processes: [...list]));
+        break;
+      }
+    }
+  }
+
+  void _updatePayedParkingTimeOfProcess(UpdatePayedParkingTimeEvent event, Emitter<ChargingProcessState> emit) {
+    final list = [...state.processes];
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].transactionId == event.transactionId) {
+        list[i] = list[i].copyWith(
+          payedParkingLasts: event.payedParkingTime,
+          payedParkingPrice: event.price,
+          isPayedParkingStarted: true,
+        );
+        emit(state.copyWith(processes: [...list]));
+        break;
+      }
     }
   }
 }

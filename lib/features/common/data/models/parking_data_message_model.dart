@@ -8,7 +8,6 @@ class ParkingDataMessageModel extends ParkingDataMessageEntity {
   const ParkingDataMessageModel({
     super.freeParkingMinutes,
     super.locationName,
-    super.parkingEndTime,
     super.parkingPrice,
     super.parkingStartTime,
     super.transactionId,

@@ -66,8 +66,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
               context: context,
               value: Point(latitude: value.latitude, longitude: value.longitude),
               onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 18),
-              // userIcon: CarOnMap.defineType(StorageRepository.getString(StorageKeys.carOnMap)).imageOnMap,
-              userIcon: AppImages.taxiCar);
+              userIcon: CarOnMap.defineType(StorageRepository.getString(StorageKeys.carOnMap)).imageOnMap);
           emit(state.copyWith(
             userLocationObject: newMarker,
             userLocationAccessingStatus: FormzSubmissionStatus.success,
@@ -79,6 +78,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           emit(state.copyWith(userLocationAccessingStatus: FormzSubmissionStatus.success));
         }
         await _moveMapCamera(value.latitude, value.longitude, 16);
+        add(const ChangeLuminosityStateEvent(hasLuminosity: false));
       }
     } else {
       add(SetLocationAccessStateEvent(status: locationStatus));
@@ -149,14 +149,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _changeLuminosityState(ChangeLuminosityStateEvent event, Emitter<MapState> emit) async {
-    final hasLocationAccess = state.locationAccessStatus.isPermissionGranted;
-    if (!hasLocationAccess) {
-      if (event.hasLuminosity) {
-        await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
-        emit(state.copyWith(hasLuminosity: true));
-      } else {
-        await yandexMapController.setMapStyle('');
-        emit(state.copyWith(hasLuminosity: false));
+    if (event.hasLuminosity) {
+      await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
+      emit(state.copyWith(hasLuminosity: true));
+    } else {
+      await yandexMapController.setMapStyle('');
+      emit(state.copyWith(hasLuminosity: false));
+      final hasLocationAccess = state.locationAccessStatus.isPermissionGranted;
+      if (!hasLocationAccess) {
         await Future.delayed(const Duration(seconds: 10));
         add(const ChangeLuminosityStateEvent(hasLuminosity: true));
       }
@@ -174,12 +174,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     if (state.locationAccessStatus.isPermissionGranted) {
       final currentLat = StorageRepository.getDouble(StorageKeys.latitude);
       final currentLong = StorageRepository.getDouble(StorageKeys.longitude);
+      print('currentLat $currentLat');
+      print('currentLong $currentLong');
       final newMarker = await MyFunctions.getMyIcon(
         context: context,
         value: Point(latitude: currentLong, longitude: currentLat),
         userIcon: event.carOnMap.imageOnMap,
-        onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 18),
+        onObjectTap: (object, point) async {
+          _moveMapCamera(object.point.latitude, object.point.longitude, 18);
+        },
       );
+      print('newMarker $newMarker');
       emit(state.copyWith(userLocationObject: newMarker));
     }
   }

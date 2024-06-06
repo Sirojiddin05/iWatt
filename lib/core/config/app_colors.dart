@@ -10,6 +10,7 @@ class AppColors {
   static const amaranth = Color(0xFFE93B50);
   static const darkTurquoise = Color(0xFF02BFDF);
   static const brightSun = Color(0xFFEBC032);
+  static const brightSun3 = Color(0xffEBBF32);
   static const solitude = Color(0xffF2F2F7);
   static const zircon = Color(0xffDFE7E8);
   static const baliHai = Color(0xff8898AA);

@@ -59,6 +59,7 @@ class ChargeLocationSingleBloc extends Bloc<ChargeLocationSingleEvent, ChargeLoc
           final connector = charger.connectors[j];
           if (connector.id == event.connectorId) {
             emit(state.copyWith(selectedStationIndex: i));
+            print('selectedStationIndex $i');
             break;
           }
         }

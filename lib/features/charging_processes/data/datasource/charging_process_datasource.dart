@@ -76,7 +76,7 @@ class ChargingProcessDataSourceImpl implements ChargingProcessDataSource {
       final response = await _dio.get('chargers/InProgressChargingTransactionList/');
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         return GenericPagination.fromJson(
-          response.data,
+          {'results': response.data},
           (p0) => InProgressChargingModel.fromJson(p0 as Map<String, dynamic>),
         );
       } else {

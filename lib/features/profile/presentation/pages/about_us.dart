@@ -8,6 +8,7 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
@@ -28,7 +29,7 @@ class AboutUsPage extends StatelessWidget {
           appBar: AppBarWrapper(
             hasBackButton: true,
             title: LocaleKeys.about_us.tr(),
-            subtitle: 'Version 1.0.0',
+            subtitle: MyFunctions.getCurrentVersionSync(),
           ),
           body: Padding(
             padding: const EdgeInsets.fromLTRB(16, 64, 16, 32),
@@ -44,8 +45,7 @@ class AboutUsPage extends StatelessWidget {
                 const SizedBox(height: 32),
                 BlocBuilder<AboutUsBloc, AboutUsState>(
                   builder: (context, state) {
-                    String data =
-                        "<p><span id=\"title\">I-WATT</span> - ${state.aboutUs.content.replaceAll("<p>", '')}";
+                    String data = "<p><span id=\"title\">I-WATT</span> - ${state.aboutUs.content.replaceAll("<p>", '')}";
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       decoration: BoxDecoration(

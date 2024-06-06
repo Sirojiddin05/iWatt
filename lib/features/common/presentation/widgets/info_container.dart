@@ -10,6 +10,7 @@ class InfoContainer extends StatelessWidget {
   final Color color;
   final EdgeInsets? margin;
   final Widget? suffix;
+  final Color? iconColor;
   const InfoContainer({
     super.key,
     required this.infoText,
@@ -17,6 +18,7 @@ class InfoContainer extends StatelessWidget {
     this.margin,
     this.title,
     this.suffix,
+    this.iconColor,
   });
 
   @override
@@ -25,12 +27,12 @@ class InfoContainer extends StatelessWidget {
       margin: margin ?? const EdgeInsets.all(16),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.32),
+        color: color,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          SvgPicture.asset(AppIcons.info),
+          SvgPicture.asset(AppIcons.info, color: iconColor),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

@@ -263,5 +263,12 @@
   "payed_parking_will_start": "Платная парковка начнется через",
   "payed_parking_is_going": "Идёт платная парковка",
   "time_passed": "Прошло времени",
-  "total": "Итого"
+  "total": "Итого",
+  "yet" : "ещё",
+  "pause" : "Пауза",
+  "parking_is_over_disconnect_connector": "Процесс зардяки закончился, отсоедините свой автомобиль от станции",
+  "no_charging_cars": "Нет заряжаемых автомобилей",
+  "connect_to_charging_station": "Подключитесь к ЭЗС и вы сможете увидеть процесс зарядки в этом окне",
+  "in_process": "В процессе",
+  "history": "История"
 }

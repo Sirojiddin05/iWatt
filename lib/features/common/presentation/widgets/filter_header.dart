@@ -5,6 +5,7 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_clear_button.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/sheet_header_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class FilterHeader extends StatefulWidget {
@@ -24,8 +25,8 @@ class _FilterHeaderState extends State<FilterHeader> {
       decoration: BoxDecoration(
           color: context.colorScheme.primaryContainer,
           borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
+            topRight: Radius.circular(16),
+            topLeft: Radius.circular(16),
           ),
           boxShadow: [
             BoxShadow(
@@ -40,9 +41,9 @@ class _FilterHeaderState extends State<FilterHeader> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 8),
-          SvgPicture.asset(AppIcons.sheetHeader),
+          const SheetHeadContainer(),
           Row(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Align(
@@ -62,9 +63,12 @@ class _FilterHeaderState extends State<FilterHeader> {
                       valueListenable: widget.connectorTypes),
                 ),
               ),
-              Text(
-                LocaleKeys.filter.tr(),
-                style: context.textTheme.displayMedium,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(
+                  LocaleKeys.filter.tr(),
+                  style: context.textTheme.displayMedium,
+                ),
               ),
               Expanded(
                 child: Align(
@@ -73,8 +77,8 @@ class _FilterHeaderState extends State<FilterHeader> {
                     onTap: () => Navigator.pop(context),
                     behavior: HitTestBehavior.opaque,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                      child: SvgPicture.asset(AppIcons.close),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      child: SvgPicture.asset(AppIcons.closeBoldGrey),
                     ),
                   ),
                 ),

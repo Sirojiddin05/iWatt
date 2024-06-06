@@ -48,10 +48,10 @@ class ChargingProcessState extends Equatable {
         startProcessStatus,
         startProcessErrorMessage,
         stopProcessStatus,
+        getChargingProcesses,
+        getChargingProcessErrorMessage,
         stopProcessErrorMessage,
         processes,
         transactionCheque,
-        getChargingProcesses,
-        getChargingProcessErrorMessage,
       ];
 }

@@ -12,6 +12,8 @@ class MeterValueMessageModel extends MeterValueMessageEntity {
     super.consumedKwh,
     super.money,
     super.status,
+    super.currentKwh,
+    super.estimatedTime,
   });
 
   factory MeterValueMessageModel.fromJson(Map<String, dynamic> json) => _$MeterValueMessageModelFromJson(json);

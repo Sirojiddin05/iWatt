@@ -25,10 +25,13 @@ class _BatteryContainerState extends State<BatteryContainer> {
   @override
   void initState() {
     super.initState();
-    if (widget.percent == 24) {
+    if (widget.percent == 0) {
       colorBackground = colorBackground1;
       colorForeground = colorForeground1;
-    } else if (widget.percent > 30 && widget.percent < 50) {
+    } else if (widget.percent <= 20) {
+      colorBackground = colorBackground3;
+      colorForeground = colorForeground3;
+    } else if (widget.percent >= 20 && widget.percent < 50) {
       colorBackground = colorBackground3;
       colorForeground = colorForeground3;
     } else if (widget.percent > 50) {
@@ -39,10 +42,10 @@ class _BatteryContainerState extends State<BatteryContainer> {
 
   @override
   void didUpdateWidget(covariant BatteryContainer oldWidget) {
-    if (widget.percent == 24) {
+    if (widget.percent == 0) {
       colorBackground = colorBackground1;
       colorForeground = colorForeground1;
-    } else if (widget.percent > 30 && widget.percent < 50) {
+    } else if (widget.percent > 20 && widget.percent < 50) {
       colorBackground = colorBackground3;
       colorForeground = colorForeground3;
     } else if (widget.percent > 50) {

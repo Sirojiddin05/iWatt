@@ -6,14 +6,26 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/battery_container.dart';
 
 class ChargingCarAnimationWidget extends StatelessWidget {
-  final double? scale;
+  final double carScale;
+  final double batteryScale;
   final int percentage;
-  const ChargingCarAnimationWidget({super.key, this.scale, required this.percentage});
+  final int fontSize;
+  final FontWeight percentageFontWeight;
+  final FontWeight percentageSignFontWeight;
+  const ChargingCarAnimationWidget({
+    super.key,
+    required this.percentage,
+    this.carScale = 1.26,
+    this.batteryScale = 1.7,
+    this.fontSize = 40,
+    this.percentageFontWeight = FontWeight.w700,
+    this.percentageSignFontWeight = FontWeight.w800,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
-      scale: scale ?? 1,
+      scale: carScale,
       child: Material(
         color: Colors.transparent,
         child: Stack(
@@ -27,7 +39,7 @@ class ChargingCarAnimationWidget extends StatelessWidget {
               child: UnconstrainedBox(
                 alignment: Alignment.center,
                 child: Transform.scale(
-                  scale: 1.7,
+                  scale: batteryScale,
                   child: BatteryContainer(
                     percent: getPercent(),
                   ),
@@ -58,8 +70,8 @@ class ChargingCarAnimationWidget extends StatelessWidget {
                         words: {
                           getPercent().toString(): HighlightedWord(
                             textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700,
+                              fontSize: fontSize.toDouble(),
+                              fontWeight: percentageFontWeight,
                               height: 1,
                               letterSpacing: 0,
                               color: AppColors.cyprus,
@@ -67,8 +79,8 @@ class ChargingCarAnimationWidget extends StatelessWidget {
                           ),
                           '%': HighlightedWord(
                             textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
+                              fontSize: fontSize.toDouble() / 2,
+                              fontWeight: percentageSignFontWeight,
                               height: 1,
                               letterSpacing: 0,
                               color: AppColors.cyprus,
@@ -82,8 +94,8 @@ class ChargingCarAnimationWidget extends StatelessWidget {
                         words: {
                           getPercent().toString(): HighlightedWord(
                             textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700,
+                              fontSize: fontSize.toDouble(),
+                              fontWeight: percentageFontWeight,
                               height: 1,
                               letterSpacing: 0,
                               foreground: Paint()
@@ -94,8 +106,8 @@ class ChargingCarAnimationWidget extends StatelessWidget {
                           ),
                           '%': HighlightedWord(
                             textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
+                              fontSize: fontSize.toDouble() / 2,
+                              fontWeight: percentageSignFontWeight,
                               height: 1,
                               letterSpacing: 0,
                               foreground: Paint()

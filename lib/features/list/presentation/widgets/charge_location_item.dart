@@ -107,26 +107,14 @@ class ChargeLocationCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
-                              child: HighlightedText(
-                                allText: "${location.locationName} ${location.vendorName}",
-                                highlightedText: highlightedTitle,
-                                textAlign: TextAlign.left,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ),
-                          if (hasSavedIcon) ...{
-                            SavedUnSaveButton(
-                              location: location.copyWith(isFavorite: true),
-                            ),
-                          }
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
+                        child: HighlightedText(
+                          allText: "${location.locationName} ${location.vendorName}",
+                          highlightedText: highlightedTitle,
+                          textAlign: TextAlign.left,
+                          maxLines: 2,
+                        ),
                       ),
                       if (location.logo.isNotEmpty) ...{
                         const SizedBox(height: 6),
@@ -139,6 +127,11 @@ class ChargeLocationCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (hasSavedIcon) ...{
+                  SavedUnSaveButton(
+                    location: location.copyWith(isFavorite: true),
+                  ),
+                },
               ],
             ),
             const SizedBox(height: 12),
@@ -156,8 +149,7 @@ class ChargeLocationCard extends StatelessWidget {
                 const LocationDataDividerCircle(),
                 LocationCardDataRow(
                   icon: context.themedIcons.station,
-                  value:
-                      "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
+                  value: "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
                 ),
                 if (location.distance != -1) ...{
                   const LocationDataDividerCircle(),

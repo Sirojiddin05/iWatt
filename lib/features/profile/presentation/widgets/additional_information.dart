@@ -64,8 +64,11 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
           ),
           const Spacer(),
           InfoContainer(
+            iconColor: AppColors.dodgerBlue,
+            color: AppColors.dodgerBlue,
             infoText: LocaleKeys.if_you_enter_your_car_number_you_will_have_additional_conveniences.tr(),
             title: LocaleKeys.helpful_information.tr(),
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           ),
         ],
       ),

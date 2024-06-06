@@ -113,7 +113,6 @@ class _MyCarsPageState extends State<MyCarsPage> {
               isDismissible: false,
               enableDrag: false,
               overlayStyle: SystemUiOverlayStyle.light,
-              builder: (c) => const AddCarPresentSheet(),
               builder: (c) => BlocProvider.value(
                 value: carsBloc,
                 child: const AddCarPresentSheet(),

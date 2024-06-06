@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
-import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/widgets/payment_ckeck_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_features_usecase.dart';
@@ -25,6 +27,7 @@ import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.da
 import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
 import 'package:i_watt_app/service_locator.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:vibration/vibration.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   @override
   void initState() {
     super.initState();
-    _instructionsBloc = context.read<InstructionsBloc>();
     _versionCheckBloc = VersionCheckBloc(
       GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()),
       GetVersionFeaturesUseCase(serviceLocator<VersionCheckRepositoryImpl>()),
@@ -69,12 +71,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
       ..addListener(() => _currentIndex.value = _tabController.index);
-
-    bool onBoarding = StorageRepository.getBool(StorageKeys.onBoarding);
-
-    if (onBoarding) {
-      _instructionsBloc.add(GetInstructionsEvent(InstructionsType.onboarding.name));
-    }
 
     //TODO
     // context.read<LoginBloc>().add(GetUserDataEvent());
@@ -127,12 +123,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                 }
               },
             ),
+            BlocListener<ChargingProcessBloc, ChargingProcessState>(
+              listenWhen: (o, n) => o.transactionCheque != n.transactionCheque,
+              listener: (context, state) async {
+                showCupertinoModalBottomSheet(
+                  context: context,
+                  barrierColor: AppColors.white,
+                  enableDrag: false,
+                  isDismissible: false,
+                  builder: (ctx) {
+                    return ChargingPaymentCheck(cheque: state.transactionCheque);
+                  },
+                );
+              },
+            ),
             BlocListener<VersionCheckBloc, VersionCheckState>(
               listenWhen: (o, n) => o.getVersionFeaturesStatus != n.getVersionFeaturesStatus,
               listener: (context, state) async {
                 if (state.getVersionFeaturesStatus.isSuccess) {
-                  StorageRepository.putList(StorageKeys.versionFeatures,
-                      [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
+                  StorageRepository.putList(
+                      StorageKeys.versionFeatures, [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
                   showModalBottomSheet(
                     context: context,
                     useSafeArea: true,

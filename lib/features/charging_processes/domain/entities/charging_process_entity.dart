@@ -1,8 +1,11 @@
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/common/domain/entities/meter_value_message.dart';
 import 'package:i_watt_app/features/common/domain/entities/parking_data_message.dart';
 
-class ChargingProcessEntity {
+class ChargingProcessEntity extends Equatable {
   final ConnectorEntity connector;
   final int startCommandId;
   final int stopCommandId;
@@ -12,8 +15,14 @@ class ChargingProcessEntity {
   final String locationName;
   final String estimatedTime;
   final ParkingDataMessageEntity parkingData;
+  final bool isPayedParkingStarted;
+  final int payedParkingLasts;
+  final int payedParkingWillStartAfter;
+  final int payedParkingPrice;
+  final Timer? payedParkingTimer;
+  final Timer? freeParkingTimer;
 
-  ChargingProcessEntity({
+  const ChargingProcessEntity({
     this.connector = const ConnectorEntity(),
     this.startCommandId = -1,
     this.stopCommandId = -1,
@@ -23,6 +32,12 @@ class ChargingProcessEntity {
     this.status = '',
     this.locationName = '',
     this.estimatedTime = '',
+    this.payedParkingLasts = 0,
+    this.isPayedParkingStarted = false,
+    this.payedParkingWillStartAfter = 0,
+    this.payedParkingTimer,
+    this.freeParkingTimer,
+    this.payedParkingPrice = 0,
   });
 
   ChargingProcessEntity copyWith({
@@ -36,6 +51,12 @@ class ChargingProcessEntity {
     String? status,
     String? locationName,
     String? estimatedTime,
+    int? payedParkingLasts,
+    bool? isPayedParkingStarted,
+    int? payedParkingWillStartAfter,
+    int? payedParkingPrice,
+    Timer? payedParkingTimer,
+    Timer? freeParkingTimer,
   }) {
     return ChargingProcessEntity(
       connector: connector ?? this.connector,
@@ -47,6 +68,31 @@ class ChargingProcessEntity {
       locationName: locationName ?? this.locationName,
       estimatedTime: estimatedTime ?? this.estimatedTime,
       parkingData: parkingData ?? this.parkingData,
+      payedParkingLasts: payedParkingLasts ?? this.payedParkingLasts,
+      isPayedParkingStarted: isPayedParkingStarted ?? this.isPayedParkingStarted,
+      payedParkingWillStartAfter: payedParkingWillStartAfter ?? this.payedParkingWillStartAfter,
+      payedParkingTimer: payedParkingTimer ?? this.payedParkingTimer,
+      freeParkingTimer: freeParkingTimer ?? this.freeParkingTimer,
+      payedParkingPrice: payedParkingPrice ?? this.payedParkingPrice,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        connector,
+        startCommandId,
+        stopCommandId,
+        transactionId,
+        meterValue,
+        status,
+        locationName,
+        estimatedTime,
+        parkingData,
+        isPayedParkingStarted,
+        payedParkingLasts,
+        payedParkingWillStartAfter,
+        payedParkingPrice,
+        payedParkingTimer,
+        freeParkingTimer,
+      ];
 }

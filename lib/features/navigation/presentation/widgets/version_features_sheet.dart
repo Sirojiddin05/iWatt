@@ -51,7 +51,7 @@ class _VersionFeaturesSheetState extends State<VersionFeaturesSheet> with Single
           const SizedBox(height: 16),
           DotsIndicator(
             dotColor: AppColors.zircon,
-            activeDotColor: AppColors.blueBayoux.withOpacity(.8),
+            activeDotColor: AppColors.dodgerBlue,
             length: widget.list.length,
             offset: !pageController.hasClients ? 0 : pageController.page ?? 0,
           ),

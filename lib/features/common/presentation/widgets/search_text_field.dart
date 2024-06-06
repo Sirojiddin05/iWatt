@@ -37,7 +37,8 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  late TextEditingController _controller;
+  late final TextEditingController _controller;
+  late final FocusNode focusNode;
   late final ValueNotifier<bool> suffixVisibility;
 
   @override
@@ -95,6 +96,7 @@ class _SearchFieldState extends State<SearchField> {
           onClear: widget.onClear ??
               () {
                 _controller.clear();
+                widget.focusNode?.requestFocus();
                 widget.onChanged('');
               },
         ),

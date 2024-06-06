@@ -24,7 +24,7 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-        buildWhen: (o, n) => o.location != n.location,
+        // buildWhen: (o, n) => o.location != n.location,
         builder: (context, state) {
           return Container(
             padding: EdgeInsets.only(bottom: context.padding.bottom),
@@ -63,7 +63,15 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                     borderRadius: 20,
                     color: AppColors.limeGreen,
                     rippleColor: AppColors.white.withAlpha(30),
-                    onTap: onChargeTap,
+                    onTap: () {
+                      if (state.location.chargers.isNotEmpty) {
+                        print('state.location.chargers.isNotEmpty');
+                        context
+                            .read<ChargeLocationSingleBloc>()
+                            .add(ChangeSelectedStationIndexByConnectorId(state.location.chargers.first.connectors.first.id));
+                      }
+                      onChargeTap();
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

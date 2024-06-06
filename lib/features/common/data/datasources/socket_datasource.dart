@@ -32,9 +32,7 @@ class SocketDataSourceImpl implements SocketDataSource {
 
   WebSocketChannel? _channel;
 
-  SocketDataSourceImpl() {
-    connectToSocket();
-  }
+  SocketDataSourceImpl();
 
   @override
   Future<void> connectToSocket() async {
@@ -63,10 +61,25 @@ class SocketDataSourceImpl implements SocketDataSource {
         final meterValue = MeterValueMessageModel.fromJson(messageData);
         _meterValueStream.add(meterValue);
       } else if (messageType == SocketType.parking_data.name) {
-        final parkingData = ParkingDataMessageModel.fromJson(messageData);
+        print('parking_data');
+        late final parkingData;
+        try {
+          parkingData = ParkingDataMessageModel.fromJson(messageData);
+        } catch (e) {
+          print('error $e');
+        }
+        print('parking_data1 $messageData');
+        print('parking_data2 $messageData');
         _parkingDataStream.add(parkingData);
       } else if (messageType == SocketType.transaction_cheque.name) {
-        final transactionCheque = TransactionMessageModel.fromJson(messageData);
+        late final transactionCheque;
+        try {
+          transactionCheque = TransactionMessageModel.fromJson(messageData);
+        } catch (e) {
+          print('error $e');
+        }
+        print('transaction_cheque $messageType');
+        print('messageData $messageData');
         _transactionChequeStream.add(transactionCheque);
       }
     });

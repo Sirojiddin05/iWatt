@@ -126,6 +126,7 @@ class LocationSingleLoaderView extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: context.padding.bottom + 70),
         ],
       ),
     );

@@ -145,6 +145,8 @@ class ConnectorCard extends StatelessWidget {
                       showCupertinoModalBottomSheet(
                         context: context,
                         backgroundColor: AppColors.white,
+                        enableDrag: false,
+                        isDismissible: false,
                         builder: (ctx) {
                           return ChargingProcessSheet(
                             connector: connector,
@@ -171,15 +173,7 @@ class ConnectorCard extends StatelessWidget {
                       onTap: () {
                         if (authState.authenticationStatus.isAuthenticated) {
                           if (connector.status == 'Preparing' && isNearToStation) {
-                            showCustomAdaptiveDialog(
-                              context,
-                              title: LocaleKeys.start_charging.tr(),
-                              description: LocaleKeys.you_sure_you_want_start_charging.tr(),
-                              confirmText: LocaleKeys.start.tr(),
-                              onConfirm: () {
-                                context.read<ChargingProcessBloc>().add(CreateChargingProcessEvent(connector));
-                              },
-                            );
+                            context.read<ChargingProcessBloc>().add(CreateChargingProcessEvent(connector));
                           }
                         } else {
                           showLoginDialog(context, onConfirm: () {

@@ -25,12 +25,8 @@ class MyFunctions {
     return '${formatNumber(p)} UZS';
   }
 
-  static String getParkingTitle(String startTime, int freeMinutes) {
-    final start = DateTime.parse(startTime);
-    final now = DateTime.now();
-    final difference = now.difference(start);
-    final minutes = difference.inMinutes;
-    if (minutes < freeMinutes) {
+  static String getParkingTitle(bool isPayedParkingStarted) {
+    if (!isPayedParkingStarted) {
       return LocaleKeys.payed_parking_will_start;
     } else {
       return LocaleKeys.payed_parking_is_going;
@@ -168,8 +164,7 @@ class MyFunctions {
     return 0;
   }
 
-  static String getCarNumberType(int type) =>
-      CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
+  static String getCarNumberType(int type) => CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
 
   static String getFormattedDate(DateTime dateTime) {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
@@ -186,8 +181,16 @@ class MyFunctions {
     }
   }
 
-  static String getFormattedTimerTime(int ticks) {
+  static String getFormattedTimerTime(int ticks, {bool includeHours = false}) {
     final buffer = StringBuffer();
+    if (includeHours) {
+      final hours = (ticks / 3600).floor();
+      if (hours < 10) {
+        buffer.write('0');
+      }
+      buffer.write(hours);
+      buffer.write(':');
+    }
     final minutes = (ticks / 60).floor();
     if (minutes < 10) {
       buffer.write('0');
@@ -309,8 +312,7 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
-    final distance = Geolocator.distanceBetween(
-        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -375,8 +377,7 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(
-        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

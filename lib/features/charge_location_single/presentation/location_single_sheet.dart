@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/charge_location_single_repository_impl.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/usecases/get_charge_location_single_usecase.dart';
@@ -21,6 +22,7 @@ import 'package:i_watt_app/features/common/data/repositories_impl/socket_reposit
 import 'package:i_watt_app/features/common/domain/usecases/connector_status_stream_usecase.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
 import 'package:i_watt_app/service_locator.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class LocationSingleSheet extends StatefulWidget {
   final String title;
@@ -57,7 +59,6 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
   late ValueNotifier<double> dragStickTop;
   late final ChargeLocationSingleBloc chargeLocationSingleBloc;
   late final AnimationController animationController;
-  final GlobalKey _key = GlobalKey();
   double contentHeight = 0;
 
   @override
@@ -78,185 +79,149 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
     draggableScrollableController = DraggableScrollableController()..addListener(draggableListener);
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 120),
+      duration: const Duration(milliseconds: 300),
+      reverseDuration: const Duration(milliseconds: 300),
     );
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
-      Size size = renderBox.size;
-      contentHeight = size.height;
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
+    //   Size size = renderBox.size;
+    //   contentHeight = size.height;
+    // });
   }
 
   @override
   void didUpdateWidget(oldWidget) {
     super.didUpdateWidget(oldWidget);
-    RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
-    Size size = renderBox.size;
-    contentHeight = size.height;
-    setState(() {});
+    // RenderBox renderBox = _key.currentContext?.findRenderObject() as RenderBox;
+    // Size size = renderBox.size;
+    // contentHeight = size.height;
+    // setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: chargeLocationSingleBloc,
+    return BlocProvider(
+      create: (ctx) => chargeLocationSingleBloc,
       child: WKeyboardDismisser(
-        child: AnimatedBuilder(
-            animation: animationController,
-            builder: (context, child) {
-              double scaleAnimation = 1 - (animationController.value * .1);
-              double transformY = context.sizeOf.height - (contentHeight * animationController.value);
-              double transformY2 = animationController.value;
-              double opacity = 0;
-              if (animationController.value > .3) {
-                opacity = animationController.value * .8;
-              } else {
-                opacity = 0;
-              }
-              double borderRadius = 20 * animationController.value;
-              return Stack(
-                children: [
-                  Transform.translate(
-                    offset: Offset(0, transformY2),
-                    child: Transform(
-                      transform: Matrix4.identity()..scale(scaleAnimation),
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: context.sizeOf.width,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(borderRadius),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: Stack(
-                          children: [
-                            BackgroundImage(headerOpacity: headerOpacity),
-                            Positioned.fill(
-                              top: MediaQueryData.fromView(View.of(context)).padding.top,
-                              child: DraggableScrollableSheet(
-                                snap: true,
-                                snapSizes: const [.5, .83, 1],
-                                minChildSize: .5,
-                                initialChildSize: widget.midSize ? .83 : .5,
-                                controller: draggableScrollableController,
-                                builder: (context, controller) {
-                                  return SizedBox(
-                                    height: context.sizeOf.height,
-                                    child: NotificationListener(
-                                      onNotification: (OverscrollIndicatorNotification notification) {
-                                        notification.disallowIndicator();
-                                        return false;
-                                      },
-                                      child: Stack(
-                                        children: [
-                                          LocationSingleBodyWrapper(
-                                            child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-                                              buildWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
-                                              builder: (context, state) {
-                                                final location = state.location;
-                                                final vendor = location.vendor;
-                                                final chargers = location.chargers;
-                                                final facilities = location.facilities;
-                                                return CustomScrollView(
-                                                  physics: const BouncingScrollPhysics(),
-                                                  controller: controller,
-                                                  slivers: [
-                                                    SliverPersistentHeader(
-                                                      pinned: true,
-                                                      delegate: LocationSingleHeaderTop(
-                                                        locationName: widget.title,
-                                                      ),
-                                                    ),
-                                                    SliverPersistentHeader(
-                                                      delegate: LocationSingleHeaderAddress(
-                                                        locationAddress: widget.address,
-                                                        distance: widget.distance,
-                                                      ),
-                                                    ),
-                                                    //TODO next version
-                                                    // SliverPersistentHeader(
-                                                    //   pinned: true,
-                                                    //   delegate: LocationSingleHeaderTabBar(tabController: tabController),
-                                                    // ),
-                                                    SliverList.list(
-                                                      children: [
-                                                        if (state.getSingleStatus.isSuccess) ...{
-                                                          if (vendor.minimumBalance.isNotEmpty) ...{
-                                                            MinBalanceCard(minBalance: vendor.minimumBalance),
-                                                          },
-                                                          ChargingPointsCard(chargers: chargers),
-                                                          FacilitiesCard(facilities: facilities),
-                                                          ContactsCard(
-                                                            email: vendor.name,
-                                                            phone: vendor.phone,
-                                                            website: vendor.website,
-                                                            socialMedia: vendor.socialMedia,
-                                                          ),
-                                                          // LoaderSwitcherWidget(
-                                                          //   loading: state.getSingleChargeLocationStatus ==
-                                                          //       FormzSubmissionStatus.inProgress,
-                                                          //   loaderWidget: const MinBalanceCardLoader(),
-                                                          //   child: const MinBalanceCard(),
-                                                          // ),
-                                                          // LoaderSwitcherWidget(
-                                                          //   loading: state.getSingleChargeLocationStatus ==
-                                                          //       FormzSubmissionStatus.inProgress,
-                                                          //   loaderWidget: const ChargingPointsCardLoader(),
-                                                          //   child: ChargingPointsCard(location: widget.location),
-                                                          // ),
-                                                          // LoaderSwitcherWidget(
-                                                          //   loading: state.getSingleChargeLocationStatus ==
-                                                          //       FormzSubmissionStatus.inProgress,
-                                                          //   loaderWidget: const FacilitiesCardLoader(),
-                                                          //   child: const FacilitiesCard(),
-                                                          // ),
-                                                          // LoaderSwitcherWidget(
-                                                          //   loading: state.getSingleChargeLocationStatus ==
-                                                          //       FormzSubmissionStatus.inProgress,
-                                                          //   loaderWidget: const ContactsCardLoader(),
-                                                          //   child: const ContactsCard(),
-                                                          // ),
-                                                          const SizedBox(height: 70),
-                                                        } else if (state.getSingleStatus.isInProgress) ...{
-                                                          const LocationSingleLoaderView()
-                                                        }
-                                                      ],
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                          DraggableHead(dragStickTop: dragStickTop)
-                                        ],
+        child: Stack(
+          children: [
+            BackgroundImage(headerOpacity: headerOpacity),
+            Positioned.fill(
+              top: MediaQueryData.fromView(View.of(context)).padding.top,
+              child: DraggableScrollableSheet(
+                snap: true,
+                snapSizes: const [.5, .83, 1],
+                minChildSize: .5,
+                initialChildSize: widget.midSize ? .83 : .5,
+                controller: draggableScrollableController,
+                builder: (context, controller) {
+                  return SizedBox(
+                    height: context.sizeOf.height,
+                    child: NotificationListener(
+                      onNotification: (OverscrollIndicatorNotification notification) {
+                        notification.disallowIndicator();
+                        return false;
+                      },
+                      child: Stack(
+                        children: [
+                          LocationSingleBodyWrapper(
+                            child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+                              buildWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
+                              builder: (context, state) {
+                                final location = state.location;
+                                final vendor = location.vendor;
+                                final chargers = location.chargers;
+                                final facilities = location.facilities;
+                                return CustomScrollView(
+                                  physics: const BouncingScrollPhysics(),
+                                  controller: controller,
+                                  slivers: [
+                                    SliverPersistentHeader(
+                                      pinned: true,
+                                      delegate: LocationSingleHeaderTop(
+                                        locationName: widget.title,
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
+                                    SliverPersistentHeader(
+                                      delegate: LocationSingleHeaderAddress(
+                                        locationAddress: widget.address,
+                                        distance: widget.distance,
+                                      ),
+                                    ),
+                                    //TODO next version
+                                    // SliverPersistentHeader(
+                                    //   pinned: true,
+                                    //   delegate: LocationSingleHeaderTabBar(tabController: tabController),
+                                    // ),
+                                    SliverList.list(
+                                      children: [
+                                        if (state.getSingleStatus.isSuccess) ...{
+                                          if (vendor.minimumBalance.isNotEmpty) ...{
+                                            MinBalanceCard(minBalance: vendor.minimumBalance),
+                                          },
+                                          ConnectorsCard(
+                                            chargers: chargers,
+                                            onTap: () {
+                                              showCupertinoModalBottomSheet(
+                                                context: context,
+                                                backgroundColor: AppColors.white,
+                                                enableDrag: false,
+                                                isDismissible: false,
+                                                builder: (ctx) {
+                                                  return BlocProvider.value(
+                                                    value: chargeLocationSingleBloc,
+                                                    child: StationSingleSheet(
+                                                      onClose: () => Navigator.pop(ctx),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                          FacilitiesCard(facilities: facilities),
+                                          ContactsCard(
+                                            email: vendor.name,
+                                            phone: vendor.phone,
+                                            website: vendor.website,
+                                            socialMedia: vendor.socialMedia,
+                                          ),
+                                          const SizedBox(height: 70),
+                                        } else if (state.getSingleStatus.isInProgress) ...{
+                                          const LocationSingleLoaderView()
+                                        }
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                            LocationSingleSheetBottomWidget(
-                              onChargeTap: onToggled,
-                            ),
-                          ],
-                        ),
+                          ),
+                          DraggableHead(dragStickTop: dragStickTop)
+                        ],
                       ),
                     ),
-                  ),
-                  Transform.translate(
-                    offset: Offset(0, transformY),
-                    child: GestureDetector(
-                      onVerticalDragStart: _onDragStart,
-                      onVerticalDragUpdate: _onDragUpdate,
-                      onVerticalDragEnd: _onDragEnd,
-                      child: StationSingleSheet(
-                        key: _key,
-                        onClose: onToggled,
-                      ),
+                  );
+                },
+              ),
+            ),
+            LocationSingleSheetBottomWidget(onChargeTap: () {
+              showCupertinoModalBottomSheet(
+                context: context,
+                backgroundColor: AppColors.white,
+                enableDrag: false,
+                isDismissible: false,
+                builder: (ctx) {
+                  return BlocProvider.value(
+                    value: chargeLocationSingleBloc,
+                    child: StationSingleSheet(
+                      onClose: () => Navigator.pop(ctx),
                     ),
-                  )
-                ],
+                  );
+                },
               );
             }),
+          ],
+        ),
       ),
     );
   }

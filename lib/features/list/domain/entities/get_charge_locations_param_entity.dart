@@ -30,8 +30,8 @@ class GetChargeLocationParamEntity {
       params.putIfAbsent('zoom', () => zoom);
     }
     if (longitude != -1 && latitude != -1) {
-      params.putIfAbsent('latitude', () => latitude);
-      params.putIfAbsent('longitude', () => longitude);
+      params.putIfAbsent('user_latitude', () => latitude);
+      params.putIfAbsent('user_longitude', () => longitude);
     }
     if (powerType.isNotEmpty) {
       String power = '';

@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
-import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
@@ -50,7 +50,6 @@ import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/inte
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
@@ -92,9 +91,7 @@ class App extends StatelessWidget {
         BlocProvider(create: (context) => CarOnMapBloc()),
         // BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
-        BlocProvider(
-            create: (context) =>
-                InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
+        BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(
@@ -227,8 +224,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    bool onBoarding = StorageRepository.getBool(StorageKeys.onBoarding, defValue: false);
+    if (!onBoarding) {
+      context.read<InstructionsBloc>().add(GetInstructionsEvent(InstructionsType.onboarding.name));
+    }
   }
 
   @override
@@ -250,6 +251,11 @@ class _MyAppState extends State<MyApp> {
             child: child,
             listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
             listener: (context, state) async {
+              if (state.authenticationStatus.isAuthenticated) {
+                context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
+              } else {
+                context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
+              }
               _navigator.pushAndRemoveUntil(
                 MaterialWithModalsPageRoute(
                   builder: (context) => const HomeScreen(),

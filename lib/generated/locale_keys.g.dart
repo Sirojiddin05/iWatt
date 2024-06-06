@@ -148,6 +148,7 @@ abstract class  LocaleKeys {
   static const verification_not_right = 'verification_not_right';
   static const remove = 'remove';
   static const select_card = 'select_card';
+  static const start = 'start';
   static const you_need_to_login_to_do_this_action = 'you_need_to_login_to_do_this_action';
   static const log_out_from_account = 'log_out_from_account';
   static const are_you_sure_you_want_to_log_out = 'are_you_sure_you_want_to_log_out';
@@ -194,8 +195,10 @@ abstract class  LocaleKeys {
   static const birthday = 'birthday';
   static const gender = 'gender';
   static const delete_photo = 'delete_photo';
+  static const delete_car = 'delete_car';
   static const do_you_really_want_to_delete_your_account = 'do_you_really_want_to_delete_your_account';
   static const do_you_really_want_to_delete_profile_photo = 'do_you_really_want_to_delete_profile_photo';
+  static const do_you_really_want_to_delete_this_car = 'do_you_really_want_to_delete_this_car';
   static const change_profile_photo = 'change_profile_photo';
   static const camera = 'camera';
   static const gallery = 'gallery';
@@ -207,8 +210,9 @@ abstract class  LocaleKeys {
   static const update_app_subtitle = 'update_app_subtitle';
   static const update_app_subtitle_2 = 'update_app_subtitle_2';
   static const skip = 'skip';
+  static const close = 'close';
+  static const next = 'next';
   static const you_sure_you_want_start_charging = 'you_sure_you_want_start_charging';
-  static const charing = 'charing';
   static const max_power = 'max_power';
   static const price = 'price';
   static const charging_is_starting = 'charging_is_starting';
@@ -221,7 +225,6 @@ abstract class  LocaleKeys {
   static const sum = 'sum';
   static const stop_charging = 'stop_charging';
   static const with_this_action_you_stop_charging = 'with_this_action_you_stop_charging';
-  static const start = 'start';
   static const finish = 'finish';
   static const cheque = 'cheque';
   static const charging_id = 'charging_id';
@@ -254,5 +257,12 @@ abstract class  LocaleKeys {
   static const payed_parking_is_going = 'payed_parking_is_going';
   static const time_passed = 'time_passed';
   static const total = 'total';
+  static const yet = 'yet';
+  static const pause = 'pause';
+  static const parking_is_over_disconnect_connector = 'parking_is_over_disconnect_connector';
+  static const no_charging_cars = 'no_charging_cars';
+  static const connect_to_charging_station = 'connect_to_charging_station';
+  static const in_process = 'in_process';
+  static const history = 'history';
 
 }

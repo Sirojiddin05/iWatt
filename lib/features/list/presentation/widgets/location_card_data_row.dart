@@ -19,11 +19,13 @@ class LocationCardDataRow extends StatelessWidget {
         children: [
           SvgPicture.asset(icon),
           const SizedBox(width: 6),
-          Text(
-            value,
-            style: context.textTheme.titleMedium?.copyWith(fontSize: 12),
-            maxLines: 1,
-            overflow: TextOverflow.fade,
+          Expanded(
+            child: Text(
+              value,
+              style: context.textTheme.titleMedium?.copyWith(fontSize: 12),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
