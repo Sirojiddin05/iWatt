@@ -3,15 +3,16 @@ import 'package:i_watt_app/core/error/exception_handler.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/common/data/models/error_model.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
+import 'package:i_watt_app/features/profile/data/models/create_credit_card_model.dart';
 import 'package:i_watt_app/features/profile/data/models/credit_card_model.dart';
 import 'package:i_watt_app/features/profile/data/models/payment_status_model.dart';
 
 abstract class PaymentsDataSource {
   Future<GenericPagination<CreditCardModel>> getCreditCards({String? next});
 
-  Future<String> createCreditCard({required String cardNumber, required String expireDate});
+  Future<CreateCreditCardModel> createCreditCard({required String cardNumber, required String expireDate});
 
-  Future<void> confirmCreditCard({required String otp, required String cardNumber});
+  Future<void> confirmCreditCard({required String otp, required String cardToken});
 
   Future<void> deleteCreditCard({required int userCardId});
 
@@ -155,7 +156,7 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
   }
 
   @override
-  Future<String> createCreditCard({required String cardNumber, required String expireDate}) async {
+  Future<CreateCreditCardModel> createCreditCard({required String cardNumber, required String expireDate}) async {
     try {
       final response = await dio.post(
         '/payment/CardCreate/',
@@ -163,7 +164,7 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
         options: Options(headers: {"Authorization": "Bearer ${StorageRepository.getString('token')}"}),
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-        return response.data['otp_sent_phone'] as String;
+        return CreateCreditCardModel.fromJson(response.data);
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
@@ -184,13 +185,12 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
   }
 
   @override
-  Future<void> confirmCreditCard({required String otp, required String cardNumber}) async {
+  Future<void> confirmCreditCard({required String otp, required String cardToken}) async {
     try {
       final response = await dio.post(
-        'payments/paylov/confirm-user-card/',
+        '/payment/CardVerify/$cardToken/',
         data: {
-          "otp": otp,
-          "card_number": cardNumber,
+          "code": otp,
         },
         options: Options(headers: {"Authorization": "Bearer ${StorageRepository.getString('token')}"}),
       );
@@ -217,11 +217,11 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
   @override
   Future<void> deleteCreditCard({required int userCardId}) async {
     try {
-      final response = await dio.delete(
-        'payments/paylov/delete-user-card/$userCardId',
-        // data: {
-        //   "user_card_id": userCardId,
-        // },
+      final response = await dio.post(
+        'payment/CardDelete/',
+        data: {
+          "card_id": userCardId,
+        },
         options: Options(headers: {"Authorization": "Bearer ${StorageRepository.getString('token')}"}),
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {

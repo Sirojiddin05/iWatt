@@ -10,6 +10,10 @@ class CreditCardsState extends Equatable {
   final String creditCardsNext;
   final String otpSentPhone;
   final String errorMessage;
+  final int codeAvailableTime;
+  final String cardNumber;
+  final String cardExpiryDate;
+  final String cardToken;
 
   const CreditCardsState({
     this.getCreditCardsStatus = FormzSubmissionStatus.initial,
@@ -21,6 +25,10 @@ class CreditCardsState extends Equatable {
     this.creditCardsNext = '',
     this.otpSentPhone = '',
     this.errorMessage = '',
+    this.codeAvailableTime = 0,
+    this.cardNumber = '',
+    this.cardExpiryDate = '',
+    this.cardToken = '',
   });
 
   CreditCardsState copyWith({
@@ -33,6 +41,10 @@ class CreditCardsState extends Equatable {
     String? creditCardsNext,
     String? otpSentPhone,
     String? errorMessage,
+    int? codeAvailableTime,
+    String? cardNumber,
+    String? cardExpiryDate,
+    String? cardToken,
   }) {
     return CreditCardsState(
       getCreditCardsStatus: getCreditCardsStatus ?? this.getCreditCardsStatus,
@@ -44,6 +56,10 @@ class CreditCardsState extends Equatable {
       creditCardsNext: creditCardsNext ?? this.creditCardsNext,
       otpSentPhone: otpSentPhone ?? this.otpSentPhone,
       errorMessage: errorMessage ?? this.errorMessage,
+      codeAvailableTime: codeAvailableTime ?? this.codeAvailableTime,
+      cardNumber: cardNumber ?? this.cardNumber,
+      cardExpiryDate: cardExpiryDate ?? this.cardExpiryDate,
+      cardToken: cardToken ?? this.cardToken,
     );
   }
 
@@ -58,5 +74,9 @@ class CreditCardsState extends Equatable {
         creditCardsNext,
         otpSentPhone,
         errorMessage,
+        codeAvailableTime,
+        cardNumber,
+        cardExpiryDate,
+        cardToken,
       ];
 }

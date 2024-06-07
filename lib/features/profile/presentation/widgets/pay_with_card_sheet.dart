@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
@@ -97,7 +98,18 @@ class _PayWithCardSheetState extends State<PayWithCardSheet> {
                   crossFadeState: editing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                   alignment: Alignment.bottomCenter,
                   firstChild: const PayWithCardSheetBottom(),
-                  secondChild: const RemoveCreditCardButton(),
+                  secondChild: RemoveCreditCardButton(
+                    onCancel: () {
+                      selectedId = null;
+                    },
+                    isLoading: state.deleteCardStatus == FormzSubmissionStatus.inProgress,
+                    isDisabled: false,
+                    onRemove: () {
+                      // context
+                      //     .read<CreditCardsBloc>()
+                      //     .add(DeleteCreditCardEvent(ids: ids, onSuccess: () {}, onError: (e) {}));
+                    },
+                  ),
                 ),
               ),
             ],

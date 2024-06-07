@@ -11,8 +11,9 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 class MyCardsSheetHeader extends StatelessWidget {
   final bool hasCards;
   final Function() onEditTap;
+  final bool editing;
 
-  const MyCardsSheetHeader({super.key, required this.onEditTap, required this.hasCards});
+  const MyCardsSheetHeader({super.key, required this.onEditTap, required this.hasCards, required this.editing});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class MyCardsSheetHeader extends StatelessWidget {
           children: [
             Text(LocaleKeys.my_cards.tr(), style: Theme.of(context).textTheme.displayMedium),
             if (hasCards) const SizedBox(width: 6),
-            if (hasCards)
+            if (hasCards && !editing)
               WScaleAnimation(
                 onTap: onEditTap,
                 child: Container(
