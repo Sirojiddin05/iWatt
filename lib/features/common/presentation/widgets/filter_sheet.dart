@@ -37,7 +37,6 @@ class _FilterSheetState extends State<FilterSheet> {
     powerTypes.value = [...widget.selectedPowerTypes];
     controller = ScrollController()
       ..addListener(() {
-        print('Scrolling ${controller.offset}');
         if (controller.offset > 10 && !haShadow.value) {
           haShadow.value = true;
         } else if (controller.offset < 10 && haShadow.value) {
@@ -66,6 +65,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 onClearTap: () {
                   connectorTypes.value = [];
                   powerTypes.value = [];
+                  print('onClearTap = ${connectorTypes.value}');
                 },
                 connectorTypes: connectorTypes,
                 powerTypes: powerTypes,
@@ -82,12 +82,16 @@ class _FilterSheetState extends State<FilterSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ConnectorTypesList(
-                    defaultSelectedTypes: connectorTypes.value,
-                    onChanged: (List<int> value) {
-                      connectorTypes.value = [...value];
-                    },
-                  ),
+                  ValueListenableBuilder(
+                      valueListenable: connectorTypes,
+                      builder: (context, val, child) {
+                        return ConnectorTypesList(
+                          defaultSelectedTypes: connectorTypes.value,
+                          onChanged: (List<int> value) {
+                            connectorTypes.value = [...value];
+                          },
+                        );
+                      }),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 0, 6),
                     child: FilterCategoryTitle(title: LocaleKeys.power.tr()),
