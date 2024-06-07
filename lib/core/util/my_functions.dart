@@ -20,6 +20,7 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
   static String getPrice(String price) {
     final p = price.split('.').toList().first.split(',').toList().first;
     return '${formatNumber(p)} UZS';
@@ -122,7 +123,7 @@ class MyFunctions {
     String balance = myBalance.replaceAll(' ', '');
     balance = balance.replaceAll('-', '');
     balance = balance.split('.').first;
-    return '-${formatNumber(balance)}';
+    return '${myBalance.contains('-') ? '-' : ''}${formatNumber(balance)}';
   }
 
   static String formatNumber(String number) {
@@ -164,7 +165,8 @@ class MyFunctions {
     return 0;
   }
 
-  static String getCarNumberType(int type) => CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
+  static String getCarNumberType(int type) =>
+      CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
 
   static String getFormattedDate(DateTime dateTime) {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
@@ -312,7 +314,8 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
-    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(
+        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -377,7 +380,8 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(
+        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

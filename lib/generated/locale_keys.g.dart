@@ -265,5 +265,6 @@ abstract class  LocaleKeys {
   static const in_process = 'in_process';
   static const history = 'history';
   static const sent_code_to_your_phone = 'sent_code_to_your_phone';
+  static const balance = 'balance';
 
 }

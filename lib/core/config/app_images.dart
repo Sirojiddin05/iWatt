@@ -32,4 +32,5 @@ class AppImages {
   static const updateDialogVector = 'assets/images/update_dialog_vector.svg';
   static const transparentCar = 'assets/images/transparent_car.png';
   static const carIwatt = 'assets/images/car_iwatt.png';
+  static const balanceWallet = 'assets/images/balance_wallet.png';
 }

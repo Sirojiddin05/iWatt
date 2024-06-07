@@ -128,4 +128,5 @@ class AppIcons {
   static const stopCharging = 'assets/icons/ic_stop.svg';
   static const stationBackground = 'assets/icons/ic_station_back.svg';
   static const tick = 'assets/icons/ic_tick.svg';
+  static const balancePattern = 'assets/icons/balance_pattern.svg';
 }

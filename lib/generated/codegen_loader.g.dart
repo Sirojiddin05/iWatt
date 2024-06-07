@@ -287,7 +287,8 @@ class CodegenLoader extends AssetLoader{
   "connect_to_charging_station": "Подключитесь к ЭЗС и вы сможете увидеть процесс зарядки в этом окне",
   "in_process": "В процессе",
   "history": "История",
-  "sent_code_to_your_phone": "Мы вам отправили одноразовый код подтверждения ваш номер"
+  "sent_code_to_your_phone": "Мы вам отправили одноразовый код подтверждения ваш номер",
+  "balance": "Баланс:"
 };
 static const Map<String,dynamic> en = {
   "other": {
