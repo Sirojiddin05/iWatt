@@ -39,7 +39,7 @@ class GetChargeLocationParamEntity {
         power = power + powerGroup.toString();
         if (powerGroup != powerType.last) power = '$power,';
       }
-      params.putIfAbsent('power', () => power);
+      params.putIfAbsent('max_electric_powers', () => power);
     }
     if (connectorType.isNotEmpty) {
       String connector = '';

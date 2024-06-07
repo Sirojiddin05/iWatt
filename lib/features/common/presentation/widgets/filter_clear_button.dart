@@ -17,7 +17,7 @@ class FilterClearButton extends StatelessWidget {
       child: WScaleAnimation(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 19),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 19),
           child: Text(
             LocaleKeys.clear.tr(),
             style: context.textTheme.headlineSmall!.copyWith(color: !isActive ? AppColors.gullGrey : AppColors.dodgerBlue),

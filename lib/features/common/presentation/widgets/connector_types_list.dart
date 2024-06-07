@@ -39,7 +39,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 0, 8),
+            padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
             child: FilterCategoryTitle(title: 'AC:'),
           ),
           ...List.generate(
@@ -50,6 +50,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
                 valueListenable: connectorTypes,
                 builder: (context, v, child) {
                   return FilterTile(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     includeIcon: true,
                     hasDivider: index != state.acConnectionTypes.length - 1,
                     title: connector.name,
@@ -69,7 +70,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
             },
           ),
           const Padding(
-            padding: EdgeInsets.fromLTRB(16, 12, 0, 8),
+            padding: EdgeInsets.fromLTRB(16, 12, 0, 0),
             child: FilterCategoryTitle(title: 'DC:'),
           ),
           ...List.generate(

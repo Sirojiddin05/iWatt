@@ -257,18 +257,6 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
           getChargingProcesses: FormzSubmissionStatus.success,
           processes: [
             ...processes,
-            ChargingProcessEntity(
-              transactionId: 1,
-              connector: const ConnectorEntity(
-                id: 1,
-                name: 'Connector 1',
-              ),
-              locationName: 'Location 1',
-              meterValue: const MeterValueMessageEntity().copyWith(
-                batteryPercent: 20,
-                consumedKwh: '0',
-              ),
-            ),
           ],
         ),
       );

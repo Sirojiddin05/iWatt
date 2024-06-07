@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/charging_car_data_component.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
@@ -15,13 +16,24 @@ class ChargingProcessList extends StatelessWidget {
     return BlocBuilder<ChargingProcessBloc, ChargingProcessState>(
       builder: (ctx, state) {
         if (state.processes.isEmpty) {
-          return Center(
-            child: EmptyStateWidget(
-              icon: AppImages.carIwatt,
-              title: LocaleKeys.no_charging_cars.tr(),
-              titleTextStyle: Theme.of(context).textTheme.displayLarge,
-              subtitle: LocaleKeys.connect_to_charging_station.tr(),
-              subtitleTextStyle: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 12),
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<ChargingProcessBloc>().add(GetChargingProcessesEvent());
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: SizedBox(
+                height: context.sizeOf.height - kToolbarHeight - context.padding.bottom,
+                child: Center(
+                  child: EmptyStateWidget(
+                    icon: AppImages.carIwatt,
+                    title: LocaleKeys.no_charging_cars.tr(),
+                    titleTextStyle: Theme.of(context).textTheme.displayLarge,
+                    subtitle: LocaleKeys.connect_to_charging_station.tr(),
+                    subtitleTextStyle: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 12),
+                  ),
+                ),
+              ),
             ),
           );
         } else {
@@ -32,9 +44,7 @@ class ChargingProcessList extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 20),
             itemBuilder: (context, index) {
               final process = state.processes[index];
-              return ChargingCarDataWidget(
-                process: process,
-              );
+              return ChargingCarDataWidget(process: process);
             },
           );
         }

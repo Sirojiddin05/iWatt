@@ -16,9 +16,9 @@ class PowerTypesDataSourceImpl extends PowerTypesDataSource {
   @override
   Future<GenericPagination<IdNameModel>> getPowerTypes() async {
     try {
-      final response = await _dio.get('core/power-groups/');
+      final response = await _dio.get('chargers/MaxElectricPowerList/');
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson(response.data, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
+        return GenericPagination.fromJson({'results': response.data}, (p0) => IdNameModel.fromJson(p0 as Map<String, dynamic>));
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(

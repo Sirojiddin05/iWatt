@@ -10,7 +10,6 @@ import 'package:i_watt_app/features/common/presentation/widgets/sheet_wrapper.da
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ActionSheet extends StatelessWidget {
@@ -57,8 +56,11 @@ class ActionSheet extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
                   onTap: () {
                     Navigator.pop(context);
-                    showCupertinoModalBottomSheet(
+                    showModalBottomSheet(
                       context: context,
+                      isScrollControlled: true,
+                      enableDrag: true,
+                      backgroundColor: Colors.transparent,
                       builder: (context) => AppealsList(
                         location: location.id,
                       ),

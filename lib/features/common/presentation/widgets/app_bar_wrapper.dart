@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/chevron_back_button.dart';
 
@@ -60,15 +61,13 @@ class AppBarWrapper extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     Text(
                       subtitle,
-                      style: context.textTheme.labelMedium
-                          ?.copyWith(color: Theme.of(context).inputDecorationTheme.labelStyle?.color),
+                      style: context.textTheme.labelMedium?.copyWith(
+                        color: AppColors.darkGray,
+                      ),
                     ),
                   ],
                 ),
-              if (actions.isNotEmpty)
-                Expanded(child: Row(mainAxisAlignment: MainAxisAlignment.end, children: actions))
-              else
-                const Spacer()
+              if (actions.isNotEmpty) Expanded(child: Row(mainAxisAlignment: MainAxisAlignment.end, children: actions)) else const Spacer()
             ],
           ),
       bottom: bottom,

@@ -96,16 +96,14 @@ class _CustomBuilderAnimationState extends State<CustomBuilderAnimation> {
               //   angle = -.85;
               // }
               return Stack(
+                alignment: Alignment.center,
                 children: [
                   Positioned(
-                    left: 0,
-                    right: 0,
                     top: ((pageOffset2) * 100),
                     bottom: 0,
                     child: Transform(
                       alignment: Alignment.center,
                       transform: Matrix4.identity()
-                        // perspective
                         ..setEntry(3, 2, .0008)
                         ..rotateY(angle),
                       child: isImage

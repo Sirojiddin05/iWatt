@@ -8,14 +8,10 @@ class IdNameEntity {
   final String type;
   final String icon;
   final List<String> descriptions;
+  @JsonKey(name: 'max_electric_power', defaultValue: -1)
+  final int maxElectricPower;
 
-  const IdNameEntity({
-    this.id = -1,
-    this.name = '',
-    this.icon = '',
-    this.type = '',
-    this.descriptions = const [],
-  });
+  const IdNameEntity({this.id = -1, this.name = '', this.icon = '', this.type = '', this.descriptions = const [], this.maxElectricPower = -1});
 }
 
 class IdNameConverter implements JsonConverter<IdNameEntity, Map<String, dynamic>> {

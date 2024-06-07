@@ -38,8 +38,12 @@ class LocationsList extends StatelessWidget {
             return AnimatedCrossFade(
               firstChild: InfoContainer(
                 infoText: LocaleKeys.filter_is_active.tr(),
+                color: AppColors.geyser.withOpacity(0.32),
+                iconColor: AppColors.taxBreak,
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 suffix: WButton(
                   height: 32,
+                  rippleColor: AppColors.cyprus.withAlpha(10),
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                   text: LocaleKeys.clear.tr(),
                   textStyle: context.textTheme.bodySmall!.copyWith(fontSize: 12),
@@ -59,8 +63,7 @@ class LocationsList extends StatelessWidget {
         ),
         Expanded(
           child: BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
-            buildWhen: (o, n) =>
-                o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
+            buildWhen: (o, n) => o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
             builder: (context, state) {
               if (state.getChargeLocationsStatus.isInProgress) {
                 return const ChargeLocationCardsLoader();

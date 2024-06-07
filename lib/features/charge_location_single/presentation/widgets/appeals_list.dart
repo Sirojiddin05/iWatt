@@ -73,19 +73,25 @@ class _AppealsListState extends State<AppealsList> {
           },
           builder: (ctx, state) {
             return Container(
-              color: context.colorScheme.background,
+              margin: EdgeInsets.only(
+                top: MediaQueryData.fromView(View.of(context)).padding.top,
+              ),
+              decoration: BoxDecoration(color: context.colorScheme.background, borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   SheetHeaderWidget(
                     title: LocaleKeys.to_complain.tr(),
                   ),
                   Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
                   if (state.getAppealsStatus.isInProgress) ...{
-                    const Expanded(child: CircularProgressIndicator.adaptive())
+                    Padding(padding: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom), child: const CircularProgressIndicator.adaptive())
                   } else if (state.getAppealsStatus.isSuccess) ...{
                     if (state.appeals.isNotEmpty) ...{
-                      Expanded(
+                      Flexible(
                         child: Paginator(
+                          shrinkWrap: true,
                           controller: controller,
                           physics: const BouncingScrollPhysics(),
                           separatorBuilder: (context, index) => index == state.appeals.length - 1
@@ -160,27 +166,29 @@ class _AppealsListState extends State<AppealsList> {
                       )
                     }
                   },
-                  ValueListenableBuilder(
-                    valueListenable: appealNotifier,
-                    builder: (BuildContext context, value, Widget? child) {
-                      return WButton(
-                        isLoading: state.sendAppealStatus.isInProgress,
-                        margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-                        isDisabled: appealController.text.isEmpty && appealNotifier.value == state.appeals.length - 1,
-                        text: LocaleKeys.send.tr(),
-                        onTap: () {
-                          ctx.read<AppealBloc>().add(
-                                SendAppealEvent(
-                                  location: widget.location,
-                                  text: appealNotifier.value == state.appeals.length - 1
-                                      ? appealController.text
-                                      : state.appeals[appealNotifier.value].name,
-                                ),
-                              );
-                        },
-                      );
-                    },
-                  ),
+                  if (state.appeals.isNotEmpty) ...{
+                    ValueListenableBuilder(
+                      valueListenable: appealNotifier,
+                      builder: (BuildContext context, value, Widget? child) {
+                        return WButton(
+                          isLoading: state.sendAppealStatus.isInProgress,
+                          margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                          isDisabled: appealController.text.isEmpty && appealNotifier.value == state.appeals.length - 1,
+                          text: LocaleKeys.send.tr(),
+                          onTap: () {
+                            ctx.read<AppealBloc>().add(
+                                  SendAppealEvent(
+                                    location: widget.location,
+                                    text: appealNotifier.value == state.appeals.length - 1
+                                        ? appealController.text
+                                        : state.appeals[appealNotifier.value].name,
+                                  ),
+                                );
+                          },
+                        );
+                      },
+                    ),
+                  },
                   SizedBox(height: MediaQuery.viewInsetsOf(context).bottom + 16)
                 ],
               ),

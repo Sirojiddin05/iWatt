@@ -5,18 +5,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/features/charge_location_single/presentation/widgets/facilities_sheet.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
 import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class FacilitiesCard extends StatelessWidget {
   final List<IdNameEntity> facilities;
+  final VoidCallback onAll;
 
-  const FacilitiesCard({super.key, required this.facilities});
+  const FacilitiesCard({super.key, required this.facilities, required this.onAll});
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +37,7 @@ class FacilitiesCard extends StatelessWidget {
                 ),
               ),
               WScaleAnimation(
-                onTap: () {
-                  showCupertinoModalBottomSheet(
-                    context: context,
-                    backgroundColor: AppColors.white,
-                    builder: (context) => FacilitiesSheet(facilities),
-                  );
-                },
+                onTap: onAll,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
                   child: Row(
@@ -77,13 +70,7 @@ class FacilitiesCard extends StatelessWidget {
                 (index) {
                   if (facilities.length > 8 && index == 8) {
                     return WCustomTappableButton(
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          backgroundColor: AppColors.white,
-                          builder: (context) => FacilitiesSheet(facilities),
-                        );
-                      },
+                      onTap: onAll,
                       borderRadius: BorderRadius.circular(41),
                       rippleColor: AppColors.white.withAlpha(30),
                       child: Container(

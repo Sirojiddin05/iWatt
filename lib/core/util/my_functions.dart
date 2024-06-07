@@ -548,7 +548,7 @@ class MyFunctions {
         ),
       ),
       point: Point(latitude: value.latitude, longitude: value.longitude),
-      mapId: const MapObjectId('user_location'),
+      mapId: MapObjectId(userIcon),
     );
 
     return newMarker;

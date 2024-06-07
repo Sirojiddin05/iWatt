@@ -57,7 +57,7 @@ class CodegenLoader extends AssetLoader{
   "input_for_search": "Введите для поиска",
   "recent_requests": "Недавние запросы",
   "find_station": "Найти станцию",
-  "you_can_find_the_nearest_charging_station_by_pressing_the_current_button": "Вы можете найти самую близкую зарядную станцию, нажав текущую кнопку",
+  "you_can_find_the_nearest_charging_station_by_pressing_the_current_button": "Вы можете найти самую близкую зарядную станцию, нажав на текущую кнопку",
   "nothing_found": "Ничего не найдено",
   "nothing_found_to_your_request": "По вашему запросу ничего не найдено",
   "authorization": "Авторизация",
@@ -286,7 +286,10 @@ class CodegenLoader extends AssetLoader{
   "no_charging_cars": "Нет заряжаемых автомобилей",
   "connect_to_charging_station": "Подключитесь к ЭЗС и вы сможете увидеть процесс зарядки в этом окне",
   "in_process": "В процессе",
-  "history": "История"
+  "history": "История",
+  "point_the_camera_to_the_qr_where_it_is_located_at_the_station": "Наведите камеру на QR, который находится на станции",
+  "scan_qr": "Сканируйте QR код",
+  "sorry_qr_code_is_invalid": "Извините, QR-код недействителен. Пожалуйста, попробуйте еще раз."
 };
 static const Map<String,dynamic> en = {
   "other": {

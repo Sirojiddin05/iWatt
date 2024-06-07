@@ -24,11 +24,8 @@ class _ChargingProcessesScreenState extends State<ChargingProcessesScreen> with 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWrapper(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: ChargersTab(
-            tabController: tabController,
-          ),
+        child: ChargersTab(
+          tabController: tabController,
         ),
       ),
       body: TabBarView(

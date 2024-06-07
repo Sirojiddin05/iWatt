@@ -11,14 +11,16 @@ class InfoContainer extends StatelessWidget {
   final EdgeInsets? margin;
   final Widget? suffix;
   final Color? iconColor;
+  final TextStyle? subtitleStyle;
   const InfoContainer({
     super.key,
     required this.infoText,
-    this.color = AppColors.geyser,
+    this.color = AppColors.dodgerBlue,
     this.margin,
     this.title,
     this.suffix,
     this.iconColor,
+    this.subtitleStyle,
   });
 
   @override
@@ -43,10 +45,11 @@ class InfoContainer extends StatelessWidget {
                     title!,
                     style: context.textTheme.displaySmall?.copyWith(fontSize: 12),
                   ),
+                  const SizedBox(height: 2),
                 },
                 Text(
                   infoText,
-                  style: context.textTheme.titleLarge?.copyWith(fontSize: 12),
+                  style: subtitleStyle ?? context.textTheme.headlineSmall,
                 ),
               ],
             ),

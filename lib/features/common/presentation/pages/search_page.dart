@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/map_search_app_bar.dart';
@@ -85,6 +87,24 @@ class _SearchPageState extends State<SearchPage> {
                                 highlightedTitle: state.searchPattern,
                                 onTap: () {
                                   context.read<SearchHistoryBloc>().add(PostSearchHistoryEvent(location.id));
+                                  showModalBottomSheet(
+                                    context: context,
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    backgroundColor: AppColors.black,
+                                    barrierColor: AppColors.black.withOpacity(.52),
+                                    builder: (ctx) {
+                                      return LocationSingleSheet(
+                                        title: '${location.vendorName} "${location.locationName}"',
+                                        address: location.address,
+                                        distance: location.distance.toString(),
+                                        midSize: true,
+                                        id: location.id,
+                                        latitude: location.latitude,
+                                        longitude: location.longitude,
+                                      );
+                                    },
+                                  );
                                   // todo: implement
                                   // showCupertinoModalBottomSheet(
                                   //   isDismissible: true,

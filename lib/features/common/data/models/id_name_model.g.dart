@@ -15,6 +15,7 @@ IdNameModel _$IdNameModelFromJson(Map<String, dynamic> json) => IdNameModel(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      maxElectricPower: (json['max_electric_power'] as num?)?.toInt() ?? -1,
     );
 
 Map<String, dynamic> _$IdNameModelToJson(IdNameModel instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$IdNameModelToJson(IdNameModel instance) =>
       '_type': instance.type,
       'icon': instance.icon,
       'descriptions': instance.descriptions,
+      'max_electric_power': instance.maxElectricPower,
     };

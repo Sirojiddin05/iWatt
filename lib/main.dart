@@ -49,6 +49,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bl
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
@@ -89,6 +90,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => CarOnMapBloc()),
+        BlocProvider(create: (context) => PresentBottomSheetBloc()),
         // BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
         BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
@@ -146,8 +148,6 @@ class App extends StatelessWidget {
             ),
           )..add(GetPowerTypesEvent()),
         ),
-        // connectorTypesBloc = ConnectorTypesBloc(GetConnectorTypesUseCase(serviceLocator<ConnectorTypesRepositoryImpl>()))..add(GetConnectorTypesEvent());
-        // powerTypesBloc = PowerTypesBloc(GetPowerTypesUseCase(serviceLocator<PowerTypesRepositoryImpl>()))..add(GetPowerTypesEvent());
         BlocProvider(
           create: (context) => AboutUsBloc(
             GetHelpUseCase(serviceLocator<AboutUsRepositoryImpl>()),

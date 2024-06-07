@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +8,7 @@ import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class UpdateDialog extends StatelessWidget {
   final bool isRequired;
@@ -62,7 +65,20 @@ class UpdateDialog extends StatelessWidget {
                     child: WButton(
                       height: 44,
                       text: LocaleKeys.update.tr(),
-                      onTap: () {},
+                      onTap: () {
+                        if (Platform.isAndroid) {
+                          launchUrlString(
+                            'https://play.google.com/store/apps/details?id=app.i-watt.uz',
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else if (Platform.isIOS) {
+                          //TODO: Add App Store link
+                          launchUrlString(
+                            'https://apps.apple.com/uz/app/i-watt/id6479287593',
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],

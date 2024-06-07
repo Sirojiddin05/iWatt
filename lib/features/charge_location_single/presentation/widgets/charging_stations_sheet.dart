@@ -14,7 +14,8 @@ import 'connector_card.dart';
 
 class StationSingleSheet extends StatefulWidget {
   final VoidCallback onClose;
-  const StationSingleSheet({super.key, required this.onClose});
+  final int isSelected;
+  const StationSingleSheet({super.key, required this.onClose, required this.isSelected});
 
   @override
   State<StationSingleSheet> createState() => _StationSingleSheetState();
@@ -33,87 +34,92 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    return PopScope(
+      onPopInvoked: (isTrue) {
+        widget.onClose();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          color: AppColors.white,
         ),
-        color: AppColors.white,
-      ),
-      clipBehavior: Clip.hardEdge,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: PresentSheetHeader(
-              title: LocaleKeys.charging_stations.tr(),
-              titleFotSize: 18,
-              hasCloseIcon: true,
-              onCloseTap: widget.onClose,
-              paddingOfCloseIcon: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        clipBehavior: Clip.hardEdge,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: PresentSheetHeader(
+                title: LocaleKeys.charging_stations.tr(),
+                titleFotSize: 18,
+                hasCloseIcon: true,
+                onCloseTap: widget.onClose,
+                paddingOfCloseIcon: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+              ),
             ),
-          ),
-          Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      const StationBackgroundImage(),
-                      Positioned.fill(
-                        child: BlocConsumer<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-                          listenWhen: (o, n) => o.selectedStationIndex != n.selectedStationIndex,
-                          listener: (context, state) {
-                            carouselController.animateToPage(state.selectedStationIndex);
-                          },
-                          builder: (ctx, state) {
-                            return CarouselSlider(
-                              carouselController: carouselController,
-                              options: CarouselOptions(
-                                onPageChanged: (index, reason) {
-                                  carouselIndex.value = index;
-                                },
-                                height: 464,
-                                enableInfiniteScroll: false,
-                                viewportFraction: .6,
-                                disableCenter: true,
-                                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                                enlargeCenterPage: true,
-                                enlargeFactor: .5,
-                              ),
-                              items: List.generate(
-                                state.location.chargers.length,
-                                (stationIndex) {
-                                  final station = state.location.chargers[stationIndex];
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: List.generate(station.connectors.length, (connectorIndex) {
-                                      final connector = station.connectors[connectorIndex];
-                                      return ConnectorCard(
-                                        connector: connector,
-                                        price: station.price,
-                                        isNearToStation: state.isNearToStation,
-                                        locationName: '${state.location.vendor.name} "${state.location.name}"',
-                                      );
-                                    }),
-                                  );
-                                },
-                              ),
-                            );
-                          },
+            Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        const StationBackgroundImage(),
+                        Positioned.fill(
+                          child: BlocConsumer<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+                            listenWhen: (o, n) => o.selectedStationIndex != n.selectedStationIndex,
+                            listener: (context, state) {
+                              carouselController.animateToPage(state.selectedStationIndex);
+                            },
+                            builder: (ctx, state) {
+                              return CarouselSlider(
+                                carouselController: carouselController,
+                                options: CarouselOptions(
+                                  onPageChanged: (index, reason) {
+                                    carouselIndex.value = index;
+                                  },
+                                  height: 464,
+                                  enableInfiniteScroll: false,
+                                  viewportFraction: .6,
+                                  disableCenter: true,
+                                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                                  enlargeCenterPage: true,
+                                  enlargeFactor: .5,
+                                ),
+                                items: List.generate(
+                                  state.location.chargers.length,
+                                  (stationIndex) {
+                                    final station = state.location.chargers[stationIndex];
+                                    return Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: List.generate(station.connectors.length, (connectorIndex) {
+                                        final connector = station.connectors[connectorIndex];
+                                        return ConnectorCard(
+                                          connector: connector,
+                                          price: station.price,
+                                          isNearToStation: state.isNearToStation,
+                                          locationName: '${state.location.vendor.name} "${state.location.name}"',
+                                        );
+                                      }),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const ChargingStationsBottomWidget(),
-              ],
+                  const ChargingStationsBottomWidget(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

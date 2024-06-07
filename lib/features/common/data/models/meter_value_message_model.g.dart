@@ -15,6 +15,8 @@ MeterValueMessageModel _$MeterValueMessageModelFromJson(
       consumedKwh: json['consumed_kwh'] as String? ?? '',
       money: json['money'] as String? ?? '',
       status: json['status'] as String? ?? '',
+      currentKwh: json['current_kwh'] as String? ?? '',
+      estimatedTime: json['estimated_time'] as String? ?? '',
     );
 
 Map<String, dynamic> _$MeterValueMessageModelToJson(
@@ -25,5 +27,7 @@ Map<String, dynamic> _$MeterValueMessageModelToJson(
       'money': instance.money,
       'battery_percent': instance.batteryPercent,
       'consumed_kwh': instance.consumedKwh,
+      'current_kwh': instance.currentKwh,
       'status': instance.status,
+      'estimated_time': instance.estimatedTime,
     };

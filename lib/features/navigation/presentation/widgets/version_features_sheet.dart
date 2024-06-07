@@ -47,7 +47,42 @@ class _VersionFeaturesSheetState extends State<VersionFeaturesSheet> with Single
       ),
       child: Column(
         children: [
-          _buildPageView(widget.list),
+          Container(
+            height: MediaQuery.of(context).size.height * .63,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: context.theme.appBarTheme.backgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xff08313E),
+                  Color(0xff07141C),
+                ],
+              ),
+            ),
+            child: NotificationListener(
+              onNotification: (OverscrollIndicatorNotification notification) {
+                notification.disallowIndicator();
+                return false;
+              },
+              child: PageView.custom(
+                controller: pageController,
+                physics: const ClampingScrollPhysics(),
+                onPageChanged: (page) => currentPageIndex.value = page,
+                childrenDelegate: SliverChildBuilderDelegate(
+                  (context, index) => CustomBuilderAnimation(
+                    index: index,
+                    pageController: pageController,
+                    feature: widget.list[index],
+                  ),
+                  childCount: widget.list.length,
+                ),
+                padEnds: true,
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
           DotsIndicator(
             dotColor: AppColors.zircon,
@@ -72,46 +107,6 @@ class _VersionFeaturesSheetState extends State<VersionFeaturesSheet> with Single
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildPageView(List<VersionFeaturesEntity> features) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * .63,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: context.theme.appBarTheme.backgroundColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xff08313E),
-            Color(0xff07141C),
-          ],
-        ),
-      ),
-      child: NotificationListener(
-        onNotification: (OverscrollIndicatorNotification notification) {
-          notification.disallowIndicator();
-          return false;
-        },
-        child: PageView.custom(
-          controller: pageController,
-          physics: const ClampingScrollPhysics(),
-          onPageChanged: (page) => currentPageIndex.value = page,
-          childrenDelegate: SliverChildBuilderDelegate(
-            (context, index) => CustomBuilderAnimation(
-              index: index,
-              pageController: pageController,
-              feature: features[index],
-            ),
-            childCount: features.length,
-          ),
-          padEnds: true,
-        ),
       ),
     );
   }

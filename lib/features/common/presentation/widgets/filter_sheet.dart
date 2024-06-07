@@ -24,14 +24,26 @@ class FilterSheet extends StatefulWidget {
 class _FilterSheetState extends State<FilterSheet> {
   late final ValueNotifier<List<int>> connectorTypes;
   late final ValueNotifier<List<int>> powerTypes;
+  late final ScrollController controller;
+  late final ValueNotifier<bool> haShadow;
 
   @override
   void initState() {
     super.initState();
+    haShadow = ValueNotifier<bool>(false);
     connectorTypes = ValueNotifier<List<int>>([]);
     powerTypes = ValueNotifier<List<int>>([]);
     connectorTypes.value = [...widget.selectedConnectorTypes];
     powerTypes.value = [...widget.selectedPowerTypes];
+    controller = ScrollController()
+      ..addListener(() {
+        print('Scrolling ${controller.offset}');
+        if (controller.offset > 10 && !haShadow.value) {
+          haShadow.value = true;
+        } else if (controller.offset < 10 && haShadow.value) {
+          haShadow.value = false;
+        }
+      });
   }
 
   @override
@@ -47,17 +59,24 @@ class _FilterSheetState extends State<FilterSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FilterHeader(
-            onClearTap: () {
-              connectorTypes.value = [];
-              powerTypes.value = [];
+          ValueListenableBuilder(
+            valueListenable: haShadow,
+            builder: (context, value, child) {
+              return FilterHeader(
+                onClearTap: () {
+                  connectorTypes.value = [];
+                  powerTypes.value = [];
+                },
+                connectorTypes: connectorTypes,
+                powerTypes: powerTypes,
+                hasShadow: value,
+              );
             },
-            connectorTypes: connectorTypes,
-            powerTypes: powerTypes,
           ),
           Divider(thickness: 1, color: context.theme.dividerColor, height: 0),
           Expanded(
             child: SingleChildScrollView(
+              controller: controller,
               physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,14 +103,14 @@ class _FilterSheetState extends State<FilterSheet> {
                             builder: (context, v, child) {
                               return FilterTile(
                                 hasDivider: index != state.powerTypes.length - 1,
-                                title: power.name,
+                                title: '${power.maxElectricPower} ${LocaleKeys.kW.tr()}',
                                 includeIcon: false,
-                                isSelectedDefault: powerTypes.value.contains(power.id),
+                                isSelectedDefault: powerTypes.value.contains(power.maxElectricPower),
                                 onSwitch: (val) {
                                   if (val) {
-                                    powerTypes.value = [...powerTypes.value, power.id];
+                                    powerTypes.value = [...powerTypes.value, power.maxElectricPower];
                                   } else {
-                                    powerTypes.value.remove(power.id);
+                                    powerTypes.value.remove(power.maxElectricPower);
                                     powerTypes.value = [...powerTypes.value];
                                   }
                                 },

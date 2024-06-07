@@ -1,12 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
+import 'package:i_watt_app/features/map/presentation/pages/qr_screen.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/location_button.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/qr_button.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/zoom_buttons.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapControllers extends StatelessWidget {
   final AnimationController headerSizeController;
@@ -45,24 +51,40 @@ class MapControllers extends StatelessWidget {
             ),
             QrButton(
               onTap: () {
-                // Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (ctx) => const QrGenerationScreen())).then(
-                //   (result) {
-                //     if (result is int) {
-                //       if (result != -1 && result != 0) {
-                //         showCupertinoModalBottomSheet(
-                //           backgroundColor: Colors.transparent,
-                //           context: context,
-                //           enableDrag: false,
-                //           builder: (ctx) {
-                //             return ChargeLocationSheet(location: const ChargeLocationEntity().copyWith(id: result));
-                //           },
-                //         );
-                //       } else {
-                //         context.showPopUp(status: PopUpStatus.error, context: context, message: LocaleKeys.sorry_qr_code_is_invalid.tr());
-                //       }
-                //     }
-                //   },
-                // );
+                Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (ctx) => const QrGenerationScreen())).then(
+                  (result) {
+                    if (result is Map) {
+                      final isValidLocation = result.containsKey('location_id') && result['location_id'] != 0;
+                      final isValidStation = result.containsKey('station_id') && result['station_id'] != 0;
+                      final isValidConnector = result.containsKey('connector_id') && result['connector_id'] != 0;
+                      if (isValidConnector && isValidLocation && isValidStation) {
+                        showCupertinoModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          enableDrag: false,
+                          builder: (ctx) {
+                            return LocationSingleSheet(
+                              id: result['location_id'],
+                              stationId: result['station_id'],
+                              connectorId: result['connector_id'],
+                              title: '',
+                              address: '',
+                              latitude: '',
+                              longitude: '',
+                              midSize: true,
+                            );
+                          },
+                        );
+                      } else {
+                        context.showPopUp(
+                          context,
+                          PopUpStatus.failure,
+                          message: LocaleKeys.sorry_qr_code_is_invalid.tr(),
+                        );
+                      }
+                    }
+                  },
+                );
               },
             ),
           ],

@@ -15,54 +15,63 @@ class NoInternetBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InternetBloc, InternetState>(builder: (context, state) {
-      return PopScope(
-        canPop: state.isConnected,
-        child: Container(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            bottom: 16,
-          ),
-          decoration: const BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(16),
-              topLeft: Radius.circular(16),
+    return BlocConsumer<InternetBloc, InternetState>(
+      listener: (context, state) {
+        print('NoInternetBottomSheet listener state.isConnected: ${state.isConnected}');
+        if (state.isConnected) {
+          Navigator.pop(context);
+        }
+      },
+      builder: (context, state) {
+        return PopScope(
+          canPop: state.isConnected,
+          child: Container(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 16,
+            ),
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(16),
+                topLeft: Radius.circular(16),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 46),
+                SvgPicture.asset(AppIcons.noInternet),
+                const SizedBox(height: 10),
+                Text(
+                  '🙈${LocaleKeys.no_network.tr()}',
+                  style: context.textTheme.displayLarge,
+                ),
+                const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    LocaleKeys.check_connection_and_update.tr(),
+                    //TODO: Adapt color of text to appTheme
+                    style: context.textTheme.labelMedium?.copyWith(color: AppColors.taxBreak),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                WButton(
+                  isLoading: state.status.isInProgress,
+                  margin: EdgeInsets.only(bottom: context.padding.bottom),
+                  onTap: () => context.read<InternetBloc>().add(CheckConnectionEvent()),
+                  text: LocaleKeys.refresh_the_page.tr(),
+                ),
+              ],
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 46),
-              SvgPicture.asset(AppIcons.noInternet),
-              Text(
-                '🙈${LocaleKeys.no_network.tr()}',
-                style: context.textTheme.displayLarge,
-              ),
-              const SizedBox(height: 2),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Text(
-                  LocaleKeys.check_connection_and_update.tr(),
-                  //TODO: Adapt color of text to appTheme
-                  style: context.textTheme.labelMedium?.copyWith(color: AppColors.taxBreak),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 32),
-              WButton(
-                isLoading: state.status == FormzSubmissionStatus.inProgress,
-                margin: EdgeInsets.only(bottom: context.padding.bottom),
-                onTap: () => context.read<InternetBloc>().add(CheckConnectionEvent()),
-                text: LocaleKeys.refresh_the_page.tr(),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
@@ -71,6 +80,7 @@ void showNoInternetBottomSheet(BuildContext context) {
     isDismissible: false,
     context: context,
     enableDrag: false,
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) => const NoInternetBottomSheet(),
   );

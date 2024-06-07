@@ -37,6 +37,7 @@ class InternetBloc extends Bloc<InternetEvent, InternetState> {
       }
       add(ConnectionChanged(isConnected: isConnected));
     });
+
     on<ConnectionChanged>((event, emit) {
       emit(state.copyWith(isConnected: event.isConnected));
     });

@@ -14,6 +14,7 @@ class FilterTile extends StatelessWidget {
   final bool isSelectedDefault;
   final bool includeIcon;
   final String icon;
+  final EdgeInsets padding;
   final Function(bool) onSwitch;
 
   const FilterTile({
@@ -24,6 +25,7 @@ class FilterTile extends StatelessWidget {
     super.key,
     this.includeIcon = false,
     this.icon = '',
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
   });
 
   @override
@@ -42,11 +44,11 @@ class FilterTile extends StatelessWidget {
           borderRadius: BorderRadius.zero,
           rippleColor: context.theme.primaryColor.withAlpha(30),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+            padding: padding,
             child: Row(
               children: [
                 if (icon.isNotEmpty) ...{
-                  SvgPicture.network(icon, width: 32, height: 32),
+                  SvgPicture.network(icon, width: 40, height: 40),
                   const SizedBox(width: 12),
                 },
                 Text(
