@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
+import 'package:i_watt_app/core/services/push_notifications.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/enums/nav_bat_item.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -77,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
       ..addListener(() => _currentIndex.value = _tabController.index);
+    PushNotificationService.initializeAndListenFirebaseMessaging();
 
     //TODO
     // context.read<LoginBloc>().add(GetUserDataEvent());
@@ -166,8 +168,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
               listenWhen: (o, n) => o.getVersionFeaturesStatus != n.getVersionFeaturesStatus,
               listener: (context, state) async {
                 if (state.getVersionFeaturesStatus.isSuccess) {
-                  StorageRepository.putList(
-                      StorageKeys.versionFeatures, [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
+                  StorageRepository.putList(StorageKeys.versionFeatures,
+                      [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
                   showModalBottomSheet(
                     context: context,
                     useSafeArea: true,
@@ -219,7 +221,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                 controller: _tabController,
                 child: PopScope(
                   onPopInvoked: (bool didPop) async {
-                    final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
+                    final isFirstRouteInCurrentTab =
+                        !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
                     if (isFirstRouteInCurrentTab) {
                       _changePage(0);
                     }
@@ -242,7 +245,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                         color: context.bottomNavigationBarTheme.backgroundColor,
                         border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
                         boxShadow: [
-                          BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
+                          BoxShadow(
+                              color: context.appBarTheme.shadowColor!,
+                              spreadRadius: 0,
+                              blurRadius: 40,
+                              offset: const Offset(0, -2)),
                         ],
                       ),
                       child: Row(
@@ -290,7 +297,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     }
   }
 
-  Widget _buildPageNavigator(NavItemEnum tabItem) => TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
+  Widget _buildPageNavigator(NavItemEnum tabItem) =>
+      TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
 
   Future<void> _changePage(int index) async {
     _tabController.animateTo(index);

@@ -152,7 +152,7 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
         final code = scanData.code;
 
         ///  https://app.i-watt.uz/?location_id=3,station_id=3connector_id=2
-        if (code.contains("connector_id") && code.contains("station_id") && code.contains("connector_id")) {
+        if (code != null && code.contains("connector_id") && code.contains("station_id") && code.contains("connector_id")) {
           await qrController.pauseCamera();
           qrController.dispose();
           cleanedText = code.replaceAll('https://app.i-watt.uz/?location_id=', '').replaceAll('station_id=', '').replaceAll('connector_id=', '');
