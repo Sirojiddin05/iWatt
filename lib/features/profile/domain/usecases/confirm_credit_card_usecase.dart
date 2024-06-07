@@ -3,14 +3,14 @@ import 'package:i_watt_app/core/usecases/base_usecase.dart';
 import 'package:i_watt_app/core/util/either.dart';
 import 'package:i_watt_app/features/profile/domain/repositories/payments_repository.dart';
 
-class ConfirmCreditCardUseCase extends UseCase<void, ({String otp, String cardNumber})> {
+class ConfirmCreditCardUseCase extends UseCase<void, ({String otp, String cardToken})> {
   final PaymentsRepository paymentsRepository;
 
   ConfirmCreditCardUseCase({required this.paymentsRepository});
 
   @override
-  Future<Either<Failure, void>> call(({String otp, String cardNumber}) params) {
-    return paymentsRepository.confirmCreditCard(otp: params.otp, cardNumber: params.cardNumber);
+  Future<Either<Failure, void>> call(({String otp, String cardToken}) params) {
+    return paymentsRepository.confirmCreditCard(otp: params.otp, cardToken: params.cardToken);
   }
 }
 

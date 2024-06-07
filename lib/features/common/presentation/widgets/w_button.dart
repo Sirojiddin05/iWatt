@@ -19,6 +19,7 @@ class WButton extends StatelessWidget {
   final Widget? child;
   final Widget? loadingWidget;
   final Color? disabledColor;
+  final Color? disabledTextColor;
   final bool isDisabled;
   final bool isLoading;
   final double? scaleValue;
@@ -29,6 +30,7 @@ class WButton extends StatelessWidget {
     this.text = '',
     this.color,
     this.textColor = AppColors.white,
+    this.disabledTextColor = AppColors.geyser,
     this.borderRadius = 8,
     this.disabledColor,
     this.isDisabled = false,
@@ -72,7 +74,7 @@ class WButton extends StatelessWidget {
                 ? loadingWidget ?? const Center(child: CupertinoActivityIndicator(color: AppColors.white))
                 : AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 200),
-                    style: context.textTheme.bodySmall!.copyWith(color: isDisabled ? AppColors.geyser : textColor),
+                    style: context.textTheme.bodySmall!.copyWith(color: isDisabled ? disabledTextColor : textColor),
                     child: child ??
                         Text(
                           text,

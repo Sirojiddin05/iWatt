@@ -9,10 +9,18 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animatio
 
 class PhoneEditContainer extends StatelessWidget {
   final String phone;
+  final String? phoneWithCountryCode;
   final VoidCallback? onTap;
   final bool hasEdit;
   final EdgeInsets margin;
-  const PhoneEditContainer({super.key, required this.phone, this.onTap, required this.hasEdit, this.margin = EdgeInsets.zero});
+
+  const PhoneEditContainer(
+      {super.key,
+      required this.phone,
+      this.onTap,
+      required this.hasEdit,
+      this.margin = EdgeInsets.zero,
+      this.phoneWithCountryCode});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,7 @@ class PhoneEditContainer extends StatelessWidget {
             onTap: onTap ?? () => Navigator.pop(context),
             rippleColor: context.theme.splashColor,
             borderRadius: BorderRadius.circular(6),
-            child: PhoneRepresenter(phone: "+998 $phone", hasEdit: hasEdit),
+            child: PhoneRepresenter(phone: phoneWithCountryCode ?? "+998 $phone", hasEdit: hasEdit),
           ),
         ),
         if (hasEdit) ...{

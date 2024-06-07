@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import 'package:i_watt_app/features/profile/domain/usecases/get_credit_cards_use
 import 'package:i_watt_app/service_locator.dart';
 
 part 'credit_cards_event.dart';
+
 part 'credit_cards_state.dart';
 
 class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
@@ -25,10 +28,12 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
   final GetCreditCardsUseCase getCreditCardsUseCase =
       GetCreditCardsUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
 
+  Timer _otpTimer = Timer(Duration.zero, () {});
+
   CreditCardsBloc() : super(const CreditCardsState()) {
+    on<ResendCode>(_onResendCode);
     on<DeleteCreditCardEvent>((event, emit) async {
       emit(state.copyWith(deleteCardStatus: FormzSubmissionStatus.inProgress));
-
       final result = await deleteCardUseCase.call(event.id);
       if (result.isRight) {
         emit(state.copyWith(
@@ -41,28 +46,44 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
       }
     });
     on<CreateCreditCard>((event, emit) async {
-      emit(state.copyWith(createCardStatus: FormzSubmissionStatus.inProgress));
-
-      final result = await createCreditCardUseCase
-          .call(CreateCardParams(cardNumber: event.cardNumber, expireDate: event.expireDate));
-      if (result.isRight) {
-        emit(state.copyWith(
-          otpSentPhone: result.right,
-          createCardStatus: FormzSubmissionStatus.success,
-        ));
-      } else {
-        emit(state.copyWith(
-          createCardStatus: FormzSubmissionStatus.failure,
-          errorMessage: result.left.errorMessage,
-        ));
+      emit(state.copyWith(
+          createCardStatus: FormzSubmissionStatus.inProgress,
+          cardNumber: event.cardNumber,
+          cardExpiryDate: event.expireDate));
+      try {
+        final result = await createCreditCardUseCase
+            .call(CreateCardParams(cardNumber: event.cardNumber, expireDate: event.expireDate));
+        if (result.isRight) {
+          emit(
+            state.copyWith(
+              otpSentPhone: result.right.phoneNumber,
+              cardToken: result.right.token,
+              createCardStatus: FormzSubmissionStatus.success,
+              codeAvailableTime: 60,
+            ),
+          );
+          print('Create credit card success');
+          event.onSuccess();
+          _setTimer();
+        } else {
+          emit(state.copyWith(
+            createCardStatus: FormzSubmissionStatus.failure,
+            errorMessage: result.left.errorMessage,
+          ));
+        }
+      } catch (e) {
+        print(e);
+        emit(state.copyWith(createCardStatus: FormzSubmissionStatus.failure, errorMessage: e.toString()));
       }
     });
     on<ConfirmCreditCardEvent>((event, emit) async {
       emit(state.copyWith(confirmCardStatus: FormzSubmissionStatus.inProgress));
-      final result = await confirmCreditCardUseCase.call((cardNumber: event.cardNumber, otp: event.otp));
+      final result = await confirmCreditCardUseCase.call((cardToken: state.cardToken, otp: event.otp));
       if (result.isRight) {
+        event.onSuccess();
         emit(state.copyWith(confirmCardStatus: FormzSubmissionStatus.success));
       } else {
+        event.onError(result.left.errorMessage);
         emit(state.copyWith(confirmCardStatus: FormzSubmissionStatus.failure, errorMessage: result.left.errorMessage));
       }
     });
@@ -88,5 +109,37 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
         ));
       }
     });
+    on<CodeAvailableTimeDecreased>((event, emit) {
+      if (state.codeAvailableTime > 0) {
+        emit(state.copyWith(codeAvailableTime: state.codeAvailableTime - 1));
+      }
+    });
+  }
+
+  void _setTimer() {
+    if (_otpTimer.isActive) {
+      _otpTimer.cancel();
+    }
+    _otpTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (state.codeAvailableTime == 0) {
+        timer.cancel();
+      }
+      add(const CodeAvailableTimeDecreased());
+    });
+  }
+
+  void _onResendCode(ResendCode event, Emitter<CreditCardsState> emit) async {
+    final result = await createCreditCardUseCase(CreateCardParams(
+      cardNumber: state.cardNumber,
+      expireDate: state.cardExpiryDate,
+    ));
+    if (result.isRight) {
+      emit(state.copyWith(
+        otpSentPhone: result.right.phoneNumber,
+        cardToken: result.right.token,
+        codeAvailableTime: 60,
+      ));
+      _setTimer();
+    }
   }
 }

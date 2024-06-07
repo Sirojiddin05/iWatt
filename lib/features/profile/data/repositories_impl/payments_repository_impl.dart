@@ -5,6 +5,7 @@ import 'package:i_watt_app/core/util/either.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 import 'package:i_watt_app/features/profile/data/datasources/payments_data_source.dart';
 import 'package:i_watt_app/features/profile/data/models/credit_card_model.dart';
+import 'package:i_watt_app/features/profile/domain/entities/create_credit_card_entity.dart';
 import 'package:i_watt_app/features/profile/domain/repositories/payments_repository.dart';
 
 class PaymentsRepositoryImpl extends PaymentsRepository {
@@ -37,7 +38,7 @@ class PaymentsRepositoryImpl extends PaymentsRepository {
   }
 
   @override
-  Future<Either<Failure, String>> createCreditCard({required String cardNumber, required String expireDate}) async {
+  Future<Either<Failure, CreateCreditCardEntity>> createCreditCard({required String cardNumber, required String expireDate}) async {
     try {
       final result = await dataSource.createCreditCard(cardNumber: cardNumber, expireDate: expireDate);
       return Right(result);
@@ -49,9 +50,9 @@ class PaymentsRepositoryImpl extends PaymentsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> confirmCreditCard({required String otp, required String cardNumber}) async {
+  Future<Either<Failure, void>> confirmCreditCard({required String otp, required String cardToken}) async {
     try {
-      final result = await dataSource.confirmCreditCard(otp: otp, cardNumber: cardNumber);
+      final result = await dataSource.confirmCreditCard(otp: otp, cardToken: cardToken);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));

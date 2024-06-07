@@ -15,11 +15,12 @@ import 'package:i_watt_app/features/common/presentation/widgets/sheet_close_butt
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/code_verification_bottom_sheet.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-showAddCardSheet(BuildContext context) {
+Future<dynamic> showAddCardSheet(BuildContext context) {
   return showCupertinoModalBottomSheet(
     context: context,
     useRootNavigator: true,
@@ -183,6 +184,20 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                                   "${cardValidController.text.substring(3, 5)}${cardValidController.text.substring(0, 2)}";
                               context.read<CreditCardsBloc>().add(
                                     CreateCreditCard(
+                                      onSuccess: () async {
+                                        await showCupertinoModalBottomSheet(
+                                            context: context,
+                                            useRootNavigator: true,
+                                            builder: (BuildContext context) {
+                                              return const CodeVerificationBottomSheet();
+                                            }).then((value) {
+                                          if (value != null) {
+                                            if (value) {
+                                              Navigator.pop(context);
+                                            }
+                                          }
+                                        });
+                                      },
                                       cardNumber: cardController.text.replaceAll(RegExp(r'\(?\)?\-?\ ?'), ''),
                                       expireDate: expireDate,
                                     ),

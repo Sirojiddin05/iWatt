@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
@@ -32,7 +33,7 @@ class MyCardsSheet extends StatefulWidget {
 
 class _MyCardsSheetState extends State<MyCardsSheet> {
   bool editing = false;
-  List<int> ids = [];
+  int? selectedIds;
 
   @override
   void initState() {
@@ -49,8 +50,16 @@ class _MyCardsSheetState extends State<MyCardsSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               MyCardsSheetHeader(
+                editing: editing,
                 hasCards: state.creditCards.isNotEmpty,
-                onEditTap: () => setState(() => editing = !editing),
+                onEditTap: () => setState(() {
+                  editing = !editing;
+                  if (selectedIds != null) {
+                    selectedIds = null;
+                  } else {
+                    selectedIds = 0;
+                  }
+                }),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
@@ -60,17 +69,13 @@ class _MyCardsSheetState extends State<MyCardsSheet> {
                       ...(state.creditCards.map(
                         (e) => CreditCardItem(
                           card: e,
-                          editing: editing,
-                          selected: ids.contains(e.id),
+                          editing: false,
+                          selectedId: selectedIds,
                           onTap: !editing
                               ? () {}
                               : () {
                                   setState(() {
-                                    if (ids.contains(e.id)) {
-                                      ids = [...ids.where((id) => id != e.id)];
-                                    } else {
-                                      ids = [...ids, e.id];
-                                    }
+                                    selectedIds = e.id;
                                   });
                                 },
                         ),
@@ -81,15 +86,30 @@ class _MyCardsSheetState extends State<MyCardsSheet> {
                         title: LocaleKeys.you_dont_have_a_card.tr(),
                         subtitle: LocaleKeys.add_your_card_to_make_payment.tr(),
                       ),
-                    if (!editing) const AddCardButton(),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 150),
                       crossFadeState: editing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                       alignment: Alignment.bottomCenter,
-                      firstChild: const SizedBox(width: double.infinity),
-                      secondChild: const Padding(
-                        padding: EdgeInsets.only(top: 26.0),
-                        child: RemoveCreditCardButton(),
+                      firstChild: const AddCardButton(),
+                      secondChild: Padding(
+                        padding: const EdgeInsets.only(top: 26.0),
+                        child: RemoveCreditCardButton(
+                          onCancel: () {
+                            setState(() {
+                              selectedIds = null;
+                              editing = false;
+                            });
+                          },
+                          isLoading: state.deleteCardStatus == FormzSubmissionStatus.inProgress,
+                          isDisabled: selectedIds == null || selectedIds == 0,
+                          onRemove: () {
+                            if (selectedIds != null && selectedIds != 0) {
+                              context
+                                  .read<CreditCardsBloc>()
+                                  .add(DeleteCreditCardEvent(id: selectedIds!, onSuccess: () {}, onError: (e) {}));
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ],
