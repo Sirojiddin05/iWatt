@@ -12,14 +12,14 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animatio
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class QrGenerationScreen extends StatefulWidget {
-  const QrGenerationScreen({super.key});
+class ScanStation extends StatefulWidget {
+  const ScanStation({super.key});
 
   @override
-  State<QrGenerationScreen> createState() => _QrGenerationScreenState();
+  State<ScanStation> createState() => _ScanStationState();
 }
 
-class _QrGenerationScreenState extends State<QrGenerationScreen> with TickerProviderStateMixin {
+class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin {
   late final QRViewController qrController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   bool onFlash = false;

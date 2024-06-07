@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/add_card_bottom_sheet.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AddCardButton extends StatelessWidget {
   const AddCardButton({super.key});
@@ -27,12 +29,20 @@ class AddCardButton extends StatelessWidget {
         color: context.theme.primaryColor.withOpacity(.08),
         height: 60,
         onTap: () async {
-          final value = await showAddCardSheet(context);
-          if (value != null) {
-            if (value) {
-              context.read<CreditCardsBloc>().add(const GetCreditCards());
-            }
-          }
+          Navigator.pop(context);
+          showCupertinoModalBottomSheet(
+            context: context,
+            useRootNavigator: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
+            ),
+            builder: (context) => const AddCardBottomSheet(),
+          ).then((value) {
+            context.read<CreditCardsBloc>().add(const GetCreditCards());
+            context.showPopUp(context, PopUpStatus.success, message: LocaleKeys.card_is_added.tr());
+          });
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,

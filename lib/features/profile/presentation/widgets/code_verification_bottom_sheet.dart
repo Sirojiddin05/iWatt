@@ -114,7 +114,7 @@ class _CodeVerificationBottomSheetState extends State<CodeVerificationBottomShee
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  LocaleKeys.sent_code_to_your_phone.tr(),
+                  LocaleKeys.we_send_otp_to_your_phone.tr(),
                   style: context.textTheme.labelLarge!.copyWith(
                     color: AppColors.blueBayoux,
                     fontWeight: FontWeight.w400,

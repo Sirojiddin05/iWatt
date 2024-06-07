@@ -54,26 +54,31 @@ class HelpSheet extends StatelessWidget {
                         icon: AppIcons.phoneSmall,
                         padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                        onTap: () => launchUrlString('tel:${state.help.helpPhoneNumber}'),
+                        onTap: () {
+                          launchUrlString('tel:${state.help.helpPhoneNumber}', mode: LaunchMode.externalApplication);
+                        },
                       ),
                       Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
                       IconTextButton(
                         title: state.help.helpEmail,
                         icon: AppIcons.mail,
                         padding: const EdgeInsets.all(12),
-                        onTap: () => launchUrlString(
-                          "mailto:${state.help.helpEmail}",
-                          mode: LaunchMode.externalApplication,
-                        ),
+                        onTap: () {
+                          launchUrlString(
+                            "mailto:${state.help.helpEmail}",
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
                       ),
                       Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
                       IconTextButton(
-                        title: state.help.helpTelegramLink,
-                        icon: AppIcons.telegram,
-                        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
-                        padding: const EdgeInsets.all(12),
-                        onTap: () => launchUrlString(state.help.helpTelegramLink),
-                      ),
+                          title: state.help.helpTelegramLink,
+                          icon: AppIcons.telegram,
+                          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+                          padding: const EdgeInsets.all(12),
+                          onTap: () {
+                            launchUrlString(state.help.helpTelegramLink, mode: LaunchMode.externalApplication);
+                          }),
                     } else if (state.getHelpStatus.isFailure) ...{
                       const ErrorStateTextWidget()
                     }

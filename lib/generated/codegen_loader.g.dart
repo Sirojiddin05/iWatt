@@ -289,7 +289,8 @@ class CodegenLoader extends AssetLoader{
   "history": "История",
   "point_the_camera_to_the_qr_where_it_is_located_at_the_station": "Наведите камеру на QR, который находится на станции",
   "scan_qr": "Сканируйте QR код",
-  "sorry_qr_code_is_invalid": "Извините, QR-код недействителен. Пожалуйста, попробуйте еще раз."
+  "sorry_qr_code_is_invalid": "Извините, QR-код недействителен. Пожалуйста, попробуйте еще раз.",
+  "card_is_added": "Карта добавлена"
 };
 static const Map<String,dynamic> en = {
   "other": {

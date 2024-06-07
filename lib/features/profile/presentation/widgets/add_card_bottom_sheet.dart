@@ -20,19 +20,6 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-Future<dynamic> showAddCardSheet(BuildContext context) {
-  return showCupertinoModalBottomSheet(
-    context: context,
-    useRootNavigator: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(12),
-      ),
-    ),
-    builder: (context) => const AddCardBottomSheet(),
-  );
-}
-
 class AddCardBottomSheet extends StatefulWidget {
   const AddCardBottomSheet({super.key});
 
@@ -125,8 +112,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                               TextHighlight(
                                 text: LocaleKeys.by_clicking_add_you_agree_to_the_privacy_policy.tr(),
                                 textAlign: TextAlign.center,
-                                textStyle: context.textTheme.labelMedium!
-                                    .copyWith(color: context.textTheme.titleMedium?.color),
+                                textStyle: context.textTheme.labelMedium!.copyWith(color: context.textTheme.titleMedium?.color),
                                 words: {
                                   (context.locale.languageCode == 'uz'
                                       ? "maxfiylik siyosatiga rozilik bildirasiz"
@@ -158,8 +144,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                                 message: state.errorMessage,
                               );
                             } else if (state.createCardStatus.isSuccess) {
-                              final expireDate =
-                                  "${cardValidController.text.substring(3, 5)}${cardValidController.text.substring(0, 2)}";
+                              final expireDate = "${cardValidController.text.substring(3, 5)}${cardValidController.text.substring(0, 2)}";
                               // await showCupertinoModalBottomSheet(
                               //     context: context,
                               //     useRootNavigator: true,
@@ -180,8 +165,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                           child: WButton(
                             margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                             onTap: () async {
-                              final expireDate =
-                                  "${cardValidController.text.substring(3, 5)}${cardValidController.text.substring(0, 2)}";
+                              final expireDate = "${cardValidController.text.substring(3, 5)}${cardValidController.text.substring(0, 2)}";
                               context.read<CreditCardsBloc>().add(
                                     CreateCreditCard(
                                       onSuccess: () async {
@@ -235,10 +219,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                                   context.locale.languageCode == "uz"
                                       ? Text(
                                           "  tomonidan qo'llab quvvatlanadi.",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium!
-                                              .copyWith(color: AppColors.taxBreak),
+                                          style: Theme.of(context).textTheme.labelMedium!.copyWith(color: AppColors.taxBreak),
                                         )
                                       : const SizedBox(),
                                 ],

@@ -6,7 +6,6 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/profile/domain/entities/car_entity.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/add_car_usecase.dart';
-import 'package:meta/meta.dart';
 
 part 'add_car_event.dart';
 part 'add_car_state.dart';

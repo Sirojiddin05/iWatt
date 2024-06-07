@@ -52,6 +52,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
                   return FilterTile(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     includeIcon: true,
+                    icon: connector.icon,
                     hasDivider: index != state.acConnectionTypes.length - 1,
                     title: connector.name,
                     isSelectedDefault: connectorTypes.value.contains(connector.id),
@@ -81,6 +82,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
                 valueListenable: connectorTypes,
                 builder: (context, v, child) {
                   return FilterTile(
+                    icon: connector.icon,
                     hasDivider: index != state.dcConnectionTypes.length - 1,
                     includeIcon: true,
                     title: connector.name,

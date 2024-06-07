@@ -51,7 +51,7 @@ class MapControllers extends StatelessWidget {
             ),
             QrButton(
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (ctx) => const QrGenerationScreen())).then(
+                Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (ctx) => const ScanStation())).then(
                   (result) {
                     if (result is Map) {
                       final isValidLocation = result.containsKey('location_id') && result['location_id'] != 0;

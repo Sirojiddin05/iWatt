@@ -267,5 +267,6 @@ abstract class  LocaleKeys {
   static const point_the_camera_to_the_qr_where_it_is_located_at_the_station = 'point_the_camera_to_the_qr_where_it_is_located_at_the_station';
   static const scan_qr = 'scan_qr';
   static const sorry_qr_code_is_invalid = 'sorry_qr_code_is_invalid';
+  static const card_is_added = 'card_is_added';
 
 }

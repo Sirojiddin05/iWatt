@@ -78,6 +78,7 @@ class _FilterSheetState extends State<FilterSheet> {
             child: SingleChildScrollView(
               controller: controller,
               physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(bottom: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
