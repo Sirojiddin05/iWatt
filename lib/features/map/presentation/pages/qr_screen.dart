@@ -112,8 +112,8 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
               ),
             ),
             Positioned(
-              left: MediaQuery.of(context).size.width * 0.42,
-              bottom: MediaQuery.of(context).size.height * 0.16,
+              left: context.sizeOf.width * 0.42,
+              bottom: context.sizeOf.height * 0.16,
               child: WScaleAnimation(
                 onTap: () {
                   onFlash ? _turnOffFlash(context) : _turnOnFlash(context);
@@ -129,7 +129,7 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: SvgPicture.asset(
-                    onFlash ? AppIcons.flashLightOn : AppIcons.flashLightOf,
+                    onFlash ? AppIcons.flashLightOf : AppIcons.flashLightOn,
                     width: 40,
                     height: 40,
                   ),

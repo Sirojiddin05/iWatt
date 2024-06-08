@@ -73,7 +73,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                 BlocListener<CarOnMapBloc, CarOnMapState>(
                   listenWhen: (o, n) => o.carOnMap != n.carOnMap,
                   listener: (context, state) {
-                    mapBloc.add(SetCarOnMapEvent(state.carOnMap));
+                    mapBloc.add(const SetMyPositionEvent(forceSet: true));
                   },
                 ),
               ],

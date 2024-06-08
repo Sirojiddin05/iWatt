@@ -39,7 +39,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<SelectUnSelectMapObject>(_selectUnSelectMapObject);
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetControllersVisibilityEvent>(_setControllersVisibility);
-    on<SetCarOnMapEvent>(_setCarOnMap);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
@@ -59,7 +58,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     if (locationStatus.isPermissionGranted) {
       final value = await MyFunctions.getCurrentLocation();
       if (value != null) {
-        if (value.latitude != state.currentLat || value.longitude != state.currentLong) {
+        if (value.latitude != state.currentLat || value.longitude != state.currentLong || event.forceSet) {
           await StorageRepository.putDouble(StorageKeys.latitude, value.latitude);
           await StorageRepository.putDouble(StorageKeys.longitude, value.longitude);
           final newMarker = await MyFunctions.getMyIcon(
@@ -157,7 +156,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     } else {
       await yandexMapController.setMapStyle('');
-      emit(state.copyWith(hasLuminosity: false));
       if (!hasLocationAccess) {
         await Future.delayed(const Duration(seconds: 10));
         add(const ChangeLuminosityStateEvent(hasLuminosity: true));
@@ -170,24 +168,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       areControllersVisible: event.areControllersVisible,
       isSearchFieldVisible: event.searchFieldVisible,
     ));
-  }
-
-  void _setCarOnMap(SetCarOnMapEvent event, Emitter<MapState> emit) async {
-    if (state.locationAccessStatus.isPermissionGranted) {
-      final currentLat = StorageRepository.getDouble(StorageKeys.latitude);
-      final currentLong = StorageRepository.getDouble(StorageKeys.longitude);
-      print('currentLat $currentLat');
-      print('currentLong $currentLong');
-      final newMarker = await MyFunctions.getMyIcon(
-          context: context,
-          value: Point(latitude: currentLong, longitude: currentLat),
-          userIcon: event.carOnMap.imageOnMap,
-          onObjectTap: (object, point) async {
-            _moveMapCamera(object.point.latitude, object.point.longitude, 18);
-          });
-      print('newMarker $newMarker');
-      emit(state.copyWith(userLocationObject: newMarker));
-    }
   }
 
   Future<void> _moveMapCamera(double lat, double long, [double? zoom]) async {

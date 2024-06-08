@@ -46,7 +46,7 @@ extension BuildContextExtensions on BuildContext {
             },
           ),
       displayDuration: const Duration(seconds: 3),
-      dismissType: status.isWarning ? DismissType.onSwipe : DismissType.none,
+      dismissType: DismissType.onSwipe,
       curve: Curves.decelerate,
       reverseCurve: Curves.linear,
       onAnimationControllerInit: (ctrl) => controller = ctrl,

@@ -46,6 +46,7 @@ class _VersionFeaturesSheetState extends State<VersionFeaturesSheet> with Single
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             height: MediaQuery.of(context).size.height * .63,
@@ -90,21 +91,19 @@ class _VersionFeaturesSheetState extends State<VersionFeaturesSheet> with Single
             length: widget.list.length,
             offset: !pageController.hasClients ? 0 : pageController.page ?? 0,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-            child: WButton(
-              onTap: () {
-                if (currentPageIndex.value != (widget.list.length - 1)) {
-                  pageController.nextPage(
-                    duration: const Duration(milliseconds: 240),
-                    curve: Curves.easeInOutQuad,
-                  );
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-              text: LocaleKeys.next.tr(),
-            ),
+          WButton(
+            onTap: () {
+              if (currentPageIndex.value != (widget.list.length - 1)) {
+                pageController.nextPage(
+                  duration: const Duration(milliseconds: 240),
+                  curve: Curves.easeInOutQuad,
+                );
+              } else {
+                Navigator.pop(context);
+              }
+            },
+            text: LocaleKeys.next.tr(),
+            margin: EdgeInsets.fromLTRB(16, 12, 16, context.padding.bottom + 10),
           ),
         ],
       ),

@@ -45,7 +45,9 @@ class HelpSheet extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 32),
                         child: SizedBox(
                           width: double.infinity,
-                          child: CircularProgressIndicator.adaptive(),
+                          child: Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
                         ),
                       )
                     } else if (state.getHelpStatus.isSuccess) ...{

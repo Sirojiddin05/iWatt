@@ -26,7 +26,8 @@ class SetLocationAccessStateEvent extends MapEvent {
 }
 
 class SetMyPositionEvent extends MapEvent {
-  const SetMyPositionEvent();
+  final bool forceSet;
+  const SetMyPositionEvent({this.forceSet = false});
 }
 
 class InitializeMapControllerEvent extends MapEvent {
@@ -87,10 +88,4 @@ class SetDraggableSheetOffsetEvent extends MapEvent {
   final double offset;
 
   const SetDraggableSheetOffsetEvent(this.offset);
-}
-
-class SetCarOnMapEvent extends MapEvent {
-  final CarOnMap carOnMap;
-
-  const SetCarOnMapEvent(this.carOnMap);
 }

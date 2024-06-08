@@ -31,12 +31,13 @@ class PhoneTextField extends StatelessWidget {
       hasError: hasError,
       hintStyle: context.textTheme.headlineSmall?.copyWith(fontSize: 20, color: AppColors.zircon),
       style: context.textTheme.headlineSmall?.copyWith(fontSize: 20),
+      // contentPadding: EdgeInsets.only(bottom: 20),
       inputFormatters: [
         const CustomPhoneFormatter(),
         Formatters.phoneFormatter,
       ],
       prefixIcon: Padding(
-        padding: const EdgeInsets.only(right: 6, bottom: 2, left: 12),
+        padding: const EdgeInsets.only(right: 6, bottom: 0, left: 12),
         child: Text(
           '+998',
           style: context.textTheme.headlineSmall?.copyWith(fontSize: 20),

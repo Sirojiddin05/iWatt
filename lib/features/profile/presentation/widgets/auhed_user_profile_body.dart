@@ -138,7 +138,6 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                       isScrollControlled: true,
                       useRootNavigator: true,
                       backgroundColor: Colors.transparent,
-                      constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
                       builder: (context) => BlocBuilder<InstructionsBloc, InstructionsState>(
                         builder: (context, state) {
                           return VersionFeaturesSheet(list: state.instructions);

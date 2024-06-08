@@ -28,6 +28,7 @@ class _CustomBuilderAnimationState extends State<CustomBuilderAnimation> {
 
   @override
   void initState() {
+    super.initState();
     isImage = (imageExtensions.any((e) => widget.feature.file.toLowerCase().endsWith(e)));
     if (!isImage) {
       controller = CachedVideoPlayerPlusController.networkUrl(Uri.parse(widget.feature.file))
@@ -52,13 +53,6 @@ class _CustomBuilderAnimationState extends State<CustomBuilderAnimation> {
         }
       }
     });
-    // _controller = CachedVideoPlayerController.network(
-    //     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
-    // _controller.initialize().then((value) {
-    //   _controller.play();
-    //   setState(() {});
-    // });
-    super.initState();
   }
 
   @override
@@ -72,72 +66,39 @@ class _CustomBuilderAnimationState extends State<CustomBuilderAnimation> {
     return Column(
       children: [
         Expanded(
-          child: AnimatedBuilder(
-            animation: widget.pageController,
-            builder: (context, child) {
-              double pageOffset = 0;
-              double pageOffset2 = 0;
-              if (widget.index == 1) {
-                pageOffset = 1;
-                pageOffset2 = 1;
-              }
-              if (widget.pageController.position.haveDimensions) {
-                if (widget.pageController.page! >= widget.index) {
-                  pageOffset2 = widget.pageController.page! - widget.index;
-                } else if (widget.pageController.page! < widget.index) {
-                  pageOffset2 = widget.index - widget.pageController.page!;
-                }
-                pageOffset = widget.index - widget.pageController.page!;
-              }
-              double angle = pageOffset * 1.3;
-              // if (angle > .85) {
-              //   angle = .85;
-              // } else if (angle < -.85) {
-              //   angle = -.85;
-              // }
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    top: ((pageOffset2) * 100),
-                    bottom: 0,
-                    child: Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, .0008)
-                        ..rotateY(angle),
-                      child: isImage
-                          ? WImage(imageUrl: widget.feature.file, fit: BoxFit.fitHeight)
-                          : controller.value.isInitialized
-                              ? AspectRatio(
-                                  aspectRatio: controller.value.aspectRatio,
-                                  child: GestureDetector(
-                                    onTapDown: (event) {
-                                      controller.pause();
-                                    },
-                                    onTapUp: (event) {
-                                      controller.play();
-                                    },
-                                    onTapCancel: () {
-                                      controller.play();
-                                    },
-                                    child: CachedVideoPlayerPlus(controller),
-                                  ),
-                                )
-                              : Shimmer(
-                                  child: ShimmerLoading(
-                                    isLoading: true,
-                                    child: ShimmerContainer(
-                                      width: double.infinity,
-                                      height: context.sizeOf.height * .65,
-                                    ),
-                                  ),
-                                ),
-                      // Image.asset('assets/images/phone.png'),
+          child: Builder(
+            builder: (context) {
+              if (isImage) {
+                return WImage(imageUrl: widget.feature.file, fit: BoxFit.fitHeight);
+              } else {
+                if (controller.value.isInitialized) {
+                  return AspectRatio(
+                    aspectRatio: controller.value.aspectRatio,
+                    child: GestureDetector(
+                      onTapDown: (event) {
+                        controller.pause();
+                      },
+                      onTapUp: (event) {
+                        controller.play();
+                      },
+                      onTapCancel: () {
+                        controller.play();
+                      },
+                      child: CachedVideoPlayerPlus(controller),
                     ),
-                  ),
-                ],
-              );
+                  );
+                } else {
+                  return Shimmer(
+                    child: ShimmerLoading(
+                      isLoading: true,
+                      child: ShimmerContainer(
+                        width: double.infinity,
+                        height: context.sizeOf.height * .65,
+                      ),
+                    ),
+                  );
+                }
+              }
             },
           ),
         ),

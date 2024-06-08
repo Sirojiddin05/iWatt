@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   late final TabController _tabController;
   late final ValueNotifier<int> _currentIndex;
   late final VersionCheckBloc _versionCheckBloc;
-  late final InstructionsBloc _instructionsBloc;
   late final AnimationController animationController;
 
   final Map<NavItemEnum, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -140,14 +139,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                     isScrollControlled: true,
                     useRootNavigator: true,
                     backgroundColor: Colors.transparent,
-                    constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
-                    builder: (context) => BlocProvider.value(
-                      value: _instructionsBloc,
-                      child: BlocBuilder<InstructionsBloc, InstructionsState>(
-                        builder: (context, state) {
-                          return VersionFeaturesSheet(list: state.onBoarding);
-                        },
-                      ),
+                    builder: (context) => BlocBuilder<InstructionsBloc, InstructionsState>(
+                      builder: (context, state) {
+                        return VersionFeaturesSheet(list: state.onBoarding);
+                      },
                     ),
                   );
                 }

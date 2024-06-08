@@ -10,6 +10,7 @@ import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/enums/instructions_type.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:i_watt_app/features/authorization/domain/usecases/get_authentication_status.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
@@ -75,6 +76,7 @@ Future<void> main() async {
     //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
     //   options.tracesSampleRate = 1.0;
     // }, appRunner: () {
+    await MyFunctions.currentVersionAsync;
     return runApp(const App());
     // }
   }, (error, stack) async {

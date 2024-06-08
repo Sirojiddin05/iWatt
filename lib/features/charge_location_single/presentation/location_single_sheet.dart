@@ -112,15 +112,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
           animation: animationController,
           builder: (context, child) {
             double scaleAnimation = 1 - (animationController.value * .1);
-            final h = context.sizeOf.height - context.padding.top;
+            final h = context.sizeOf.height - (context.padding.top + 8);
             double transformY = context.sizeOf.height - (h * animationController.value);
             double transformY2 = animationController.value;
-            double opacity = 0;
-            if (animationController.value > .3) {
-              opacity = animationController.value * .8;
-            } else {
-              opacity = 0;
-            }
             double borderRadius = 20 * animationController.value;
             return Stack(
               children: [

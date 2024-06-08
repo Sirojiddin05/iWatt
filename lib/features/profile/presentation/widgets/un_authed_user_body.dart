@@ -7,11 +7,13 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
+import 'package:i_watt_app/features/profile/presentation/pages/about_us.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/help_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/login_to_system_container.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class UnAuthedUserBody extends StatefulWidget {
   final ScrollController controller;
@@ -55,7 +57,6 @@ class _UnAuthedUserBodyState extends State<UnAuthedUserBody> {
                       isScrollControlled: true,
                       useRootNavigator: true,
                       backgroundColor: Colors.transparent,
-                      constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
                       builder: (context) => BlocBuilder<InstructionsBloc, InstructionsState>(
                         builder: (context, state) {
                           return VersionFeaturesSheet(list: state.instructions);
@@ -92,7 +93,13 @@ class _UnAuthedUserBodyState extends State<UnAuthedUserBody> {
                       ),
                     ),
                   ],
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialWithModalsPageRoute(
+                        builder: (ctx) => const AboutUsPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
