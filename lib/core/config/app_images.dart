@@ -15,6 +15,7 @@ class AppImages {
   static const balanceMessage = 'assets/images/balance_message.png';
   static const parkingInProgress = 'assets/images/parking_in_progress.png';
   static const emptyStation = 'assets/images/empty_station.png';
+  static const emptyTransaction = 'assets/images/empty_transaction.png';
   static const searchEmpty = 'assets/images/search_empty.png';
   static const lightTheme = 'assets/images/light_theme.png';
   static const darkTheme = 'assets/images/dark_theme.png';

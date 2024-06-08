@@ -12,7 +12,6 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/pay_with_card_sheet.dart';
-import 'package:i_watt_app/features/profile/presentation/widgets/payment_bottom_sheet.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -31,7 +30,7 @@ class BalanceMessage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: WCustomTappableButton(
               onTap: () {
-                 showCupertinoModalBottomSheet(
+                showCupertinoModalBottomSheet(
                   context: context,
                   useRootNavigator: true,
                   shape: const RoundedRectangleBorder(
@@ -39,7 +38,7 @@ class BalanceMessage extends StatelessWidget {
                       top: Radius.circular(12),
                     ),
                   ),
-                  builder: (context) => const PaymentBottomSheet(),
+                  builder: (context) => const SizedBox(),
                 );
               },
               borderRadius: const BorderRadius.only(
@@ -157,7 +156,6 @@ class BalanceMessage extends StatelessWidget {
             ),
           );
         }
-
       },
     );
   }

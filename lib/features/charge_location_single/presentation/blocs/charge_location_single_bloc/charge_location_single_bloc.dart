@@ -95,6 +95,9 @@ class ChargeLocationSingleBloc extends Bloc<ChargeLocationSingleEvent, ChargeLoc
         ),
       );
     });
+    on<ChangeSelectedStationIndex>((event, emit) {
+      emit(state.copyWith(selectedStationIndex: event.index));
+    });
   }
 
   void initializeLocationStream() async {

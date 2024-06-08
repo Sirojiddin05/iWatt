@@ -268,5 +268,6 @@ abstract class  LocaleKeys {
   static const scan_qr = 'scan_qr';
   static const sorry_qr_code_is_invalid = 'sorry_qr_code_is_invalid';
   static const card_is_added = 'card_is_added';
+  static const balance = 'balance';
 
 }

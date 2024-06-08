@@ -36,87 +36,78 @@ class _MyCardsSheetState extends State<MyCardsSheet> {
   int? selectedIds;
 
   @override
-  void initState() {
-    super.initState();
-    context.read<CreditCardsBloc>().add(const GetCreditCards());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardsBloc, CreditCardsState>(
       builder: (context, state) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              MyCardsSheetHeader(
-                editing: editing,
-                hasCards: state.creditCards.isNotEmpty,
-                onEditTap: () => setState(() {
-                  editing = !editing;
-                  if (selectedIds != null) {
-                    selectedIds = null;
-                  } else {
-                    selectedIds = 0;
-                  }
-                }),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
-                child: Column(
-                  children: [
-                    if (state.creditCards.isNotEmpty)
-                      ...(state.creditCards.map(
-                        (e) => CreditCardItem(
-                          card: e,
-                          editing: false,
-                          selectedId: selectedIds,
-                          onTap: !editing
-                              ? () {}
-                              : () {
-                                  setState(() {
-                                    selectedIds = e.id;
-                                  });
-                                },
-                        ),
-                      ))
-                    else
-                      EmptyStateWidget(
-                        icon: AppImages.creditCards,
-                        title: LocaleKeys.you_dont_have_a_card.tr(),
-                        subtitle: LocaleKeys.add_your_card_to_make_payment.tr(),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MyCardsSheetHeader(
+              editing: editing,
+              hasCards: state.creditCards.isNotEmpty,
+              onEditTap: () => setState(() {
+                editing = !editing;
+                if (selectedIds != null) {
+                  selectedIds = null;
+                } else {
+                  selectedIds = 0;
+                }
+              }),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
+              child: Column(
+                children: [
+                  if (state.creditCards.isNotEmpty)
+                    ...(state.creditCards.map(
+                      (e) => CreditCardItem(
+                        card: e,
+                        editing: false,
+                        selectedId: selectedIds,
+                        onTap: !editing
+                            ? () {}
+                            : () {
+                                setState(() {
+                                  selectedIds = e.id;
+                                });
+                              },
                       ),
-                    AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 150),
-                      crossFadeState: editing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                      alignment: Alignment.bottomCenter,
-                      firstChild: const AddCardButton(),
-                      secondChild: Padding(
-                        padding: const EdgeInsets.only(top: 26.0),
-                        child: RemoveCreditCardButton(
-                          onCancel: () {
-                            setState(() {
-                              selectedIds = null;
-                              editing = false;
-                            });
-                          },
-                          isLoading: state.deleteCardStatus == FormzSubmissionStatus.inProgress,
-                          isDisabled: selectedIds == null || selectedIds == 0,
-                          onRemove: () {
-                            if (selectedIds != null && selectedIds != 0) {
-                              context
-                                  .read<CreditCardsBloc>()
-                                  .add(DeleteCreditCardEvent(id: selectedIds!, onSuccess: () {}, onError: (e) {}));
-                            }
-                          },
-                        ),
+                    ))
+                  else
+                    EmptyStateWidget(
+                      icon: AppImages.creditCards,
+                      title: LocaleKeys.you_dont_have_a_card.tr(),
+                      subtitle: LocaleKeys.add_your_card_to_make_payment.tr(),
+                    ),
+                  AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 150),
+                    crossFadeState: editing ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    alignment: Alignment.bottomCenter,
+                    firstChild: const AddCardButton(),
+                    secondChild: Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: RemoveCreditCardButton(
+                        onCancel: () {
+                          setState(() {
+                            selectedIds = null;
+                            editing = false;
+                          });
+                        },
+                        isLoading: state.deleteCardStatus == FormzSubmissionStatus.inProgress,
+                        isDisabled: selectedIds == null || selectedIds == 0,
+                        onRemove: () {
+                          if (selectedIds != null && selectedIds != 0) {
+                            context.read<CreditCardsBloc>().add(DeleteCreditCardEvent(id: selectedIds!, onSuccess: () {}, onError: (e) {}));
+                          }
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom + 8),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

@@ -25,8 +25,6 @@ class ChargingStationsBottomWidget extends StatelessWidget {
       child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
         // buildWhen: (o, n) => o.selectedStationIndex != n.selectedStationIndex,
         builder: (context, state) {
-          print('location ${state.location.chargers.length}');
-          print('selectedstation ${state.selectedStationIndex}');
           return Row(
             children: [
               if (state.location.chargers.length > 1) ...{
@@ -40,7 +38,6 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                     },
                     child: SvgPicture.asset(
                       AppIcons.chevronLeftBlack,
-                      color: state.selectedStationIndex == 0 ? AppColors.blueBayoux.withOpacity(.5) : null,
                     ),
                   ),
                 ),
@@ -91,8 +88,7 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                       AppIcons.chevronRightGrey,
                       height: 24,
                       width: 24,
-                      color:
-                          state.selectedStationIndex == (state.location.chargers.length - 1) ? AppColors.blueBayoux.withOpacity(.5) : AppColors.black,
+                      color: AppColors.cyprus,
                     ),
                   ),
                 ),

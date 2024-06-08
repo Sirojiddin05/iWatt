@@ -29,8 +29,6 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
   @override
   void didUpdateWidget(covariant ConnectorTypesList oldWidget) {
     connectorTypes.value = [...widget.defaultSelectedTypes];
-    print('didUpdateWidget widget.defaultSelectedTypes = ${widget.defaultSelectedTypes}');
-    print('connectorTypes.value = ${connectorTypes.value}');
     super.didUpdateWidget(oldWidget);
   }
 

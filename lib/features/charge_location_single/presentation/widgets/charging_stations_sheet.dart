@@ -23,12 +23,10 @@ class StationSingleSheet extends StatefulWidget {
 
 class _StationSingleSheetState extends State<StationSingleSheet> {
   late CarouselController carouselController;
-  late ValueNotifier<int> carouselIndex;
 
   @override
   void initState() {
     carouselController = CarouselController();
-    carouselIndex = ValueNotifier(0);
     super.initState();
   }
 
@@ -79,7 +77,7 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                                 carouselController: carouselController,
                                 options: CarouselOptions(
                                   onPageChanged: (index, reason) {
-                                    carouselIndex.value = index;
+                                    context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(index));
                                   },
                                   height: 464,
                                   enableInfiniteScroll: false,

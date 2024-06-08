@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -25,6 +26,7 @@ class AddCardButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       dashPattern: const [18, 8],
       child: WButton(
+        rippleColor: AppColors.primaryRipple30,
         textColor: context.theme.primaryColor,
         color: context.theme.primaryColor.withOpacity(.08),
         height: 60,
@@ -34,9 +36,7 @@ class AddCardButton extends StatelessWidget {
             context: context,
             useRootNavigator: true,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(12),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
             ),
             builder: (context) => const AddCardBottomSheet(),
           ).then((value) {

@@ -132,4 +132,5 @@ class AppIcons {
   static const flashLightOf = 'assets/icons/flash_light_of.svg';
   static const cancel = 'assets/icons/cancel.svg';
   static const balancePattern = 'assets/icons/balance_pattern.svg';
+  static const roundedPlug = 'assets/icons/ic_rounded_plug.svg';
 }

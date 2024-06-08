@@ -5,6 +5,7 @@ class AppColors {
 
   // https://www.color-blindness.com/color-name-hue/
   static const white = Color(0xFFFFFFFF);
+  static const white2 = Color(0xFFFDFDFD);
   static const black = Color(0x00000000);
   static const nero = Color(0xFF141414);
   static const amaranth = Color(0xFFE93B50);

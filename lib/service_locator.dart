@@ -10,7 +10,9 @@ import 'package:i_watt_app/features/charge_location_single/data/datasources/char
 import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/appeal_repository_impl.dart';
 import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/charge_location_single_repository_impl.dart';
 import 'package:i_watt_app/features/charging_processes/data/datasource/charging_process_datasource.dart';
+import 'package:i_watt_app/features/charging_processes/data/datasource/transaction_history_datasource.dart';
 import 'package:i_watt_app/features/charging_processes/data/repositories_impl/charging_process_repository_impl.dart';
+import 'package:i_watt_app/features/charging_processes/data/repositories_impl/transaction_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/datasources/about_us_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/change_language_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/connector_types_datasource.dart';
@@ -53,11 +55,9 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => ProfileDatasourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ProfileRepositoryImpl(serviceLocator<ProfileDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ConnectorTypesDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => ConnectorTypesRepositoryImpl(serviceLocator<ConnectorTypesDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ConnectorTypesRepositoryImpl(serviceLocator<ConnectorTypesDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => PowerTypesDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => PowerTypesRepositoryImpl(serviceLocator<PowerTypesDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => VersionCheckDataSourceImpl(serviceLocator<DioSettings>().dio));
@@ -65,32 +65,29 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => VersionCheckRepositoryImpl(serviceLocator<VersionCheckDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => InstructionsRepositoryImpl(serviceLocator<InstructionsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => SearchHistoryDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => SearchHistoryRepositoryImpl(serviceLocator<SearchHistoryDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => SearchHistoryRepositoryImpl(serviceLocator<SearchHistoryDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => AboutUsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => AboutUsRepositoryImpl(serviceLocator<AboutUsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => NotificationDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => NotificationsRepositoryImpl(serviceLocator<NotificationDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChangeLanguageDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => ChangeLanguageRepositoryImpl(serviceLocator<ChangeLanguageDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChangeLanguageRepositoryImpl(serviceLocator<ChangeLanguageDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => CarsDatasourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => CarsRepositoryImpl(serviceLocator<CarsDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => CarBrandsDatasourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => CarBrandsRepositoryImpl(serviceLocator<CarBrandsDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargeLocationSingleDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator.registerLazySingleton(
-      () => ChargeLocationSingleRepositoryImpl(serviceLocator<ChargeLocationSingleDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChargeLocationSingleRepositoryImpl(serviceLocator<ChargeLocationSingleDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => AppealDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => AppealRepositoryImpl(serviceLocator<AppealDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => SocketDataSourceImpl());
   serviceLocator.registerLazySingleton(() => SocketRepositoryImpl(serviceLocator<SocketDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargingProcessDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => ChargingProcessRepositoryImpl(serviceLocator<ChargingProcessDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChargingProcessRepositoryImpl(serviceLocator<ChargingProcessDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => PaymentsDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
-  serviceLocator
-      .registerLazySingleton(() => PaymentsRepositoryImpl(dataSource: serviceLocator<PaymentsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => PaymentsRepositoryImpl(dataSource: serviceLocator<PaymentsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => TransactionHistoryDatasourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => TransactionHistoryRepositoryImpl(serviceLocator<TransactionHistoryDatasourceImpl>()));
   // serviceLocator.registerLazySingleton(() => AppealDataSourceImpl(dio: serviceLocator<DioSettings>().dio));
   // serviceLocator.registerLazySingleton(() => AppealRepositoryImpl(dataSource: serviceLocator<AppealDataSourceImpl>()));
   // serviceLocator.registerLazySingleton(() => InstructionDataSourceImpl(serviceLocator<DioSettings>().dio));

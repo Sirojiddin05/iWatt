@@ -15,18 +15,13 @@ import 'package:i_watt_app/features/profile/domain/usecases/get_credit_cards_use
 import 'package:i_watt_app/service_locator.dart';
 
 part 'credit_cards_event.dart';
-
 part 'credit_cards_state.dart';
 
 class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
-  final CreateCreditCardUseCase createCreditCardUseCase =
-      CreateCreditCardUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
-  final ConfirmCreditCardUseCase confirmCreditCardUseCase =
-      ConfirmCreditCardUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
-  final DeleteCreditCardUseCase deleteCardUseCase =
-      DeleteCreditCardUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
-  final GetCreditCardsUseCase getCreditCardsUseCase =
-      GetCreditCardsUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
+  final CreateCreditCardUseCase createCreditCardUseCase = CreateCreditCardUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
+  final ConfirmCreditCardUseCase confirmCreditCardUseCase = ConfirmCreditCardUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
+  final DeleteCreditCardUseCase deleteCardUseCase = DeleteCreditCardUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
+  final GetCreditCardsUseCase getCreditCardsUseCase = GetCreditCardsUseCase(paymentsRepository: serviceLocator<PaymentsRepositoryImpl>());
 
   Timer _otpTimer = Timer(Duration.zero, () {});
 
@@ -36,44 +31,37 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
       emit(state.copyWith(deleteCardStatus: FormzSubmissionStatus.inProgress));
       final result = await deleteCardUseCase.call(event.id);
       if (result.isRight) {
-        emit(state.copyWith(
-          deleteCardStatus: FormzSubmissionStatus.success,
-        ));
-        event.onSuccess();
+        final creditCards = state.creditCards.where((element) => element.id != event.id).toList();
+        emit(
+          state.copyWith(
+            deleteCardStatus: FormzSubmissionStatus.success,
+            creditCards: [...creditCards],
+          ),
+        );
       } else {
         emit(state.copyWith(deleteCardStatus: FormzSubmissionStatus.failure));
         event.onError((result.left as ServerFailure).errorMessage.toString());
       }
     });
     on<CreateCreditCard>((event, emit) async {
-      emit(state.copyWith(
-          createCardStatus: FormzSubmissionStatus.inProgress,
-          cardNumber: event.cardNumber,
-          cardExpiryDate: event.expireDate));
-      try {
-        final result = await createCreditCardUseCase
-            .call(CreateCardParams(cardNumber: event.cardNumber, expireDate: event.expireDate));
-        if (result.isRight) {
-          emit(
-            state.copyWith(
-              otpSentPhone: result.right.phoneNumber,
-              cardToken: result.right.token,
-              createCardStatus: FormzSubmissionStatus.success,
-              codeAvailableTime: 60,
-            ),
-          );
-          print('Create credit card success');
-          event.onSuccess();
-          _setTimer();
-        } else {
-          emit(state.copyWith(
-            createCardStatus: FormzSubmissionStatus.failure,
-            errorMessage: result.left.errorMessage,
-          ));
-        }
-      } catch (e) {
-        print(e);
-        emit(state.copyWith(createCardStatus: FormzSubmissionStatus.failure, errorMessage: e.toString()));
+      emit(state.copyWith(createCardStatus: FormzSubmissionStatus.inProgress, cardNumber: event.cardNumber, cardExpiryDate: event.expireDate));
+      final result = await createCreditCardUseCase.call(CreateCardParams(cardNumber: event.cardNumber, expireDate: event.expireDate));
+      if (result.isRight) {
+        emit(
+          state.copyWith(
+            otpSentPhone: result.right.phoneNumber,
+            cardToken: result.right.token,
+            createCardStatus: FormzSubmissionStatus.success,
+            codeAvailableTime: 60,
+          ),
+        );
+        event.onSuccess();
+        _setTimer();
+      } else {
+        emit(state.copyWith(
+          createCardStatus: FormzSubmissionStatus.failure,
+          errorMessage: result.left.errorMessage,
+        ));
       }
     });
     on<ConfirmCreditCardEvent>((event, emit) async {
