@@ -131,4 +131,5 @@ class AppIcons {
   static const flashLightOn = 'assets/icons/flash_light_on.svg';
   static const flashLightOf = 'assets/icons/flash_light_of.svg';
   static const cancel = 'assets/icons/cancel.svg';
+  static const balancePattern = 'assets/icons/balance_pattern.svg';
 }
