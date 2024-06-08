@@ -10,6 +10,7 @@ import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.d
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
 
 part 'notification_event.dart';
+
 part 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {

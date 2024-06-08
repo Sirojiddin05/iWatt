@@ -220,7 +220,7 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
       final response = await dio.post(
         'payment/CardDelete/',
         data: {
-          "card_id": userCardId,
+          "id": userCardId,
         },
         options: Options(headers: {"Authorization": "Bearer ${StorageRepository.getString('token')}"}),
       );

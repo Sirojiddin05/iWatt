@@ -149,7 +149,7 @@ class _LoginWithQrState extends State<LoginWithQr> {
         final code = scanData.code;
 
         ///i-watt:token
-        if (code.contains("i-watt:")) {
+        if (code != null && code.contains("i-watt:")) {
           await qrController.pauseCamera();
           qrController.dispose();
           token = code.replaceAll('i-watt:', '');
