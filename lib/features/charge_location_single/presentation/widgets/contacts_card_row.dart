@@ -1,21 +1,19 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class ContactsCardRow extends StatefulWidget {
   final String icon;
   final String value;
   final String hint;
+  final VoidCallback onTap;
   const ContactsCardRow({
     super.key,
     required this.icon,
     required this.value,
     required this.hint,
+    required this.onTap,
   });
 
   @override
@@ -45,14 +43,7 @@ class _ContactsCardRowState extends State<ContactsCardRow> {
                 child: SelectableText(
                   widget.value,
                   style: context.textTheme.headlineMedium!.copyWith(color: AppColors.cyprus),
-                  onTap: () async {
-                    await Clipboard.setData(ClipboardData(text: widget.value));
-                    context.showPopUp(
-                      context,
-                      PopUpStatus.success,
-                      message: LocaleKeys.copied_to_clipboard.tr(),
-                    );
-                  },
+                  onTap: widget.onTap,
                 ),
               );
             }

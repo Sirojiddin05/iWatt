@@ -84,7 +84,6 @@ class _AppealsListState extends State<AppealsList> {
                   SheetHeaderWidget(
                     title: LocaleKeys.to_complain.tr(),
                   ),
-                  Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
                   if (state.getAppealsStatus.isInProgress) ...{
                     Padding(padding: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom), child: const CircularProgressIndicator.adaptive())
                   } else if (state.getAppealsStatus.isSuccess) ...{

@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/contacts_card_row.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
@@ -39,18 +41,38 @@ class ContactsCard extends StatelessWidget {
             icon: AppIcons.phoneFill,
             value: phone,
             hint: LocaleKeys.show_phone_number.tr(),
+            onTap: () {
+              launchUrlString(
+                'tel:${phone}',
+                mode: LaunchMode.externalApplication,
+              );
+            },
           ),
           const SizedBox(height: 16),
           ContactsCardRow(
             icon: AppIcons.globe,
             value: website,
             hint: LocaleKeys.show_web_address.tr(),
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: website));
+              context.showPopUp(
+                context,
+                PopUpStatus.success,
+                message: LocaleKeys.copied_to_clipboard.tr(),
+              );
+            },
           ),
           const SizedBox(height: 16),
           ContactsCardRow(
             icon: AppIcons.sms,
             value: email,
             hint: LocaleKeys.show_web_address.tr(),
+            onTap: () {
+              launchUrlString(
+                "mailto:$email",
+                mode: LaunchMode.externalApplication,
+              );
+            },
           ),
           if (socialMedia.isNotEmpty) ...[
             const SizedBox(height: 16),
@@ -63,7 +85,7 @@ class ContactsCard extends StatelessWidget {
                 socialMedia.length,
                 (index) => WScaleAnimation(
                   onTap: () {
-                    launchUrlString('');
+                    launchUrlString(socialMedia[index].name, mode: LaunchMode.externalApplication);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8),
