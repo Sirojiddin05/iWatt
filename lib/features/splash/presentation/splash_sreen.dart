@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_watt_app/core/config/app_lotties.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:lottie/lottie.dart';
@@ -42,29 +43,35 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Spacer(),
-          FadeTransition(
-            opacity: logoController,
-            child: Transform.scale(
-              scale: 1.2,
-              child: Image.asset(context.themedIcons.splashLogo, width: 130, height: 32),
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
+      ),
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Spacer(),
+            FadeTransition(
+              opacity: logoController,
               child: Transform.scale(
-                scale: 2,
-                child: Lottie.asset(AppLottie.splashLottie, height: 32, width: 20),
+                scale: 1.2,
+                child: Image.asset(context.themedIcons.splashLogo, width: 130, height: 32),
               ),
             ),
-          ),
-          SizedBox(height: context.padding.bottom + 20)
-        ],
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Transform.scale(
+                  scale: 2,
+                  child: Lottie.asset(AppLottie.splashLottie, height: 32, width: 20),
+                ),
+              ),
+            ),
+            SizedBox(height: context.padding.bottom + 20)
+          ],
+        ),
       ),
     );
   }

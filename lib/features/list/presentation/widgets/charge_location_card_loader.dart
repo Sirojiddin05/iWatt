@@ -11,6 +11,7 @@ class ChargeLocationCardLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 114,
+      width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       decoration: BoxDecoration(
         color: context.colorScheme.primaryContainer,

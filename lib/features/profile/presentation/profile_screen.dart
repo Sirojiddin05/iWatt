@@ -46,7 +46,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Row(
             children: [
               const SizedBox(width: 16),
-              Image.asset(context.themedIcons.splashLogo, width: 80, height: 20),
+              Hero(
+                tag: 'mainLogo',
+                child: Image.asset(context.themedIcons.splashLogo, width: 80, height: 20),
+              ),
               const Spacer(),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (ctx, state) {

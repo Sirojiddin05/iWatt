@@ -21,6 +21,96 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class MyFunctions {
   const MyFunctions._();
 
+  static String getNotificationCreatedTime(String locale, String createdAt) {
+    final dateTime = DateTime.parse(createdAt).toLocal();
+    Duration difference = DateTime.now().difference(dateTime);
+    final years = difference.inDays ~/ 365;
+    final days = difference.inDays;
+    final hours = difference.inHours;
+    final minutes = difference.inMinutes;
+    if (years > 0) {
+      return DateFormat(MyFunctions.getFullDatePattern(locale), locale).format(dateTime).toString();
+    } else if (days > 7) {
+      return DateFormat(MyFunctions.getFullDatePattern(locale), locale).format(dateTime).toString();
+    } else if (days > 1 && days <= 7) {
+      return DateFormat(MyFunctions.getWeekDayTimePattern(locale), locale).format(dateTime).toString();
+    } else if (days == 1) {
+      return DateFormat(MyFunctions.getYesterdayTimePattern(locale), locale).format(dateTime).toString();
+    } else if (hours >= 1) {
+      return MyFunctions.geHoursAgoPattern(locale, hours);
+    } else if (minutes >= 1) {
+      return MyFunctions.geMinutesAgoPattern(locale, minutes);
+    } else {
+      if (locale == 'uz') {
+        return 'Hozirgina';
+      }
+      if (locale == 'ru') {
+        return 'Только что';
+      }
+      return 'Just now';
+    }
+  }
+
+  static String geMinutesAgoPattern(String locale, int minutesAgo) {
+    if (locale == 'uz') {
+      return "$minutesAgo daqiqa oldin";
+    }
+    if (locale == 'ru') {
+      return "$minutesAgo мин. назад";
+    }
+    return "$minutesAgo minutes ago";
+  }
+
+  static String geHoursAgoPattern(String locale, int hoursAgo) {
+    if (locale == 'uz') {
+      return "$hoursAgo soat oldin";
+    }
+    if (locale == 'ru') {
+      return "$hoursAgo ч. назад";
+    }
+    return "$hoursAgo hours ago";
+  }
+
+  static String getYesterdayTimePattern(String locale) {
+    if (locale == 'uz') {
+      return "'Kecha' HH:mm 'da'";
+    }
+    if (locale == 'ru') {
+      return "'Вчера' в HH:mm";
+    }
+    return "'Yesterday' 'at' HH:mm";
+  }
+
+  static String getWeekDayTimePattern(String locale) {
+    if (locale == 'uz') {
+      return "EEEE HH:mm 'da'";
+    }
+    if (locale == 'ru') {
+      return "EEEE 'в' HH:mm";
+    }
+    return "EEEE 'at' HH:mm";
+  }
+
+  static String getMonthTimePattern(String locale) {
+    if (locale == 'uz') {
+      return "d MMMM HH:mm 'da'";
+    }
+    if (locale == 'ru') {
+      return "d MMMM 'в' HH:mm ";
+    }
+    return "MMMM M 'at' HH:mm a";
+  }
+
+  static String getFullDatePattern(String locale) {
+    if (locale == 'uz') {
+      return "d MMMM y 'yil'";
+    }
+    if (locale == 'ru') {
+      return "d MMMM y 'г.'";
+    }
+    return "MMMM M, y";
+  }
+
   static String getPrice(String price) {
     final p = price.split('.').toList().first.split(',').toList().first;
     return '${formatNumber(p)} UZS';
@@ -113,7 +203,11 @@ class MyFunctions {
   }
 
   static String getEventTime(String dateTime) {
+    if (dateTime.isEmpty) {
+      return '';
+    }
     final parsed = DateTime.parse(dateTime);
+    DateFormat();
     final time = DateFormat("hh:mm").format(parsed).toString();
     final date = DateFormat("dd.MM.yyyy").format(parsed).toString();
     return '$time, $date';
@@ -165,8 +259,7 @@ class MyFunctions {
     return 0;
   }
 
-  static String getCarNumberType(int type) =>
-      CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
+  static String getCarNumberType(int type) => CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
 
   static String getFormattedDate(DateTime dateTime) {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
@@ -176,8 +269,8 @@ class MyFunctions {
     Duration difference = DateTime.now().difference(dateTime);
     if (difference.inDays == 1) {
       return LocaleKeys.yesterday.tr();
-    } else if (difference.inDays > 1) {
-      return DateFormat('dd MMM yyyy').format(dateTime).toLowerCase();
+    } else if (difference.inDays < 1) {
+      return DateFormat('dd.MMM.yyyy').format(dateTime).toLowerCase();
     } else {
       return '${difference.inSeconds} ago';
     }
@@ -314,8 +407,7 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
-    final distance = Geolocator.distanceBetween(
-        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -380,8 +472,7 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(
-        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

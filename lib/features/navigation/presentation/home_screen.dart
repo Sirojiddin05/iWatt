@@ -163,15 +163,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
               listenWhen: (o, n) => o.getVersionFeaturesStatus != n.getVersionFeaturesStatus,
               listener: (context, state) async {
                 if (state.getVersionFeaturesStatus.isSuccess) {
-                  StorageRepository.putList(StorageKeys.versionFeatures,
-                      [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
+                  StorageRepository.putList(
+                      StorageKeys.versionFeatures, [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
                   showModalBottomSheet(
                     context: context,
                     useSafeArea: true,
                     isScrollControlled: true,
                     useRootNavigator: true,
                     backgroundColor: Colors.transparent,
-                    constraints: BoxConstraints(maxHeight: context.sizeOf.height * 0.75),
                     builder: (context) => BlocProvider.value(
                       value: _versionCheckBloc,
                       child: BlocBuilder<VersionCheckBloc, VersionCheckState>(
@@ -196,13 +195,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             builder: (ctx, child) {
               double scaleAnimation = 1 - (animationController.value * .1);
               double transformY2 = animationController.value;
-              double opacity = 0;
-              if (animationController.value > .3) {
-                opacity = animationController.value * .8;
-              } else {
-                opacity = 0;
-              }
-              double borderRadius = 20 * animationController.value;
+
+              double borderRadius = 12 * animationController.value;
               return PresentSheetBackPageWrapper(
                 transformY2: transformY2,
                 scaleAnimation: scaleAnimation,
@@ -211,13 +205,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
               );
             },
             child: AnnotatedRegion(
-              value: SystemUiOverlayStyle.dark,
+              value: SystemUiOverlayStyle.dark.copyWith(systemNavigationBarColor: AppColors.white),
               child: HomeTabControllerProvider(
                 controller: _tabController,
                 child: PopScope(
                   onPopInvoked: (bool didPop) async {
-                    final isFirstRouteInCurrentTab =
-                        !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
+                    final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
                     if (isFirstRouteInCurrentTab) {
                       _changePage(0);
                     }
@@ -240,11 +233,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                         color: context.bottomNavigationBarTheme.backgroundColor,
                         border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
                         boxShadow: [
-                          BoxShadow(
-                              color: context.appBarTheme.shadowColor!,
-                              spreadRadius: 0,
-                              blurRadius: 40,
-                              offset: const Offset(0, -2)),
+                          BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
                         ],
                       ),
                       child: Row(
@@ -292,8 +281,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     }
   }
 
-  Widget _buildPageNavigator(NavItemEnum tabItem) =>
-      TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
+  Widget _buildPageNavigator(NavItemEnum tabItem) => TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
 
   Future<void> _changePage(int index) async {
     _tabController.animateTo(index);

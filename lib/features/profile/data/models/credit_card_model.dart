@@ -10,6 +10,7 @@ class CreditCardModel extends CreditCardEntity {
     super.cardNumber,
     super.id,
     super.expireDate,
+    super.bankName,
   });
 
   factory CreditCardModel.fromJson(Map<String, dynamic> json) => _$CreditCardModelFromJson(json);

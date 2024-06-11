@@ -103,7 +103,7 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(width: 16),
-                    SvgPicture.asset(
+                    SvgPicture.network(
                       car.connectorType[index].icon,
                       width: 32,
                       height: 32,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:i_watt_app/core/util/text_formatters/custom_text_editing_formatter.dart';
+import 'package:i_watt_app/core/util/text_formatters/custom_number_field_formatter.dart';
 import 'package:i_watt_app/core/util/text_formatters/upper_case_editing_formatter.dart';
 
 class RegionNumberField extends StatelessWidget {

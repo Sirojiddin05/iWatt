@@ -85,7 +85,9 @@ class _AppealsListState extends State<AppealsList> {
                     title: LocaleKeys.to_complain.tr(),
                   ),
                   if (state.getAppealsStatus.isInProgress) ...{
-                    Padding(padding: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom), child: const CircularProgressIndicator.adaptive())
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom),
+                        child: const Center(child: CircularProgressIndicator.adaptive()))
                   } else if (state.getAppealsStatus.isSuccess) ...{
                     if (state.appeals.isNotEmpty) ...{
                       Flexible(

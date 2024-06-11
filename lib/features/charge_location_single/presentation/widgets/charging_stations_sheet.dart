@@ -12,29 +12,16 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 import 'connector_card.dart';
 
-class StationSingleSheet extends StatefulWidget {
+class StationSingleSheet extends StatelessWidget {
   final VoidCallback onClose;
-  final int isSelected;
-  const StationSingleSheet({super.key, required this.onClose, required this.isSelected});
-
-  @override
-  State<StationSingleSheet> createState() => _StationSingleSheetState();
-}
-
-class _StationSingleSheetState extends State<StationSingleSheet> {
-  late CarouselController carouselController;
-
-  @override
-  void initState() {
-    carouselController = CarouselController();
-    super.initState();
-  }
+  final CarouselController carouselController;
+  const StationSingleSheet({super.key, required this.onClose, required this.carouselController});
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvoked: (isTrue) {
-        widget.onClose();
+        onClose();
       },
       child: Container(
         margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
@@ -54,7 +41,7 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                 title: LocaleKeys.charging_stations.tr(),
                 titleFotSize: 18,
                 hasCloseIcon: true,
-                onCloseTap: widget.onClose,
+                onCloseTap: onClose,
                 paddingOfCloseIcon: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               ),
             ),
@@ -67,17 +54,15 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                       children: [
                         const StationBackgroundImage(),
                         Positioned.fill(
-                          child: BlocConsumer<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-                            listenWhen: (o, n) => o.selectedStationIndex != n.selectedStationIndex,
-                            listener: (context, state) {
-                              carouselController.animateToPage(state.selectedStationIndex);
-                            },
+                          child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
                             builder: (ctx, state) {
                               return CarouselSlider(
                                 carouselController: carouselController,
                                 options: CarouselOptions(
                                   onPageChanged: (index, reason) {
-                                    context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(index));
+                                    if (reason == CarouselPageChangedReason.manual) {
+                                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(index));
+                                    }
                                   },
                                   height: 464,
                                   enableInfiniteScroll: false,
@@ -86,6 +71,7 @@ class _StationSingleSheetState extends State<StationSingleSheet> {
                                   enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                                   enlargeCenterPage: true,
                                   enlargeFactor: .5,
+                                  initialPage: state.selectedStationIndex,
                                 ),
                                 items: List.generate(
                                   state.location.chargers.length,

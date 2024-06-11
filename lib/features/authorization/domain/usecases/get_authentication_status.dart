@@ -4,7 +4,7 @@ import 'package:i_watt_app/features/authorization/domain/repositories/authentica
 
 class GetAuthenticationStatusUseCase implements StreamUseCase<AuthenticationStatus, NoParams> {
   final AuthenticationRepository repository;
-  GetAuthenticationStatusUseCase({required this.repository});
+  GetAuthenticationStatusUseCase(this.repository);
   @override
   Stream<AuthenticationStatus> call(NoParams params) => repository.authenticationStatusStream();
 }

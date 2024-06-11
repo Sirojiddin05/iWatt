@@ -102,7 +102,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                             useRootNavigator: true,
                             isScrollControlled: true,
                             backgroundColor: AppColors.black,
-                            barrierColor: AppColors.black.withOpacity(.52),
+                            barrierColor: Colors.transparent,
                             builder: (ctx) {
                               return LocationSingleSheet(
                                 title: '${location.vendorName} "${location.locationName}"',

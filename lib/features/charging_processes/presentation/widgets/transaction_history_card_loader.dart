@@ -38,8 +38,10 @@ class TransactionHistoryCardLoader extends StatelessWidget {
         isLoading: true,
         child: Row(
           children: [
-            ShimmerContainer(width: 36, height: 36, borderRadius: 6),
-            SizedBox(height: 10),
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: ShimmerContainer(width: 36, height: 36, borderRadius: 6),
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

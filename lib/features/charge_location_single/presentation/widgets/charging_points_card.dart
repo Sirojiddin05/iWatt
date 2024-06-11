@@ -48,18 +48,6 @@ class _ConnectorsCardState extends State<ConnectorsCard> {
             onTap: () {
               context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
               widget.onTap();
-              // showCupertinoModalBottomSheet(
-              //   context: context,
-              //   backgroundColor: AppColors.white,
-              //   builder: (ctx) {
-              //     return BlocProvider.value(
-              //       value: BlocProvider.of<ChargeLocationSingleBloc>(context),
-              //       child: StationSingleSheet(
-              //         onClose: widget.onTap,
-              //       ),
-              //     );
-              //   },
-              // );
             },
             borderRadius: getBorderRadius(index),
             rippleColor: AppColors.primaryRipple30,
@@ -67,7 +55,7 @@ class _ConnectorsCardState extends State<ConnectorsCard> {
               padding: index == 0 ? const EdgeInsets.fromLTRB(16, 16, 12, 10) : const EdgeInsets.fromLTRB(16, 10, 12, 10),
               child: Row(
                 children: [
-                  SvgPicture.asset(
+                  SvgPicture.network(
                     allConnectors[index].standard.icon,
                     width: 32,
                     height: 32,

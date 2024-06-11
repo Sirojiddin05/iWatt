@@ -131,7 +131,9 @@ class ConnectorCard extends StatelessWidget {
               builder: (context, authState) {
                 return BlocConsumer<ChargingProcessBloc, ChargingProcessState>(
                   listenWhen: (o, n) {
-                    return o.startProcessStatus != n.startProcessStatus;
+                    final isThisConnector = connector.id == n.processes.last.connector.id;
+                    final isStartStatusChanged = o.startProcessStatus != n.startProcessStatus;
+                    return isThisConnector && isStartStatusChanged;
                   },
                   listener: (BuildContext context, ChargingProcessState state) {
                     if (state.startProcessStatus.isFailure) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/widgets/transaction_history_card_loader.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/shimmer_loader.dart';
-import 'package:i_watt_app/features/list/presentation/widgets/charge_location_card_loader.dart';
 
 class TransactionHistoryLoader extends StatelessWidget {
   const TransactionHistoryLoader({super.key});
@@ -17,7 +17,7 @@ class TransactionHistoryLoader extends StatelessWidget {
             return const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ChargeLocationCardLoader(),
+                TransactionHistoryCardLoader(),
                 SizedBox(height: 16),
               ],
             );

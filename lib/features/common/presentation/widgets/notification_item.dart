@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -15,7 +16,7 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return WCustomTappableButton(
       onTap: () {
-        showSingleNotificationSheet(context, notification);
+        showSingleNotificationSheet(context, notification.id);
       },
       borderRadius: BorderRadius.circular(0),
       rippleColor: context.textTheme.titleLarge!.color!.withOpacity(.15),
@@ -31,23 +32,25 @@ class NotificationItem extends StatelessWidget {
               color: notification.isRead ? Colors.transparent : AppColors.dodgerBlue,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  notification.title,
-                  style: context.textTheme.headlineMedium,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  MyFunctions.getFormattedTime(DateTime.parse(notification.createdAt)),
-                  style: context.textTheme.titleSmall?.copyWith(fontSize: 12),
-                ),
-              ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    notification.title,
+                    style: context.textTheme.headlineMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    MyFunctions.getNotificationCreatedTime(context.locale.languageCode, notification.createdAt),
+                    style: context.textTheme.titleSmall?.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

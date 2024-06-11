@@ -1,6 +1,6 @@
 class PayWithCardParams {
   final int cardId;
-  final int amount;
+  final String amount;
 
   const PayWithCardParams({required this.cardId, required this.amount});
 }

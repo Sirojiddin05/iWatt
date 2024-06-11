@@ -262,17 +262,22 @@ class CodegenLoader extends AssetLoader{
     "singular_nominative": "час",
     "singular_genitive": "часа",
     "plural_nominative": "часы",
-    "plural_genitive": "часов"
+    "plural_genitive": "часов",
+    "short": "ч.",
+    "ago": "ч. назад"
   },
   "minute": {
     "singular_nominative": "минута",
     "plural_nominative": "минуты",
-    "plural_genitive": "минут"
+    "plural_genitive": "минут",
+    "short": "мин.",
+    "ago": "мин. назад"
   },
   "second": {
     "singular_nominative": "секунда",
     "plural_nominative": "секунды",
-    "plural_genitive": "секунд"
+    "plural_genitive": "секунд",
+    "short": "сек."
   },
   "total_charging_price": "Общая сумма зарядки",
   "to_back": "Вернуться",
@@ -291,7 +296,87 @@ class CodegenLoader extends AssetLoader{
   "scan_qr": "Сканируйте QR код",
   "sorry_qr_code_is_invalid": "Извините, QR-код недействителен. Пожалуйста, попробуйте еще раз.",
   "card_is_added": "Карта добавлена",
-  "balance": "Баланс:"
+  "balance": "Баланс:",
+  "january": {
+    "capital": "Январь",
+    "small": "январь",
+    "short": "янв",
+    "small_genitive": "января"
+  },
+  "february": {
+    "capital": "Февраль",
+    "small": "февраль",
+    "short": "фев",
+    "small_genitive": "февраля"
+  },
+  "march": {
+    "capital": "Март",
+    "small": "март",
+    "short": "мар",
+    "small_genitive": "марта"
+  },
+  "april": {
+    "capital": "Апрель",
+    "small": "апрель",
+    "short": "апр",
+    "small_genitive": "апреля"
+  },
+  "may": {
+    "capital": "Май",
+    "small": "май",
+    "short": "май",
+    "small_genitive": "мая"
+  },
+  "june": {
+    "capital": "Июнь",
+    "small": "июнь",
+    "short": "июн",
+    "small_genitive": "июня"
+  },
+  "july": {
+    "capital": "Июль",
+    "small": "июль",
+    "short": "июл",
+    "small_genitive": "июля"
+  },
+  "august": {
+    "capital": "Август",
+    "small": "август",
+    "short": "авг",
+    "small_genitive": "августа"
+  },
+  "september": {
+    "capital": "Сентябрь",
+    "small": "сентябрь",
+    "short": "сен",
+    "small_genitive": "сентября"
+  },
+  "october": {
+    "capital": "Октябрь",
+    "small": "октябрь",
+    "short": "окт",
+    "small_genitive": "октября"
+  },
+  "november": {
+    "capital": "Ноябрь",
+    "small": "ноябрь",
+    "short": "ноя",
+    "small_genitive": "ноября"
+  },
+  "december": {
+    "capital": "Декабрь",
+    "small": "декабрь",
+    "short": "дек",
+    "small_genitive": "декабря"
+  },
+  "at": "в",
+  "just_now": "только что",
+  "top_up": "Пополнение баланса",
+  "top_up_was_successful": "Баланс успешно пополнен",
+  "you_have_debt_of_amount": "У вас есть задолженность в размере",
+  "profile_updated_successfully": "Профиль успешно обновлен",
+  "input_the_sum": "Введите сумму",
+  "payment": "Оплата"
 };
 static const Map<String,dynamic> en = {
   "other": {

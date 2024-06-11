@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,7 @@ import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.d
 import 'package:i_watt_app/features/common/domain/usecases/parking_data_stream_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/post_search_history_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/read_all_notifications.dart';
+import 'package:i_watt_app/features/common/domain/usecases/register_device_id_key_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/start_command_result_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/stop_command_result_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/transaction_cheque_stream_usecase.dart';
@@ -53,15 +55,19 @@ import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/single_notification_sheet.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
+import 'package:i_watt_app/features/profile/data/repositories_impl/payments_repository_impl.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/get_user_data_usecase.dart';
+import 'package:i_watt_app/features/profile/domain/usecases/pay_with_card_usecase.dart';
 import 'package:i_watt_app/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/payments_bloc/payments_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/firebase_options.dart';
@@ -96,7 +102,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => CarOnMapBloc()),
+        BlocProvider(
+          create: (context) => CarOnMapBloc(),
+        ),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
         // BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
@@ -104,7 +112,8 @@ class App extends StatelessWidget {
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(
-            GetAuthenticationStatusUseCase(repository: serviceLocator<AuthenticationRepositoryImpl>()),
+            GetAuthenticationStatusUseCase(serviceLocator<AuthenticationRepositoryImpl>()),
+            RegisterDeviceIdAndKeyUseCase(serviceLocator<NotificationsRepositoryImpl>()),
           ),
         ),
         BlocProvider(
@@ -200,6 +209,13 @@ class App extends StatelessWidget {
             DeleteAccountUseCase(serviceLocator<ProfileRepositoryImpl>()),
           )..add(GetUserData()),
         ),
+        BlocProvider(
+          create: (context) => PaymentBloc(
+            PayWithCardUseCase(
+              serviceLocator<PaymentsRepositoryImpl>(),
+            ),
+          ),
+        ),
       ],
       child: EasyLocalization(
         path: 'assets/translations',
@@ -237,6 +253,17 @@ class _MyAppState extends State<MyApp> {
     if (!onBoarding) {
       context.read<InstructionsBloc>().add(GetInstructionsEvent(InstructionsType.onboarding.name));
     }
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('FirebaseMessaging.data ${message.data}');
+      print('FirebaseMessaging.title ${message.notification?.title}');
+      print('FirebaseMessaging.messageId ${message.messageId}');
+      print('FirebaseMessaging.messageType ${message.messageType}');
+      print('FirebaseMessaging.messageType ${message.notification}');
+      var notificationId = int.tryParse(message.data['notification_id']);
+      if (notificationId != null) {
+        showSingleNotificationSheet(context, notificationId);
+      }
+    });
   }
 
   @override

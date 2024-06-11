@@ -156,6 +156,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     } else {
       await yandexMapController.setMapStyle('');
+      emit(state.copyWith(hasLuminosity: false));
       if (!hasLocationAccess) {
         await Future.delayed(const Duration(seconds: 10));
         add(const ChangeLuminosityStateEvent(hasLuminosity: true));

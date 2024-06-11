@@ -7,6 +7,7 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/animated_size_scale_map_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/pay_with_card_sheet.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class TopUpBalanceMessage extends StatelessWidget {
@@ -19,7 +20,9 @@ class TopUpBalanceMessage extends StatelessWidget {
       builder: (context, message) {
         return AnimatedScaleSizeWidget(
           buttonText: LocaleKeys.pay.tr(),
-          onButtonTap: () {},
+          onButtonTap: () {
+            showPayWithCardSheet(context);
+          },
           iconPath: AppImages.balanceMessage,
           body: RichText(
             text: TextSpan(

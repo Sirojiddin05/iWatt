@@ -64,12 +64,6 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                     color: AppColors.limeGreen,
                     rippleColor: AppColors.white.withAlpha(30),
                     onTap: () {
-                      if (state.location.chargers.isNotEmpty) {
-                        print('state.location.chargers.isNotEmpty');
-                        context
-                            .read<ChargeLocationSingleBloc>()
-                            .add(ChangeSelectedStationIndexByConnectorId(state.location.chargers.first.connectors.first.id));
-                      }
                       onChargeTap();
                     },
                     child: Row(

@@ -2,17 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/charging_processes/data/repositories_impl/transaction_history_repository_impl.dart';
+import 'package:i_watt_app/features/charging_processes/domain/usecases/get_single_transaction_usecase.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/transactions_bloc/transaction_history_bloc.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/payment_ckeck_sheet.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/widgets/transaction_history_loader.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/transaction_item_history.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
-import 'package:i_watt_app/features/list/presentation/widgets/charge_location_cards_loader.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransactionHistoryList extends StatelessWidget {
@@ -21,10 +23,9 @@ class TransactionHistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
-      buildWhen: (o, n) => o.getTransactionHistoryStatus != n.getTransactionHistoryStatus,
       builder: (context, state) {
         if (state.getTransactionHistoryStatus.isInProgress) {
-          return const ChargeLocationCardsLoader();
+          return const TransactionHistoryLoader();
         } else if (state.getTransactionHistoryStatus.isSuccess) {
           if (state.transactionHistory.isEmpty) {
             return Center(
@@ -54,15 +55,18 @@ class TransactionHistoryList extends StatelessWidget {
                 return TransactionHistoryItem(
                   transaction: transaction,
                   onTap: () {
-                    context.read<TransactionHistoryBloc>().add(GetSingleTransactionEvent(transaction.transactionId));
                     showCupertinoModalBottomSheet(
                       context: context,
-                      barrierColor: AppColors.white,
                       enableDrag: false,
                       isDismissible: false,
+                      useRootNavigator: true,
                       builder: (ctx) {
-                        return BlocProvider.value(
-                          value: context.read<TransactionHistoryBloc>(),
+                        return BlocProvider(
+                          create: (ctx) => TransactionHistoryBloc.single(
+                            GetSingleTransactionUseCase(
+                              serviceLocator<TransactionHistoryRepositoryImpl>(),
+                            ),
+                          )..add(GetSingleTransactionEvent(transaction.id)),
                           child: BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
                             builder: (context, state) {
                               return ChargingPaymentCheck(

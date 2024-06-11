@@ -11,7 +11,7 @@ class NotificationState extends Equatable {
     this.notificationOnOffStatus = FormzSubmissionStatus.initial,
     this.notificationOnOffError = '',
     this.notifications = const [],
-    this.notificationDetail = const NotificationDetailEntity(),
+    this.notificationDetail = const NotificationEntity(),
     this.next = '',
     this.fetchMore = false,
     this.unReadNotificationsCount = -1,
@@ -26,7 +26,7 @@ class NotificationState extends Equatable {
   final FormzSubmissionStatus notificationOnOffStatus;
   final String notificationOnOffError;
   final List<NotificationEntity> notifications;
-  final NotificationDetailEntity notificationDetail;
+  final NotificationEntity notificationDetail;
   final String next;
   final bool fetchMore;
   final int unReadNotificationsCount;
@@ -41,7 +41,7 @@ class NotificationState extends Equatable {
     FormzSubmissionStatus? notificationOnOffStatus,
     String? notificationOnOffError,
     List<NotificationEntity>? notifications,
-    NotificationDetailEntity? notificationDetail,
+    NotificationEntity? notificationDetail,
     String? next,
     bool? fetchMore,
     int? unReadNotificationsCount,

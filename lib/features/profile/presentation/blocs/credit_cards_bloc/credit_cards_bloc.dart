@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
-import 'package:i_watt_app/core/error/failure_handler.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/payments_repository_impl.dart';
 import 'package:i_watt_app/features/profile/domain/entities/create_card_params.dart';
 import 'package:i_watt_app/features/profile/domain/entities/credit_card_entity.dart';
@@ -38,9 +37,10 @@ class CreditCardsBloc extends Bloc<CreditCardsEvent, CreditCardsState> {
             creditCards: [...creditCards],
           ),
         );
+        event.onSuccess();
       } else {
         emit(state.copyWith(deleteCardStatus: FormzSubmissionStatus.failure));
-        event.onError((result.left as ServerFailure).errorMessage.toString());
+        event.onError(result.left.errorMessage);
       }
     });
     on<CreateCreditCard>((event, emit) async {

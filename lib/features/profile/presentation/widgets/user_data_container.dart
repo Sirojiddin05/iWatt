@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/shimmer_loader.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_image.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
@@ -58,20 +60,41 @@ class UserDataContainer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        user.fullName.isEmpty ? 'User ${user.id}' : user.fullName,
-                        style: context.textTheme.headlineLarge?.copyWith(fontSize: 18),
-                      ),
-                      const SizedBox(height: 2),
-                      if (user.phone.isNotEmpty) ...{
-                        Text(
-                          user.phone,
-                          style: context.textTheme.titleMedium?.copyWith(
-                            fontSize: 12,
-                            //TODO theme
-                            color: AppColors.taxBreak,
+                      if (state.getUserDataStatus.isInProgress) ...{
+                        const Shimmer(
+                          child: ShimmerLoading(
+                            isLoading: true,
+                            child: Column(
+                              children: [
+                                ShimmerContainer(
+                                  width: 100,
+                                  height: 16,
+                                ),
+                                SizedBox(height: 2),
+                                ShimmerContainer(
+                                  width: 100,
+                                  height: 16,
+                                ),
+                              ],
+                            ),
                           ),
+                        )
+                      } else ...{
+                        Text(
+                          user.fullName.isEmpty ? 'User ${user.id}' : user.fullName,
+                          style: context.textTheme.headlineLarge?.copyWith(fontSize: 18),
                         ),
+                        const SizedBox(height: 2),
+                        if (user.phone.isNotEmpty) ...{
+                          Text(
+                            user.phone,
+                            style: context.textTheme.titleMedium?.copyWith(
+                              fontSize: 12,
+                              //TODO theme
+                              color: AppColors.taxBreak,
+                            ),
+                          ),
+                        }
                       }
                     ],
                   ),

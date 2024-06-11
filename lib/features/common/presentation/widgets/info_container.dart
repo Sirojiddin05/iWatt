@@ -5,13 +5,15 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class InfoContainer extends StatelessWidget {
-  final String infoText;
   final String? title;
+  final String infoText;
+  final TextStyle? infoTextStyle;
+  final TextStyle? titleTextStyle;
   final Color color;
+  final String icon;
+  final Color? iconColor;
   final EdgeInsets? margin;
   final Widget? suffix;
-  final Color? iconColor;
-  final TextStyle? subtitleStyle;
   const InfoContainer({
     super.key,
     required this.infoText,
@@ -20,7 +22,9 @@ class InfoContainer extends StatelessWidget {
     this.title,
     this.suffix,
     this.iconColor,
-    this.subtitleStyle,
+    this.infoTextStyle,
+    this.titleTextStyle,
+    this.icon = AppIcons.info,
   });
 
   @override
@@ -34,7 +38,7 @@ class InfoContainer extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SvgPicture.asset(AppIcons.info, color: iconColor),
+          SvgPicture.asset(icon, color: iconColor),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -43,13 +47,13 @@ class InfoContainer extends StatelessWidget {
                 if (title != null) ...{
                   Text(
                     title!,
-                    style: context.textTheme.displaySmall?.copyWith(fontSize: 12),
+                    style: titleTextStyle ?? context.textTheme.displaySmall?.copyWith(fontSize: 12),
                   ),
                   const SizedBox(height: 2),
                 },
                 Text(
                   infoText,
-                  style: subtitleStyle ?? context.textTheme.headlineSmall,
+                  style: infoTextStyle ?? context.textTheme.headlineSmall,
                 ),
               ],
             ),

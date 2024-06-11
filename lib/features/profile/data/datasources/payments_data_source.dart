@@ -11,7 +11,7 @@ abstract class PaymentsDataSource {
   Future<CreateCreditCardModel> createCreditCard({required String cardNumber, required String expireDate});
   Future<void> confirmCreditCard({required String otp, required String cardToken});
   Future<void> deleteCreditCard({required int userCardId});
-  Future<void> payWithCard({required int cardId, required int amount});
+  Future<void> payWithCard({required int cardId, required String amount});
 }
 
 class PaymentsDataSourceImpl extends PaymentsDataSource {
@@ -128,14 +128,13 @@ class PaymentsDataSourceImpl extends PaymentsDataSource {
   }
 
   @override
-  Future<void> payWithCard({required int cardId, required int amount}) async {
+  Future<void> payWithCard({required int cardId, required String amount}) async {
     try {
       final response = await dio.post(
-        'payments/paylov/receipts/pay/',
-        data: {"card_id": cardId, "amount": amount},
+        'payment/ReceiptPay/',
+        data: {"card": cardId, "amount": amount},
       );
-      if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      } else {
+      if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
           statusCode: error.statusCode,

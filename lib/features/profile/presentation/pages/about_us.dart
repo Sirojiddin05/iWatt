@@ -39,7 +39,10 @@ class AboutUsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(AppImages.logo, width: context.sizeOf.width * .5),
+                  Hero(
+                    tag: 'mainLogo',
+                    child: Image.asset(AppImages.logo, width: context.sizeOf.width * .5),
+                  ),
                   const SizedBox(height: 32),
                   BlocBuilder<AboutUsBloc, AboutUsState>(
                     builder: (context, state) {

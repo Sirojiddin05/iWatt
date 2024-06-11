@@ -1,7 +1,9 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/charge_location_single_repository_impl.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/usecases/get_charge_location_single_usecase.dart';
@@ -59,16 +61,16 @@ class LocationSingleSheet extends StatefulWidget {
 }
 
 class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerProviderStateMixin {
-  late TabController tabController;
-  late DraggableScrollableController draggableScrollableController;
-  late ValueNotifier<double> headerOpacity;
-  late ValueNotifier<double> dragStickTop;
+  late final TabController tabController;
+  late final DraggableScrollableController draggableScrollableController;
+  late final ValueNotifier<double> headerOpacity;
+  late final ValueNotifier<double> dragStickTop;
   late final ChargeLocationSingleBloc chargeLocationSingleBloc;
   late final AnimationController animationController;
-  final GlobalKey _key = GlobalKey();
-  late final ValueNotifier<int> isStationsSheet;
-  double stationSingleSheetHeight = 0;
   late final Animation<double> animation;
+  late final ValueNotifier<int> isStationsSheet;
+  late final CarouselController carouselController;
+  double stationSingleSheetHeight = 0;
   bool isOpened = false;
 
   @override
@@ -79,13 +81,16 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
       vsync: this,
       duration: const Duration(milliseconds: 400),
       reverseDuration: const Duration(milliseconds: 400),
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
-        } else if (status == AnimationStatus.dismissed) {
-          context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: false));
-        }
-      });
+    )..addStatusListener(
+        (status) {
+          if (status == AnimationStatus.completed) {
+            context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+          } else if (status == AnimationStatus.dismissed) {
+            context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: false));
+          }
+        },
+      );
+    carouselController = CarouselController();
     animation = CurvedAnimation(parent: animationController, curve: Curves.decelerate);
     headerOpacity = ValueNotifier(widget.midSize ? 1 : 0);
     dragStickTop = ValueNotifier(widget.midSize ? 20 : 0);
@@ -105,172 +110,180 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light,
+      value: SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: AppColors.white),
       child: BlocProvider(
         create: (ctx) => chargeLocationSingleBloc,
-        child: AnimatedBuilder(
-          animation: animationController,
-          builder: (context, child) {
-            double scaleAnimation = 1 - (animationController.value * .1);
-            final h = context.sizeOf.height - (context.padding.top + 8);
-            double transformY = context.sizeOf.height - (h * animationController.value);
-            double transformY2 = animationController.value;
-            double borderRadius = 20 * animationController.value;
-            return Stack(
-              children: [
-                PresentSheetBackPageWrapper(
-                  transformY2: transformY2,
-                  scaleAnimation: scaleAnimation,
-                  borderRadius: borderRadius,
-                  child: child ?? const SizedBox.shrink(),
-                ),
-                ValueListenableBuilder(
-                  valueListenable: isStationsSheet,
-                  builder: (ctx, val, child) {
-                    return Transform.translate(
-                      offset: Offset(0, transformY),
-                      child: GestureDetector(
-                        onVerticalDragStart: _onDragStart,
-                        onVerticalDragUpdate: _onDragUpdate,
-                        onVerticalDragEnd: _onDragEnd,
-                        child: val == 1
-                            ? StationSingleSheet(
-                                onClose: () {
-                                  onToggled();
-                                },
-                                isSelected: isStationsSheet.value,
-                              )
-                            : FacilitiesSheet(
-                                onClose: () {
-                                  onToggled();
-                                },
-                              ),
-                      ),
-                    );
-                  },
-                )
-              ],
-            );
+        child: BlocListener<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+          listenWhen: (o, n) => o.selectedStationIndex != n.selectedStationIndex,
+          listener: (context, state) {
+            carouselController.animateToPage(state.selectedStationIndex);
           },
-          child: WKeyboardDismisser(
-            child: Stack(
-              children: [
-                BackgroundImage(headerOpacity: headerOpacity),
-                Positioned.fill(
-                  top: MediaQueryData.fromView(View.of(context)).padding.top,
-                  child: DraggableScrollableSheet(
-                    snap: true,
-                    snapSizes: const [.5, .83, 1],
-                    minChildSize: .5,
-                    initialChildSize: widget.midSize ? .83 : .5,
-                    controller: draggableScrollableController,
-                    builder: (context, controller) {
-                      return SizedBox(
-                        height: context.sizeOf.height,
-                        child: NotificationListener(
-                          onNotification: (OverscrollIndicatorNotification notification) {
-                            notification.disallowIndicator();
-                            return false;
-                          },
-                          child: Stack(
-                            children: [
-                              LocationSingleBodyWrapper(
-                                child: BlocConsumer<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-                                  listenWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
-                                  listener: (context, state) {
-                                    if (state.getSingleStatus.isSuccess &&
-                                        widget.connectorId != -1 &&
-                                        widget.stationId != -1 &&
-                                        widget.id != -1 &&
-                                        !isOpened) {
-                                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(widget.connectorId));
-                                      isStationsSheet.value = 1;
-                                      onToggled();
-                                    }
-                                  },
-                                  buildWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
-                                  builder: (context, state) {
-                                    final location = state.location;
-                                    final vendor = location.vendor;
-                                    final chargers = location.chargers;
-                                    final facilities = location.facilities;
-                                    return CustomScrollView(
-                                      physics: const BouncingScrollPhysics(),
-                                      controller: controller,
-                                      slivers: [
-                                        SliverPersistentHeader(
-                                          pinned: true,
-                                          delegate: LocationSingleHeaderTop(
-                                            locationName: widget.title,
-                                          ),
-                                        ),
-                                        SliverPersistentHeader(
-                                          delegate: LocationSingleHeaderAddress(
-                                            locationAddress: widget.address,
-                                            distance: widget.distance,
-                                          ),
-                                        ),
-                                        //TODO next version
-                                        // SliverPersistentHeader(
-                                        //   pinned: true,
-                                        //   delegate: LocationSingleHeaderTabBar(tabController: tabController),
-                                        // ),
-                                        SliverList.list(
-                                          children: [
-                                            if (state.getSingleStatus.isSuccess) ...{
-                                              if (vendor.minimumBalance.isNotEmpty) ...{
-                                                MinBalanceCard(minBalance: vendor.minimumBalance),
-                                              },
-                                              ConnectorsCard(
-                                                chargers: chargers,
-                                                onTap: () {
-                                                  isStationsSheet.value = 1;
-                                                  context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
-                                                  onToggled();
-                                                },
-                                              ),
-                                              FacilitiesCard(
-                                                facilities: facilities,
-                                                onAll: () {
-                                                  isStationsSheet.value = 2;
-                                                  context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
-                                                  onToggled();
-                                                  //
-                                                },
-                                              ),
-                                              ContactsCard(
-                                                email: vendor.name,
-                                                phone: vendor.phone,
-                                                website: vendor.website,
-                                                socialMedia: vendor.socialMedia,
-                                              ),
-                                              const SizedBox(height: 70),
-                                            } else if (state.getSingleStatus.isInProgress) ...{
-                                              const LocationSingleLoaderView()
-                                            }
-                                          ],
-                                        ),
-                                      ],
-                                    );
+          child: AnimatedBuilder(
+            animation: animationController,
+            builder: (context, child) {
+              double scaleAnimation = 1 - (animationController.value * .1);
+              final h = context.sizeOf.height - (context.padding.top + 8);
+              double transformY = context.sizeOf.height - (h * animationController.value);
+              double transformY2 = animationController.value;
+              double borderRadius = 12 * animationController.value;
+              return Stack(
+                children: [
+                  PresentSheetBackPageWrapper(
+                    transformY2: transformY2,
+                    scaleAnimation: scaleAnimation,
+                    borderRadius: borderRadius,
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: isStationsSheet,
+                    builder: (ctx, val, child) {
+                      return Transform.translate(
+                        offset: Offset(0, transformY),
+                        child: GestureDetector(
+                          onVerticalDragStart: _onDragStart,
+                          onVerticalDragUpdate: _onDragUpdate,
+                          onVerticalDragEnd: _onDragEnd,
+                          child: val == 1
+                              ? child
+                              : FacilitiesSheet(
+                                  onClose: () {
+                                    onToggled();
                                   },
                                 ),
-                              ),
-                              DraggableHead(dragStickTop: dragStickTop)
-                            ],
-                          ),
                         ),
                       );
                     },
+                    child: StationSingleSheet(
+                      carouselController: carouselController,
+                      onClose: () {
+                        onToggled();
+                      },
+                    ),
+                  )
+                ],
+              );
+            },
+            child: WKeyboardDismisser(
+              child: Stack(
+                children: [
+                  BackgroundImage(headerOpacity: headerOpacity),
+                  Positioned.fill(
+                    top: MediaQueryData.fromView(View.of(context)).padding.top,
+                    child: DraggableScrollableSheet(
+                      snap: true,
+                      snapSizes: const [.5, .83, 1],
+                      minChildSize: .5,
+                      initialChildSize: widget.midSize ? .83 : .5,
+                      controller: draggableScrollableController,
+                      builder: (context, controller) {
+                        return SizedBox(
+                          height: context.sizeOf.height,
+                          child: NotificationListener(
+                            onNotification: (OverscrollIndicatorNotification notification) {
+                              notification.disallowIndicator();
+                              return false;
+                            },
+                            child: Stack(
+                              children: [
+                                LocationSingleBodyWrapper(
+                                  child: BlocConsumer<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+                                    listenWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
+                                    listener: (context, state) {
+                                      if (state.getSingleStatus.isSuccess &&
+                                          widget.connectorId != -1 &&
+                                          widget.stationId != -1 &&
+                                          widget.id != -1 &&
+                                          !isOpened) {
+                                        isOpened = true;
+                                        context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(widget.connectorId));
+                                        isStationsSheet.value = 1;
+                                        onToggled();
+                                      }
+                                    },
+                                    buildWhen: (o, n) => o.getSingleStatus != n.getSingleStatus,
+                                    builder: (context, state) {
+                                      final location = state.location;
+                                      final vendor = location.vendor;
+                                      final chargers = location.chargers;
+                                      final facilities = location.facilities;
+                                      return CustomScrollView(
+                                        physics: const BouncingScrollPhysics(),
+                                        controller: controller,
+                                        slivers: [
+                                          SliverPersistentHeader(
+                                            pinned: true,
+                                            delegate: LocationSingleHeaderTop(
+                                              locationName: widget.title,
+                                            ),
+                                          ),
+                                          SliverPersistentHeader(
+                                            delegate: LocationSingleHeaderAddress(
+                                              locationAddress: widget.address,
+                                              distance: widget.distance,
+                                            ),
+                                          ),
+                                          //TODO next version
+                                          // SliverPersistentHeader(
+                                          //   pinned: true,
+                                          //   delegate: LocationSingleHeaderTabBar(tabController: tabController),
+                                          // ),
+                                          SliverList.list(
+                                            children: [
+                                              if (state.getSingleStatus.isSuccess) ...{
+                                                if (vendor.minimumBalance.isNotEmpty) ...{
+                                                  MinBalanceCard(minBalance: vendor.minimumBalance),
+                                                },
+                                                ConnectorsCard(
+                                                  chargers: chargers,
+                                                  onTap: () {
+                                                    isStationsSheet.value = 1;
+                                                    context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                                                    onToggled();
+                                                  },
+                                                ),
+                                                FacilitiesCard(
+                                                  facilities: facilities,
+                                                  onAll: () {
+                                                    isStationsSheet.value = 2;
+                                                    context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                                                    onToggled();
+                                                    //
+                                                  },
+                                                ),
+                                                ContactsCard(
+                                                  email: vendor.name,
+                                                  phone: vendor.phone,
+                                                  website: vendor.website,
+                                                  socialMedia: vendor.socialMedia,
+                                                ),
+                                                SizedBox(height: context.padding.bottom + 56),
+                                              } else if (state.getSingleStatus.isInProgress) ...{
+                                                const LocationSingleLoaderView()
+                                              }
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                                DraggableHead(dragStickTop: dragStickTop)
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                LocationSingleSheetBottomWidget(
-                  onChargeTap: () {
-                    isStationsSheet.value = 1;
-                    context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
-                    onToggled();
-                  },
-                ),
-              ],
+                  LocationSingleSheetBottomWidget(
+                    onChargeTap: () {
+                      isStationsSheet.value = 1;
+                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                      onToggled();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -7,7 +7,7 @@ import 'package:i_watt_app/features/profile/domain/usecases/pay_with_card_params
 class PayWithCardUseCase extends UseCase<void, PayWithCardParams> {
   final PaymentsRepository paymentsRepository;
 
-  PayWithCardUseCase({required this.paymentsRepository});
+  PayWithCardUseCase(this.paymentsRepository);
 
   @override
   Future<Either<Failure, void>> call(PayWithCardParams params) {

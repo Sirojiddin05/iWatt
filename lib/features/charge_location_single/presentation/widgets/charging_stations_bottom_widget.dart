@@ -38,6 +38,7 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                     },
                     child: SvgPicture.asset(
                       AppIcons.chevronLeftBlack,
+                      color: state.selectedStationIndex == 0 ? context.theme.dividerColor : null,
                     ),
                   ),
                 ),
@@ -88,7 +89,7 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                       AppIcons.chevronRightGrey,
                       height: 24,
                       width: 24,
-                      color: AppColors.cyprus,
+                      color: state.selectedStationIndex == (state.location.chargers.length - 1) ? context.theme.dividerColor : AppColors.cyprus,
                     ),
                   ),
                 ),

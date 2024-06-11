@@ -45,51 +45,10 @@ class _CodeVerificationBottomSheetState extends State<CodeVerificationBottomShee
         borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
         child: Scaffold(
           backgroundColor: context.theme.appBarTheme.backgroundColor,
-          bottomNavigationBar: BlocBuilder<CreditCardsBloc, CreditCardsState>(
-            builder: (context, state) {
-              return ValueListenableBuilder<bool>(
-                valueListenable: valueListenable..value = MediaQuery.of(context).viewInsets.bottom == 0,
-                builder: (context, value, child) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      BlocListener<CreditCardsBloc, CreditCardsState>(
-                        listener: (context, state) {},
-                        child: WButton(
-                          margin: EdgeInsets.fromLTRB(16, 0, 16, MediaQuery.of(context).padding.bottom + 16),
-                          onTap: () async {
-                            context.read<CreditCardsBloc>().add(
-                                  ConfirmCreditCardEvent(
-                                    onError: (message) {
-                                      context.showPopUp(
-                                        context,
-                                        PopUpStatus.failure,
-                                        message: message,
-                                      );
-                                    },
-                                    onSuccess: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop(true);
-                                    },
-                                    otp: pinCodeController.text,
-                                  ),
-                                );
-                          },
-                          isLoading: state.confirmCardStatus.isInProgress,
-                          text: LocaleKeys.add.tr(),
-                          rippleColor: Colors.white.withAlpha(50),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
           appBar: AppBar(
             elevation: 0,
             leadingWidth: 0,
+            automaticallyImplyLeading: false,
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -178,6 +137,37 @@ class _CodeVerificationBottomSheetState extends State<CodeVerificationBottomShee
                 ),
               ],
             ),
+          ),
+          bottomNavigationBar: BlocBuilder<CreditCardsBloc, CreditCardsState>(
+            builder: (context, state) {
+              return WButton(
+                margin: EdgeInsets.fromLTRB(16, 0, 16, context.viewInsets.bottom + context.padding.bottom + 16),
+                onTap: () async {
+                  context.read<CreditCardsBloc>().add(
+                        ConfirmCreditCardEvent(
+                          onError: (message) {
+                            context.showPopUp(
+                              context,
+                              PopUpStatus.failure,
+                              message: message,
+                            );
+                          },
+                          onSuccess: () {
+                            context.read<CreditCardsBloc>().add(const GetCreditCards());
+                            context.showPopUp(context, PopUpStatus.success, message: LocaleKeys.card_is_added.tr());
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop();
+                          },
+                          otp: pinCodeController.text,
+                        ),
+                      );
+                },
+                isLoading: state.confirmCardStatus.isInProgress,
+                text: LocaleKeys.add.tr(),
+                rippleColor: Colors.white.withAlpha(50),
+              );
+            },
           ),
         ),
       ),

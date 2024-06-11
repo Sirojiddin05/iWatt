@@ -27,8 +27,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   void initState() {
-    bloc = context.read<NotificationBloc>()..add(GetNotifications());
     super.initState();
+    bloc = context.read<NotificationBloc>()..add(GetNotifications());
   }
 
   @override

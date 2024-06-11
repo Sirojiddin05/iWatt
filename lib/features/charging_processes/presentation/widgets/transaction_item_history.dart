@@ -5,11 +5,11 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
-import 'package:i_watt_app/features/common/domain/entities/transaction_message.dart';
+import 'package:i_watt_app/features/charging_processes/domain/entities/transaction_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 
 class TransactionHistoryItem extends StatelessWidget {
-  final TransactionMessageEntity transaction;
+  final TransactionEntity transaction;
 
   final VoidCallback onTap;
   const TransactionHistoryItem({required this.transaction, super.key, required this.onTap});
@@ -21,7 +21,7 @@ class TransactionHistoryItem extends StatelessWidget {
       rippleColor: AppColors.brightSun.withAlpha(30),
       borderRadius: BorderRadius.circular(6),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(12), boxShadow: [
           BoxShadow(
             offset: const Offset(0, 6),
@@ -45,6 +45,7 @@ class TransactionHistoryItem extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     transaction.locationName,
@@ -61,14 +62,14 @@ class TransactionHistoryItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  DateFormat("dd.MM.yyyy").format(DateTime.parse(transaction.chargingHasEndedAt)).toString(),
+                  DateFormat("dd.MM.yyyy").format(DateTime.tryParse(transaction.createdAt)?.toLocal() ?? DateTime.now()).toString(),
                   style: context.textTheme.labelMedium!.copyWith(
                     color: AppColors.taxBreak,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '- ${MyFunctions.getPrice(transaction.chargingPrice)} UZS',
+                  '- ${MyFunctions.getPrice(transaction.totalPrice)} UZS',
                   style: context.textTheme.headlineMedium!.copyWith(
                     color: AppColors.amaranth,
                   ),

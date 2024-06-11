@@ -13,7 +13,7 @@ abstract class PaymentsRepository {
 
   Future<Either<Failure, void>> deleteCreditCard({required int userCardId});
 
-  Future<Either<Failure, void>> payWithCard({required int cardId, required int amount});
+  Future<Either<Failure, void>> payWithCard({required int cardId, required String amount});
 // Future<Either<Failure, GenericPagination<PaymentTypeStatusEntity>>> getPaymentSystems();
 // Future<Either<Failure, PaymentStatusEntity>> getTransactionState({required String amount, required int transactionId});
 // Future<Either<Failure, TransactionLinkEntity>> getTransactionLink({required int amount, required String type});

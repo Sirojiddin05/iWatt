@@ -1,7 +1,7 @@
 part of 'transaction_history_bloc.dart';
 
 class TransactionHistoryState extends Equatable {
-  final List<TransactionMessageEntity> transactionHistory;
+  final List<TransactionEntity> transactionHistory;
   final FormzSubmissionStatus getTransactionHistoryStatus;
   final TransactionMessageEntity singleTransactionHistory;
   final FormzSubmissionStatus getSingleTransactionHistoryStatus;
@@ -18,7 +18,7 @@ class TransactionHistoryState extends Equatable {
   });
 
   TransactionHistoryState copyWith({
-    List<TransactionMessageEntity>? transactionHistory,
+    List<TransactionEntity>? transactionHistory,
     FormzSubmissionStatus? getTransactionHistoryStatus,
     TransactionMessageEntity? singleTransactionHistory,
     FormzSubmissionStatus? getSingleTransactionHistoryStatus,

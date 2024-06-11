@@ -32,7 +32,11 @@ class _ChargingPaymentCheckState extends State<ChargingPaymentCheck> with Ticker
           ),
           Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
           if (widget.isLoading) ...{
-            const Center(child: CircularProgressIndicator.adaptive())
+            const Expanded(
+              child: Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
           } else ...{
             Expanded(
               child: SingleChildScrollView(

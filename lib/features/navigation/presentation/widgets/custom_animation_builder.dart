@@ -1,7 +1,6 @@
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/shimmer_loader.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_image.dart';
 import 'package:i_watt_app/features/navigation/domain/entity/version_features_entity.dart';
 
@@ -88,15 +87,7 @@ class _CustomBuilderAnimationState extends State<CustomBuilderAnimation> {
                     ),
                   );
                 } else {
-                  return Shimmer(
-                    child: ShimmerLoading(
-                      isLoading: true,
-                      child: ShimmerContainer(
-                        width: double.infinity,
-                        height: context.sizeOf.height * .65,
-                      ),
-                    ),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
               }
             },

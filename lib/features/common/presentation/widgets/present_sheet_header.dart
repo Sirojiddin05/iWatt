@@ -8,13 +8,21 @@ class PresentSheetHeader extends StatelessWidget {
   final double? titleFotSize;
   final VoidCallback? onCloseTap;
   final bool hasCloseIcon;
-  const PresentSheetHeader({super.key, required this.title, this.paddingOfCloseIcon, this.titleFotSize, this.onCloseTap, this.hasCloseIcon = true});
+  final bool isTitleCentered;
+  const PresentSheetHeader(
+      {super.key,
+      required this.title,
+      this.paddingOfCloseIcon,
+      this.titleFotSize,
+      this.onCloseTap,
+      this.hasCloseIcon = true,
+      this.isTitleCentered = true});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Spacer(),
+        if (isTitleCentered) const Spacer() else const SizedBox(width: 16),
         Text(
           title,
           style: Theme.of(context).textTheme.displayMedium,

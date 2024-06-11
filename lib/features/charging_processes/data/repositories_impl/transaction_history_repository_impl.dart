@@ -3,6 +3,7 @@ import 'package:i_watt_app/core/error/failure_handler.dart';
 import 'package:i_watt_app/core/util/either.dart';
 import 'package:i_watt_app/core/util/extensions/dio_exeption_type_extension.dart';
 import 'package:i_watt_app/features/charging_processes/data/datasource/transaction_history_datasource.dart';
+import 'package:i_watt_app/features/charging_processes/domain/entities/transaction_entity.dart';
 import 'package:i_watt_app/features/charging_processes/domain/repositories/transaction_history_repository.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 import 'package:i_watt_app/features/common/domain/entities/transaction_message.dart';
@@ -28,7 +29,7 @@ class TransactionHistoryRepositoryImpl implements TransactionHistoryRepository {
   }
 
   @override
-  Future<Either<Failure, GenericPagination<TransactionMessageEntity>>> getTransactions({required String next}) async {
+  Future<Either<Failure, GenericPagination<TransactionEntity>>> getTransactions({required String next}) async {
     try {
       final result = await dataSource.getTransactionHistory(next: next);
       return Right(result);

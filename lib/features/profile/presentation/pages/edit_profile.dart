@@ -295,7 +295,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               context.showPopUp(
                 context,
                 PopUpStatus.success,
-                message: "Your profile updated successfully!",
+                message: LocaleKeys.profile_updated_successfully.tr(),
               );
               Navigator.pop(context);
             } else if (state.updateProfileStatus.isFailure) {

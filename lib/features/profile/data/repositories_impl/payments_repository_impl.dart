@@ -14,7 +14,7 @@ class PaymentsRepositoryImpl extends PaymentsRepository {
   PaymentsRepositoryImpl({required this.dataSource});
 
   @override
-  Future<Either<Failure, void>> payWithCard({required int cardId, required int amount}) async {
+  Future<Either<Failure, void>> payWithCard({required int cardId, required String amount}) async {
     try {
       final result = await dataSource.payWithCard(cardId: cardId, amount: amount);
       return Right(result);

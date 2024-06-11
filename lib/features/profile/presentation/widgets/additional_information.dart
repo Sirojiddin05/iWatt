@@ -68,7 +68,7 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
             iconColor: AppColors.dodgerBlue,
             color: AppColors.dodgerBlue.withOpacity(0.1),
             infoText: LocaleKeys.if_you_enter_your_car_number_you_will_have_additional_conveniences.tr(),
-            subtitleStyle: context.textTheme.labelMedium?.copyWith(color: AppColors.cyprus),
+            infoTextStyle: context.textTheme.labelMedium?.copyWith(color: AppColors.cyprus),
             margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           ),
         ],

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
@@ -49,11 +48,13 @@ class SelectableStationItem extends StatelessWidget {
             Row(
               children: List.generate(
                 connectors.length,
-                (index) => SvgPicture.network(
-                  connectors[index].standard.icon,
-                  width: 28,
-                  height: 28,
-                  color: ConnectorStatus.fromString(connectors[index].status).color,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: SvgPicture.network(
+                    connectors[index].standard.icon,
+                    width: 32,
+                    height: 32,
+                  ),
                 ),
               ),
             ),

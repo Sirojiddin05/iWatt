@@ -20,6 +20,7 @@ class BackgroundImage extends StatelessWidget {
       top: 0,
       right: 0,
       left: 0,
+      bottom: 0,
       child: ValueListenableBuilder(
         valueListenable: headerOpacity,
         builder: (context, value, child) {
@@ -27,19 +28,25 @@ class BackgroundImage extends StatelessWidget {
             opacity: value,
             child: Stack(
               children: [
-                Container(
-                  width: double.infinity,
-                  height: context.sizeOf.height * 0.3,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(AppImages.locationSingleHeaderBg),
-                      fit: BoxFit.cover,
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: context.sizeOf.height * 0.3,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(AppImages.locationSingleHeaderBg),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
+                    const Spacer()
+                  ],
                 ),
                 Positioned(
                   left: 16,
-                  bottom: 64,
+                  bottom: context.sizeOf.height * 0.78,
                   child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
                     builder: (context, state) {
                       return LogoContainer(

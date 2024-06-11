@@ -72,6 +72,7 @@ class _SelectStationSheetState extends State<SelectStationSheet> {
                     title: state.location.chargers[index].name,
                     onTap: () {
                       context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(index));
+                      Navigator.pop(context);
                     },
                   ),
                 ),

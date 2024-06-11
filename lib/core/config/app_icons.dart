@@ -108,6 +108,7 @@ class AppIcons {
   static const notWorkingStatusIcon = 'assets/icons/ic_notworking_status.svg';
   static const nearStationStatusIcon = 'assets/icons/ic_connect.svg';
   static const card = 'assets/icons/ic_card.svg';
+  static const cardNumber = 'assets/icons/ic_card_number.svg';
   static const uzcard = 'assets/icons/ic_uzcard.svg';
   static const humo = 'assets/icons/ic_humo.svg';
   static const visa = 'assets/icons/ic_visa.svg';
@@ -133,4 +134,5 @@ class AppIcons {
   static const cancel = 'assets/icons/cancel.svg';
   static const balancePattern = 'assets/icons/balance_pattern.svg';
   static const roundedPlug = 'assets/icons/ic_rounded_plug.svg';
+  static const debtIcon = 'assets/icons/ic_debt.svg';
 }
