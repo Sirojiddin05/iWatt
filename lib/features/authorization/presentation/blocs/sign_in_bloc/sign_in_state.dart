@@ -3,8 +3,10 @@ part of 'sign_in_bloc.dart';
 class SignInState extends Equatable {
   const SignInState({
     this.signInStatus = FormzSubmissionStatus.initial,
+    this.signInWithQrStatus = FormzSubmissionStatus.initial,
     this.verifyCodeStatus = FormzSubmissionStatus.initial,
     this.signInErrorMessage = '',
+    this.signInWithQrErrorMessage = '',
     this.verifyCodeErrorMessage = '',
     this.verifiedPhone = '',
     this.tempPhone = '',
@@ -16,8 +18,10 @@ class SignInState extends Equatable {
   });
 
   final FormzSubmissionStatus signInStatus;
+  final FormzSubmissionStatus signInWithQrStatus;
   final FormzSubmissionStatus verifyCodeStatus;
   final String signInErrorMessage;
+  final String signInWithQrErrorMessage;
   final String verifyCodeErrorMessage;
   final String verifiedPhone;
   final String tempPhone;
@@ -29,9 +33,11 @@ class SignInState extends Equatable {
 
   SignInState copyWith({
     FormzSubmissionStatus? signInStatus,
+    FormzSubmissionStatus? signInWithQrStatus,
     FormzSubmissionStatus? verifyCodeStatus,
     String? signInErrorMessage,
     String? verifyCodeErrorMessage,
+    String? signInWithQrErrorMessage,
     String? verifiedPhone,
     String? tempPhone,
     String? session,
@@ -42,8 +48,10 @@ class SignInState extends Equatable {
   }) {
     return SignInState(
       signInStatus: signInStatus ?? this.signInStatus,
+      signInWithQrStatus: signInWithQrStatus ?? this.signInWithQrStatus,
       verifyCodeStatus: verifyCodeStatus ?? this.verifyCodeStatus,
       signInErrorMessage: signInErrorMessage ?? this.signInErrorMessage,
+      signInWithQrErrorMessage: signInWithQrErrorMessage ?? this.signInWithQrErrorMessage,
       verifyCodeErrorMessage: verifyCodeErrorMessage ?? this.verifyCodeErrorMessage,
       verifiedPhone: verifiedPhone ?? this.verifiedPhone,
       tempPhone: tempPhone ?? this.tempPhone,
@@ -58,9 +66,11 @@ class SignInState extends Equatable {
   @override
   List<Object> get props => [
         signInStatus,
+        signInWithQrStatus,
         verifyCodeStatus,
         signInErrorMessage,
         verifyCodeErrorMessage,
+        signInWithQrErrorMessage,
         verifiedPhone,
         tempPhone,
         session,

@@ -19,91 +19,86 @@ class StationSingleSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (isTrue) {
-        onClose();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+    return Container(
+      margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        color: AppColors.white,
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: PresentSheetHeader(
+              title: LocaleKeys.charging_stations.tr(),
+              titleFotSize: 18,
+              hasCloseIcon: true,
+              onCloseTap: onClose,
+              paddingOfCloseIcon: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            ),
           ),
-          color: AppColors.white,
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: PresentSheetHeader(
-                title: LocaleKeys.charging_stations.tr(),
-                titleFotSize: 18,
-                hasCloseIcon: true,
-                onCloseTap: onClose,
-                paddingOfCloseIcon: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              ),
-            ),
-            Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        const StationBackgroundImage(),
-                        Positioned.fill(
-                          child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-                            builder: (ctx, state) {
-                              return CarouselSlider(
-                                carouselController: carouselController,
-                                options: CarouselOptions(
-                                  onPageChanged: (index, reason) {
-                                    if (reason == CarouselPageChangedReason.manual) {
-                                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(index));
-                                    }
-                                  },
-                                  height: 464,
-                                  enableInfiniteScroll: false,
-                                  viewportFraction: .6,
-                                  disableCenter: true,
-                                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                                  enlargeCenterPage: true,
-                                  enlargeFactor: .5,
-                                  initialPage: state.selectedStationIndex,
-                                ),
-                                items: List.generate(
-                                  state.location.chargers.length,
-                                  (stationIndex) {
-                                    final station = state.location.chargers[stationIndex];
-                                    return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: List.generate(station.connectors.length, (connectorIndex) {
-                                        final connector = station.connectors[connectorIndex];
-                                        return ConnectorCard(
-                                          connector: connector,
-                                          price: station.price,
-                                          isNearToStation: state.isNearToStation,
-                                          locationName: '${state.location.vendor.name} "${state.location.name}"',
-                                        );
-                                      }),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+          Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      const StationBackgroundImage(),
+                      Positioned.fill(
+                        child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+                          builder: (ctx, state) {
+                            return CarouselSlider(
+                              carouselController: carouselController,
+                              options: CarouselOptions(
+                                onPageChanged: (index, reason) {
+                                  if (reason == CarouselPageChangedReason.manual) {
+                                    context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(index));
+                                  }
+                                },
+                                enableInfiniteScroll: false,
+                                viewportFraction: .6,
+                                disableCenter: true,
+                                enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                                enlargeCenterPage: true,
+                                enlargeFactor: .5,
+                                initialPage: state.selectedStationIndex,
+                              ),
+                              items: List.generate(
+                                state.location.chargers.length,
+                                (stationIndex) {
+                                  final station = state.location.chargers[stationIndex];
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(station.connectors.length, (connectorIndex) {
+                                      final connector = station.connectors[connectorIndex];
+                                      return ConnectorCard(
+                                        connector: connector,
+                                        price: station.price,
+                                        isNearToStation: state.isNearToStation,
+                                        locationName: '${state.location.vendor.name} "${state.location.name}"',
+                                        onClose: onClose,
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const ChargingStationsBottomWidget(),
-                ],
-              ),
+                ),
+                const ChargingStationsBottomWidget(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

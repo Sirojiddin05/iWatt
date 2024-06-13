@@ -21,29 +21,29 @@ class NotificationLoaderItem extends StatelessWidget {
               color: context.appBarTheme.backgroundColor,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 16,
-                  width: context.sizeOf.width * .34,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: context.appBarTheme.backgroundColor,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 16,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: context.appBarTheme.backgroundColor,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  height: 14,
-                  width: context.sizeOf.width * .87,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: context.appBarTheme.backgroundColor,
+                  const SizedBox(height: 4),
+                  Container(
+                    height: 14,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: context.appBarTheme.backgroundColor,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

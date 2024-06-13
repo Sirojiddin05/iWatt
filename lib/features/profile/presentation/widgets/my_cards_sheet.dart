@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -105,6 +107,11 @@ class _MyCardsSheetState extends State<MyCardsSheet> {
                           showCupertinoModalBottomSheet(
                             context: context,
                             useRootNavigator: true,
+                            overlayStyle: SystemUiOverlayStyle.dark.copyWith(
+                              statusBarIconBrightness: Brightness.light,
+                              statusBarBrightness: Brightness.dark,
+                              systemNavigationBarColor: AppColors.white,
+                            ),
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                             ),

@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/domain/entities/notification_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/single_notification_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 
 class NotificationItem extends StatelessWidget {
   final NotificationEntity notification;
@@ -17,6 +19,7 @@ class NotificationItem extends StatelessWidget {
     return WCustomTappableButton(
       onTap: () {
         showSingleNotificationSheet(context, notification.id);
+        context.read<ProfileBloc>().add(DecrementNotificationCount());
       },
       borderRadius: BorderRadius.circular(0),
       rippleColor: context.textTheme.titleLarge!.color!.withOpacity(.15),

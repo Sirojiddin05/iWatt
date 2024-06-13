@@ -376,7 +376,9 @@ class CodegenLoader extends AssetLoader{
   "you_have_debt_of_amount": "У вас есть задолженность в размере",
   "profile_updated_successfully": "Профиль успешно обновлен",
   "input_the_sum": "Введите сумму",
-  "payment": "Оплата"
+  "payment": "Оплата",
+  "use_account_from_other_device": "Использовать с другого устройства?",
+  "scan_the_qr_and_login": "Отсканируйте этот QR-код с помощью устройства на котором хотите использовать I WATT, и войдите в свой аккаунт"
 };
 static const Map<String,dynamic> en = {
   "other": {

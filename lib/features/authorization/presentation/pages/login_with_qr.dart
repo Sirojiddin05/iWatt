@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +9,7 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -102,11 +104,11 @@ class _LoginWithQrState extends State<LoginWithQr> {
                   Text(
                     LocaleKeys.point_the_camera_to_the_qr_where_it_is_located_at_the_station.tr(),
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.zircon,
-                        ),
+                    style: context.textTheme.titleSmall!.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.zircon,
+                    ),
                   ),
                 ],
               ),
@@ -147,16 +149,14 @@ class _LoginWithQrState extends State<LoginWithQr> {
     qrController.scannedDataStream.listen(
       (scanData) async {
         final code = scanData.code;
-
-        ///i-watt:token
         if (code != null && code.contains("i-watt:")) {
           await qrController.pauseCamera();
           qrController.dispose();
           token = code.replaceAll('i-watt:', '');
         }
-
+        final decryptedToken = await decryptToken(token);
         if (token.isNotEmpty) {
-          Navigator.pop(ctx, token);
+          Navigator.pop(ctx, decryptedToken);
         }
       },
     );
@@ -188,6 +188,20 @@ class _LoginWithQrState extends State<LoginWithQr> {
     } on Exception catch (_) {
       context.showPopUp(context, PopUpStatus.failure, message: 'Could not disable Flashlight');
     }
+  }
+
+  Future<String> decryptToken(String ivAndEncryptedToken) async {
+    final ivBase64 = ivAndEncryptedToken.substring(0, 24); // The first 24 characters represent the base64-encoded IV
+    final encryptedTokenBase64 = ivAndEncryptedToken.substring(24);
+    final key = await MyFunctions.getEncryptionKey(); // The rest is the encrypted data
+    if (key == null) {
+      return '';
+    }
+    final iv = encrypt.IV.fromBase64(ivBase64);
+    final encrypter = encrypt.Encrypter(encrypt.AES(encrypt.Key.fromUtf8(key), mode: encrypt.AESMode.cbc));
+    final decrypted = encrypter.decrypt64(encryptedTokenBase64, iv: iv);
+    print('decrypted ${decrypted}');
+    return 'refresh $decrypted';
   }
 
   @override

@@ -17,7 +17,6 @@ class SignInRepositoryImpl implements SignInRepository {
       return Right(result);
     } on ServerException catch (e) {
       final message = e.errorMessage;
-      print('ServerException: $message');
       return Left(ServerFailure(errorMessage: e.errorMessage, error: e.error));
     } on CustomDioException catch (e) {
       final message = e.type.message;
@@ -39,6 +38,22 @@ class SignInRepositoryImpl implements SignInRepository {
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));
+    } on CustomDioException catch (e) {
+      final message = e.type.message;
+      return Left(DioFailure(errorMessage: message));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> loginWithQr({required String token}) async {
+    try {
+      final result = await _dataSource.loginWithQr(token: token);
+      return Right(result);
+    } on ServerException catch (e) {
+      final message = e.errorMessage;
+      return Left(ServerFailure(errorMessage: message, error: e.error));
     } on CustomDioException catch (e) {
       final message = e.type.message;
       return Left(DioFailure(errorMessage: message));

@@ -23,6 +23,7 @@ InProgressChargingModel _$InProgressChargingModelFromJson(
       freeParkingMinutes: (json['free_parking_minutes'] as num?)?.toInt() ?? -1,
       parkingPrice: json['parking_price'] as String? ?? '',
       parkingStartTime: json['parking_start_time'] as String? ?? '',
+      status: json['status'] as String? ?? '',
     );
 
 Map<String, dynamic> _$InProgressChargingModelToJson(
@@ -39,4 +40,5 @@ Map<String, dynamic> _$InProgressChargingModelToJson(
       'start_command_id': instance.startCommandId,
       'vendor_name': instance.vendorName,
       'location_name': instance.locationName,
+      'status': instance.status,
     };

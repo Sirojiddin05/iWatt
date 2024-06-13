@@ -109,6 +109,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
 
   @override
   Widget build(BuildContext context) {
+    // final paddingTop = Platform.isAndroid ? MediaQueryData.fromView(View.of(context)).padding.top : context.padding.top + 8;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: AppColors.white),
       child: BlocProvider(
@@ -122,45 +123,53 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
             animation: animationController,
             builder: (context, child) {
               double scaleAnimation = 1 - (animationController.value * .1);
-              final h = context.sizeOf.height - (context.padding.top + 8);
+              final h = context.sizeOf.height - context.padding.top;
               double transformY = context.sizeOf.height - (h * animationController.value);
               double transformY2 = animationController.value;
               double borderRadius = 12 * animationController.value;
-              return Stack(
-                children: [
-                  PresentSheetBackPageWrapper(
-                    transformY2: transformY2,
-                    scaleAnimation: scaleAnimation,
-                    borderRadius: borderRadius,
-                    child: child ?? const SizedBox.shrink(),
-                  ),
-                  ValueListenableBuilder(
-                    valueListenable: isStationsSheet,
-                    builder: (ctx, val, child) {
-                      return Transform.translate(
-                        offset: Offset(0, transformY),
-                        child: GestureDetector(
-                          onVerticalDragStart: _onDragStart,
-                          onVerticalDragUpdate: _onDragUpdate,
-                          onVerticalDragEnd: _onDragEnd,
-                          child: val == 1
-                              ? child
-                              : FacilitiesSheet(
-                                  onClose: () {
-                                    onToggled();
-                                  },
-                                ),
-                        ),
-                      );
-                    },
-                    child: StationSingleSheet(
-                      carouselController: carouselController,
-                      onClose: () {
-                        onToggled();
-                      },
+              return PopScope(
+                onPopInvoked: (isTrue) {
+                  if (animationController.isCompleted) {
+                    onToggled();
+                  }
+                },
+                canPop: animationController.isDismissed,
+                child: Stack(
+                  children: [
+                    PresentSheetBackPageWrapper(
+                      transformY2: transformY2,
+                      scaleAnimation: scaleAnimation,
+                      borderRadius: borderRadius,
+                      child: child ?? const SizedBox.shrink(),
                     ),
-                  )
-                ],
+                    ValueListenableBuilder(
+                      valueListenable: isStationsSheet,
+                      builder: (ctx, val, child) {
+                        return Transform.translate(
+                          offset: Offset(0, transformY),
+                          child: GestureDetector(
+                            onVerticalDragStart: _onDragStart,
+                            onVerticalDragUpdate: _onDragUpdate,
+                            onVerticalDragEnd: _onDragEnd,
+                            child: val == 1
+                                ? child
+                                : FacilitiesSheet(
+                                    onClose: () {
+                                      onToggled();
+                                    },
+                                  ),
+                          ),
+                        );
+                      },
+                      child: StationSingleSheet(
+                        carouselController: carouselController,
+                        onClose: () {
+                          onToggled();
+                        },
+                      ),
+                    )
+                  ],
+                ),
               );
             },
             child: WKeyboardDismisser(

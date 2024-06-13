@@ -28,4 +28,9 @@ class ResendCode extends SignInEvent {}
 
 class ClearOtp extends SignInEvent {}
 
+class SignInWithQrEvent extends SignInEvent {
+  final String token;
+  const SignInWithQrEvent({required this.token});
+}
+
 // class Lo

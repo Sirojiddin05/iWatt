@@ -40,6 +40,7 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
       onTap: () {
         showCupertinoModalBottomSheet(
           context: context,
+          useRootNavigator: true,
           builder: (ctx) {
             return ChargingProcessSheet(
               connector: widget.process.connector,
@@ -91,6 +92,7 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
                 ),
                 const SizedBox(height: 6),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       getSubtitleText(),
@@ -98,7 +100,7 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
                     ),
                     if (widget.process.parkingData.transactionId != -1) ...{
                       Text(
-                        getSubtitleText(),
+                        ' ${getTime()}',
                         style: context.textTheme.titleMedium!.copyWith(
                           color: !widget.process.isPayedParkingStarted ? AppColors.amaranth : null,
                         ),
@@ -174,9 +176,16 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
 
   String getSubtitleText() {
     if (widget.process.parkingData.transactionId != -1) {
-      return MyFunctions.getParkingTitle(widget.process.isPayedParkingStarted);
+      return MyFunctions.getParkingTitle(widget.process.isPayedParkingStarted).tr();
     } else {
       return widget.process.locationName;
     }
+  }
+
+  String getTime() {
+    if (widget.process.isPayedParkingStarted) {
+      return MyFunctions.getFormattedTimerTime(widget.process.payedParkingLasts);
+    }
+    return MyFunctions.getFormattedTimerTime(widget.process.payedParkingWillStartAfter);
   }
 }

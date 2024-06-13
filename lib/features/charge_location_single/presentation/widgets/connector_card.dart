@@ -25,6 +25,7 @@ class ConnectorCard extends StatelessWidget {
   final String price;
   final bool isNearToStation;
   final String locationName;
+  final VoidCallback onClose;
 
   const ConnectorCard({
     super.key,
@@ -32,6 +33,7 @@ class ConnectorCard extends StatelessWidget {
     required this.price,
     required this.isNearToStation,
     required this.locationName,
+    required this.onClose,
   });
 
   @override
@@ -143,6 +145,7 @@ class ConnectorCard extends StatelessWidget {
                         message: state.startProcessErrorMessage,
                       );
                     } else if (state.startProcessStatus.isSuccess) {
+                      onClose();
                       Navigator.popUntil(context, (route) => route.isFirst);
                       showCupertinoModalBottomSheet(
                         context: context,
@@ -167,7 +170,10 @@ class ConnectorCard extends StatelessWidget {
                       borderRadius: 10,
                       color: getColor().withOpacity(0.1),
                       rippleColor: AppColors.dodgerBlue.withAlpha(30),
-                      isLoading: connector.status == 'Preparing' && isNearToStation && state.startProcessStatus.isInProgress,
+                      isLoading: connector.status == 'Preparing' &&
+                          isNearToStation &&
+                          state.startProcessStatus.isInProgress &&
+                          connector.id == state.processes.last.connector.id,
                       loadingWidget: CupertinoActivityIndicator(
                         color: context.theme.primaryColor,
                         radius: 9,

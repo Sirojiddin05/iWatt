@@ -14,7 +14,6 @@ class NotificationState extends Equatable {
     this.notificationDetail = const NotificationEntity(),
     this.next = '',
     this.fetchMore = false,
-    this.unReadNotificationsCount = -1,
   });
 
   final FormzSubmissionStatus getNotificationsStatus;
@@ -29,7 +28,6 @@ class NotificationState extends Equatable {
   final NotificationEntity notificationDetail;
   final String next;
   final bool fetchMore;
-  final int unReadNotificationsCount;
 
   NotificationState copyWith({
     FormzSubmissionStatus? getNotificationsStatus,
@@ -59,7 +57,6 @@ class NotificationState extends Equatable {
       notificationDetail: notificationDetail ?? this.notificationDetail,
       next: next ?? this.next,
       fetchMore: fetchMore ?? this.fetchMore,
-      unReadNotificationsCount: unReadNotificationsCount ?? this.unReadNotificationsCount,
     );
   }
 
@@ -77,6 +74,5 @@ class NotificationState extends Equatable {
         notificationDetail,
         next,
         fetchMore,
-        unReadNotificationsCount,
       ];
 }

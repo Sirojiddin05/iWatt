@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
@@ -47,13 +49,29 @@ class UserDataContainer extends StatelessWidget {
             final user = state.user;
             return Row(
               children: [
-                WImage(
-                  imageUrl: state.user.photo,
-                  fit: BoxFit.cover,
-                  width: 48,
-                  height: 48,
-                  borderRadius: BorderRadius.circular(10),
-                  errorWidget: const UserImagePlaceholder(),
+                GestureDetector(
+                  onTap: () {
+                    if (state.user.photo.contains('https://')) {
+                      showGeneralDialog(
+                        context: context,
+                        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                          return UserImageDialog(
+                            imageUrl: state.user.photo,
+                            animation: animation,
+                          );
+                        },
+                      );
+                    }
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: WImage(
+                    imageUrl: state.user.photo,
+                    fit: BoxFit.cover,
+                    width: 48,
+                    height: 48,
+                    borderRadius: BorderRadius.circular(10),
+                    errorWidget: const UserImagePlaceholder(),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -106,6 +124,63 @@ class UserDataContainer extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class UserImageDialog extends StatelessWidget {
+  final Animation animation;
+  final String imageUrl;
+  const UserImageDialog({
+    super.key,
+    required this.imageUrl,
+    required this.animation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.dark.copyWith(
+        systemNavigationBarColor: Colors.transparent,
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            behavior: HitTestBehavior.opaque,
+            onTapDown: (details) => Navigator.pop(context),
+            onTapUp: (details) => Navigator.pop(context),
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: animation.value * 3,
+                    sigmaY: animation.value * 3,
+                  ),
+                  child: child,
+                );
+              },
+              child: SizedBox(
+                height: context.sizeOf.height,
+                width: context.sizeOf.height,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: WImage(
+              width: context.sizeOf.width / 2,
+              height: context.sizeOf.width / 2,
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(context.sizeOf.width),
+              errorWidget: const UserImagePlaceholder(),
+            ),
+          ),
+        ],
       ),
     );
   }

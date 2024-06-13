@@ -33,156 +33,166 @@ class TopUpBottomSheet extends StatefulWidget {
 class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBindingObserver, TickerProviderStateMixin {
   late final TextEditingController amountController;
   late final PaymentBloc paymentsBloc;
+  late int selectedCardId;
 
   @override
   void initState() {
     super.initState();
     paymentsBloc = BlocProvider.of<PaymentBloc>(context);
+    selectedCardId = paymentsBloc.state.selectUserCardId;
     amountController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
     return WKeyboardDismisser(
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PresentSheetHeader(
-              title: LocaleKeys.top_up.tr(),
-              isTitleCentered: false,
-              onCloseTap: () => Navigator.pop(context),
-            ),
-            Divider(color: context.theme.dividerColor, height: 1, thickness: 1),
-            const SizedBox(height: 16),
-            const BalanceMessage(isMain: false),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-                      child: DefaultTextField(
-                        title: LocaleKeys.input_the_sum.tr(),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          const ThousandsSeparatorInputFormatter(),
-                        ],
-                        onChanged: (value) {
-                          paymentsBloc.add(SavePaymentSumEvent(value.replaceAll(" ", "")));
-                        },
-                        hintText: '0',
-                        keyboardType: TextInputType.number,
-                        controller: amountController,
-                        suffixMaxWidth: 62,
-                        suffix: Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: Text(
-                            "UZS",
-                            style: context.textTheme.headlineLarge!.copyWith(color: AppColors.darkGray),
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark.copyWith(
+          systemNavigationBarColor: AppColors.white,
+        ),
+        child: Scaffold(
+          backgroundColor: AppColors.white,
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PresentSheetHeader(
+                title: LocaleKeys.top_up.tr(),
+                isTitleCentered: false,
+                onCloseTap: () => Navigator.pop(context),
+              ),
+              Divider(color: context.theme.dividerColor, height: 1, thickness: 1),
+              const SizedBox(height: 16),
+              const BalanceMessage(isMain: false),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                        child: DefaultTextField(
+                          title: LocaleKeys.input_the_sum.tr(),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            const ThousandsSeparatorInputFormatter(),
+                          ],
+                          onChanged: (value) {
+                            paymentsBloc.add(SavePaymentSumEvent(value.replaceAll(" ", "")));
+                          },
+                          hintText: '0',
+                          keyboardType: TextInputType.number,
+                          controller: amountController,
+                          suffixMaxWidth: 62,
+                          suffix: Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: Text(
+                              "UZS",
+                              style: context.textTheme.headlineLarge!.copyWith(color: AppColors.darkGray),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Divider(color: AppColors.solitude, height: 1, thickness: 1),
-                    BlocBuilder<CreditCardsBloc, CreditCardsState>(
-                      buildWhen: (p, c) => p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
-                      builder: (context, creditCards) {
-                        return BlocBuilder<PaymentBloc, PaymentState>(
-                          buildWhen: (p, c) => p.selectUserCardId != c.selectUserCardId,
-                          builder: (context, paymentState) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
-                              child: Column(
-                                children: [
-                                  if (creditCards.getCreditCardsStatus.isInProgress) ...{
-                                    const Padding(
-                                      padding: EdgeInsets.all(32),
-                                      child: Center(
-                                        child: CircularProgressIndicator.adaptive(),
-                                      ),
-                                    )
-                                  } else if (creditCards.getCreditCardsStatus.isSuccess) ...{
-                                    if (creditCards.creditCards.isNotEmpty) ...{
-                                      ...List.generate(creditCards.creditCards.length, (index) {
-                                        final card = creditCards.creditCards[index];
-                                        return CreditCardItem(
-                                          card: card,
-                                          editing: true,
-                                          selectedId: paymentState.selectUserCardId,
-                                          onTap: () {
-                                            paymentsBloc.add(SelectUserCardEvent(id: card.id));
-                                          },
-                                        );
-                                      }),
-                                    } else ...{
-                                      Center(
-                                        child: EmptyStateWidget(
-                                          icon: AppImages.creditCards,
-                                          title: LocaleKeys.you_dont_have_a_card.tr(),
-                                          subtitle: LocaleKeys.add_your_card_to_make_payment.tr(),
-                                        ),
-                                      )
-                                    },
-                                    AddCardButton(
-                                      onTap: () {
-                                        showCupertinoModalBottomSheet(
-                                          context: context,
-                                          useRootNavigator: true,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                                          ),
-                                          builder: (context) => const AddCardBottomSheet(),
-                                        );
-                                      },
-                                    )
-                                  } else if (creditCards.getCreditCardsStatus.isFailure) ...{
-                                    Padding(
-                                      padding: const EdgeInsets.all(32),
-                                      child: Center(
-                                        child: Text(
-                                          LocaleKeys.failure_in_loading.tr(),
-                                        ),
+                      const Divider(color: AppColors.solitude, height: 1, thickness: 1),
+                      BlocBuilder<CreditCardsBloc, CreditCardsState>(
+                        buildWhen: (p, c) => p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
+                        builder: (context, creditCards) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+                            child: Column(
+                              children: [
+                                if (creditCards.getCreditCardsStatus.isInProgress) ...{
+                                  const Padding(
+                                    padding: EdgeInsets.all(32),
+                                    child: Center(
+                                      child: CircularProgressIndicator.adaptive(),
+                                    ),
+                                  )
+                                } else if (creditCards.getCreditCardsStatus.isSuccess) ...{
+                                  if (creditCards.creditCards.isNotEmpty) ...{
+                                    ...List.generate(creditCards.creditCards.length, (index) {
+                                      final card = creditCards.creditCards[index];
+                                      return CreditCardItem(
+                                        card: card,
+                                        editing: true,
+                                        selectedId: selectedCardId,
+                                        onTap: () {
+                                          setState(() {
+                                            selectedCardId = card.id;
+                                          });
+                                          paymentsBloc.add(SelectUserCardEvent(id: card.id));
+                                        },
+                                      );
+                                    }),
+                                  } else ...{
+                                    Center(
+                                      child: EmptyStateWidget(
+                                        icon: AppImages.creditCards,
+                                        title: LocaleKeys.you_dont_have_a_card.tr(),
+                                        subtitle: LocaleKeys.add_your_card_to_make_payment.tr(),
                                       ),
                                     )
                                   },
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    )
-                  ],
+                                  AddCardButton(
+                                    onTap: () {
+                                      showCupertinoModalBottomSheet(
+                                        context: context,
+                                        useRootNavigator: true,
+                                        overlayStyle: SystemUiOverlayStyle.dark.copyWith(
+                                          statusBarIconBrightness: Brightness.light,
+                                          statusBarBrightness: Brightness.dark,
+                                          systemNavigationBarColor: AppColors.white,
+                                        ),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                                        ),
+                                        builder: (context) => const AddCardBottomSheet(),
+                                      );
+                                    },
+                                  )
+                                } else if (creditCards.getCreditCardsStatus.isFailure) ...{
+                                  Padding(
+                                    padding: const EdgeInsets.all(32),
+                                    child: Center(
+                                      child: Text(
+                                        LocaleKeys.failure_in_loading.tr(),
+                                      ),
+                                    ),
+                                  )
+                                },
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: BlocConsumer<PaymentBloc, PaymentState>(
-          listenWhen: (p, c) => p.payWithCardStatus != c.payWithCardStatus,
-          listener: (context, paymentState) {
-            if (paymentState.payWithCardStatus.isFailure) {
-              context.showPopUp(context, PopUpStatus.failure, message: paymentState.payWithCardError);
-            } else if (paymentState.payWithCardStatus.isSuccess) {
-              Navigator.pop(context);
-              context.read<ProfileBloc>().add(GetUserData());
-              context.showPopUp(context, PopUpStatus.success, message: LocaleKeys.top_up_was_successful.tr());
-            }
-          },
-          builder: (context, paymentState) {
-            return WButton(
-              text: LocaleKeys.top_up.tr(),
-              isLoading: paymentState.payWithCardStatus.isInProgress,
-              margin: EdgeInsets.fromLTRB(16, 0, 16, context.padding.bottom + context.viewInsets.bottom + 16),
-              isDisabled: paymentState.amount.isEmpty || paymentState.selectUserCardId == -1,
-              onTap: () async {
-                paymentsBloc.add(const PayWithCard());
-              },
-            );
-          },
+              )
+            ],
+          ),
+          bottomNavigationBar: BlocConsumer<PaymentBloc, PaymentState>(
+            listenWhen: (p, c) => p.payWithCardStatus != c.payWithCardStatus,
+            listener: (context, paymentState) {
+              if (paymentState.payWithCardStatus.isFailure) {
+                context.showPopUp(context, PopUpStatus.failure, message: paymentState.payWithCardError);
+              } else if (paymentState.payWithCardStatus.isSuccess) {
+                Navigator.pop(context);
+                context.read<ProfileBloc>().add(GetUserData());
+                context.showPopUp(context, PopUpStatus.success, message: LocaleKeys.top_up_was_successful.tr());
+              }
+            },
+            builder: (context, paymentState) {
+              return WButton(
+                text: LocaleKeys.top_up.tr(),
+                isLoading: paymentState.payWithCardStatus.isInProgress,
+                margin: EdgeInsets.fromLTRB(16, 0, 16, context.padding.bottom + context.viewInsets.bottom + 16),
+                isDisabled: paymentState.amount.isEmpty || paymentState.selectUserCardId == -1,
+                onTap: () async {
+                  paymentsBloc.add(const PayWithCard());
+                },
+              );
+            },
+          ),
         ),
       ),
     );

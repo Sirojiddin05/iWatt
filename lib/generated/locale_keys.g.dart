@@ -342,5 +342,7 @@ abstract class  LocaleKeys {
   static const profile_updated_successfully = 'profile_updated_successfully';
   static const input_the_sum = 'input_the_sum';
   static const payment = 'payment';
+  static const use_account_from_other_device = 'use_account_from_other_device';
+  static const scan_the_qr_and_login = 'scan_the_qr_and_login';
 
 }

@@ -9,6 +9,8 @@ class TransactionHistoryCardLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 60,
+      width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: context.colorScheme.primaryContainer,

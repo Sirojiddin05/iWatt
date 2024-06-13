@@ -135,4 +135,5 @@ class AppIcons {
   static const balancePattern = 'assets/icons/balance_pattern.svg';
   static const roundedPlug = 'assets/icons/ic_rounded_plug.svg';
   static const debtIcon = 'assets/icons/ic_debt.svg';
+  static const qrIcon = 'assets/icons/ic_qr_icon.svg';
 }

@@ -55,7 +55,7 @@ class _AddCarManufacturersListState extends State<AddCarManufacturersList> with 
               }
               if (state.getManufacturers.isInProgress) {
                 return const Expanded(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: Center(child: CircularProgressIndicator.adaptive()),
                 );
               }
               if (state.getManufacturers.isSuccess) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_she
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/no_internet_bottomsheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/present_back_wrapper.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/single_notification_sheet.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_features_usecase.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_usecase.dart';
@@ -31,6 +33,7 @@ import 'package:i_watt_app/features/navigation/presentation/widgets/navigation_b
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:vibration/vibration.dart';
@@ -73,11 +76,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
       GetAppLatestVersionUseCase(serviceLocator<VersionCheckRepositoryImpl>()),
       GetVersionFeaturesUseCase(serviceLocator<VersionCheckRepositoryImpl>()),
     )..add(GetVersionEvent());
-
     _currentIndex = ValueNotifier<int>(0);
     _tabController = TabController(length: 4, vsync: this, animationDuration: const Duration(milliseconds: 0))
       ..addListener(() => _currentIndex.value = _tabController.index);
     PushNotificationService.initializeAndListenFirebaseMessaging();
+    FirebaseMessaging.instance.getInitialMessage().then((message) async {
+      var notificationId = int.tryParse(message?.data['notification_id']);
+      if (notificationId != null) {
+        await Future.delayed(const Duration(seconds: 2));
+        showSingleNotificationSheet(context, notificationId);
+        context.read<ProfileBloc>().add(DecrementNotificationCount());
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      var notificationId = int.tryParse(message.data['notification_id']);
+      if (notificationId != null) {
+        showSingleNotificationSheet(context, notificationId);
+        context.read<ProfileBloc>().add(DecrementNotificationCount());
+      }
+    });
+    FirebaseMessaging.onMessage.listen((message) {
+      var notificationId = int.tryParse(message.data['notification_id']);
+      if (notificationId != null) {
+        context.read<ProfileBloc>().add(GetUserData());
+      }
+    });
 
     //TODO
     // context.read<LoginBloc>().add(GetUserDataEvent());
@@ -124,6 +147,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                   barrierColor: AppColors.white,
                   enableDrag: false,
                   isDismissible: false,
+                  overlayStyle: SystemUiOverlayStyle.dark.copyWith(
+                    systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
+                    statusBarBrightness: Brightness.dark,
+                    statusBarIconBrightness: Brightness.light,
+                  ),
                   builder: (ctx) {
                     return ChargingPaymentCheck(cheque: state.transactionCheque);
                   },

@@ -13,4 +13,5 @@ class StorageKeys {
   static const carOnMap = 'car_on_map';
   static const versionFeatures = 'version_features';
   static const onBoarding = 'on_boarding';
+  static const encryptionKey = 'ENCRYPTION_KEY';
 }

@@ -65,6 +65,7 @@ class TokenRefreshInterceptor implements Interceptor {
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data[StorageKeys.accessToken]}');
+        await StorageRepository.putString(StorageKeys.refreshToken, '${response.data[StorageKeys.refreshToken]}');
       } else {
         await StorageRepository.deleteString(StorageKeys.accessToken);
         if (response.statusCode == 401) {

@@ -111,5 +111,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       );
       emit(state.copyWith(user: newUser));
     });
+    on<DecrementNotificationCount>((event, emit) async {
+      final oldUser = state.user;
+      final newUser = state.user.copyWith(notificationCount: state.user.notificationCount - 1);
+      emit(state.copyWith(user: newUser));
+    });
   }
 }

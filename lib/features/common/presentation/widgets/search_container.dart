@@ -71,7 +71,11 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
           ),
           Row(
             children: [
-              Container(decoration: const BoxDecoration(color: AppColors.whiteSmoke), width: 0.5, height: 24),
+              Container(
+                decoration: const BoxDecoration(color: AppColors.whiteSmoke),
+                width: 0.5,
+                height: 24,
+              ),
               BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
                 buildWhen: (o, n) {
                   return o.selectedConnectorTypes != n.selectedConnectorTypes || o.selectedPowerTypes != n.selectedPowerTypes;

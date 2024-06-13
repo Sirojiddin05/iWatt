@@ -8,7 +8,7 @@ part 'edit_car_event.dart';
 part 'edit_car_state.dart';
 
 class EditCarBloc extends Bloc<EditCarEvent, EditCarState> {
-  EditCarBloc() : super(const EditCarState()) {
+  EditCarBloc(CarEntity car) : super(EditCarState(car: car)) {
     on<EditSetManufacturer>((event, emit) {});
   }
 }

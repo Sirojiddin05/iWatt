@@ -170,7 +170,7 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                                 const SizedBox(height: 12),
                                 if (process.status == ChargingProcessStatus.PARKING.name) ...{
                                   ParkingCard(
-                                    parkingPrice: process.parkingData.parkingPrice,
+                                    parkingPrice: MyFunctions.formatNumber(process.payedParkingPrice.toString()),
                                     payedParkingLasts: process.payedParkingLasts,
                                     payedParkingWillStartAfter: process.payedParkingWillStartAfter,
                                     isPayedPeriodStarted: process.isPayedParkingStarted,

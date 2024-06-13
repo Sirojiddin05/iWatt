@@ -23,6 +23,7 @@ class AppImages {
   static const carsEmpty = 'assets/images/cars_empty.png';
   static const shareQrExample = 'assets/images/share_qr_example.png';
   static const logo = 'assets/images/logo.png';
+  static const qrLogo = 'assets/images/qr_logo.png';
   static const uicLogo = 'assets/images/uic_logo.png';
   static const notificationsEmpty = 'assets/images/notifications_empty.png';
   static const humo = 'assets/images/humo.png';

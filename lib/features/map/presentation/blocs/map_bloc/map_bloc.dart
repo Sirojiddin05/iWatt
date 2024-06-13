@@ -39,6 +39,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<SelectUnSelectMapObject>(_selectUnSelectMapObject);
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetControllersVisibilityEvent>(_setControllersVisibility);
+    on<SetCarOnMapEvent>(_setCarOnMap);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
@@ -81,6 +82,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     } else {
       add(SetLocationAccessStateEvent(status: locationStatus));
+    }
+  }
+
+  void _setCarOnMap(SetCarOnMapEvent event, Emitter<MapState> emit) async {
+    if (state.locationAccessStatus.isPermissionGranted) {
+      final newMarker = await MyFunctions.getMyIcon(
+          context: context,
+          value: Point(latitude: state.currentLat, longitude: state.currentLong),
+          onObjectTap: (object, point) async => await _moveMapCamera(object.point.latitude, object.point.longitude, 16),
+          userIcon: CarOnMap.defineType(StorageRepository.getString(StorageKeys.carOnMap)).imageOnMap);
+      emit(state.copyWith(userLocationObject: newMarker));
     }
   }
 

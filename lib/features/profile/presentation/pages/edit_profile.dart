@@ -35,10 +35,10 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   late final TextEditingController fullNameController;
-  late ValueNotifier<String> gender;
-  late ValueNotifier<String> dateOfBirth;
-  late ValueNotifier<String> photo;
-  late ValueNotifier<String> fullName;
+  late final ValueNotifier<String> gender;
+  late final ValueNotifier<String> dateOfBirth;
+  late final ValueNotifier<String> photo;
+  late final ValueNotifier<String> fullName;
 
   @override
   void initState() {
@@ -323,9 +323,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             isLoading: state.updateProfileStatus.isInProgress,
             margin: EdgeInsets.fromLTRB(
               16,
+              8,
               16,
-              16,
-              MediaQuery.of(context).viewPadding.bottom + 16,
+              context.viewInsets.bottom + context.padding.bottom + 16,
             ),
           ),
         ),

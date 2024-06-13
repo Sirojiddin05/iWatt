@@ -15,11 +15,17 @@ import 'package:i_watt_app/core/util/enums/car_number_type.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:i_watt_app/service_locator.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static Future<String?> getEncryptionKey() async {
+    final key = await secureStorage.read(key: StorageKeys.encryptionKey);
+    return key;
+  }
 
   static String getNotificationCreatedTime(String locale, String createdAt) {
     final dateTime = DateTime.parse(createdAt).toLocal();

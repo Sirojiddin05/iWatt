@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
@@ -39,6 +40,7 @@ class TransactionHistoryList extends StatelessWidget {
           final itemNumber = state.transactionHistory.length;
           return RefreshIndicator(
             onRefresh: () async {
+              await Future.delayed(const Duration(milliseconds: 200));
               context.read<TransactionHistoryBloc>().add(GetTransactionHistoryEvent());
             },
             child: Paginator(
@@ -60,6 +62,11 @@ class TransactionHistoryList extends StatelessWidget {
                       enableDrag: false,
                       isDismissible: false,
                       useRootNavigator: true,
+                      overlayStyle: SystemUiOverlayStyle.dark.copyWith(
+                        systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
+                        statusBarIconBrightness: Brightness.light,
+                        statusBarBrightness: Brightness.dark,
+                      ),
                       builder: (ctx) {
                         return BlocProvider(
                           create: (ctx) => TransactionHistoryBloc.single(

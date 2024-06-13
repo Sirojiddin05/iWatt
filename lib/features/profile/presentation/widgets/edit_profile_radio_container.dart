@@ -36,7 +36,9 @@ class EditProfileRadioContainer extends StatelessWidget {
           children: [
             Text(label, style: context.textTheme.bodyMedium),
             WRadio(
-              onChanged: (value) {},
+              onChanged: (value) {
+                onTap();
+              },
               value: value,
               groupValue: groupValue,
             ),

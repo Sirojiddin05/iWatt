@@ -1,4 +1,7 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/network/dio_settings.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/authorization/data/datasources/authentication_datasource.dart';
@@ -43,9 +46,15 @@ import 'package:i_watt_app/features/profile/data/repositories_impl/payments_repo
 import 'package:i_watt_app/features/profile/data/repositories_impl/profile_repository_impl.dart';
 
 final serviceLocator = GetIt.I;
+const secureStorage = FlutterSecureStorage();
 
 Future<void> setupLocator() async {
   await StorageRepository.getInstance();
+  await dotenv.load(fileName: ".env");
+  await secureStorage.write(
+    key: StorageKeys.encryptionKey,
+    value: dotenv.env[StorageKeys.encryptionKey] ?? '',
+  );
 
   serviceLocator.registerLazySingleton(() => DioSettings());
   serviceLocator.registerFactory(() => AuthenticationDatasourceImpl(dio: serviceLocator<DioSettings>().dio));

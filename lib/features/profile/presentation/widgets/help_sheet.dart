@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
@@ -18,78 +19,83 @@ class HelpSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SheetWrapper(
-      color: context.theme.scaffoldBackgroundColor,
-      child: BlocBuilder<AboutUsBloc, AboutUsState>(
-        builder: (context, state) {
-          if (state.getHelpStatus.isInitial) {
-            context.read<AboutUsBloc>().add(GetHelpEvent());
-          }
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SheetHeaderWidget(
-                title: LocaleKeys.help.tr(),
-              ),
-              WhiteWrapperContainer(
-                margin: EdgeInsets.fromLTRB(
-                  16,
-                  16,
-                  16,
-                  context.padding.bottom + 16,
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.dark.copyWith(
+        systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
+      ),
+      child: SheetWrapper(
+        color: context.theme.scaffoldBackgroundColor,
+        child: BlocBuilder<AboutUsBloc, AboutUsState>(
+          builder: (context, state) {
+            if (state.getHelpStatus.isInitial) {
+              context.read<AboutUsBloc>().add(GetHelpEvent());
+            }
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SheetHeaderWidget(
+                  title: LocaleKeys.help.tr(),
                 ),
-                child: Column(
-                  children: [
-                    if (state.getHelpStatus.isInProgress) ...{
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Center(
-                            child: CircularProgressIndicator.adaptive(),
+                WhiteWrapperContainer(
+                  margin: EdgeInsets.fromLTRB(
+                    16,
+                    16,
+                    16,
+                    context.padding.bottom + 16,
+                  ),
+                  child: Column(
+                    children: [
+                      if (state.getHelpStatus.isInProgress) ...{
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
                           ),
+                        )
+                      } else if (state.getHelpStatus.isSuccess) ...{
+                        IconTextButton(
+                          title: state.help.helpPhoneNumber,
+                          icon: AppIcons.phoneSmall,
+                          padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                          onTap: () {
+                            launchUrlString('tel:${state.help.helpPhoneNumber}', mode: LaunchMode.externalApplication);
+                          },
                         ),
-                      )
-                    } else if (state.getHelpStatus.isSuccess) ...{
-                      IconTextButton(
-                        title: state.help.helpPhoneNumber,
-                        icon: AppIcons.phoneSmall,
-                        padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                        onTap: () {
-                          launchUrlString('tel:${state.help.helpPhoneNumber}', mode: LaunchMode.externalApplication);
-                        },
-                      ),
-                      Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
-                      IconTextButton(
-                        title: state.help.helpEmail,
-                        icon: AppIcons.mail,
-                        padding: const EdgeInsets.all(12),
-                        onTap: () {
-                          launchUrlString(
-                            "mailto:${state.help.helpEmail}",
-                            mode: LaunchMode.externalApplication,
-                          );
-                        },
-                      ),
-                      Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
-                      IconTextButton(
-                          title: state.help.helpTelegramLink,
-                          icon: AppIcons.telegram,
-                          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+                        Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
+                        IconTextButton(
+                          title: state.help.helpEmail,
+                          icon: AppIcons.mail,
                           padding: const EdgeInsets.all(12),
                           onTap: () {
-                            launchUrlString(state.help.helpTelegramLink, mode: LaunchMode.externalApplication);
-                          }),
-                    } else if (state.getHelpStatus.isFailure) ...{
-                      const ErrorStateTextWidget()
-                    }
-                  ],
-                ),
-              )
-            ],
-          );
-        },
+                            launchUrlString(
+                              "mailto:${state.help.helpEmail}",
+                              mode: LaunchMode.externalApplication,
+                            );
+                          },
+                        ),
+                        Divider(height: 1, color: context.theme.dividerColor, thickness: 1, indent: 44),
+                        IconTextButton(
+                            title: state.help.helpTelegramLink,
+                            icon: AppIcons.telegram,
+                            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+                            padding: const EdgeInsets.all(12),
+                            onTap: () {
+                              launchUrlString(state.help.helpTelegramLink, mode: LaunchMode.externalApplication);
+                            }),
+                      } else if (state.getHelpStatus.isFailure) ...{
+                        const ErrorStateTextWidget()
+                      }
+                    ],
+                  ),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -18,6 +18,7 @@ class InProgressChargingModel extends InProgressChargingEntity {
     super.freeParkingMinutes,
     super.parkingPrice,
     super.parkingStartTime,
+    super.status,
   });
 
   factory InProgressChargingModel.fromJson(Map<String, dynamic> json) => _$InProgressChargingModelFromJson(json);

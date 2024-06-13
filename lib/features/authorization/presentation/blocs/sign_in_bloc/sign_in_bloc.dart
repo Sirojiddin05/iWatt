@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/error/failure_handler.dart';
 import 'package:i_watt_app/features/authorization/domain/entities/verify_code_params_entity.dart';
 import 'package:i_watt_app/features/authorization/domain/usecases/login_usecase.dart';
+import 'package:i_watt_app/features/authorization/domain/usecases/login_with_qr_usecase.dart';
 import 'package:i_watt_app/features/authorization/domain/usecases/verify_code_usecase.dart';
 
 part 'sign_in_event.dart';
@@ -15,10 +16,12 @@ part 'sign_in_state.dart';
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final LoginUseCase loginUseCase;
   final VerifyCodeUseCase verifyCodeUseCase;
+  final LoginWithQrUseCase loginWithQrUseCase;
   Timer _otpTimer = Timer(Duration.zero, () {});
   SignInBloc({
     required this.loginUseCase,
     required this.verifyCodeUseCase,
+    required this.loginWithQrUseCase,
   }) : super(const SignInState()) {
     on<ChangePhone>(_changePhone);
     on<SignIn>(_signIn);
@@ -26,6 +29,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<VerifyCode>(_verifyCode);
     on<CodeAvailableTimeDecreased>(_onCodeAvailableTimeDecreased);
     on<ResendCode>(_onResendCode);
+    on<SignInWithQrEvent>(_signInWithQrEvent);
   }
 
   void _changePhone(ChangePhone event, Emitter<SignInState> emit) {
@@ -106,8 +110,21 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     }
   }
 
+  void _signInWithQrEvent(SignInWithQrEvent event, Emitter<SignInState> emit) async {
+    emit(state.copyWith(signInWithQrStatus: FormzSubmissionStatus.inProgress));
+    final result = await loginWithQrUseCase(event.token);
+    if (result.isRight) {
+      emit(state.copyWith(signInWithQrStatus: FormzSubmissionStatus.success));
+    } else {
+      emit(state.copyWith(
+        signInWithQrStatus: FormzSubmissionStatus.failure,
+        signInWithQrErrorMessage: result.left.errorMessage,
+      ));
+    }
+  }
+
   void _onResendCode(ResendCode event, Emitter<SignInState> emit) async {
-    final result = await verifyCodeUseCase(VerifyCodeParamsEntity(
+    await verifyCodeUseCase(VerifyCodeParamsEntity(
       code: state.otp,
       phone: state.verifiedPhone,
       session: state.session,

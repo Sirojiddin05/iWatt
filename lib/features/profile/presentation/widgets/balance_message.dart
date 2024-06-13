@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -40,6 +41,11 @@ class BalanceMessage extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(12),
                     ),
+                  ),
+                  overlayStyle: SystemUiOverlayStyle.dark.copyWith(
+                    statusBarIconBrightness: Brightness.light,
+                    statusBarBrightness: Brightness.dark,
+                    systemNavigationBarColor: AppColors.white,
                   ),
                   builder: (context) => const TopUpBottomSheet(),
                 );

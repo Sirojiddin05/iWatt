@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +54,6 @@ import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/single_notification_sheet.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
@@ -253,17 +251,6 @@ class _MyAppState extends State<MyApp> {
     if (!onBoarding) {
       context.read<InstructionsBloc>().add(GetInstructionsEvent(InstructionsType.onboarding.name));
     }
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('FirebaseMessaging.data ${message.data}');
-      print('FirebaseMessaging.title ${message.notification?.title}');
-      print('FirebaseMessaging.messageId ${message.messageId}');
-      print('FirebaseMessaging.messageType ${message.messageType}');
-      print('FirebaseMessaging.messageType ${message.notification}');
-      var notificationId = int.tryParse(message.data['notification_id']);
-      if (notificationId != null) {
-        showSingleNotificationSheet(context, notificationId);
-      }
-    });
   }
 
   @override
@@ -294,7 +281,7 @@ class _MyAppState extends State<MyApp> {
                 MaterialWithModalsPageRoute(
                   builder: (context) => const HomeScreen(),
                 ),
-                (route) => false,
+                (route) => true,
               );
             },
           );

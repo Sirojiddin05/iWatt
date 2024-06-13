@@ -96,6 +96,9 @@ class ChequeWidget extends StatelessWidget {
   }
 
   String get parkingTime {
+    if (cheque.parkingStartTime.isEmpty || cheque.parkingEndTime.isEmpty) {
+      return '-';
+    }
     StringBuffer sb = StringBuffer();
     final time = MyFunctions.getDifferenceBetweenTwoDates(cheque.parkingStartTime, cheque.parkingEndTime);
     final days = time[0];

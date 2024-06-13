@@ -130,6 +130,7 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
           //     showModalBottomSheet(
           //       context: context,
           //       isScrollControlled: true,
+          //       backgroundColor: Colors.transparent,
           //       builder: (ctx) {
           //         return const EditCarSheet();
           //       },
@@ -153,7 +154,7 @@ class _CarSingleSheetState extends State<CarSingleSheet> {
             },
             builder: (context, state) => WButton(
               text: LocaleKeys.delete.tr(),
-              rippleColor: AppColors.amaranth.withAlpha(30),
+              rippleColor: AppColors.amaranth.withAlpha(20),
               border: Border.all(color: AppColors.amaranth),
               color: context.colorScheme.background,
               textStyle: context.textTheme.headlineLarge!.copyWith(fontSize: 15),

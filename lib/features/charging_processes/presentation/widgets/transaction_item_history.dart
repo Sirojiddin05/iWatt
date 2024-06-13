@@ -18,7 +18,7 @@ class TransactionHistoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return WCustomTappableButton(
       onTap: onTap,
-      rippleColor: AppColors.brightSun.withAlpha(30),
+      rippleColor: AppColors.brightSun.withAlpha(20),
       borderRadius: BorderRadius.circular(6),
       child: Container(
         padding: const EdgeInsets.all(12),

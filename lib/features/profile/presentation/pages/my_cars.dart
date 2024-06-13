@@ -49,89 +49,94 @@ class _MyCarsPageState extends State<MyCarsPage> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: carsBloc,
-      child: Scaffold(
-        appBar: AppBarWrapper(
-          title: LocaleKeys.my_cars.tr(),
-          hasBackButton: true,
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark.copyWith(
+          systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
         ),
-        body: BlocBuilder<CarsBloc, CarsState>(
-          builder: (context, state) {
-            if (state.getCarsStatus.isSuccess) {
-              if (state.cars.isNotEmpty) {
-                return ListView.separated(
-                  itemCount: state.cars.length,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-                  itemBuilder: (context, index) {
-                    final car = state.cars[index];
-                    return CarItem(
-                      model: car.model,
-                      manufacturer: car.manufacturer,
-                      number: car.stateNumber,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          useRootNavigator: true,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return BlocProvider.value(
-                              value: carsBloc,
-                              child: CarSingleSheet(carId: car.id),
-                            );
-                          },
-                        );
-                      },
-                      connectorTypes: car.connectorType,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 12);
-                  },
+        child: Scaffold(
+          appBar: AppBarWrapper(
+            title: LocaleKeys.my_cars.tr(),
+            hasBackButton: true,
+          ),
+          body: BlocBuilder<CarsBloc, CarsState>(
+            builder: (context, state) {
+              if (state.getCarsStatus.isSuccess) {
+                if (state.cars.isNotEmpty) {
+                  return ListView.separated(
+                    itemCount: state.cars.length,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+                    itemBuilder: (context, index) {
+                      final car = state.cars[index];
+                      return CarItem(
+                        model: car.model,
+                        manufacturer: car.manufacturer,
+                        number: car.stateNumber,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            useRootNavigator: true,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return BlocProvider.value(
+                                value: carsBloc,
+                                child: CarSingleSheet(carId: car.id),
+                              );
+                            },
+                          );
+                        },
+                        connectorTypes: car.connectorType,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 12);
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: EmptyStateWidget(
+                      icon: AppImages.carsEmpty,
+                      title: LocaleKeys.you_have_no_cars_yet.tr(),
+                      subtitle: LocaleKeys.you_have_not_added_any_cars_yet.tr(),
+                    ),
+                  );
+                }
+              } else if (state.getCarsStatus.isInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
                 );
               } else {
-                return Center(
-                  child: EmptyStateWidget(
-                    icon: AppImages.carsEmpty,
-                    title: LocaleKeys.you_have_no_cars_yet.tr(),
-                    subtitle: LocaleKeys.you_have_not_added_any_cars_yet.tr(),
-                  ),
-                );
+                return const SizedBox();
               }
-            } else if (state.getCarsStatus.isInProgress) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            } else {
-              return const SizedBox();
-            }
-          },
-        ),
-        bottomNavigationBar: WButton(
-          onTap: () {
-            showCupertinoModalBottomSheet(
-              context: context,
-              isDismissible: false,
-              enableDrag: false,
-              overlayStyle: SystemUiOverlayStyle.light,
-              builder: (c) => BlocProvider.value(
-                value: carsBloc,
-                child: const AddCarPresentSheet(),
-              ),
-            );
-          },
-          margin: EdgeInsets.fromLTRB(16, 8, 16, context.padding.bottom),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(AppIcons.circlePlus),
-              const SizedBox(width: 4),
-              Text(
-                LocaleKeys.add_car.tr(),
-                style: context.textTheme.bodySmall!.copyWith(
-                  color: AppColors.white,
+            },
+          ),
+          bottomNavigationBar: WButton(
+            onTap: () {
+              showCupertinoModalBottomSheet(
+                context: context,
+                isDismissible: false,
+                enableDrag: false,
+                overlayStyle: SystemUiOverlayStyle.light,
+                builder: (c) => BlocProvider.value(
+                  value: carsBloc,
+                  child: const AddCarPresentSheet(),
                 ),
-              )
-            ],
+              );
+            },
+            margin: EdgeInsets.fromLTRB(16, 8, 16, context.padding.bottom + 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(AppIcons.circlePlus),
+                const SizedBox(width: 4),
+                Text(
+                  LocaleKeys.add_car.tr(),
+                  style: context.textTheme.bodySmall!.copyWith(
+                    color: AppColors.white,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

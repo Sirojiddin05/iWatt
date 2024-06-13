@@ -66,7 +66,7 @@ class CreditCardItem extends StatelessWidget {
                 const Spacer(),
                 if (editing)
                   WRadio(
-                    onChanged: (value) {},
+                    onChanged: (value) => onTap(),
                     value: card.id,
                     groupValue: selectedId,
                   ),

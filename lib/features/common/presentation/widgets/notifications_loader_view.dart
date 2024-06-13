@@ -10,7 +10,10 @@ class NotificationsLoaderView extends StatelessWidget {
     return Shimmer(
       child: ListView(
         physics: const NeverScrollableScrollPhysics(),
-        children: List.generate(20, (index) => const NotificationLoaderItem()),
+        children: List.generate(
+          20,
+          (index) => const NotificationLoaderItem(),
+        ),
       ),
     );
   }

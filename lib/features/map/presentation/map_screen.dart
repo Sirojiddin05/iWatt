@@ -73,7 +73,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                 BlocListener<CarOnMapBloc, CarOnMapState>(
                   listenWhen: (o, n) => o.carOnMap != n.carOnMap,
                   listener: (context, state) {
-                    mapBloc.add(const SetMyPositionEvent(forceSet: true));
+                    mapBloc.add(SetCarOnMapEvent(carOnMap: state.carOnMap));
                   },
                 ),
               ],
@@ -124,7 +124,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                   }
                 },
                 builder: (context, state) {
-                  print('state car on map ${state.userLocationObject?.mapId ?? 'setno'}');
                   return YandexMap(
                     rotateGesturesEnabled: true,
                     mapObjects: _getMapObjects(state),

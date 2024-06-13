@@ -54,3 +54,7 @@ class UpdateProfileLocally extends ProfileEvent {
     this.isNotificationEnabled,
   });
 }
+
+class DecrementNotificationCount extends ProfileEvent {
+  DecrementNotificationCount();
+}

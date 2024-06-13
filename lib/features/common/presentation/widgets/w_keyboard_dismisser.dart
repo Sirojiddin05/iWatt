@@ -13,13 +13,7 @@ class _WKeyboardDismisserState extends State<WKeyboardDismisser> with WidgetsBin
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onHorizontalDragEnd: (_) {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-      },
       onVerticalDragEnd: (_) {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-      },
-      onHorizontalDragCancel: () {
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
       onVerticalDragCancel: () {

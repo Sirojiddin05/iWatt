@@ -13,6 +13,7 @@ class InProgressChargingEntity {
   final int startCommandId;
   final String vendorName;
   final String locationName;
+  final String status;
 
   const InProgressChargingEntity({
     this.id = -1,
@@ -25,6 +26,7 @@ class InProgressChargingEntity {
     this.locationName = '',
     this.parkingPrice = '',
     this.parkingStartTime = '',
+    this.status = '',
     this.freeParkingMinutes = -1,
   });
 }

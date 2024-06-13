@@ -6,8 +6,8 @@ import 'package:i_watt_app/features/common/data/models/error_model.dart';
 
 abstract class SignInDataSource {
   Future<String> login({required String phone});
-
   Future<bool> verifyCode({required String code, required String phone, required String session, required String type});
+  Future<void> loginWithQr({required String token});
 }
 
 class SignInDataSourceImpl extends SignInDataSource {
@@ -32,8 +32,7 @@ class SignInDataSourceImpl extends SignInDataSource {
           error: error.error,
         );
       }
-    } on ServerException catch (e) {
-      print('ServerException $e');
+    } on ServerException {
       rethrow;
     } on DioException catch (e) {
       final type = e.type;
@@ -63,9 +62,37 @@ class SignInDataSourceImpl extends SignInDataSource {
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data[StorageKeys.accessToken]}');
-        await StorageRepository.putString(
-            StorageKeys.refreshToken, 'Bearer ${response.data[StorageKeys.refreshToken]}');
+        await StorageRepository.putString(StorageKeys.refreshToken, '${response.data[StorageKeys.refreshToken]}');
         return response.data["is_new"];
+      } else {
+        final error = GenericErrorModel.fromJson(response.data);
+        throw ServerException(
+          statusCode: error.statusCode,
+          errorMessage: error.message,
+          error: error.error,
+        );
+      }
+    } on ServerException {
+      rethrow;
+    } on DioException catch (e) {
+      final type = e.type;
+      final message = e.message ?? '';
+      throw CustomDioException(errorMessage: message, type: type);
+    } on Exception catch (e) {
+      throw ParsingException(errorMessage: e.toString());
+    }
+  }
+
+  @override
+  Future<void> loginWithQr({required String token}) async {
+    try {
+      final response = await _dio.post(
+        'users/token/refresh/',
+        data: {"refresh": token},
+      );
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        await StorageRepository.putString(StorageKeys.accessToken, 'Bearer ${response.data['access']}');
+        await StorageRepository.putString(StorageKeys.refreshToken, '${response.data['refresh']}');
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
