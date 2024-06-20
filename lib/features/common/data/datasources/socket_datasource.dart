@@ -47,6 +47,9 @@ class SocketDataSourceImpl implements SocketDataSource {
       final message = jsonDecode(jsonMessage);
       final messageType = message["type"];
       final messageData = message["data"];
+      print('type $messageType');
+      print('data $messageData');
+
       if (messageType == SocketType.connector.name) {
         final connectorResult = ConnectorStatusMessageModel.fromJson(messageData);
         _connectorStatusStream.add(connectorResult);

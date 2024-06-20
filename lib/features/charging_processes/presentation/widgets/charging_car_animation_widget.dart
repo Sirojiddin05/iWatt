@@ -64,60 +64,90 @@ class ChargingCarAnimationWidget extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      TextHighlight(
-                        text: '${getPercent().toString()}%',
-                        textAlign: TextAlign.end,
-                        words: {
-                          getPercent().toString(): HighlightedWord(
-                            textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: fontSize.toDouble(),
-                              fontWeight: percentageFontWeight,
-                              height: 1,
-                              letterSpacing: 0,
-                              color: AppColors.cyprus,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextHighlight(
+                            text: getPercent().toString(),
+                            textAlign: TextAlign.end,
+                            words: {
+                              getPercent().toString(): HighlightedWord(
+                                textStyle: context.textTheme.titleSmall!.copyWith(
+                                  fontSize: fontSize.toDouble(),
+                                  fontWeight: percentageFontWeight,
+                                  height: 1,
+                                  letterSpacing: 0,
+                                  color: AppColors.cyprus,
+                                ),
+                              ),
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 3),
+                            child: TextHighlight(
+                              text: '%',
+                              textAlign: TextAlign.end,
+                              words: {
+                                '%': HighlightedWord(
+                                  textStyle: context.textTheme.titleSmall!.copyWith(
+                                    fontSize: fontSize.toDouble() / 2,
+                                    fontWeight: percentageSignFontWeight,
+                                    height: 1,
+                                    letterSpacing: 0,
+                                    color: AppColors.cyprus,
+                                  ),
+                                ),
+                              },
                             ),
                           ),
-                          '%': HighlightedWord(
-                            textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: fontSize.toDouble() / 2,
-                              fontWeight: percentageSignFontWeight,
-                              height: 1,
-                              letterSpacing: 0,
-                              color: AppColors.cyprus,
-                            ),
-                          ),
-                        },
+                        ],
                       ),
-                      TextHighlight(
-                        text: '${getPercent().toString()}%',
-                        textAlign: TextAlign.end,
-                        words: {
-                          getPercent().toString(): HighlightedWord(
-                            textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: fontSize.toDouble(),
-                              fontWeight: percentageFontWeight,
-                              height: 1,
-                              letterSpacing: 0,
-                              foreground: Paint()
-                                ..style = PaintingStyle.stroke
-                                ..strokeWidth = 1.4
-                                ..color = AppColors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextHighlight(
+                            text: getPercent().toString(),
+                            textAlign: TextAlign.end,
+                            words: {
+                              getPercent().toString(): HighlightedWord(
+                                textStyle: context.textTheme.titleSmall!.copyWith(
+                                  fontSize: fontSize.toDouble(),
+                                  fontWeight: percentageFontWeight,
+                                  height: 1,
+                                  letterSpacing: 0,
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 1.4
+                                    ..color = AppColors.white,
+                                ),
+                              ),
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 3),
+                            child: TextHighlight(
+                              text: '%',
+                              textAlign: TextAlign.end,
+                              words: {
+                                '%': HighlightedWord(
+                                  textStyle: context.textTheme.titleSmall!.copyWith(
+                                    fontSize: fontSize.toDouble() / 2,
+                                    fontWeight: percentageSignFontWeight,
+                                    height: 1,
+                                    letterSpacing: 0,
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 0.8
+                                      ..color = AppColors.white,
+                                  ),
+                                ),
+                              },
                             ),
                           ),
-                          '%': HighlightedWord(
-                            textStyle: context.textTheme.titleSmall!.copyWith(
-                              fontSize: fontSize.toDouble() / 2,
-                              fontWeight: percentageSignFontWeight,
-                              height: 1,
-                              letterSpacing: 0,
-                              foreground: Paint()
-                                ..style = PaintingStyle.stroke
-                                ..strokeWidth = 0.8
-                                ..color = AppColors.white,
-                            ),
-                          ),
-                        },
-                      ),
+                        ],
+                      )
                     ],
                   ),
                 ),

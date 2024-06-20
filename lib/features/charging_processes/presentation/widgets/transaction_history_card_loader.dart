@@ -59,7 +59,7 @@ class TransactionHistoryCardLoader extends StatelessWidget {
               children: [
                 ShimmerContainer(height: 17, width: 63, borderRadius: 4),
                 SizedBox(height: 2),
-                ShimmerContainer(height: 20, width: 98, borderRadius: 4),
+                ShimmerContainer(height: 17, width: 98, borderRadius: 4),
               ],
             )
           ],

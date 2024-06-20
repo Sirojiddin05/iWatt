@@ -59,7 +59,7 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           PresentSheetHeader(
-            title: LocaleKeys.charging.tr(),
+            title: LocaleKeys.charging_processes_singular.tr(),
             titleFotSize: 18,
             paddingOfCloseIcon: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             onCloseTap: () {
@@ -69,7 +69,7 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
           Divider(color: context.theme.dividerColor, thickness: 1, height: 1),
           const SizedBox(height: 16),
           MaxPowerAndPriceWidget(
-            maxPower: widget.connector.maxPower.toString(),
+            maxPower: widget.connector.maxElectricPower.toString(),
             price: MyFunctions.formatNumber(
               widget.connector.price.toString().split('.').first,
             ),
@@ -102,10 +102,9 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
             builder: (context, state) {
               if (state.processes.isEmpty || state.processes[processIndex].connector.id != widget.connector.id) {
                 Navigator.of(context).pop();
-                return const SizedBox.expand();
+                return const SizedBox.shrink();
               }
               final process = state.processes[processIndex];
-              final meterValue = process.meterValue;
               return Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(top: 16),
@@ -142,7 +141,7 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                                       AppIcons.plugRight,
                                       width: 16,
                                       height: 16,
-                                      color: meterValue.batteryPercent == -1 ? AppColors.brightSun : AppColors.limeGreen,
+                                      color: process.batteryPercent == -1 ? AppColors.brightSun : AppColors.limeGreen,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
@@ -158,14 +157,14 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                                 // }
                                 const SizedBox(height: 40),
                                 ChargingCarAnimationWidget(
-                                  percentage: meterValue.batteryPercent,
+                                  percentage: process.batteryPercent,
                                 ),
                                 const SizedBox(height: 20),
                                 GridInfoCardsWidget(
-                                  currentPower: '${meterValue.currentKwh} ${LocaleKeys.kW.tr()}',
-                                  timeLeft: meterValue.estimatedTime,
-                                  charged: "${meterValue.consumedKwh} ${LocaleKeys.kW.tr()}",
-                                  paid: meterValue.money.isEmpty ? '-' : "${meterValue.money} ${LocaleKeys.sum.tr()}",
+                                  currentPower: '${process.currentKwh} ${LocaleKeys.kW.tr()}',
+                                  timeLeft: process.estimatedTime,
+                                  charged: "${process.consumedKwh} ${LocaleKeys.kW.tr()}",
+                                  paid: process.money.isEmpty ? '-' : "${process.money} ${LocaleKeys.sum.tr()}",
                                 ),
                                 const SizedBox(height: 12),
                                 if (process.status == ChargingProcessStatus.PARKING.name) ...{
@@ -190,7 +189,7 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                               description: LocaleKeys.with_this_action_you_stop_charging.tr(),
                               confirmText: LocaleKeys.finish.tr(),
                               onConfirm: () {
-                                context.read<ChargingProcessBloc>().add(StopChargingProcessEvent(transactionId: meterValue.transactionId));
+                                context.read<ChargingProcessBloc>().add(StopChargingProcessEvent(transactionId: process.transactionId));
                               },
                             );
                           },
@@ -233,11 +232,11 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
   }
 
   String getTitleText(ChargingProcessEntity process) {
-    if (process.parkingData.transactionId != -1) {
+    if (process.freeParkingMinutes != -1) {
       return LocaleKeys.pause.tr();
-    } else if (process.meterValue.batteryPercent == -1) {
+    } else if (process.batteryPercent == -1) {
       return LocaleKeys.charging_is_starting.tr();
-    } else if (process.meterValue.batteryPercent == 100) {
+    } else if (process.batteryPercent == 100) {
       return LocaleKeys.charging_is_ended.tr();
     }
     return LocaleKeys.charging.tr();

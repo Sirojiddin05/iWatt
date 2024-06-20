@@ -142,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             BlocListener<ChargingProcessBloc, ChargingProcessState>(
               listenWhen: (o, n) => o.transactionCheque != n.transactionCheque,
               listener: (context, state) async {
+                await Future.delayed(const Duration(milliseconds: 500));
                 showCupertinoModalBottomSheet(
                   context: context,
                   barrierColor: AppColors.white,
@@ -153,7 +154,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                     statusBarIconBrightness: Brightness.light,
                   ),
                   builder: (ctx) {
-                    return ChargingPaymentCheck(cheque: state.transactionCheque);
+                    return ChargingPaymentCheck(
+                      cheque: state.transactionCheque,
+                    );
                   },
                 );
               },

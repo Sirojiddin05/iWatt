@@ -6,6 +6,10 @@ abstract class  LocaleKeys {
   static const other_neuter = 'other.neuter';
   static const map = 'map';
   static const stations = 'stations';
+  static const charging_processes_singular = 'charging_processes.singular';
+  static const charging_processes_singular_genitive = 'charging_processes.singular_genitive';
+  static const charging_processes_plural_nominative = 'charging_processes.plural_nominative';
+  static const charging_processes_plural_genitive = 'charging_processes.plural_genitive';
   static const charging_processes = 'charging_processes';
   static const profile = 'profile';
   static const no_network = 'no_network';

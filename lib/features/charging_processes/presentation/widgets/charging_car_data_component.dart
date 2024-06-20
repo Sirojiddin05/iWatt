@@ -98,7 +98,7 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
                       getSubtitleText(),
                       style: context.textTheme.titleLarge!.copyWith(color: AppColors.taxBreak),
                     ),
-                    if (widget.process.parkingData.transactionId != -1) ...{
+                    if (widget.process.freeParkingMinutes != -1) ...{
                       Text(
                         ' ${getTime()}',
                         style: context.textTheme.titleMedium!.copyWith(
@@ -118,17 +118,17 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
                 const SizedBox(height: 10),
                 IconDataRow(
                   icon: AppIcons.batteryChargeMinimalistic,
-                  value: "${widget.process.meterValue.consumedKwh} ${LocaleKeys.kW.tr()}",
+                  value: "${widget.process.consumedKwh} ${LocaleKeys.kW.tr()}",
                 ),
                 const SizedBox(height: 10),
                 IconDataRow(
                   icon: AppIcons.flash,
-                  value: "${widget.process.meterValue.currentKwh} ${LocaleKeys.kW.tr()}",
+                  value: "${widget.process.currentKwh} ${LocaleKeys.kW.tr()}",
                 ),
                 const SizedBox(height: 10),
                 IconDataRow(
                   icon: AppIcons.billCheck,
-                  value: '${MyFunctions.getPrice(widget.process.meterValue.money)} ${LocaleKeys.sum.tr()}',
+                  value: '${MyFunctions.getPrice(widget.process.money)} ${LocaleKeys.sum.tr()}',
                 ),
                 const SizedBox(height: 10),
                 IconDataRow(
@@ -143,7 +143,7 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
             top: 106,
             bottom: 24,
             child: ChargingCarAnimationWidget(
-              percentage: widget.process.meterValue.batteryPercent,
+              percentage: widget.process.batteryPercent,
               carScale: 1,
               batteryScale: 1,
               fontSize: 26,
@@ -157,25 +157,25 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
   }
 
   Color getPlugIconColor() {
-    if (widget.process.parkingData.transactionId != -1 || widget.process.meterValue.batteryPercent == -1) {
+    if (widget.process.freeParkingMinutes != -1 || widget.process.batteryPercent == -1) {
       return AppColors.brightSun;
     }
     return AppColors.limeGreen;
   }
 
   String getTitleText() {
-    if (widget.process.parkingData.transactionId != -1) {
+    if (widget.process.freeParkingMinutes != -1) {
       return LocaleKeys.pause.tr();
-    } else if (widget.process.meterValue.batteryPercent == -1) {
+    } else if (widget.process.batteryPercent == -1) {
       return LocaleKeys.charging_is_starting.tr();
-    } else if (widget.process.meterValue.batteryPercent == 100) {
+    } else if (widget.process.batteryPercent == 100) {
       return LocaleKeys.charging_is_ended.tr();
     }
     return LocaleKeys.charging.tr();
   }
 
   String getSubtitleText() {
-    if (widget.process.parkingData.transactionId != -1) {
+    if (widget.process.freeParkingMinutes != -1) {
       return MyFunctions.getParkingTitle(widget.process.isPayedParkingStarted).tr();
     } else {
       return widget.process.locationName;

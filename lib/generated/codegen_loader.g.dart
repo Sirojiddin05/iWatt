@@ -22,7 +22,12 @@ class CodegenLoader extends AssetLoader{
   },
   "map": "Карта",
   "stations": "Станции",
-  "charging_processes": "Зарядки",
+  "charging_processes": {
+    "singular": "Зарядка",
+    "singular_genitive": "Зарядки",
+    "plural_nominative": "Зарядки",
+    "plural_genitive": "Зарядок"
+  },
   "profile": "Профиль",
   "no_network": "Нет сети",
   "check_connection": "Проверьте соединение",

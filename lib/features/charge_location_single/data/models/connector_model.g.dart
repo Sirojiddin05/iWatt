@@ -15,6 +15,9 @@ ConnectorModel _$ConnectorModelFromJson(Map<String, dynamic> json) =>
           : const ConnectorStandardConverter()
               .fromJson(json['standard'] as Map<String, dynamic>),
       status: json['status'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? -1,
+      parkingPrice: (json['parking_price'] as num?)?.toDouble() ?? -1,
+      maxElectricPower: (json['max_electric_power'] as num?)?.toInt() ?? -1,
     );
 
 Map<String, dynamic> _$ConnectorModelToJson(ConnectorModel instance) =>
@@ -23,4 +26,7 @@ Map<String, dynamic> _$ConnectorModelToJson(ConnectorModel instance) =>
       'name': instance.name,
       'status': instance.status,
       'standard': const ConnectorStandardConverter().toJson(instance.standard),
+      'price': instance.price,
+      'parking_price': instance.parkingPrice,
+      'max_electric_power': instance.maxElectricPower,
     };

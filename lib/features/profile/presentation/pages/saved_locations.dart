@@ -65,11 +65,11 @@ class _SavedLocationsState extends State<SavedLocations> {
                       onRefresh: () async {
                         context.read<ChargeLocationsBloc>().add(const GetChargeLocationsEvent());
                       },
-                      child: SizedBox(
-                        height: context.sizeOf.height - kToolbarHeight - context.padding.bottom,
-                        child: Center(
-                          child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: context.sizeOf.height - kToolbarHeight - context.padding.bottom,
+                          child: Center(
                             child: EmptyStateWidget(
                               title: LocaleKeys.there_are_no_saved_stations.tr(),
                               subtitle: LocaleKeys.you_have_not_save_stations_yet.tr(),

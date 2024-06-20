@@ -2,19 +2,45 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
-import 'package:i_watt_app/features/common/domain/entities/meter_value_message.dart';
-import 'package:i_watt_app/features/common/domain/entities/parking_data_message.dart';
 
 class ChargingProcessEntity extends Equatable {
-  final ConnectorEntity connector;
+  const ChargingProcessEntity({
+    this.connector = const ConnectorEntity(),
+    this.startCommandId = -1,
+    this.stopCommandId = -1,
+    this.transactionId = -1,
+    this.money = '',
+    this.batteryPercent = -1,
+    this.consumedKwh = '',
+    this.status = '',
+    this.currentKwh = '',
+    this.estimatedTime = '',
+    this.locationName = '',
+    this.parkingStartTime = '',
+    this.freeParkingMinutes = -1,
+    this.parkingPrice = '',
+    this.isPayedParkingStarted = false,
+    this.payedParkingLasts = -1,
+    this.payedParkingWillStartAfter = -1,
+    this.payedParkingPrice = -1,
+    this.payedParkingTimer,
+    this.freeParkingTimer,
+  });
+
+  final int transactionId;
   final int startCommandId;
   final int stopCommandId;
-  final int transactionId;
-  final MeterValueMessageEntity meterValue;
-  final String status;
   final String locationName;
+  final ConnectorEntity connector;
+  final String money;
+  final int batteryPercent;
+  final String consumedKwh;
+  final String currentKwh;
+  final String status;
   final String estimatedTime;
-  final ParkingDataMessageEntity parkingData;
+  final String parkingStartTime;
+  final int freeParkingMinutes;
+  final String parkingPrice;
   final bool isPayedParkingStarted;
   final int payedParkingLasts;
   final int payedParkingWillStartAfter;
@@ -22,72 +48,68 @@ class ChargingProcessEntity extends Equatable {
   final Timer? payedParkingTimer;
   final Timer? freeParkingTimer;
 
-  const ChargingProcessEntity({
-    this.connector = const ConnectorEntity(),
-    this.startCommandId = -1,
-    this.stopCommandId = -1,
-    this.transactionId = -1,
-    this.meterValue = const MeterValueMessageEntity(),
-    this.parkingData = const ParkingDataMessageEntity(),
-    this.status = '',
-    this.locationName = '',
-    this.estimatedTime = '',
-    this.payedParkingLasts = 0,
-    this.isPayedParkingStarted = false,
-    this.payedParkingWillStartAfter = 0,
-    this.payedParkingTimer,
-    this.freeParkingTimer,
-    this.payedParkingPrice = 0,
-  });
-
   ChargingProcessEntity copyWith({
-    int? taskId,
-    ConnectorEntity? connector,
+    int? transactionId,
     int? startCommandId,
     int? stopCommandId,
-    int? transactionId,
-    MeterValueMessageEntity? meterValue,
-    ParkingDataMessageEntity? parkingData,
-    String? status,
     String? locationName,
+    ConnectorEntity? connector,
+    String? money,
+    int? batteryPercent,
+    String? consumedKwh,
+    String? currentKwh,
+    String? status,
     String? estimatedTime,
-    int? payedParkingLasts,
+    String? parkingStartTime,
+    int? freeParkingMinutes,
+    String? parkingPrice,
     bool? isPayedParkingStarted,
+    int? payedParkingLasts,
     int? payedParkingWillStartAfter,
     int? payedParkingPrice,
     Timer? payedParkingTimer,
     Timer? freeParkingTimer,
   }) {
     return ChargingProcessEntity(
-      connector: connector ?? this.connector,
+      transactionId: transactionId ?? this.transactionId,
       startCommandId: startCommandId ?? this.startCommandId,
       stopCommandId: stopCommandId ?? this.stopCommandId,
-      transactionId: transactionId ?? this.transactionId,
-      meterValue: meterValue ?? this.meterValue,
-      status: status ?? this.status,
       locationName: locationName ?? this.locationName,
+      connector: connector ?? this.connector,
+      money: money ?? this.money,
+      batteryPercent: batteryPercent ?? this.batteryPercent,
+      consumedKwh: consumedKwh ?? this.consumedKwh,
+      status: status ?? this.status,
+      currentKwh: currentKwh ?? this.currentKwh,
       estimatedTime: estimatedTime ?? this.estimatedTime,
-      parkingData: parkingData ?? this.parkingData,
-      payedParkingLasts: payedParkingLasts ?? this.payedParkingLasts,
+      parkingStartTime: parkingStartTime ?? this.parkingStartTime,
+      freeParkingMinutes: freeParkingMinutes ?? this.freeParkingMinutes,
+      parkingPrice: parkingPrice ?? this.parkingPrice,
       isPayedParkingStarted: isPayedParkingStarted ?? this.isPayedParkingStarted,
+      payedParkingLasts: payedParkingLasts ?? this.payedParkingLasts,
       payedParkingWillStartAfter: payedParkingWillStartAfter ?? this.payedParkingWillStartAfter,
+      payedParkingPrice: payedParkingPrice ?? this.payedParkingPrice,
       payedParkingTimer: payedParkingTimer ?? this.payedParkingTimer,
       freeParkingTimer: freeParkingTimer ?? this.freeParkingTimer,
-      payedParkingPrice: payedParkingPrice ?? this.payedParkingPrice,
     );
   }
 
   @override
   List<Object?> get props => [
-        connector,
+        transactionId,
         startCommandId,
         stopCommandId,
-        transactionId,
-        meterValue,
-        status,
         locationName,
+        connector,
+        money,
+        batteryPercent,
+        consumedKwh,
+        currentKwh,
+        status,
         estimatedTime,
-        parkingData,
+        parkingStartTime,
+        freeParkingMinutes,
+        parkingPrice,
         isPayedParkingStarted,
         payedParkingLasts,
         payedParkingWillStartAfter,

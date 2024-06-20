@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
@@ -15,6 +16,7 @@ import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dar
 import 'package:i_watt_app/features/charge_location_single/domain/entities/connector_entity.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/pages/charging_process_sheet.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -137,7 +139,7 @@ class ConnectorCard extends StatelessWidget {
                     final isStartStatusChanged = o.startProcessStatus != n.startProcessStatus;
                     return isThisConnector && isStartStatusChanged;
                   },
-                  listener: (BuildContext context, ChargingProcessState state) {
+                  listener: (BuildContext context, ChargingProcessState state) async {
                     if (state.startProcessStatus.isFailure) {
                       context.showPopUp(
                         context,
@@ -145,7 +147,8 @@ class ConnectorCard extends StatelessWidget {
                         message: state.startProcessErrorMessage,
                       );
                     } else if (state.startProcessStatus.isSuccess) {
-                      onClose();
+                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: false));
+                      await Future.delayed(AppConstants.animationDuration);
                       Navigator.popUntil(context, (route) => route.isFirst);
                       showCupertinoModalBottomSheet(
                         context: context,

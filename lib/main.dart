@@ -82,9 +82,7 @@ Future<void> main() async {
     //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
     //   options.tracesSampleRate = 1.0;
     // }, appRunner: () {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     await MyFunctions.currentVersionAsync;
     return runApp(const App());
     // }
@@ -277,12 +275,14 @@ class _MyAppState extends State<MyApp> {
               } else {
                 context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
               }
-              _navigator.pushAndRemoveUntil(
-                MaterialWithModalsPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-                (route) => true,
-              );
+              if (!state.authenticationStatus.isUnKnown) {
+                _navigator.pushAndRemoveUntil(
+                  MaterialWithModalsPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                  (route) => false,
+                );
+              }
             },
           );
         },

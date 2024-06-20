@@ -29,8 +29,7 @@ class PushNotificationService {
   );
   static late FirebaseMessaging messaging;
 
-  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      "high importance channel", "High importance Notifications",
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel("high importance channel", "High importance Notifications",
       description: "This channel is used for important notifications", importance: Importance.max);
 
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -56,17 +55,11 @@ class PushNotificationService {
     }
   }
 
-  static Future<void> setForegroundNotificationPresentationOptions() async => await FirebaseMessaging.instance
-      .setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+  static Future<void> setForegroundNotificationPresentationOptions() async =>
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
   static Future<void> messagingRequestPermission() async => await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true);
+      alert: true, announcement: false, badge: true, carPlay: false, criticalAlert: false, provisional: false, sound: true);
 
   static Future<void> configurationFirebaseNotification() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -87,25 +80,29 @@ class PushNotificationService {
   static void initializeFlutterLocalNotificationsPlugin() {
     var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = const DarwinInitializationSettings();
-    var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   static void listenFireBaseOnMessage() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Message received: ${message.notification?.body}");
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       // bloc.add(NotificationCountEvent());
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
-            1,
-            notification.body,
-            notification.title,
-            NotificationDetails(
-                android: AndroidNotificationDetails(channel.id, channel.name,
-                    channelDescription: channel.description, icon: android.smallIcon)));
+          1,
+          notification.body,
+          notification.title,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: android.smallIcon,
+            ),
+          ),
+        );
       }
     }, onError: (error) {
       print("Error in receiving message: $error");

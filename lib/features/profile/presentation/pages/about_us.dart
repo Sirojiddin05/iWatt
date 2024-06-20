@@ -16,6 +16,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/error_state_text
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
@@ -40,7 +41,7 @@ class AboutUsPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator.adaptive());
             } else if (state.getAboutUsStatus.isSuccess) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(16, 64, 16, 32),
+                padding: EdgeInsets.fromLTRB(16, 64, 16, context.padding.bottom + 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -106,10 +107,14 @@ class AboutUsPage extends StatelessWidget {
                       style: context.textTheme.labelMedium?.copyWith(color: context.textTheme.titleSmall?.color),
                     ),
                     const SizedBox(height: 12),
-                    Image.asset(
-                      AppImages.uicLogo,
-                      width: context.sizeOf.width * .37,
-                    )
+                    GestureDetector(
+                      onTap: () => launchUrlString('https://uic.group/portfolio', mode: LaunchMode.externalApplication),
+                      behavior: HitTestBehavior.opaque,
+                      child: Image.asset(
+                        AppImages.uicLogo,
+                        width: context.sizeOf.width * .37,
+                      ),
+                    ),
                   ],
                 ),
               );

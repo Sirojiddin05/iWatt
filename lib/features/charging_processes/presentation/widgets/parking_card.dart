@@ -91,7 +91,7 @@ class _ParkingCardState extends State<ParkingCard> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${getPrice()} ${LocaleKeys.sum.tr()}',
+                      '${getPrice().replaceAll('UZS', '')} ${LocaleKeys.sum.tr()}',
                       style: context.textTheme.headlineSmall,
                     ),
                   ],

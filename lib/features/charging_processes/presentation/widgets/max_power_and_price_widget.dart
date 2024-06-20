@@ -22,7 +22,7 @@ class MaxPowerAndPriceWidget extends StatelessWidget {
           Expanded(
             child: ChargingInfoCard(
               label: LocaleKeys.max_power.tr(),
-              value: maxPower,
+              value: '$maxPower ${LocaleKeys.kW.tr()}',
               icon: AppIcons.flash,
             ),
           ),
@@ -30,7 +30,7 @@ class MaxPowerAndPriceWidget extends StatelessWidget {
           Expanded(
             child: ChargingInfoCard(
               label: LocaleKeys.price.tr(),
-              value: price,
+              value: '$price ${LocaleKeys.sum.tr()}/${LocaleKeys.kW.tr()}',
               icon: AppIcons.tagPrice,
             ),
           ),

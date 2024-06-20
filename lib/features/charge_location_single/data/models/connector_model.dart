@@ -11,6 +11,9 @@ class ConnectorModel extends ConnectorEntity {
     super.name,
     super.standard,
     super.status,
+    super.price,
+    super.parkingPrice,
+    super.maxElectricPower,
   });
   factory ConnectorModel.fromJson(Map<String, dynamic> json) => _$ConnectorModelFromJson(json);
 }

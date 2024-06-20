@@ -81,7 +81,9 @@ class StationSingleSheet extends StatelessWidget {
                                         price: station.price,
                                         isNearToStation: state.isNearToStation,
                                         locationName: '${state.location.vendor.name} "${state.location.name}"',
-                                        onClose: onClose,
+                                        onClose: () {
+                                          onClose();
+                                        },
                                       );
                                     }),
                                   );
