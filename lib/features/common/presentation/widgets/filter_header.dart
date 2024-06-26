@@ -119,14 +119,11 @@ class _FilterHeaderState extends State<FilterHeader> {
                         child: AnimatedSwitcher(
                           duration: AppConstants.animationDuration,
                           transitionBuilder: (child, animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SizeTransition(
-                                axis: Axis.horizontal,
-                                axisAlignment: 0,
-                                sizeFactor: animation,
-                                child: child,
-                              ),
+                            return SizeTransition(
+                              axis: Axis.horizontal,
+                              axisAlignment: 0,
+                              sizeFactor: animation,
+                              child: child,
                             );
                           },
                           child: Text(
