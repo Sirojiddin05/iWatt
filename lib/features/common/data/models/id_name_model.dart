@@ -12,6 +12,7 @@ class IdNameModel extends IdNameEntity {
     super.icon,
     super.descriptions,
     super.maxElectricPower,
+    super.logo,
   });
 
   factory IdNameModel.fromJson(Map<String, dynamic> json) => _$IdNameModelFromJson(json);

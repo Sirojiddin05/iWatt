@@ -92,7 +92,7 @@ class _LoginWithQrState extends State<LoginWithQr> {
               child: Column(
                 children: [
                   Text(
-                    LocaleKeys.scan_qr.tr(),
+                    LocaleKeys.qr_authorization.tr(),
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -102,7 +102,7 @@ class _LoginWithQrState extends State<LoginWithQr> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    LocaleKeys.point_the_camera_to_the_qr_where_it_is_located_at_the_station.tr(),
+                    LocaleKeys.in_order_to_login_scan_qr_code.tr(),
                     textAlign: TextAlign.center,
                     style: context.textTheme.titleSmall!.copyWith(
                       fontSize: 14,
@@ -131,7 +131,7 @@ class _LoginWithQrState extends State<LoginWithQr> {
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: SvgPicture.asset(
-                    onFlash ? AppIcons.flashLightOn : AppIcons.flashLightOf,
+                    onFlash ? AppIcons.flashLightOf : AppIcons.flashLightOn,
                     width: 40,
                     height: 40,
                   ),

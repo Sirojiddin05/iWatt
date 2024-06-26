@@ -44,7 +44,6 @@ class _ChargingCarDataWidgetState extends State<ChargingCarDataWidget> {
           builder: (ctx) {
             return ChargingProcessSheet(
               connector: widget.process.connector,
-              locationName: widget.process.locationName,
             );
           },
         );

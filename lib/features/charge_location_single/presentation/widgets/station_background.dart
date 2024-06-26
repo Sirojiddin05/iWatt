@@ -17,7 +17,7 @@ class StationBackgroundImage extends StatelessWidget {
         child: DecoratedBox(
           position: DecorationPosition.foreground,
           decoration: BoxDecoration(
-            color: AppColors.white.withOpacity(.6),
+            color: AppColors.white.withOpacity(.7),
           ),
           child: SvgPicture.asset(
             AppIcons.stationBackground,

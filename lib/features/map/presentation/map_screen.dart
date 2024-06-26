@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
@@ -32,10 +31,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   @override
   void initState() {
     super.initState();
+    final lastLat = StorageRepository.getDouble('current_lat', defValue: -1);
+    final lastLong = StorageRepository.getDouble('current_long', defValue: -1);
     chargeLocationsBloc = ChargeLocationsBloc(
         getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
         saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()))
-      ..add(const GetChargeLocationsEvent());
+      ..add(SetPointEvent(zoom: 2, point: Point(latitude: lastLat, longitude: lastLong), forceFetchingLocations: true));
+
     mapBloc = MapBloc();
     WidgetsBinding.instance.addObserver(this);
     headerSizeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
@@ -101,7 +103,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                             context: context,
                             useRootNavigator: true,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.black,
+                            backgroundColor: Colors.transparent,
                             barrierColor: Colors.transparent,
                             builder: (ctx) {
                               return LocationSingleSheet(

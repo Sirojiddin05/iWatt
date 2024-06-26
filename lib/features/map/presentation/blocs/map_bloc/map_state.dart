@@ -1,6 +1,23 @@
 part of 'map_bloc.dart';
 
 class MapState extends Equatable {
+  const MapState({
+    this.userLocationAccessingStatus = FormzSubmissionStatus.initial,
+    this.count = 0,
+    this.currentLat = 0,
+    this.currentLong = 0,
+    this.next = '',
+    this.locationSettingsTriggered = false,
+    this.locationsMapObjects,
+    this.userLocationObject,
+    this.zoomLevel = 15,
+    this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
+    this.hasLuminosity = false,
+    this.isMapInitialized = false,
+    this.chargeLocations = const [],
+    this.selectedLocation = const ChargeLocationEntity(),
+  });
+
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
   final int count;
@@ -13,8 +30,6 @@ class MapState extends Equatable {
   final bool locationSettingsTriggered;
   final bool hasLuminosity;
   final bool isMapInitialized;
-  final bool areControllersVisible;
-  final bool isSearchFieldVisible;
   final List<ChargeLocationEntity> chargeLocations;
   final ChargeLocationEntity selectedLocation;
 
@@ -31,8 +46,6 @@ class MapState extends Equatable {
     LocationPermissionStatus? locationAccessStatus,
     bool? hasLuminosity,
     bool? isMapInitialized,
-    bool? areControllersVisible,
-    bool? isSearchFieldVisible,
     List<ChargeLocationEntity>? chargeLocations,
     ChargeLocationEntity? selectedLocation,
   }) {
@@ -49,31 +62,10 @@ class MapState extends Equatable {
       zoomLevel: zoomLevel ?? this.zoomLevel,
       hasLuminosity: hasLuminosity ?? this.hasLuminosity,
       isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-      areControllersVisible: areControllersVisible ?? this.areControllersVisible,
-      isSearchFieldVisible: isSearchFieldVisible ?? this.isSearchFieldVisible,
       chargeLocations: chargeLocations ?? this.chargeLocations,
       selectedLocation: selectedLocation ?? this.selectedLocation,
     );
   }
-
-  const MapState({
-    this.userLocationAccessingStatus = FormzSubmissionStatus.initial,
-    this.count = 0,
-    this.currentLat = 0,
-    this.currentLong = 0,
-    this.next = '',
-    this.locationSettingsTriggered = false,
-    this.locationsMapObjects,
-    this.userLocationObject,
-    this.zoomLevel = 15,
-    this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
-    this.hasLuminosity = false,
-    this.isMapInitialized = false,
-    this.areControllersVisible = false,
-    this.isSearchFieldVisible = false,
-    this.chargeLocations = const [],
-    this.selectedLocation = const ChargeLocationEntity(),
-  });
 
   @override
   List<Object?> get props => [
@@ -89,8 +81,6 @@ class MapState extends Equatable {
         locationSettingsTriggered,
         hasLuminosity,
         isMapInitialized,
-        areControllersVisible,
-        isSearchFieldVisible,
         chargeLocations,
         selectedLocation,
       ];

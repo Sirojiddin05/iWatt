@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/error_state_text.dart';
@@ -101,24 +103,24 @@ class _SavedLocationsState extends State<SavedLocations> {
                           highlightedTitle: state.searchPattern,
                           hasSavedIcon: true,
                           onTap: () {
-                            // showModalBottomSheet(
-                            //   context: context,
-                            //   barrierColor: black.withOpacity(.52),
-                            //   useRootNavigator: true,
-                            //   isScrollControlled: true,
-                            //   enableDrag: false,
-                            //   backgroundColor: Colors.transparent,
-                            //   shape: const RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                            //   ),
-                            //   builder: (ctx) {
-                            //     return LocationSingleSheet(
-                            //       location: location,
-                            //       distance: distance,
-                            //       midSize: true,
-                            //     );
-                            //   },
-                            // );
+                            showModalBottomSheet(
+                              context: context,
+                              useRootNavigator: true,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              barrierColor: AppColors.black.withOpacity(.52),
+                              builder: (ctx) {
+                                return LocationSingleSheet(
+                                  title: '${location.vendorName} "${location.locationName}"',
+                                  address: location.address,
+                                  distance: location.distance.toString(),
+                                  midSize: true,
+                                  id: location.id,
+                                  latitude: location.latitude,
+                                  longitude: location.longitude,
+                                );
+                              },
+                            );
                           },
                         );
                       },

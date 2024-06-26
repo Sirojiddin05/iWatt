@@ -18,6 +18,7 @@ class SearchField extends StatefulWidget {
   final double height;
   final double? width;
   final String searchIcon;
+  final Color? fillColor;
 
   const SearchField({
     this.focusNode,
@@ -30,6 +31,7 @@ class SearchField extends StatefulWidget {
     this.height = 40,
     this.width,
     this.searchIcon = AppIcons.chevronLeftGrey,
+    this.fillColor,
   });
 
   @override
@@ -67,13 +69,14 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return DefaultTextField(
+      height: 44,
+      maxLines: 1,
       controller: _controller,
       onChanged: widget.onChanged,
-      maxLines: 1,
       hintStyle: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w500),
       focusNode: widget.focusNode,
-      height: 44,
       fill: true,
+      fillColor: widget.fillColor,
       prefixIcon: WScaleAnimation(
         onTap: () {
           Navigator.of(context).pop();

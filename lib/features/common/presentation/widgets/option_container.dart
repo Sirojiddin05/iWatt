@@ -10,10 +10,14 @@ class OptionContainer extends StatelessWidget {
   final Widget content;
   final String icon;
   final VoidCallback onTap;
+  final TextStyle? titleStyle;
+  final BoxDecoration? boxDecoration;
   const OptionContainer({
     super.key,
     required this.content,
     this.icon = '',
+    this.titleStyle,
+    this.boxDecoration,
     required this.onTap,
     required this.title,
   });
@@ -26,10 +30,11 @@ class OptionContainer extends StatelessWidget {
       children: [
         Text(
           title,
-          style: context.textTheme.titleMedium?.copyWith(
-            fontSize: 12,
-            color: AppColors.darkGray,
-          ),
+          style: titleStyle ??
+              context.textTheme.titleMedium?.copyWith(
+                fontSize: 12,
+                color: AppColors.darkGray,
+              ),
         ),
         const SizedBox(height: 6),
         WCustomTappableButton(
@@ -37,12 +42,13 @@ class OptionContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           rippleColor: AppColors.cyprus.withAlpha(30),
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: AppColors.fieldBorderZircon,
-              ),
-            ),
+            decoration: boxDecoration ??
+                BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.fieldBorderZircon,
+                  ),
+                ),
             padding: const EdgeInsets.all(12),
             child: Row(
               children: [

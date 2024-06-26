@@ -3,9 +3,10 @@ part of 'charging_process_bloc.dart';
 abstract class ChargingProcessEvent {}
 
 class CreateChargingProcessEvent extends ChargingProcessEvent {
+  final String locationName;
   final ConnectorEntity connector;
 
-  CreateChargingProcessEvent(this.connector);
+  CreateChargingProcessEvent(this.connector, {required this.locationName});
 }
 
 class DeleteChargingProcessEvent extends ChargingProcessEvent {

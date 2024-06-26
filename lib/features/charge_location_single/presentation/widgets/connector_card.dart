@@ -158,7 +158,6 @@ class ConnectorCard extends StatelessWidget {
                         builder: (ctx) {
                           return ChargingProcessSheet(
                             connector: connector,
-                            locationName: locationName,
                           );
                         },
                       );
@@ -184,7 +183,12 @@ class ConnectorCard extends StatelessWidget {
                       onTap: () {
                         if (authState.authenticationStatus.isAuthenticated) {
                           if (connector.status == 'Preparing' && isNearToStation) {
-                            context.read<ChargingProcessBloc>().add(CreateChargingProcessEvent(connector));
+                            context.read<ChargingProcessBloc>().add(
+                                  CreateChargingProcessEvent(
+                                    connector,
+                                    locationName: locationName,
+                                  ),
+                                );
                           }
                         } else {
                           showLoginDialog(context, onConfirm: () {

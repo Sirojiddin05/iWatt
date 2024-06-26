@@ -96,7 +96,7 @@ class _AnimatedScaleSizeWidgetState extends State<AnimatedScaleSizeWidget> with 
             margin: const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
             decoration: BoxDecoration(
               color: context.colorScheme.background,
-              borderRadius: BorderRadius.circular(26),
+              borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
                   color: context.theme.shadowColor,

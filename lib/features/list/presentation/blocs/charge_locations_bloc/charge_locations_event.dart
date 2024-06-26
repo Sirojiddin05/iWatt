@@ -26,10 +26,12 @@ class SetSearchPatternEvent extends ChargeLocationsEvent {
 class SetFilterEvent extends ChargeLocationsEvent {
   final List<int> connectorTypes;
   final List<int> powerTypes;
+  final List<IdNameEntity> vendors;
 
   const SetFilterEvent({
     required this.connectorTypes,
     required this.powerTypes,
+    required this.vendors,
   });
 }
 
@@ -42,8 +44,9 @@ class ChangeSavedStateOfLocation extends ChargeLocationsEvent {
 class SetPointEvent extends ChargeLocationsEvent {
   final int zoom;
   final Point point;
+  final bool forceFetchingLocations;
 
-  const SetPointEvent({required this.zoom, required this.point});
+  const SetPointEvent({required this.zoom, required this.point, this.forceFetchingLocations = false});
 }
 
 class SetFavouriteEvent extends ChargeLocationsEvent {

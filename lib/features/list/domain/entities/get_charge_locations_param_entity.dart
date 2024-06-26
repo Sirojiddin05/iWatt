@@ -2,6 +2,7 @@ class GetChargeLocationParamEntity {
   final bool isFavourite;
   final List<int> powerType;
   final List<int> connectorType;
+  final List<int> vendors;
   final String searchPattern;
   final String next;
   final int zoom;
@@ -12,6 +13,7 @@ class GetChargeLocationParamEntity {
     this.isFavourite = false,
     this.powerType = const [],
     this.connectorType = const [],
+    this.vendors = const [],
     this.next = '',
     this.searchPattern = '',
     this.zoom = -1,
@@ -34,20 +36,16 @@ class GetChargeLocationParamEntity {
       params.putIfAbsent('user_longitude', () => longitude);
     }
     if (powerType.isNotEmpty) {
-      String power = '';
-      for (final powerGroup in powerType) {
-        power = power + powerGroup.toString();
-        if (powerGroup != powerType.last) power = '$power,';
-      }
+      String power = powerType.join(', ');
       params.putIfAbsent('max_electric_powers', () => power);
     }
     if (connectorType.isNotEmpty) {
-      String connector = '';
-      for (final type in connectorType) {
-        connector = connector + type.toString();
-        if (type != connectorType.last) connector = '$connector,';
-      }
+      String connector = connectorType.join(', ');
       params.putIfAbsent('type_connection', () => connector);
+    }
+    if (vendors.isNotEmpty) {
+      String vendor = vendors.join(', ');
+      params.putIfAbsent('vendors', () => vendor);
     }
     return params;
   }

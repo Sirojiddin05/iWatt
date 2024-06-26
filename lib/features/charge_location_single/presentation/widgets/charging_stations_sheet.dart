@@ -23,8 +23,8 @@ class StationSingleSheet extends StatelessWidget {
       margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
         ),
         color: AppColors.white,
       ),

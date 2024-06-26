@@ -147,12 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ],
                               onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (ctx) {
-                                      return const CarOnMapSheet();
-                                    });
+                                showCarOnMapSheet(context);
                               },
                             ),
                             if (isAuthenticated) ...{

@@ -30,9 +30,12 @@ class LocationsList extends StatelessWidget {
             final oldConnectorTypes = o.selectedConnectorTypes;
             final newPowerTypes = n.selectedPowerTypes;
             final newConnectorTypes = n.selectedConnectorTypes;
+            final oldVendors = o.selectedVendors;
+            final newVendors = n.selectedVendors;
             final isPowersChanged = oldPowerTypes != newPowerTypes;
             final isTypesChanged = oldConnectorTypes != newConnectorTypes;
-            return isPowersChanged || isTypesChanged;
+            final isVendorsChanged = oldVendors != newVendors;
+            return isPowersChanged || isTypesChanged || isVendorsChanged;
           },
           builder: (context, state) {
             return AnimatedCrossFade(
@@ -49,12 +52,12 @@ class LocationsList extends StatelessWidget {
                   textStyle: context.textTheme.bodySmall!.copyWith(fontSize: 12),
                   color: context.colorScheme.primaryContainer,
                   onTap: () {
-                    context.read<ChargeLocationsBloc>().add(const SetFilterEvent(powerTypes: [], connectorTypes: []));
+                    context.read<ChargeLocationsBloc>().add(const SetFilterEvent(powerTypes: [], connectorTypes: [], vendors: []));
                   },
                 ),
               ),
               secondChild: SizedBox(width: MediaQuery.sizeOf(context).width),
-              crossFadeState: state.selectedConnectorTypes.isNotEmpty || state.selectedPowerTypes.isNotEmpty
+              crossFadeState: state.selectedConnectorTypes.isNotEmpty || state.selectedPowerTypes.isNotEmpty || state.selectedVendors.isNotEmpty
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               duration: AppConstants.animationDuration,
@@ -101,7 +104,7 @@ class LocationsList extends StatelessWidget {
                             context: context,
                             useRootNavigator: true,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.black,
+                            backgroundColor: Colors.transparent,
                             barrierColor: AppColors.black.withOpacity(.52),
                             builder: (ctx) {
                               return LocationSingleSheet(

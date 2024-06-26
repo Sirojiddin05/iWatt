@@ -8,6 +8,7 @@ import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/usecases/base_usecase.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
+import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
@@ -45,10 +46,15 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     emit(state.copyWith(getChargeLocationsStatus: FormzSubmissionStatus.inProgress));
     final longitude = state.longitude == -1 ? StorageRepository.getDouble(StorageKeys.longitude) : state.longitude;
     final latitude = state.longitude == -1 ? StorageRepository.getDouble(StorageKeys.latitude) : state.latitude;
+    final vendors = List<int>.generate(
+      state.selectedVendors.length,
+      (index) => state.selectedVendors[index].id,
+    );
     final result = await getChargeLocationsUseCase.call(
       GetChargeLocationParamEntity(
         powerType: state.selectedPowerTypes,
         connectorType: state.selectedConnectorTypes,
+        vendors: vendors.contains(0) ? [] : vendors,
         searchPattern: state.searchPattern,
         longitude: longitude,
         latitude: latitude,
@@ -99,7 +105,11 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
   }
 
   void _setFilter(SetFilterEvent event, Emitter<ChargeLocationsState> emit) {
-    emit(state.copyWith(selectedConnectorTypes: event.connectorTypes, selectedPowerTypes: event.powerTypes));
+    emit(state.copyWith(
+      selectedConnectorTypes: event.connectorTypes,
+      selectedPowerTypes: event.powerTypes,
+      selectedVendors: event.vendors,
+    ));
     add(const GetChargeLocationsEvent());
   }
 
@@ -110,14 +120,13 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
 
   void _setPoint(SetPointEvent event, Emitter<ChargeLocationsState> emit) {
     final distance = MyFunctions.getDistanceBetweenTwoPoints(event.point, Point(latitude: state.latitude, longitude: state.longitude));
-    if (distance > 10) {
+    if (distance > 10 || event.forceFetchingLocations) {
       emit(state.copyWith(zoom: event.zoom, latitude: event.point.latitude, longitude: event.point.longitude));
       add(const GetChargeLocationsEvent());
     }
   }
 
   void _setSavedState(ChangeSavedStateOfLocation event, Emitter<ChargeLocationsState> emit) {
-    print('_setSavedState');
     final oldList = [...state.chargeLocations];
     for (int i = 0; i < oldList.length; i++) {
       final location = oldList[i];

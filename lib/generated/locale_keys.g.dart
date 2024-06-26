@@ -348,5 +348,9 @@ abstract class  LocaleKeys {
   static const payment = 'payment';
   static const use_account_from_other_device = 'use_account_from_other_device';
   static const scan_the_qr_and_login = 'scan_the_qr_and_login';
+  static const companies = 'companies';
+  static const select_company = 'select_company';
+  static const all_companies = 'all_companies';
+  static const select_all = 'select_all';
 
 }

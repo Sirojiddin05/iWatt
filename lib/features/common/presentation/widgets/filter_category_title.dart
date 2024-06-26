@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class FilterCategoryTitle extends StatelessWidget {
   final String title;
@@ -8,7 +9,7 @@ class FilterCategoryTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.displaySmall,
+      style: context.textTheme.displaySmall,
     );
   }
 }

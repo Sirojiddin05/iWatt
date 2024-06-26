@@ -10,6 +10,7 @@ class ChargeLocationsState extends Equatable {
   final String searchPattern;
   final List<int> selectedPowerTypes;
   final List<int> selectedConnectorTypes;
+  final List<IdNameEntity> selectedVendors;
   final int zoom;
   final double latitude;
   final double longitude;
@@ -29,6 +30,7 @@ class ChargeLocationsState extends Equatable {
     this.latitude = -1,
     this.longitude = -1,
     this.isFavourite = false,
+    this.selectedVendors = const [],
   });
 
   ChargeLocationsState copyWith({
@@ -41,6 +43,7 @@ class ChargeLocationsState extends Equatable {
     String? searchPattern,
     List<int>? selectedPowerTypes,
     List<int>? selectedConnectorTypes,
+    List<IdNameEntity>? selectedVendors,
     int? zoom,
     double? latitude,
     double? longitude,
@@ -56,6 +59,7 @@ class ChargeLocationsState extends Equatable {
       searchPattern: searchPattern ?? this.searchPattern,
       selectedPowerTypes: selectedPowerTypes ?? this.selectedPowerTypes,
       selectedConnectorTypes: selectedConnectorTypes ?? this.selectedConnectorTypes,
+      selectedVendors: selectedVendors ?? this.selectedVendors,
       zoom: zoom ?? this.zoom,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
@@ -74,6 +78,7 @@ class ChargeLocationsState extends Equatable {
         searchPattern,
         selectedConnectorTypes,
         selectedPowerTypes,
+        selectedVendors,
         zoom,
         latitude,
         longitude,

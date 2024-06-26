@@ -24,12 +24,9 @@ class AddCarManufacturersList extends StatefulWidget {
 }
 
 class _AddCarManufacturersListState extends State<AddCarManufacturersList> with TickerProviderStateMixin {
-  late TextEditingController controller;
-
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
   }
 
   @override
@@ -38,9 +35,8 @@ class _AddCarManufacturersListState extends State<AddCarManufacturersList> with 
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            padding: const EdgeInsets.all(16),
             child: SearchField(
-              controller: controller,
               searchIcon: AppIcons.searchLong,
               onChanged: (v) {
                 context.read<ManufacturersBloc>().add(SearchManufacturers(v));

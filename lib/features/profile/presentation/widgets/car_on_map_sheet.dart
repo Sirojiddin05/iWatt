@@ -9,6 +9,17 @@ import 'package:i_watt_app/features/common/presentation/widgets/sheet_wrapper.da
 import 'package:i_watt_app/features/common/presentation/widgets/w_radio_tile.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
+void showCarOnMapSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    useRootNavigator: true,
+    builder: (ctx) {
+      return const CarOnMapSheet();
+    },
+  );
+}
+
 class CarOnMapSheet extends StatelessWidget {
   const CarOnMapSheet({super.key});
 

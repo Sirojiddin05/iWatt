@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_category_title.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/filter_tile.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_switch_tile.dart';
 
 class ConnectorTypesList extends StatefulWidget {
   final List<int> defaultSelectedTypes;
@@ -49,7 +49,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
               return ValueListenableBuilder<List<int>>(
                 valueListenable: connectorTypes,
                 builder: (context, v, child) {
-                  return FilterTile(
+                  return WSwitchTile(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     includeIcon: true,
                     icon: connector.icon,
@@ -81,7 +81,7 @@ class _ConnectorTypesListState extends State<ConnectorTypesList> {
               return ValueListenableBuilder<List<int>>(
                 valueListenable: connectorTypes,
                 builder: (context, v, child) {
-                  return FilterTile(
+                  return WSwitchTile(
                     icon: connector.icon,
                     hasDivider: index != state.dcConnectionTypes.length - 1,
                     includeIcon: true,

@@ -26,6 +26,7 @@ import 'package:i_watt_app/features/common/data/repositories_impl/notifications_
 import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/socket_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/vendors_repository_impl.dart';
 import 'package:i_watt_app/features/common/domain/usecases/connect_to_socket_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_all_search_histories.dart';
 import 'package:i_watt_app/features/common/domain/usecases/delete_single_search_history.dart';
@@ -37,6 +38,7 @@ import 'package:i_watt_app/features/common/domain/usecases/get_notification.dart
 import 'package:i_watt_app/features/common/domain/usecases/get_notification_detail.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_search_history.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_vendors_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/meter_value_stream_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/notification_on_off.dart';
 import 'package:i_watt_app/features/common/domain/usecases/parking_data_stream_usecase.dart';
@@ -54,6 +56,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
@@ -71,6 +74,7 @@ import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/firebase_options.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   runZonedGuarded(() async {
@@ -87,7 +91,7 @@ Future<void> main() async {
     return runApp(const App());
     // }
   }, (error, stack) async {
-    // await Sentry.captureException(error, stackTrace: stack);
+    await Sentry.captureException(error, stackTrace: stack);
   });
 }
 
@@ -152,6 +156,13 @@ class App extends StatelessWidget {
               serviceLocator<ConnectorTypesRepositoryImpl>(),
             ),
           )..add(GetConnectorTypesEvent()),
+        ),
+        BlocProvider(
+          create: (context) => VendorsBloc(
+            GetVendorsUseCase(
+              serviceLocator<VendorsRepositoryImpl>(),
+            ),
+          )..add(GetVendorsEvent()),
         ),
         BlocProvider(
           create: (context) => PowerTypesBloc(
@@ -256,7 +267,7 @@ class _MyAppState extends State<MyApp> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: MaterialApp(
-        title: 'I WATT',
+        title: 'iWatt',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,

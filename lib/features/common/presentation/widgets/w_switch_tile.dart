@@ -8,7 +8,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_cupertino_swit
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:vibration/vibration.dart';
 
-class FilterTile extends StatelessWidget {
+class WSwitchTile extends StatelessWidget {
   final String title;
   final bool hasDivider;
   final bool isSelectedDefault;
@@ -17,7 +17,7 @@ class FilterTile extends StatelessWidget {
   final EdgeInsets padding;
   final Function(bool) onSwitch;
 
-  const FilterTile({
+  const WSwitchTile({
     this.isSelectedDefault = false,
     required this.title,
     this.hasDivider = true,

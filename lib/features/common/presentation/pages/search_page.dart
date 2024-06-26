@@ -91,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
                                     context: context,
                                     useRootNavigator: true,
                                     isScrollControlled: true,
-                                    backgroundColor: AppColors.black,
+                                    backgroundColor: Colors.transparent,
                                     barrierColor: AppColors.black.withOpacity(.52),
                                     builder: (ctx) {
                                       return LocationSingleSheet(

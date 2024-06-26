@@ -184,7 +184,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

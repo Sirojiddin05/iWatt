@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,7 @@ class BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final paddingTop = Platform.isIOS ? context.sizeOf.height * 0.16 : context.sizeOf.height * 0.14;
     return Positioned(
       top: 0,
       right: 0,
@@ -46,7 +49,7 @@ class BackgroundImage extends StatelessWidget {
                 ),
                 Positioned(
                   left: 16,
-                  bottom: context.sizeOf.height * 0.78,
+                  top: paddingTop,
                   child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
                     builder: (context, state) {
                       return LogoContainer(

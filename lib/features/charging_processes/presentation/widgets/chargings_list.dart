@@ -60,7 +60,7 @@ class ChargingProcessList extends StatelessWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 20),
               itemBuilder: (context, index) {
                 final process = state.processes[index];
-                return ChargingCarDataWidget(process: process);
+                return /**/ ChargingCarDataWidget(process: process);
               },
             );
           }

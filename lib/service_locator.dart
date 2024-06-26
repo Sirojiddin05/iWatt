@@ -23,12 +23,14 @@ import 'package:i_watt_app/features/common/data/datasources/notifications_dataso
 import 'package:i_watt_app/features/common/data/datasources/power_groups_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/search_history_datasource.dart';
 import 'package:i_watt_app/features/common/data/datasources/socket_datasource.dart';
+import 'package:i_watt_app/features/common/data/datasources/vendors_datasource.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/about_us_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/notifications_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/socket_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/vendors_repository_impl.dart';
 import 'package:i_watt_app/features/list/data/datasources/charge_locations_data_source.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/data/datasources/instructions_datasource.dart';
@@ -55,7 +57,6 @@ Future<void> setupLocator() async {
     key: StorageKeys.encryptionKey,
     value: dotenv.env[StorageKeys.encryptionKey] ?? '',
   );
-
   serviceLocator.registerLazySingleton(() => DioSettings());
   serviceLocator.registerFactory(() => AuthenticationDatasourceImpl(dio: serviceLocator<DioSettings>().dio));
   serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(serviceLocator<AuthenticationDatasourceImpl>()));
@@ -63,12 +64,14 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => SignInRepositoryImpl(serviceLocator<SignInDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ProfileDatasourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ProfileRepositoryImpl(serviceLocator<ProfileDatasourceImpl>()));
-  serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ConnectorTypesDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ConnectorTypesRepositoryImpl(serviceLocator<ConnectorTypesDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => PowerTypesDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => PowerTypesRepositoryImpl(serviceLocator<PowerTypesDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => VendorsDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => VendorsRepositoryImpl(serviceLocator<VendorsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => VersionCheckDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => InstructionsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => VersionCheckRepositoryImpl(serviceLocator<VersionCheckDataSourceImpl>()));

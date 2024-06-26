@@ -77,13 +77,6 @@ class ChangeLuminosityStateEvent extends MapEvent {
   const ChangeLuminosityStateEvent({required this.hasLuminosity});
 }
 
-class SetControllersVisibilityEvent extends MapEvent {
-  final bool? areControllersVisible;
-  final bool? searchFieldVisible;
-
-  const SetControllersVisibilityEvent({this.areControllersVisible, this.searchFieldVisible});
-}
-
 class SetDraggableSheetOffsetEvent extends MapEvent {
   final double offset;
 

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/common/presentation/pages/search_page.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_Icon_card.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_sheet.dart';
@@ -78,10 +79,13 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
               ),
               BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
                 buildWhen: (o, n) {
-                  return o.selectedConnectorTypes != n.selectedConnectorTypes || o.selectedPowerTypes != n.selectedPowerTypes;
+                  final isConnectorTypesChanged = o.selectedConnectorTypes != n.selectedConnectorTypes;
+                  final isPowerTypesChanged = o.selectedPowerTypes != n.selectedPowerTypes;
+                  final isVendorsChanged = o.selectedVendors != n.selectedVendors;
+                  return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged;
                 },
                 builder: (context, state) {
-                  final isActive = (state.selectedPowerTypes.isNotEmpty || state.selectedConnectorTypes.isNotEmpty);
+                  final isActive = state.selectedPowerTypes.isNotEmpty || state.selectedConnectorTypes.isNotEmpty || state.selectedVendors.isNotEmpty;
                   return FilterIconCard(
                     isActive: isActive,
                     onTap: () {
@@ -93,12 +97,19 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                         constraints: BoxConstraints(maxHeight: context.sizeOf.height - kToolbarHeight),
                         builder: (ctx) {
                           return FilterSheet(
-                            onChanged: (List<int> powerTypes, List<int> connectorType) {
-                              context.read<ChargeLocationsBloc>().add(SetFilterEvent(powerTypes: powerTypes, connectorTypes: connectorType));
+                            onChanged: (List<int> powerTypes, List<int> connectorType, List<IdNameEntity> vendors) {
+                              context.read<ChargeLocationsBloc>().add(
+                                    SetFilterEvent(
+                                      powerTypes: powerTypes,
+                                      connectorTypes: connectorType,
+                                      vendors: vendors,
+                                    ),
+                                  );
                               Navigator.pop(ctx);
                             },
                             selectedPowerTypes: state.selectedPowerTypes,
                             selectedConnectorTypes: state.selectedConnectorTypes,
+                            selectedVendors: state.selectedVendors,
                           );
                         },
                       );

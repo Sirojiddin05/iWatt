@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
@@ -60,6 +61,7 @@ class MapControllers extends StatelessWidget {
                       if (isValidConnector && isValidLocation && isValidStation) {
                         showCupertinoModalBottomSheet(
                           backgroundColor: Colors.transparent,
+                          barrierColor: AppColors.black.withOpacity(0.52),
                           context: context,
                           enableDrag: false,
                           builder: (ctx) {

@@ -129,11 +129,13 @@ class AppIcons {
   static const stopCharging = 'assets/icons/ic_stop.svg';
   static const stationBackground = 'assets/icons/ic_station_back.svg';
   static const tick = 'assets/icons/ic_tick.svg';
-  static const flashLightOn = 'assets/icons/flash_light_on.svg';
-  static const flashLightOf = 'assets/icons/flash_light_of.svg';
-  static const cancel = 'assets/icons/cancel.svg';
-  static const balancePattern = 'assets/icons/balance_pattern.svg';
+  static const flashLightOn = 'assets/icons/ic_flash_light_on.svg';
+  static const flashLightOf = 'assets/icons/ic_flash_light_of.svg';
+  static const cancel = 'assets/icons/ic_cancel.svg';
+  static const balancePattern = 'assets/icons/ic_balance_pattern.svg';
   static const roundedPlug = 'assets/icons/ic_rounded_plug.svg';
   static const debtIcon = 'assets/icons/ic_debt.svg';
   static const qrIcon = 'assets/icons/ic_qr_icon.svg';
+  static const backButton = 'assets/icons/ic_back_button.svg';
+  static const selectAll = 'assets/icons/ic_select_all.svg';
 }

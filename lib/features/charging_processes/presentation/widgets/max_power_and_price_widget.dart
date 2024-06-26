@@ -30,12 +30,19 @@ class MaxPowerAndPriceWidget extends StatelessWidget {
           Expanded(
             child: ChargingInfoCard(
               label: LocaleKeys.price.tr(),
-              value: '$price ${LocaleKeys.sum.tr()}/${LocaleKeys.kW.tr()}',
+              value: getPrice,
               icon: AppIcons.tagPrice,
             ),
           ),
         ],
       ),
     );
+  }
+
+  String get getPrice {
+    if (price == '-') {
+      return price;
+    }
+    return '$price ${LocaleKeys.sum.tr()}/${LocaleKeys.kW.tr()}';
   }
 }

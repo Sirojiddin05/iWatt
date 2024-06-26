@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
@@ -417,22 +417,6 @@ class MyFunctions {
     return distance;
   }
 
-  // static List<ConnectorStatus> getConnectorStatuses(ChargeLocationEntity location) {
-  //   final stations = location.chargePoints;
-  //   final connectors = stations.expand((element) => element.connectors).toList();
-  //   final List<ConnectorStatus?> listOfConnectorStatuses = List.generate(connectors.length, (i) {
-  //     final status = getConnectorStatus(connectors[i].status);
-  //     if (status != null && status.isBooked) {
-  //       return ConnectorStatus.busy;
-  //     }
-  //     return status;
-  //   });
-  //   listOfConnectorStatuses.retainWhere((element) => element != null);
-  //   final List<ConnectorStatus> list =
-  //       List.generate(listOfConnectorStatuses.length, (index) => listOfConnectorStatuses[index]!);
-  //   return list;
-  // }
-
   static ConnectorStatus getConnectorStatus(String? status) {
     switch (status) {
       case 'Available':
@@ -488,37 +472,6 @@ class MyFunctions {
       );
       painter.layout();
       painter.paint(canvas, Offset((width * (placeCount > 9 ? 0.44 : 0.46)) - painter.width * 0.34, (height * 0.28)));
-    } else if (statuses.isNotEmpty) {
-      final x = width / 2;
-      final y = shouldAddBackCircle ? height / 2.25 : height / 2.7;
-      Rect rect = Rect.fromCircle(center: Offset(x, y), radius: 56);
-      final List<Paint> paints = List.generate(statuses.length, (index) {
-        final paint = Paint();
-        paint.style = PaintingStyle.stroke;
-        paint.strokeCap = StrokeCap.round;
-        paint.strokeWidth = 8;
-        if (withLuminosity) {
-          paint.color = _adjustSaturation(statuses[index].color, -1);
-        } else {
-          paint.color = statuses[index].color;
-        }
-        return paint;
-      });
-
-      const availableSpace = 2 * pi;
-      const indentSingleLength = pi / 12;
-      final indentFullLength = statuses.length * indentSingleLength;
-      final lengthOfStatus = (availableSpace - indentFullLength) / statuses.length;
-      double startAngle = (3 * pi / 2) + (indentSingleLength / 2);
-      for (int i = 0; i < statuses.length; i++) {
-        canvas.drawArc(
-            rect,
-            startAngle,
-            lengthOfStatus, // Sweep angle (adjust as needed)
-            false,
-            paints[i]);
-        startAngle = startAngle + lengthOfStatus + indentSingleLength;
-      }
     }
 
     final img = await pictureRecorder.endRecording().toImage(width, height);
@@ -536,63 +489,49 @@ class MyFunctions {
     return completer.future;
   }
 
-  static Color _adjustSaturation(Color color, double saturationFactor) {
-    List<double> hsl = _rgbToHsl(color);
-    double newSaturation = (hsl[1] * saturationFactor).clamp(0.0, 1.0);
-    return _hslToRgb(hsl[0], newSaturation, hsl[2]);
-  }
-
-  static List<double> _rgbToHsl(Color color) {
-    double r = color.red / 255.0;
-    double g = color.green / 255.0;
-    double b = color.blue / 255.0;
-    double maximum = max(r, max(g, b));
-    double minimum = min(r, min(g, b));
-    late double h, s, l;
-    l = (maximum + minimum) / 2.0;
-
-    if (maximum == minimum) {
-      h = 0.0;
-      s = 0.0;
-    } else {
-      double d = maximum - minimum;
-      s = l > 0.5 ? d / (2.0 - maximum - minimum) : d / (maximum + minimum);
-      if (maximum == r) {
-        h = (g - b) / d + (g < b ? 6 : 0);
-      } else if (maximum == g) {
-        h = (b - r) / d + 2;
-      } else if (maximum == b) {
-        h = (r - g) / d + 4;
-      }
-      h /= 6;
-    }
-
-    return [h, s, l];
-  }
-
-  static Color _hslToRgb(double h, double s, double l) {
-    double r, g, b;
-
-    if (s == 0.0) {
-      r = g = b = l; // Achromatic
-    } else {
-      double hue2rgb(double p, double q, double t) {
-        if (t < 0.0) t += 1.0;
-        if (t > 1.0) t -= 1.0;
-        if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
-        if (t < 1.0 / 2.0) return q;
-        if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
-        return p;
-      }
-
-      double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      double p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1.0 / 3.0);
-      g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1.0 / 3.0);
-    }
-
-    return Color.fromRGBO((r * 255).round(), (g * 255).round(), (b * 255).round(), 1);
+  static Future<Uint8List?> createImageFromWidget(
+    Widget widget, {
+    Size? logicalSize,
+    Size? imageSize,
+  }) async {
+    final repaintBoundary = RenderRepaintBoundary();
+    logicalSize ??= ui.window.physicalSize / ui.window.devicePixelRatio;
+    imageSize ??= ui.window.physicalSize;
+    assert(logicalSize.aspectRatio == imageSize.aspectRatio, 'logicalSize and imageSize must not be the same');
+    final renderView = RenderView(
+      // window: ui.window,
+      child: RenderPositionedBox(alignment: Alignment.center, child: repaintBoundary),
+      configuration: ViewConfiguration(
+        devicePixelRatio: 1,
+        logicalConstraints: BoxConstraints.tight(logicalSize),
+      ),
+      view: ui.window,
+    );
+    final pipelineOwner = PipelineOwner();
+    final buildOwner = BuildOwner(focusManager: FocusManager());
+    pipelineOwner.rootNode = renderView;
+    renderView.prepareInitialFrame();
+    final rootElement = RenderObjectToWidgetAdapter<RenderBox>(
+        container: repaintBoundary,
+        child: Directionality(
+          textDirection: ui.TextDirection.ltr,
+          child: widget,
+        )).attachToRenderTree(buildOwner);
+    // final rootElement = RenderObjectToWidgetAdapter<RenderBox>(
+    //   container: repaintBoundary,
+    //   child: widget,
+    // ).attachToRenderTree(buildOwner);
+    buildOwner.buildScope(rootElement);
+    buildOwner
+      ..buildScope(rootElement)
+      ..finalizeTree();
+    pipelineOwner
+      ..flushLayout()
+      ..flushCompositingBits()
+      ..flushPaint();
+    final image = await repaintBoundary.toImage(pixelRatio: imageSize.width / logicalSize.width);
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData?.buffer.asUint8List();
   }
 
   static Future<Position?> getCurrentLocation() async {
