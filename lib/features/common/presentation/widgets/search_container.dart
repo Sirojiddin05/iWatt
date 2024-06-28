@@ -10,6 +10,7 @@ import 'package:i_watt_app/features/common/presentation/pages/search_page.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_Icon_card.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/search_filter_wrapper.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_controller_provider.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -34,11 +35,13 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.padding ?? EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 4),
+      padding: widget.padding ?? EdgeInsets.fromLTRB(12, context.padding.top + 16, 12, 4),
       child: SearchFilterWrapper(
         children: [
           Expanded(
-            child: GestureDetector(
+            child: WCustomTappableButton(
+              borderRadius: BorderRadius.circular(8),
+              rippleColor: AppColors.cyprus.withAlpha(20),
               onTap: () {
                 Navigator.of(
                   context,
@@ -52,7 +55,6 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                   ),
                 );
               },
-              behavior: HitTestBehavior.opaque,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(

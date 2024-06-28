@@ -26,7 +26,7 @@ class StationSingleSheet extends StatelessWidget {
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
-        color: AppColors.white,
+        color: AppColors.solitude,
       ),
       clipBehavior: Clip.hardEdge,
       child: Column(
@@ -81,9 +81,8 @@ class StationSingleSheet extends StatelessWidget {
                                         price: station.price,
                                         isNearToStation: state.isNearToStation,
                                         locationName: '${state.location.vendor.name} "${state.location.name}"',
-                                        onClose: () {
-                                          onClose();
-                                        },
+                                        onClose: onClose,
+                                        isIntegrated: state.location.vendor.integrated,
                                       );
                                     }),
                                   );

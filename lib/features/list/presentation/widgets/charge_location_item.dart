@@ -142,17 +142,25 @@ class ChargeLocationCard extends StatelessWidget {
             ),
             Row(
               children: [
-                LocationCardDataRow(
-                  icon: context.themedIcons.power,
-                  value: powerTypes,
-                ),
-                const LocationDataDividerCircle(),
-                LocationCardDataRow(
-                  icon: context.themedIcons.station,
-                  value: "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
-                ),
-                if (location.distance != -1) ...{
+                if (powerTypes.isNotEmpty) ...{
+                  LocationCardDataRow(
+                    icon: context.themedIcons.power,
+                    value: powerTypes,
+                  ),
+                },
+                if (powerTypes.isNotEmpty && location.chargersCount > 0) ...{
                   const LocationDataDividerCircle(),
+                },
+                if (location.chargersCount > 0) ...{
+                  LocationCardDataRow(
+                    icon: context.themedIcons.station,
+                    value: "${location.chargersCount} ${MyFunctions.getStationDueToQuantity(location.chargersCount).tr()}",
+                  ),
+                },
+                if ((location.chargersCount > 0 || powerTypes.isNotEmpty) && location.distance != -1) ...{
+                  const LocationDataDividerCircle(),
+                },
+                if (location.distance != -1) ...{
                   LocationCardDataRow(
                     icon: context.themedIcons.runner,
                     value: distanceValue,

@@ -20,7 +20,7 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
     late final String baseUrl;
     if (paramEntity.next.isNotEmpty) {
       baseUrl = paramEntity.next;
-    } else if (paramEntity.zoom != -1) {
+    } else if (paramEntity.radius != -1) {
       baseUrl = 'chargers/MapLocationList/';
     } else if (paramEntity.isFavourite) {
       baseUrl = 'chargers/SavedLocationList/';

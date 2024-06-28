@@ -18,6 +18,7 @@ VendorModel _$VendorModelFromJson(Map<String, dynamic> json) => VendorModel(
                   const IdNameConverter().fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      integrated: json['integrated'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$VendorModelToJson(VendorModel instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$VendorModelToJson(VendorModel instance) =>
       'phone': instance.phone,
       'social_media':
           instance.socialMedia.map(const IdNameConverter().toJson).toList(),
+      'integrated': instance.integrated,
     };

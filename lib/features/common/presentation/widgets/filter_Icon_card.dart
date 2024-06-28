@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 
 class FilterIconCard extends StatelessWidget {
   final bool isActive;
@@ -10,9 +11,10 @@ class FilterIconCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return WCustomTappableButton(
+      rippleColor: AppColors.cyprus.withAlpha(20),
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      borderRadius: BorderRadius.circular(8),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         height: 36,

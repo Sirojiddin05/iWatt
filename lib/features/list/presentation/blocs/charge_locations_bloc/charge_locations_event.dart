@@ -42,11 +42,10 @@ class ChangeSavedStateOfLocation extends ChargeLocationsEvent {
 }
 
 class SetPointEvent extends ChargeLocationsEvent {
-  final int zoom;
+  final double zoom;
   final Point point;
-  final bool forceFetchingLocations;
 
-  const SetPointEvent({required this.zoom, required this.point, this.forceFetchingLocations = false});
+  const SetPointEvent({required this.zoom, required this.point});
 }
 
 class SetFavouriteEvent extends ChargeLocationsEvent {

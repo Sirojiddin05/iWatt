@@ -60,6 +60,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
       add(UpdateMeterValueOfProcess(meterValue));
     });
     startCommandStreamSubscription = startCommandResultStreamUseCase(NoParams()).listen((commandResult) {
+      print('commandResult bloc: ${commandResult.status}');
       add(ChargingProcessStartedEvent(commandResult));
     });
     stopCommandStreamSubscription = stopCommandResultStreamUseCase(NoParams()).listen((commandResult) {
@@ -91,7 +92,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
 
   void _onCreateChargingProcessEvent(CreateChargingProcessEvent event, Emitter<ChargingProcessState> emit) {
     final list = [...state.processes];
-    list.add(const ChargingProcessEntity().copyWith(connector: event.connector));
+    list.add(const ChargingProcessEntity().copyWith(connector: event.connector, locationName: event.locationName));
     emit(state.copyWith(processes: [...list]));
     add(StartChargingProcessEvent(connectionId: event.connector.id));
   }
@@ -188,8 +189,18 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     final list = [...state.processes];
     for (int i = 0; i < list.length; i++) {
       if (list[i].startCommandId == event.commandMessage.commandId) {
-        list[i] = list[i].copyWith(status: ChargingProcessStatus.IN_PROGRESS.name);
-        emit(state.copyWith(startProcessStatus: FormzSubmissionStatus.success));
+        if (event.commandMessage.status) {
+          list[i] = list[i].copyWith(status: ChargingProcessStatus.IN_PROGRESS.name);
+          emit(state.copyWith(startProcessStatus: FormzSubmissionStatus.success, processes: [...list]));
+        } else {
+          emit(
+            state.copyWith(
+              startProcessStatus: FormzSubmissionStatus.failure,
+              startProcessErrorMessage: '${LocaleKeys.did_not_manage_to_do_your_request.tr()} ${LocaleKeys.try_again.tr()}',
+            ),
+          );
+          add(DeleteChargingProcessEvent(state.processes.length - 1));
+        }
         break;
       }
     }
@@ -260,30 +271,11 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
       emit(
         state.copyWith(
           getChargingProcesses: FormzSubmissionStatus.success,
-          processes: [
-            ...processes,
-            // ChargingProcessEntity(
-            //   transactionId: 1,
-            //   startCommandId: 1,
-            //   connector: const ConnectorEntity(
-            //     id: 1,
-            //     name: 'Connector 1',
-            //     status: 'Available',
-            //   ),
-            //   locationName: 'Vendor "Location 1"',
-            //   status: ChargingProcessStatus.IN_PROGRESS.name,
-            //   batteryPercent: 15,
-            //   consumedKwh: '0.5',
-            //   money: '500',
-            //   freeParkingMinutes: -1,
-            //   parkingPrice: '',
-            //   parkingStartTime: '',
-            // )
-          ],
+          processes: [...processes],
         ),
       );
       for (final process in processes) {
-        if (process.status == ChargingProcessStatus.IN_PROGRESS.name) {
+        if (process.status == ChargingProcessStatus.PARKING.name) {
           final parkingData = ParkingDataMessageEntity(
             transactionId: process.transactionId,
             locationName: process.locationName,
@@ -308,12 +300,12 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
           freeParkingTimer: Timer.periodic(
             const Duration(seconds: 1),
             (timer) {
-              if (leftSeconds > 0) {
+              if (leftSeconds > 1) {
                 leftSeconds--;
                 add(UpdateFreeParkingTimeEvent(leftSeconds, event.transactionId));
               } else {
                 timer.cancel();
-                add(SetPayedParkingPeriodTimer(event.transactionId, 1));
+                add(SetPayedParkingPeriodTimer(event.transactionId, 0));
               }
             },
           ),
@@ -346,11 +338,11 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
       if (list[i].transactionId == event.transactionId) {
         final parkingPricePerMinute = double.tryParse(list[i].parkingPrice.replaceAll(',', '.')) ?? 0;
         int leftSeconds = event.leftSeconds;
-        int price = 0;
+        int price = (leftSeconds ~/ 60 * parkingPricePerMinute).toInt();
         list[i] = list[i].copyWith(
             payedParkingTimer: Timer.periodic(const Duration(seconds: 1), (timer) {
           leftSeconds++;
-          if (timer.tick > 59 && timer.tick % 60 == 0) {
+          if (leftSeconds % 60 == 0) {
             price = ((leftSeconds / 60) * parkingPricePerMinute).toInt();
           }
           add(
@@ -372,6 +364,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
     for (int i = 0; i < list.length; i++) {
       if (list[i].transactionId == event.transactionId) {
         list[i] = list[i].copyWith(
+          payedParkingWillStartAfter: 0,
           payedParkingLasts: event.payedParkingTime,
           payedParkingPrice: event.price,
           isPayedParkingStarted: true,

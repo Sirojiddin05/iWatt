@@ -1,13 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/filter_bloc/filter_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/empty_state_widget.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/paginator.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/search_sliver_delegate.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_check_box_tile.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class FilterSecondPage extends StatefulWidget {
   final ScrollController controller;
@@ -32,20 +35,37 @@ class _FilterSecondPageState extends State<FilterSecondPage> with AutomaticKeepA
           ),
         ];
       },
-      body: WKeyboardDismisser(
-        child: BlocBuilder<VendorsBloc, VendorsState>(
-          builder: (context, state) {
-            final vendors = state.vendors;
-            context.read<FilterBloc>().add(ChangeVendorsList(vendors: vendors));
+      body: BlocBuilder<VendorsBloc, VendorsState>(
+        builder: (context, state) {
+          final vendors = state.vendors;
+          context.read<FilterBloc>().add(ChangeVendorsList(vendors: vendors));
+          if (state.getVendorsStatus.isInProgress) {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+          if (state.getVendorsStatus.isSuccess) {
+            if (state.vendors.isEmpty) {
+              return Center(
+                child: EmptyStateWidget(
+                  title: LocaleKeys.nothing_found.tr(),
+                  subtitle: LocaleKeys.nothing_found_to_your_request.tr(),
+                  icon: AppImages.searchEmpty,
+                ),
+              );
+            }
             return Paginator(
               paginatorStatus: FormzSubmissionStatus.success,
               itemBuilder: (ctx, index) {
+                final vendor = vendors[index];
                 return BlocBuilder<FilterBloc, FilterState>(
-                  buildWhen: (o, n) => o.temporaryVendors != n.temporaryVendors,
+                  buildWhen: (o, n) {
+                    final oldSelectedVendors = List<int>.generate(o.temporaryVendors.length, (index) => o.temporaryVendors[index].id);
+                    final newSelectedVendors = List<int>.generate(n.temporaryVendors.length, (index) => n.temporaryVendors[index].id);
+
+                    return oldSelectedVendors.contains(vendor.id) != newSelectedVendors.contains(vendor.id);
+                  },
                   builder: (context, filterState) {
                     final selectedVendors = filterState.temporaryVendors;
                     final selectedVendorIds = List<int>.generate(selectedVendors.length, (index) => selectedVendors[index].id);
-                    final vendor = vendors[index];
                     return WCheckBoxTile(
                       title: vendor.name,
                       icon: vendor.logo,
@@ -86,8 +106,12 @@ class _FilterSecondPageState extends State<FilterSecondPage> with AutomaticKeepA
               },
               hasMoreToFetch: state.hasMoreToFetch,
             );
-          },
-        ),
+          }
+          if (state.getVendorsStatus.isFailure) {
+            return const SizedBox.shrink();
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

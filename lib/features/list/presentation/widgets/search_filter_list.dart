@@ -9,7 +9,7 @@ class SearchFilterList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 0),
+      padding: EdgeInsets.fromLTRB(12, context.padding.top + 16, 12, 0),
       child: const DecoratedBox(
         decoration: BoxDecoration(
           boxShadow: [

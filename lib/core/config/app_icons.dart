@@ -55,7 +55,7 @@ class AppIcons {
   static const doc = 'assets/icons/ic_doc_blue.svg';
   static const help = 'assets/icons/ic_help.svg';
   static const aboutUs = 'assets/icons/ic_about_us.svg';
-  static const savedOutlined = 'assets/icons/ic_save_outlined.svg';
+  static const savedOutlined = 'assets/icons/ic_saved_outlined.svg';
   static const saved = 'assets/icons/ic_saved.svg';
   static const unSaved = 'assets/icons/ic_un_saved.svg';
   static const phoneSmall = 'assets/icons/ic_phone_blue.svg';

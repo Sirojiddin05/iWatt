@@ -5,7 +5,7 @@ class GetChargeLocationParamEntity {
   final List<int> vendors;
   final String searchPattern;
   final String next;
-  final int zoom;
+  final double radius;
   final double longitude;
   final double latitude;
 
@@ -16,7 +16,7 @@ class GetChargeLocationParamEntity {
     this.vendors = const [],
     this.next = '',
     this.searchPattern = '',
-    this.zoom = -1,
+    this.radius = -1,
     this.longitude = -1,
     this.latitude = -1,
   });
@@ -28,12 +28,12 @@ class GetChargeLocationParamEntity {
     if (searchPattern.isNotEmpty) {
       params.putIfAbsent('search', () => searchPattern);
     }
-    if (zoom != -1) {
-      params.putIfAbsent('zoom', () => zoom);
-    }
     if (longitude != -1 && latitude != -1) {
       params.putIfAbsent('user_latitude', () => latitude);
       params.putIfAbsent('user_longitude', () => longitude);
+    }
+    if (radius != -1) {
+      params.putIfAbsent('radius', () => radius);
     }
     if (powerType.isNotEmpty) {
       String power = powerType.join(', ');

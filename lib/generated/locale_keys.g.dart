@@ -352,5 +352,7 @@ abstract class  LocaleKeys {
   static const select_company = 'select_company';
   static const all_companies = 'all_companies';
   static const select_all = 'select_all';
+  static const OK = 'OK';
+  static const currently_this_vendor_is_not_integrated = 'currently_this_vendor_is_not_integrated';
 
 }

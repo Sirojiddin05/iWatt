@@ -54,21 +54,24 @@ class LocationPinWidget extends StatelessWidget {
                     ],
                   ),
                   alignment: Alignment.center,
-                  child: WImage(
-                    imageUrl: logo,
-                    height: 30,
-                    width: 30,
-                    borderRadius: BorderRadius.circular(15),
-                    errorWidget: ColoredBox(
-                      color: AppColors.limeGreen,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: SvgPicture.asset(
-                          AppIcons.union,
+                  child: logo.isNotEmpty
+                      ? WImage(
+                          imageUrl: logo,
+                          height: 30,
+                          width: 30,
+                          borderRadius: BorderRadius.circular(15),
+                        )
+                      : Container(
+                          margin: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.limeGreen,
+                          ),
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                            AppIcons.union,
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ),
               ),
               Container(

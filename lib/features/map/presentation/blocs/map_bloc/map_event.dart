@@ -50,11 +50,10 @@ class SaveZoomOnCameraPositionChanged extends MapEvent {
 }
 
 class DrawChargeLocationsEvent extends MapEvent {
-  final List<ChargeLocationEntity> locations;
   final ValueChanged<ChargeLocationEntity> onLocationTap;
   final bool withLuminosity;
 
-  const DrawChargeLocationsEvent(this.locations, {required this.onLocationTap, this.withLuminosity = false});
+  const DrawChargeLocationsEvent({required this.onLocationTap, this.withLuminosity = false});
 }
 
 class SelectChargeLocationEvent extends MapEvent {
@@ -64,12 +63,6 @@ class SelectChargeLocationEvent extends MapEvent {
 }
 
 class CheckIfSettingsTriggered extends MapEvent {}
-
-class SelectUnSelectMapObject extends MapEvent {
-  final int locationId;
-
-  const SelectUnSelectMapObject({required this.locationId});
-}
 
 class ChangeLuminosityStateEvent extends MapEvent {
   final bool hasLuminosity;

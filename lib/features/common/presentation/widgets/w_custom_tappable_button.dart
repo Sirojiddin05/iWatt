@@ -28,13 +28,13 @@ class _WCustomTappableButtonState extends State<WCustomTappableButton> {
           isTappable = false;
           setState(() {});
           timer = Timer(const Duration(milliseconds: 120), () {
-            widget.onTap();
             if (timer.isActive) {
               timer.cancel();
             }
             setState(() {
               isTappable = true;
             });
+            widget.onTap();
           });
         }
       },

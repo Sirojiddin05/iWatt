@@ -73,16 +73,16 @@ class _SingleProcessState extends State<SingleProcess> {
           },
           listener: (ctx, state) {
             if (state.stopProcessStatus.isFailure) {
-              Navigator.pop(ctx);
+              Navigator.of(context, rootNavigator: true).pop();
               context.showPopUp(
                 context,
                 PopUpStatus.failure,
                 message: state.stopProcessErrorMessage,
               );
             } else if (state.stopProcessStatus.isInProgress) {
-              showCommonLoaderDialog(context);
+              showCommonLoaderDialog(ctx);
             } else if (state.stopProcessStatus.isSuccess) {
-              Navigator.pop(context);
+              Navigator.of(context, rootNavigator: true).pop();
             }
           },
           builder: (context, state) {
@@ -116,6 +116,7 @@ class _SingleProcessState extends State<SingleProcess> {
                           return false;
                         },
                         child: SingleChildScrollView(
+                          physics: const ClampingScrollPhysics(),
                           child: Column(
                             children: [
                               const SizedBox(height: 20),

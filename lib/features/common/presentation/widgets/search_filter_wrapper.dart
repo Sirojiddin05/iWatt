@@ -9,32 +9,34 @@ class SearchFilterWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      clipBehavior: Clip.hardEdge,
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: context.theme.colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(8),
-        // border: Border.all(color: lilyWhite),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 4),
-            blurRadius: 6,
-            color: AppColors.black.withOpacity(0.05),
-          ),
-          BoxShadow(
-            offset: const Offset(0, 1),
-            spreadRadius: 1,
-            color: AppColors.black.withOpacity(0.05),
-          ),
-          BoxShadow(
-            offset: const Offset(0, 0),
-            spreadRadius: 4,
-            color: AppColors.black.withOpacity(0.08),
-          ),
-        ],
+        color: AppColors.black.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: children,
+      clipBehavior: Clip.hardEdge,
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: context.theme.colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 4),
+              blurRadius: 6,
+              color: AppColors.black.withOpacity(0.05),
+            ),
+            BoxShadow(
+              offset: const Offset(0, 1),
+              spreadRadius: 1,
+              color: AppColors.black.withOpacity(0.05),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: children,
+        ),
       ),
     );
   }

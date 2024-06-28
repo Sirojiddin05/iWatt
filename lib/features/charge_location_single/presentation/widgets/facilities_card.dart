@@ -8,7 +8,6 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
 import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class FacilitiesCard extends StatelessWidget {
@@ -36,21 +35,26 @@ class FacilitiesCard extends StatelessWidget {
                   ),
                 ),
               ),
-              WScaleAnimation(
-                onTap: onAll,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                  child: Row(
-                    children: [
-                      Text(
-                        LocaleKeys.all.tr(),
-                        style: context.textTheme.headlineSmall!.copyWith(
-                          color: AppColors.shuttleGrey,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
+                child: WCustomTappableButton(
+                  onTap: onAll,
+                  borderRadius: BorderRadius.circular(16),
+                  rippleColor: AppColors.cyprus.withAlpha(15),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
+                    child: Row(
+                      children: [
+                        Text(
+                          LocaleKeys.all.tr(),
+                          style: context.textTheme.headlineSmall!.copyWith(
+                            color: AppColors.shuttleGrey,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      SvgPicture.asset(AppIcons.chevronRightGrey, width: 16, height: 16),
-                    ],
+                        const SizedBox(width: 4),
+                        SvgPicture.asset(AppIcons.chevronRightGrey, width: 16, height: 16),
+                      ],
+                    ),
                   ),
                 ),
               ),

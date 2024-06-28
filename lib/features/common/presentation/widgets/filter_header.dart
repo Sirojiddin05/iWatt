@@ -116,21 +116,9 @@ class _FilterHeaderState extends State<FilterHeader> {
                       behavior: HitTestBehavior.opaque,
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 6, left: page == 1 ? 48 : 0),
-                        child: AnimatedSwitcher(
-                          duration: AppConstants.animationDuration,
-                          transitionBuilder: (child, animation) {
-                            return SizeTransition(
-                              axis: Axis.horizontal,
-                              axisAlignment: 0,
-                              sizeFactor: animation,
-                              child: child,
-                            );
-                          },
-                          child: Text(
-                            page == 0 ? LocaleKeys.filter.tr() : LocaleKeys.select_company.tr(),
-                            style: context.textTheme.displayMedium,
-                            key: ValueKey<int>(page),
-                          ),
+                        child: Text(
+                          page == 0 ? LocaleKeys.filter.tr() : LocaleKeys.select_company.tr(),
+                          style: context.textTheme.displayMedium,
                         ),
                       ),
                     ),

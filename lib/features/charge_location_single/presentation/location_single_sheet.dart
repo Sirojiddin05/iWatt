@@ -163,9 +163,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                       },
                       child: StationSingleSheet(
                         carouselController: carouselController,
-                        onClose: () {
-                          onToggled();
-                        },
+                        onClose: onToggled,
                       ),
                     )
                   ],

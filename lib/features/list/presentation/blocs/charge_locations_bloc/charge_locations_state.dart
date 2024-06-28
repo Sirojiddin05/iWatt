@@ -11,7 +11,8 @@ class ChargeLocationsState extends Equatable {
   final List<int> selectedPowerTypes;
   final List<int> selectedConnectorTypes;
   final List<IdNameEntity> selectedVendors;
-  final int zoom;
+  final double zoom;
+  final int radius;
   final double latitude;
   final double longitude;
   final bool isFavourite;
@@ -31,6 +32,7 @@ class ChargeLocationsState extends Equatable {
     this.longitude = -1,
     this.isFavourite = false,
     this.selectedVendors = const [],
+    this.radius = -1,
   });
 
   ChargeLocationsState copyWith({
@@ -44,10 +46,11 @@ class ChargeLocationsState extends Equatable {
     List<int>? selectedPowerTypes,
     List<int>? selectedConnectorTypes,
     List<IdNameEntity>? selectedVendors,
-    int? zoom,
+    double? zoom,
     double? latitude,
     double? longitude,
     bool? isFavourite,
+    int? radius,
   }) {
     return ChargeLocationsState(
       chargeLocations: chargeLocations ?? this.chargeLocations,
@@ -64,6 +67,7 @@ class ChargeLocationsState extends Equatable {
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       isFavourite: isFavourite ?? this.isFavourite,
+      radius: radius ?? this.radius,
     );
   }
 
@@ -83,5 +87,6 @@ class ChargeLocationsState extends Equatable {
         latitude,
         longitude,
         isFavourite,
+        radius
       ];
 }

@@ -16,6 +16,7 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
+import 'package:i_watt_app/features/charging_processes/presentation/widgets/check.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/payment_ckeck_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
@@ -132,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             BlocListener<AuthenticationBloc, AuthenticationState>(
               listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus,
               listener: (context, state) {
+                context.read<ProfileBloc>().add(GetUserData());
                 if (state.authenticationStatus.isAuthenticated) {
                   context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
                 } else {
@@ -142,12 +144,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             BlocListener<ChargingProcessBloc, ChargingProcessState>(
               listenWhen: (o, n) => o.transactionCheque != n.transactionCheque,
               listener: (context, state) async {
-                await Future.delayed(const Duration(milliseconds: 500));
+                Navigator.popUntil(context, (route) => route.isFirst);
                 showCupertinoModalBottomSheet(
                   context: context,
-                  barrierColor: AppColors.white,
-                  enableDrag: false,
-                  isDismissible: false,
+                  barrierColor: Colors.transparent,
+                  enableDrag: true,
+                  isDismissible: true,
                   overlayStyle: SystemUiOverlayStyle.dark.copyWith(
                     systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
                     statusBarBrightness: Brightness.dark,
@@ -155,7 +157,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                   ),
                   builder: (ctx) {
                     return ChargingPaymentCheck(
-                      cheque: state.transactionCheque,
+                      body: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: ChequeWidget(cheque: state.transactionCheque),
+                      ),
                     );
                   },
                 );
@@ -320,7 +325,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
 
   onToggled() {
     if (animationController.isDismissed) {
-      HapticFeedback.mediumImpact();
       animationController.forward();
     } else {
       animationController.reverse();

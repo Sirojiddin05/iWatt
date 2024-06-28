@@ -98,3 +98,7 @@ class SetPayedParkingPeriodTimer extends ChargingProcessEvent {
 
   SetPayedParkingPeriodTimer(this.transactionId, this.leftSeconds);
 }
+
+class DeleteAllProcesses extends ChargingProcessEvent {
+  DeleteAllProcesses();
+}

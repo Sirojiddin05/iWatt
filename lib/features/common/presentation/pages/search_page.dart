@@ -105,15 +105,6 @@ class _SearchPageState extends State<SearchPage> {
                                       );
                                     },
                                   );
-                                  // todo: implement
-                                  // showCupertinoModalBottomSheet(
-                                  //   isDismissible: true,
-                                  //   context: context,
-                                  //   useRootNavigator: true,
-                                  //   builder: (ctx) {
-                                  //     return ChargeLocationSheet(location: location);
-                                  //   },
-                                  // );
                                 },
                               );
                             },

@@ -11,9 +11,18 @@ class VendorEntity {
   final String phone;
   @IdNameConverter()
   final List<IdNameEntity> socialMedia;
+  final bool integrated;
 
-  const VendorEntity(
-      {this.name = '', this.minimumBalance = '', this.email = '', this.website = '', this.logo = '', this.phone = '', this.socialMedia = const []});
+  const VendorEntity({
+    this.name = '',
+    this.minimumBalance = '',
+    this.email = '',
+    this.website = '',
+    this.logo = '',
+    this.phone = '',
+    this.socialMedia = const [],
+    this.integrated = false,
+  });
 }
 
 class VendorConverter implements JsonConverter<VendorEntity, Map<String, dynamic>> {

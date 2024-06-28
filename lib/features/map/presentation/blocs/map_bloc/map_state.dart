@@ -8,7 +8,8 @@ class MapState extends Equatable {
     this.currentLong = 0,
     this.next = '',
     this.locationSettingsTriggered = false,
-    this.locationsMapObjects,
+    this.drawnMapObjects,
+    this.presentedObjects,
     this.userLocationObject,
     this.zoomLevel = 15,
     this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
@@ -21,7 +22,8 @@ class MapState extends Equatable {
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
   final int count;
-  final ClusterizedPlacemarkCollection? locationsMapObjects;
+  final List<PlacemarkMapObject>? drawnMapObjects;
+  final ClusterizedPlacemarkCollection? presentedObjects;
   final MapObject? userLocationObject;
   final double currentLat;
   final double currentLong;
@@ -40,7 +42,8 @@ class MapState extends Equatable {
     double? currentLong,
     String? next,
     bool? locationSettingsTriggered,
-    ClusterizedPlacemarkCollection? locationsMapObjects,
+    List<PlacemarkMapObject>? drawnMapObjects,
+    ClusterizedPlacemarkCollection? presentedObjects,
     MapObject? userLocationObject,
     double? zoomLevel,
     LocationPermissionStatus? locationAccessStatus,
@@ -56,7 +59,8 @@ class MapState extends Equatable {
       next: next ?? this.next,
       locationSettingsTriggered: locationSettingsTriggered ?? this.locationSettingsTriggered,
       locationAccessStatus: locationAccessStatus ?? this.locationAccessStatus,
-      locationsMapObjects: locationsMapObjects ?? this.locationsMapObjects,
+      drawnMapObjects: drawnMapObjects ?? this.drawnMapObjects,
+      presentedObjects: presentedObjects ?? this.presentedObjects,
       userLocationObject: userLocationObject ?? this.userLocationObject,
       userLocationAccessingStatus: userLocationAccessingStatus ?? this.userLocationAccessingStatus,
       zoomLevel: zoomLevel ?? this.zoomLevel,
@@ -72,7 +76,7 @@ class MapState extends Equatable {
         userLocationAccessingStatus,
         locationAccessStatus,
         count,
-        locationsMapObjects,
+        drawnMapObjects,
         userLocationObject,
         currentLat,
         currentLong,
@@ -83,5 +87,7 @@ class MapState extends Equatable {
         isMapInitialized,
         chargeLocations,
         selectedLocation,
+        drawnMapObjects,
+        presentedObjects,
       ];
 }

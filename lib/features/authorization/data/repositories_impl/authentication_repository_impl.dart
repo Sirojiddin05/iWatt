@@ -18,8 +18,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Stream<AuthenticationStatus> authenticationStatusStream() async* {
     final result = await _validateUser();
-    print('_validateUser');
-    await Future.delayed(const Duration(milliseconds: 2800));
+    await Future.delayed(const Duration(seconds: 1));
     if (result.isRight) {
       yield AuthenticationStatus.authenticated;
     } else {
@@ -40,7 +39,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       return Left(ServerFailure(errorMessage: e.errorMessage));
     } on CustomDioException catch (e) {
       final message = e.type.message;
-      return Left(DioFailure(errorMessage: message));
+      return Left(DioFailure(errorMessage: message, type: e.type));
     } on ParsingException catch (e) {
       return Left(ParsingFailure(errorMessage: e.errorMessage));
     }

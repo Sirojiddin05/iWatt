@@ -39,16 +39,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<ChangeZoomEvent>(_changeZoom, transformer: droppable());
     on<SaveZoomOnCameraPositionChanged>(_saveZoomOnCameraPositionChanged);
     on<DrawChargeLocationsEvent>(_drawChargeLocation);
-    on<SelectUnSelectMapObject>(_selectUnSelectMapObject);
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetCarOnMapEvent>(_setCarOnMap);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
     yandexMapController = event.mapController;
-    final lastLat = StorageRepository.getDouble('current_lat', defValue: -1);
-    final lastLong = StorageRepository.getDouble('current_long', defValue: -1);
-    if (lastLat != -1 && lastLong != -1) _moveMapCamera(lastLat, lastLong);
+    final lastLat = StorageRepository.getDouble(StorageKeys.latitude, defValue: -1);
+    final lastLong = StorageRepository.getDouble(StorageKeys.longitude, defValue: -1);
+    print('lastLat: $lastLat, lastLong: $lastLong');
+    if (lastLat != -1 && lastLong != -1) _moveMapCamera(lastLat, lastLong, 16);
     context = event.context;
     emit(state.copyWith(isMapInitialized: true));
   }
@@ -137,13 +137,32 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _drawChargeLocation(DrawChargeLocationsEvent event, Emitter<MapState> emit) async {
-    final List<PlacemarkMapObject> placeMarks = [];
-    for (final location in event.locations) {
-      final newObject = await _getPlaceMarkObject(onTap: event.onLocationTap, location: location, withLuminosity: event.withLuminosity);
-      placeMarks.add(newObject);
+    final List<ChargeLocationEntity> locations = [...state.chargeLocations];
+    final List<PlacemarkMapObject> placeMarks = [
+      if (state.drawnMapObjects != null) ...state.drawnMapObjects!,
+    ];
+    final List<PlacemarkMapObject> presentedPlaceMarks = [];
+    for (var location in locations) {
+      if (placeMarks.any((e) {
+        if (e.mapId.value == 'location_${location.id}') {
+          presentedPlaceMarks.add(e);
+          return true;
+        }
+        return false;
+      })) {
+        continue;
+      } else {
+        final placeMark = await _getPlaceMarkObject(
+          onTap: event.onLocationTap,
+          location: location,
+          withLuminosity: state.hasLuminosity,
+        );
+        placeMarks.add(placeMark);
+        presentedPlaceMarks.add(placeMark);
+      }
     }
-    final clusterObject = _getClusterObject(placemarks: placeMarks, withLuminosity: event.withLuminosity);
-    emit(state.copyWith(locationsMapObjects: clusterObject));
+    final clusterObject = _getClusterObject(placemarks: presentedPlaceMarks, withLuminosity: event.withLuminosity);
+    emit(state.copyWith(drawnMapObjects: placeMarks, presentedObjects: clusterObject));
   }
 
   void _checkIfSettingsTriggered(CheckIfSettingsTriggered event, Emitter<MapState> emit) async {
@@ -162,29 +181,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       await Geolocator.openAppSettings();
     } else {
       add(const SetMyPositionEvent());
-    }
-  }
-
-  void _selectUnSelectMapObject(SelectUnSelectMapObject event, Emitter<MapState> emit) async {
-    final oldPLaceMarks = [...state.locationsMapObjects!.placemarks];
-    final locations = state.chargeLocations;
-    for (int i = 0; i < locations.length; i++) {
-      final location = locations[i];
-      if (location.id == event.locationId) {
-        final toSelect = state.selectedLocation.id != event.locationId;
-        final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
-        final newAppearance = await _getLocationAppearance(
-          stationStatuses: statuses,
-          isSelected: toSelect,
-          withLuminosity: state.hasLuminosity,
-          logo: location.logo,
-        );
-        oldPLaceMarks[i] = oldPLaceMarks[i].copyWith(icon: getIcon(newAppearance));
-        final oldCluster = state.locationsMapObjects!;
-        final newMapObjects = oldCluster.copyWith(placemarks: [...oldPLaceMarks]);
-        emit(state.copyWith(locationsMapObjects: newMapObjects, selectedLocation: toSelect ? location : const ChargeLocationEntity()));
-        break;
-      }
     }
   }
 
@@ -216,7 +212,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       {required ValueChanged<ChargeLocationEntity> onTap, required ChargeLocationEntity location, required bool withLuminosity}) async {
     final point = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
     final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
-    await precacheImage(CachedNetworkImageProvider(location.logo), context);
+    if (location.logo.isNotEmpty) {
+      await precacheImage(CachedNetworkImageProvider(location.logo), context);
+    }
     final locationAppearance = await _getLocationAppearance(
       stationStatuses: statuses,
       withLuminosity: withLuminosity,
@@ -226,7 +224,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       opacity: 1,
       onTap: (object, point) async {
         add(const ChangeLuminosityStateEvent(hasLuminosity: false));
-        add(SelectUnSelectMapObject(locationId: location.id));
+        // add(SelectUnSelectMapObject(locationId: location.id));
         _moveMapCamera(object.point.latitude, object.point.longitude, 18);
         onTap(location);
       },

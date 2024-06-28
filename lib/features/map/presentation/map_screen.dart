@@ -31,12 +31,9 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   @override
   void initState() {
     super.initState();
-    final lastLat = StorageRepository.getDouble('current_lat', defValue: -1);
-    final lastLong = StorageRepository.getDouble('current_long', defValue: -1);
     chargeLocationsBloc = ChargeLocationsBloc(
         getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
-        saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()))
-      ..add(SetPointEvent(zoom: 2, point: Point(latitude: lastLat, longitude: lastLong), forceFetchingLocations: true));
+        saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()));
 
     mapBloc = MapBloc();
     WidgetsBinding.instance.addObserver(this);
@@ -62,6 +59,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
         BlocProvider<MapBloc>.value(value: mapBloc),
       ],
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             MultiBlocListener(
@@ -86,7 +84,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                   return areChargeLocationsUpdated || isLuminosityUpdated;
                 },
                 buildWhen: (o, n) {
-                  final arePlacemarksUpdated = o.locationsMapObjects != n.locationsMapObjects;
+                  final arePlacemarksUpdated = o.drawnMapObjects != n.drawnMapObjects;
                   final isUserLocationUpdated = o.userLocationObject != n.userLocationObject;
                   final isSelectedChargeLocationUpdated = o.selectedLocation != n.selectedLocation;
                   return arePlacemarksUpdated || isUserLocationUpdated || isSelectedChargeLocationUpdated;
@@ -95,8 +93,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                   if (state.isMapInitialized) {
                     mapBloc.add(
                       DrawChargeLocationsEvent(
-                        withLuminosity: state.hasLuminosity,
-                        state.chargeLocations,
                         onLocationTap: (location) {
                           headerSizeController.reverse();
                           showModalBottomSheet(
@@ -118,7 +114,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                             },
                           ).then((value) {
                             headerSizeController.forward();
-                            mapBloc.add(SelectUnSelectMapObject(locationId: location.id));
                           });
                         },
                       ),
@@ -151,11 +146,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     headerSizeController.forward();
   }
 
+  bool isInitialized = false;
   void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
-    mapBloc.add(SaveZoomOnCameraPositionChanged(position.zoom));
-    if (reason == CameraUpdateReason.gestures) {
-      mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+    if (isInitialized) {
+      if (isFinished) {
+        chargeLocationsBloc.add(SetPointEvent(zoom: position.zoom, point: position.target));
+      }
+      mapBloc.add(SaveZoomOnCameraPositionChanged(position.zoom));
+      if (reason == CameraUpdateReason.gestures) {
+        mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+      }
     }
+    isInitialized = true;
   }
 
   void _onMapTap(Point point) {}
@@ -165,8 +167,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     if (state.userLocationObject != null) {
       mapObjects.add(state.userLocationObject!);
     }
-    if (state.locationsMapObjects != null) {
-      mapObjects.add(state.locationsMapObjects!);
+    if (state.presentedObjects != null) {
+      mapObjects.add(state.presentedObjects!);
     }
     return mapObjects;
   }

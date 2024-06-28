@@ -40,15 +40,6 @@ class NavigationBarWidget extends StatelessWidget {
                         number: processes.length,
                       ),
                     ),
-                    //TODO: Uncomment this code, implement right version
-                    // BlocBuilder<ChargingProcessBloc, ChargingProcessState>(
-                    //   builder: (context, state) {
-                    //     final processes = state.processes.where((element) => element.taskStatus.running).toList();
-                    //     return processes.isNotEmpty
-                    //         ?
-                    //         : const SizedBox.shrink();
-                    //   },
-                    // ),
                   ],
                 ),
               ),

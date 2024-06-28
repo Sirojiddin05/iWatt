@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
@@ -28,6 +27,7 @@ class ConnectorCard extends StatelessWidget {
   final bool isNearToStation;
   final String locationName;
   final VoidCallback onClose;
+  final bool isIntegrated;
 
   const ConnectorCard({
     super.key,
@@ -36,6 +36,7 @@ class ConnectorCard extends StatelessWidget {
     required this.isNearToStation,
     required this.locationName,
     required this.onClose,
+    required this.isIntegrated,
   });
 
   @override
@@ -147,18 +148,16 @@ class ConnectorCard extends StatelessWidget {
                         message: state.startProcessErrorMessage,
                       );
                     } else if (state.startProcessStatus.isSuccess) {
-                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: false));
-                      await Future.delayed(AppConstants.animationDuration);
+                      onClose();
                       Navigator.popUntil(context, (route) => route.isFirst);
+                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: false));
                       showCupertinoModalBottomSheet(
                         context: context,
                         backgroundColor: AppColors.white,
                         enableDrag: false,
                         isDismissible: false,
                         builder: (ctx) {
-                          return ChargingProcessSheet(
-                            connector: connector,
-                          );
+                          return ChargingProcessSheet(connector: connector);
                         },
                       );
                     }
@@ -181,23 +180,33 @@ class ConnectorCard extends StatelessWidget {
                         radius: 9,
                       ),
                       onTap: () {
-                        if (authState.authenticationStatus.isAuthenticated) {
-                          if (connector.status == 'Preparing' && isNearToStation) {
-                            context.read<ChargingProcessBloc>().add(
-                                  CreateChargingProcessEvent(
-                                    connector,
-                                    locationName: locationName,
-                                  ),
-                                );
+                        if (isIntegrated) {
+                          if (authState.authenticationStatus.isAuthenticated) {
+                            if (connector.status == 'Preparing' && isNearToStation) {
+                              context.read<ChargingProcessBloc>().add(
+                                    CreateChargingProcessEvent(
+                                      connector,
+                                      locationName: locationName,
+                                    ),
+                                  );
+                            }
+                          } else {
+                            showLoginDialog(context, onConfirm: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const SignInPage(),
+                                ),
+                              );
+                            });
                           }
                         } else {
-                          showLoginDialog(context, onConfirm: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const SignInPage(),
-                              ),
-                            );
-                          });
+                          showCustomAdaptiveDialog(
+                            context,
+                            title: LocaleKeys.currently_this_vendor_is_not_integrated.tr(),
+                            confirmText: LocaleKeys.OK.tr(),
+                            hasCancel: false,
+                            onConfirm: () {},
+                          );
                         }
                       },
                       child: Row(

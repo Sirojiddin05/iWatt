@@ -14,6 +14,7 @@ class VendorModel extends VendorEntity {
     super.logo,
     super.phone,
     super.socialMedia,
+    super.integrated,
   });
 
   factory VendorModel.fromJson(Map<String, dynamic> json) => _$VendorModelFromJson(json);

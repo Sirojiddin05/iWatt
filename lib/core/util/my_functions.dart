@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:collection/collection.dart';
@@ -21,6 +22,10 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  static double getRadiusFromZoom(double zoom) {
+    return 40000 / pow(2, zoom) > 1 ? 40000 / pow(2, zoom) : 1;
+  }
 
   static Future<String?> getEncryptionKey() async {
     final key = await secureStorage.read(key: StorageKeys.encryptionKey);

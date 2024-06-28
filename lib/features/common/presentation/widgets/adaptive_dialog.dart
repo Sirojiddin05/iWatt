@@ -10,6 +10,7 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 Future showCustomAdaptiveDialog(
   BuildContext context, {
   required String title,
+  bool hasCancel = true,
   TextStyle? titleStyle,
   String? description,
   TextStyle? descriptionStyle,
@@ -33,6 +34,7 @@ Future showCustomAdaptiveDialog(
       confirmStyle: confirmStyle,
       onConfirm: onConfirm,
       onCancel: onCancel,
+      hasCancel: hasCancel,
     ),
   );
 }
@@ -52,6 +54,7 @@ Future showLoginDialog(
 
 class CustomAdaptiveDialog extends StatelessWidget {
   final String title;
+  final bool hasCancel;
   final TextStyle? titleStyle;
   final String? description;
   final TextStyle? descriptionStyle;
@@ -65,6 +68,7 @@ class CustomAdaptiveDialog extends StatelessWidget {
   const CustomAdaptiveDialog({
     super.key,
     required this.title,
+    required this.hasCancel,
     this.titleStyle,
     required this.description,
     required this.cancelText,
@@ -97,22 +101,24 @@ class CustomAdaptiveDialog extends StatelessWidget {
                     ),
               ),
         actions: [
-          CupertinoDialogAction(
-            onPressed: onCancel ?? () => Navigator.pop(context),
-            textStyle: cancelStyle?.copyWith(
-                  fontFamily: 'SFProText',
-                  letterSpacing: 0,
-                ) ??
-                context.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.dodgerBlue,
-                  fontFamily: 'SFProText',
-                  letterSpacing: 0,
-                ),
-            child: Text(
-              cancelText ?? LocaleKeys.cancel.tr(),
+          if (hasCancel) ...{
+            CupertinoDialogAction(
+              onPressed: onCancel ?? () => Navigator.pop(context),
+              textStyle: cancelStyle?.copyWith(
+                    fontFamily: 'SFProText',
+                    letterSpacing: 0,
+                  ) ??
+                  context.textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.dodgerBlue,
+                    fontFamily: 'SFProText',
+                    letterSpacing: 0,
+                  ),
+              child: Text(
+                cancelText ?? LocaleKeys.cancel.tr(),
+              ),
             ),
-          ),
+          },
           CupertinoDialogAction(
             onPressed: () {
               Navigator.pop(context);
@@ -158,18 +164,20 @@ class CustomAdaptiveDialog extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              MaterialButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                onPressed: onCancel ?? () => Navigator.pop(context),
-                child: Text(
-                  cancelText ?? LocaleKeys.cancel.tr(),
-                  style: cancelStyle ??
-                      context.textTheme.headlineSmall?.copyWith(
-                        color: context.textTheme.titleSmall?.color,
-                      ),
+              if (hasCancel) ...{
+                MaterialButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  onPressed: onCancel ?? () => Navigator.pop(context),
+                  child: Text(
+                    cancelText ?? LocaleKeys.cancel.tr(),
+                    style: cancelStyle ??
+                        context.textTheme.headlineSmall?.copyWith(
+                          color: context.textTheme.titleSmall?.color,
+                        ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
+                const SizedBox(width: 8),
+              },
               MaterialButton(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 onPressed: () {
