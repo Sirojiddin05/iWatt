@@ -17,6 +17,7 @@ class MapState extends Equatable {
     this.allChargeLocations = const [],
     this.filteredChargeLocations = const [],
     this.cameraPosition,
+    this.drawingObjects = false,
   });
 
   final FormzSubmissionStatus userLocationAccessingStatus;
@@ -34,6 +35,7 @@ class MapState extends Equatable {
   final bool isMapInitialized;
   final List<ChargeLocationEntity> allChargeLocations;
   final List<ChargeLocationEntity> filteredChargeLocations;
+  final bool drawingObjects;
 
   MapState copyWith({
     FormzSubmissionStatus? userLocationAccessingStatus,
@@ -51,6 +53,7 @@ class MapState extends Equatable {
     List<ChargeLocationEntity>? allChargeLocations,
     List<ChargeLocationEntity>? filteredChargeLocations,
     Point? cameraPosition,
+    bool? drawingObjects,
   }) {
     return MapState(
       userCurrentLat: userCurrentLat ?? this.userCurrentLat,
@@ -68,6 +71,7 @@ class MapState extends Equatable {
       allChargeLocations: allChargeLocations ?? this.allChargeLocations,
       filteredChargeLocations: filteredChargeLocations ?? this.filteredChargeLocations,
       cameraPosition: cameraPosition ?? this.cameraPosition,
+      drawingObjects: drawingObjects ?? this.drawingObjects,
     );
   }
 
@@ -88,5 +92,6 @@ class MapState extends Equatable {
         isMapInitialized,
         allChargeLocations,
         filteredChargeLocations,
+        drawingObjects
       ];
 }

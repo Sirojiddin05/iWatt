@@ -116,7 +116,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
       }
     }
     emit(state.copyWith(allVendors: vendors));
-    final customVendor = state.vendors.firstWhere(
+    final customVendor = state.temporaryVendors.firstWhere(
       (e) => e.id == 0,
       orElse: () => const IdNameEntity(),
     );

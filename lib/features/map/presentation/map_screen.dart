@@ -27,11 +27,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   late final AnimationController headerSizeController;
   late final ChargeLocationsBloc chargeLocationsBloc;
   late final MapBloc mapBloc;
+  OverlayEntry? overlayEntry;
 
   @override
   void initState() {
     super.initState();
     chargeLocationsBloc = ChargeLocationsBloc(
+      isForMap: true,
       getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
       saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
     );
@@ -80,7 +82,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
                   final areChargeLocationsUpdated = o.allChargeLocations != n.allChargeLocations;
-                  final filteredLocationsUpdated = o.filteredChargeLocations != n.filteredChargeLocations;
                   // final isLuminosityUpdated = o.hasLuminosity != n.hasLuminosity;
                   return areChargeLocationsUpdated;
                 },
@@ -134,7 +135,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
             ),
             const MapOpacityContainer(),
             MapHeaderWidgets(sizeController: headerSizeController),
-            MapControllers(headerSizeController: headerSizeController)
+            MapControllers(headerSizeController: headerSizeController),
           ],
         ),
       ),
@@ -148,9 +149,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
-    if (reason == CameraUpdateReason.gestures) {
-      mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
-    }
+    // if (isFinished) {
+    //   mapBloc.add(SetPresentPlaceMarks(zoom: position.zoom, point: position.target));
+    // }
+    mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
   }
 
   void _onMapTap(Point point) {}

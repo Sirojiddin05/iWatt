@@ -8,6 +8,7 @@ class GetChargeLocationParamEntity {
   final double radius;
   final double longitude;
   final double latitude;
+  final bool isForMap;
 
   const GetChargeLocationParamEntity({
     this.isFavourite = false,
@@ -19,6 +20,7 @@ class GetChargeLocationParamEntity {
     this.radius = -1,
     this.longitude = -1,
     this.latitude = -1,
+    this.isForMap = false,
   });
   Map<String, dynamic> toJson() {
     Map<String, dynamic> params = {};
@@ -28,11 +30,11 @@ class GetChargeLocationParamEntity {
     if (searchPattern.isNotEmpty) {
       params.putIfAbsent('search', () => searchPattern);
     }
-    if (longitude != -1 && latitude != -1) {
+    if (longitude != -1 && latitude != -1 && !isForMap) {
       params.putIfAbsent('user_latitude', () => latitude);
       params.putIfAbsent('user_longitude', () => longitude);
     }
-    if (radius != -1) {
+    if (radius != -1 && !isForMap) {
       params.putIfAbsent('radius', () => radius);
     }
     if (powerType.isNotEmpty) {

@@ -21,12 +21,14 @@ part 'charge_locations_state.dart';
 class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsState> {
   final GetChargeLocationsUseCase getChargeLocationsUseCase;
   final SaveUnSaveStreamUseCase saveStreamUseCase;
+  final bool isForMap;
   late final StreamSubscription<ChargeLocationEntity> chargeLocationSaveSubscription;
 
   ChargeLocationsBloc({
     required this.getChargeLocationsUseCase,
     required this.saveStreamUseCase,
-  }) : super(const ChargeLocationsState()) {
+    this.isForMap = false,
+  }) : super(ChargeLocationsState(isForMap: isForMap)) {
     chargeLocationSaveSubscription = saveStreamUseCase.call(NoParams()).listen((location) {
       if (!isClosed) {
         add(ChangeSavedStateOfLocation(location: location));

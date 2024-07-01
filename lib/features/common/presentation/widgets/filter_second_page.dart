@@ -37,12 +37,12 @@ class _FilterSecondPageState extends State<FilterSecondPage> with AutomaticKeepA
       },
       body: BlocBuilder<VendorsBloc, VendorsState>(
         builder: (context, state) {
-          final vendors = state.vendors;
-          context.read<FilterBloc>().add(ChangeVendorsList(vendors: vendors));
           if (state.getVendorsStatus.isInProgress) {
             return const Center(child: CircularProgressIndicator.adaptive());
           }
           if (state.getVendorsStatus.isSuccess) {
+            final vendors = state.vendors;
+            context.read<FilterBloc>().add(ChangeVendorsList(vendors: vendors));
             if (state.vendors.isEmpty) {
               return Center(
                 child: EmptyStateWidget(

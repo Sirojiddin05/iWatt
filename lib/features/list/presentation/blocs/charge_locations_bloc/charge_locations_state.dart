@@ -16,6 +16,7 @@ class ChargeLocationsState extends Equatable {
   final double latitude;
   final double longitude;
   final bool isFavourite;
+  final bool isForMap;
 
   const ChargeLocationsState({
     this.chargeLocations = const [],
@@ -33,6 +34,7 @@ class ChargeLocationsState extends Equatable {
     this.isFavourite = false,
     this.selectedVendors = const [],
     this.radius = -1,
+    required this.isForMap,
   });
 
   ChargeLocationsState copyWith({
@@ -68,6 +70,7 @@ class ChargeLocationsState extends Equatable {
       longitude: longitude ?? this.longitude,
       isFavourite: isFavourite ?? this.isFavourite,
       radius: radius ?? this.radius,
+      isForMap: isForMap,
     );
   }
 
@@ -87,6 +90,7 @@ class ChargeLocationsState extends Equatable {
         latitude,
         longitude,
         isFavourite,
-        radius
+        radius,
+        isForMap,
       ];
 }

@@ -14,4 +14,5 @@ class StorageKeys {
   static const versionFeatures = 'version_features';
   static const onBoarding = 'on_boarding';
   static const encryptionKey = 'ENCRYPTION_KEY';
+  static const locationAppearance = 'location';
 }

@@ -87,8 +87,9 @@ class SetCarOnMapEvent extends MapEvent {
 }
 
 class SetPresentPlaceMarks extends MapEvent {
-  const SetPresentPlaceMarks({required this.zoom, required this.point});
+  const SetPresentPlaceMarks({required this.zoom, required this.point, this.forceSet = false});
 
   final double zoom;
   final Point point;
+  final bool forceSet;
 }

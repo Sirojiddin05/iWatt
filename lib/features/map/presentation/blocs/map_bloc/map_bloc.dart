@@ -45,7 +45,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<DrawChargeLocationsEvent>(_drawChargeLocation);
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetCarOnMapEvent>(_setCarOnMap);
-    on<SetPresentPlaceMarks>(_setPresentPlaceMarks);
+    on<SetPresentPlaceMarks>(_setPresentPlaceMarks, transformer: _composedTransformer());
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
@@ -144,10 +144,22 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _setFilteredLocations(SetFilteredLocations event, Emitter<MapState> emit) {
     emit(state.copyWith(filteredChargeLocations: event.locations));
+    add(
+      SetPresentPlaceMarks(
+        zoom: state.zoomLevel,
+        point: state.cameraPosition!,
+        forceSet: true,
+      ),
+    );
   }
 
   void _setLocationAccessState(SetLocationAccessStateEvent event, Emitter<MapState> emit) {
-    emit(state.copyWith(userLocationAccessingStatus: FormzSubmissionStatus.failure, locationAccessStatus: event.status));
+    emit(
+      state.copyWith(
+        userLocationAccessingStatus: FormzSubmissionStatus.failure,
+        locationAccessStatus: event.status,
+      ),
+    );
   }
 
   void _changeZoom(ChangeZoomEvent event, Emitter<MapState> emit) async {
@@ -177,28 +189,49 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       // withLuminosity: state.hasLuminosity,
       withLuminosity: false,
     );
-    emit(state.copyWith(drawnMapObjects: placeMarks, presentedObjects: clusterObject));
+    emit(
+      state.copyWith(
+        presentedObjects: clusterObject,
+      ),
+    );
   }
 
   void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
-    final placemarks = <PlacemarkMapObject>[];
-    if (_canDraw(event.zoom, event.point)) {
+    final criteria = CameraPositionUpdateCriteria(
+      latitudeThreshold: 0.1,
+      longitudeThreshold: 0.1,
+      zoomThreshold: 1,
+    );
+    emit(state.copyWith(drawingObjects: true));
+    if (hasCameraPositionUpdatedCritically(event.point, event.zoom, criteria) || event.forceSet) {
+      final placemarks = <PlacemarkMapObject>[];
       final visibleRegion = await yandexMapController.getVisibleRegion();
       for (final location in state.filteredChargeLocations) {
         final locationPoint = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
-        if (isInVisibleRegion(locationPoint, visibleRegion)) {
+        final isVisible = isInVisibleRegion(locationPoint, visibleRegion);
+        if (isVisible) {
           final drawnMapObjects = state.drawnMapObjects;
           placemarks.add(drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
         }
       }
+      final clusterObject = _getClusterObject(
+        placemarks: placemarks,
+        //TODO
+        // withLuminosity: state.hasLuminosity,
+        withLuminosity: false,
+      );
+      emit(
+        state.copyWith(presentedObjects: clusterObject),
+      );
+      await Future.delayed(const Duration(seconds: 1));
     }
-    final clusterObject = _getClusterObject(
-      placemarks: placemarks,
-      //TODO
-      // withLuminosity: state.hasLuminosity,
-      withLuminosity: false,
+    emit(
+      state.copyWith(
+        drawingObjects: false,
+        cameraPosition: event.point,
+        zoomLevel: event.zoom,
+      ),
     );
-    emit(state.copyWith(cameraPosition: event.point, zoomLevel: event.zoom, presentedObjects: clusterObject));
   }
 
   void _checkIfSettingsTriggered(CheckIfSettingsTriggered event, Emitter<MapState> emit) async {
@@ -221,18 +254,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _changeLuminosityState(ChangeLuminosityStateEvent event, Emitter<MapState> emit) async {
-    final hasLocationAccess = state.locationAccessStatus.isPermissionGranted;
-    if (event.hasLuminosity) {
-      if (!hasLocationAccess) {
-        await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
-        emit(state.copyWith(hasLuminosity: true));
-      }
-    } else {
-      await yandexMapController.setMapStyle('');
-      emit(state.copyWith(hasLuminosity: false));
-      if (!hasLocationAccess) {
-        await Future.delayed(const Duration(seconds: 10));
-        add(const ChangeLuminosityStateEvent(hasLuminosity: true));
+    if (state.hasLuminosity != event.hasLuminosity) {
+      final hasLocationAccess = state.locationAccessStatus.isPermissionGranted;
+      if (event.hasLuminosity) {
+        if (!hasLocationAccess) {
+          await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
+          emit(state.copyWith(hasLuminosity: true));
+        }
+      } else {
+        await yandexMapController.setMapStyle('');
+        emit(state.copyWith(hasLuminosity: false));
+        if (!hasLocationAccess) {
+          await Future.delayed(const Duration(seconds: 10));
+          add(const ChangeLuminosityStateEvent(hasLuminosity: true));
+        }
       }
     }
   }
@@ -245,6 +280,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   bool isInVisibleRegion(Point point, VisibleRegion visibleRegion) {
+    print(
+        'isInVisibleRegion location ${point.latitude} ${point.longitude} ${visibleRegion.topLeft.latitude} ${visibleRegion.topLeft.longitude} ${visibleRegion.bottomRight.latitude} ${visibleRegion.bottomRight.longitude},');
     final topLeft = visibleRegion.topLeft;
     final bottomRight = visibleRegion.bottomRight;
     return point.latitude <= topLeft.latitude &&
@@ -253,8 +290,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         point.longitude <= bottomRight.longitude;
   }
 
-  Future<PlacemarkMapObject> _getPlaceMarkObject(
-      {required ValueChanged<ChargeLocationEntity> onTap, required ChargeLocationEntity location, required bool withLuminosity}) async {
+  Future<PlacemarkMapObject> _getPlaceMarkObject({
+    required ValueChanged<ChargeLocationEntity> onTap,
+    required ChargeLocationEntity location,
+    required bool withLuminosity,
+  }) async {
     final point = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
     final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
     if (location.logo.isNotEmpty) {
@@ -262,7 +302,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
     final locationAppearance = await _getLocationAppearance(
       stationStatuses: statuses,
-      withLuminosity: withLuminosity,
+      withLuminosity: false,
       logo: location.logo,
     );
     return PlacemarkMapObject(
@@ -372,7 +412,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   bool _canDraw(double zoom, Point target) {
-    if (zoom < 10) return false;
+    if (zoom < 8) return false;
     double oldLat = state.cameraPosition?.latitude ?? 0;
     double oldLong = state.cameraPosition?.latitude ?? 0;
     double newLat = target.latitude;
@@ -384,14 +424,42 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       Point(latitude: oldLat, longitude: oldLong),
       Point(latitude: newLat, longitude: newLong),
     );
-    if (state.zoomLevel - zoom > 4) {
+    if (distanceTraveled > distanceInterval || state.zoomLevel >= (zoom + 1)) {
       return true;
-    } else if (distanceTraveled > distanceInterval) {
-      return true;
-    } else {
-      return false;
     }
+    return false;
+  }
+
+  bool hasCameraPositionUpdatedCritically(Point newPoint, double newZoom, CameraPositionUpdateCriteria criteria) {
+    final oldLat = state.cameraPosition?.latitude ?? 0;
+    final oldLong = state.cameraPosition?.latitude ?? 0;
+    final oldZoom = state.zoomLevel;
+    final latDiff = (oldLat - newPoint.latitude).abs();
+    final lonDiff = (oldLong - newPoint.longitude).abs();
+    final zoomDiff = (oldZoom - newZoom).abs();
+    return latDiff > criteria.latitudeThreshold || lonDiff > criteria.longitudeThreshold || zoomDiff > criteria.zoomThreshold;
   }
 
   EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  EventTransformer<MyEvent> switchMap<MyEvent>() {
+    return (events, mapper) => events.switchMap(mapper);
+  }
+
+  EventTransformer<MyEvent> _composedTransformer<MyEvent>() {
+    return (events, mapper) {
+      return events.switchMap(mapper).debounceTime(const Duration(milliseconds: 300));
+    };
+  }
+}
+
+class CameraPositionUpdateCriteria {
+  final double latitudeThreshold;
+  final double longitudeThreshold;
+  final double zoomThreshold;
+
+  CameraPositionUpdateCriteria({
+    required this.latitudeThreshold,
+    required this.longitudeThreshold,
+    required this.zoomThreshold,
+  });
 }
