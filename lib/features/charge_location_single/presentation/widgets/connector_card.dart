@@ -27,7 +27,6 @@ class ConnectorCard extends StatelessWidget {
   final bool isNearToStation;
   final String locationName;
   final VoidCallback onClose;
-  final bool isIntegrated;
 
   const ConnectorCard({
     super.key,
@@ -36,7 +35,6 @@ class ConnectorCard extends StatelessWidget {
     required this.isNearToStation,
     required this.locationName,
     required this.onClose,
-    required this.isIntegrated,
   });
 
   @override
@@ -180,33 +178,23 @@ class ConnectorCard extends StatelessWidget {
                         radius: 9,
                       ),
                       onTap: () {
-                        if (isIntegrated) {
-                          if (authState.authenticationStatus.isAuthenticated) {
-                            if (connector.status == 'Preparing' && isNearToStation) {
-                              context.read<ChargingProcessBloc>().add(
-                                    CreateChargingProcessEvent(
-                                      connector,
-                                      locationName: locationName,
-                                    ),
-                                  );
-                            }
-                          } else {
-                            showLoginDialog(context, onConfirm: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const SignInPage(),
-                                ),
-                              );
-                            });
+                        if (authState.authenticationStatus.isAuthenticated) {
+                          if (connector.status == 'Preparing' && isNearToStation) {
+                            context.read<ChargingProcessBloc>().add(
+                                  CreateChargingProcessEvent(
+                                    connector,
+                                    locationName: locationName,
+                                  ),
+                                );
                           }
                         } else {
-                          showCustomAdaptiveDialog(
-                            context,
-                            title: LocaleKeys.currently_this_vendor_is_not_integrated.tr(),
-                            confirmText: LocaleKeys.OK.tr(),
-                            hasCancel: false,
-                            onConfirm: () {},
-                          );
+                          showLoginDialog(context, onConfirm: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SignInPage(),
+                              ),
+                            );
+                          });
                         }
                       },
                       child: Row(

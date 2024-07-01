@@ -32,10 +32,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   void initState() {
     super.initState();
     chargeLocationsBloc = ChargeLocationsBloc(
-        getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
-        saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()));
-
-    mapBloc = MapBloc();
+      getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
+      saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
+    );
+    mapBloc = BlocProvider.of<MapBloc>(context);
     WidgetsBinding.instance.addObserver(this);
     headerSizeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
   }
@@ -67,7 +67,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                 BlocListener<ChargeLocationsBloc, ChargeLocationsState>(
                   listenWhen: (o, n) => o.chargeLocations != n.chargeLocations,
                   listener: (context, state) {
-                    mapBloc.add(SetChargeLocations(state.chargeLocations));
+                    mapBloc.add(SetFilteredLocations(state.chargeLocations));
                   },
                 ),
                 BlocListener<CarOnMapBloc, CarOnMapState>(
@@ -79,15 +79,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
               ],
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
-                  final areChargeLocationsUpdated = o.chargeLocations != n.chargeLocations;
-                  final isLuminosityUpdated = o.hasLuminosity != n.hasLuminosity;
-                  return areChargeLocationsUpdated || isLuminosityUpdated;
-                },
-                buildWhen: (o, n) {
-                  final arePlacemarksUpdated = o.drawnMapObjects != n.drawnMapObjects;
-                  final isUserLocationUpdated = o.userLocationObject != n.userLocationObject;
-                  final isSelectedChargeLocationUpdated = o.selectedLocation != n.selectedLocation;
-                  return arePlacemarksUpdated || isUserLocationUpdated || isSelectedChargeLocationUpdated;
+                  final areChargeLocationsUpdated = o.allChargeLocations != n.allChargeLocations;
+                  final filteredLocationsUpdated = o.filteredChargeLocations != n.filteredChargeLocations;
+                  // final isLuminosityUpdated = o.hasLuminosity != n.hasLuminosity;
+                  return areChargeLocationsUpdated;
                 },
                 listener: (context, state) {
                   if (state.isMapInitialized) {
@@ -120,13 +115,19 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                     );
                   }
                 },
+                buildWhen: (o, n) {
+                  final arePlacemarksUpdated = o.presentedObjects != n.presentedObjects;
+                  final isUserLocationUpdated = o.userLocationObject != n.userLocationObject;
+                  return arePlacemarksUpdated || isUserLocationUpdated;
+                },
                 builder: (context, state) {
                   return YandexMap(
-                    rotateGesturesEnabled: true,
                     mapObjects: _getMapObjects(state),
                     onMapCreated: _onMapCreated,
                     onCameraPositionChanged: _onCameraPositionChanged,
                     onMapTap: _onMapTap,
+                    mode2DEnabled: true,
+                    rotateGesturesEnabled: false,
                   );
                 },
               ),
@@ -146,18 +147,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     headerSizeController.forward();
   }
 
-  bool isInitialized = false;
   void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
-    if (isInitialized) {
-      if (isFinished) {
-        chargeLocationsBloc.add(SetPointEvent(zoom: position.zoom, point: position.target));
-      }
-      mapBloc.add(SaveZoomOnCameraPositionChanged(position.zoom));
-      if (reason == CameraUpdateReason.gestures) {
-        mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
-      }
+    if (reason == CameraUpdateReason.gestures) {
+      mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
     }
-    isInitialized = true;
   }
 
   void _onMapTap(Point point) {}

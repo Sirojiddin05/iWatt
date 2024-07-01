@@ -82,7 +82,6 @@ class StationSingleSheet extends StatelessWidget {
                                         isNearToStation: state.isNearToStation,
                                         locationName: '${state.location.vendor.name} "${state.location.name}"',
                                         onClose: onClose,
-                                        isIntegrated: state.location.vendor.integrated,
                                       );
                                     }),
                                   );

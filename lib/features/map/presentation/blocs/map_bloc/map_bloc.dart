@@ -17,6 +17,8 @@ import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
+import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/location_pin_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_sheet.dart';
 import 'package:rxdart/rxdart.dart';
@@ -26,11 +28,13 @@ part 'map_event.dart';
 part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
+  final GetChargeLocationsUseCase getChargeLocationsUseCase;
   late final YandexMapController yandexMapController;
   late final BuildContext context;
 
-  MapBloc() : super(const MapState()) {
+  MapBloc(this.getChargeLocationsUseCase) : super(const MapState()) {
     on<SetChargeLocations>(_setChargeLocations);
+    on<SetFilteredLocations>(_setFilteredLocations);
     on<RequestLocationAccess>(_requestLocationAccess);
     on<CheckIfSettingsTriggered>(_checkIfSettingsTriggered);
     on<SetLocationAccessStateEvent>(_setLocationAccessState);
@@ -41,13 +45,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<DrawChargeLocationsEvent>(_drawChargeLocation);
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetCarOnMapEvent>(_setCarOnMap);
+    on<SetPresentPlaceMarks>(_setPresentPlaceMarks);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
     yandexMapController = event.mapController;
     final lastLat = StorageRepository.getDouble(StorageKeys.latitude, defValue: -1);
     final lastLong = StorageRepository.getDouble(StorageKeys.longitude, defValue: -1);
-    print('lastLat: $lastLat, lastLong: $lastLong');
     if (lastLat != -1 && lastLong != -1) _moveMapCamera(lastLat, lastLong, 16);
     context = event.context;
     emit(state.copyWith(isMapInitialized: true));
@@ -59,7 +63,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     if (locationStatus.isPermissionGranted) {
       final value = await MyFunctions.getCurrentLocation();
       if (value != null) {
-        if (value.latitude != state.currentLat || value.longitude != state.currentLong || event.forceSet) {
+        if (value.latitude != state.userCurrentLat || value.longitude != state.userCurrentLong || event.forceSet) {
           await StorageRepository.putDouble(StorageKeys.latitude, value.latitude);
           await StorageRepository.putDouble(StorageKeys.longitude, value.longitude);
           final newMarker = await MyFunctions.getMyIcon(
@@ -82,8 +86,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           emit(state.copyWith(
             userLocationObject: newMarker,
             userLocationAccessingStatus: FormzSubmissionStatus.success,
-            currentLat: value.latitude,
-            currentLong: value.longitude,
+            userCurrentLat: value.latitude,
+            userCurrentLong: value.longitude,
             locationAccessStatus: LocationPermissionStatus.permissionGranted,
           ));
         } else {
@@ -101,7 +105,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     if (state.locationAccessStatus.isPermissionGranted) {
       final newMarker = await MyFunctions.getMyIcon(
           context: context,
-          value: Point(latitude: state.currentLat, longitude: state.currentLong),
+          value: Point(latitude: state.userCurrentLat, longitude: state.userCurrentLong),
           onObjectTap: (object, point) async {
             final cameraPosition = await yandexMapController.getCameraPosition();
             final target = cameraPosition.target;
@@ -120,8 +124,26 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  void _setChargeLocations(SetChargeLocations event, Emitter<MapState> emit) {
-    emit(state.copyWith(chargeLocations: event.locations));
+  void _setChargeLocations(SetChargeLocations event, Emitter<MapState> emit) async {
+    final result = await getChargeLocationsUseCase.call(
+      GetChargeLocationParamEntity(
+        longitude: 69.2745949166718,
+        latitude: 41.26825524558951,
+        radius: MyFunctions.getRadiusFromZoom(1),
+      ),
+    );
+    if (result.isRight) {
+      emit(
+        state.copyWith(
+          allChargeLocations: result.right.results,
+          filteredChargeLocations: result.right.results,
+        ),
+      );
+    }
+  }
+
+  void _setFilteredLocations(SetFilteredLocations event, Emitter<MapState> emit) {
+    emit(state.copyWith(filteredChargeLocations: event.locations));
   }
 
   void _setLocationAccessState(SetLocationAccessStateEvent event, Emitter<MapState> emit) {
@@ -137,32 +159,46 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _drawChargeLocation(DrawChargeLocationsEvent event, Emitter<MapState> emit) async {
-    final List<ChargeLocationEntity> locations = [...state.chargeLocations];
-    final List<PlacemarkMapObject> placeMarks = [
-      if (state.drawnMapObjects != null) ...state.drawnMapObjects!,
-    ];
-    final List<PlacemarkMapObject> presentedPlaceMarks = [];
+    final List<PlacemarkMapObject> placeMarks = [];
+    final locations = state.allChargeLocations;
     for (var location in locations) {
-      if (placeMarks.any((e) {
-        if (e.mapId.value == 'location_${location.id}') {
-          presentedPlaceMarks.add(e);
-          return true;
+      final placeMark = await _getPlaceMarkObject(
+        onTap: event.onLocationTap,
+        location: location,
+        //TODO
+        // withLuminosity: state.hasLuminosity,
+        withLuminosity: false,
+      );
+      placeMarks.add(placeMark);
+    }
+    final clusterObject = _getClusterObject(
+      placemarks: placeMarks,
+      //TODO
+      // withLuminosity: state.hasLuminosity,
+      withLuminosity: false,
+    );
+    emit(state.copyWith(drawnMapObjects: placeMarks, presentedObjects: clusterObject));
+  }
+
+  void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
+    final placemarks = <PlacemarkMapObject>[];
+    if (_canDraw(event.zoom, event.point)) {
+      final visibleRegion = await yandexMapController.getVisibleRegion();
+      for (final location in state.filteredChargeLocations) {
+        final locationPoint = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
+        if (isInVisibleRegion(locationPoint, visibleRegion)) {
+          final drawnMapObjects = state.drawnMapObjects;
+          placemarks.add(drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
         }
-        return false;
-      })) {
-        continue;
-      } else {
-        final placeMark = await _getPlaceMarkObject(
-          onTap: event.onLocationTap,
-          location: location,
-          withLuminosity: state.hasLuminosity,
-        );
-        placeMarks.add(placeMark);
-        presentedPlaceMarks.add(placeMark);
       }
     }
-    final clusterObject = _getClusterObject(placemarks: presentedPlaceMarks, withLuminosity: event.withLuminosity);
-    emit(state.copyWith(drawnMapObjects: placeMarks, presentedObjects: clusterObject));
+    final clusterObject = _getClusterObject(
+      placemarks: placemarks,
+      //TODO
+      // withLuminosity: state.hasLuminosity,
+      withLuminosity: false,
+    );
+    emit(state.copyWith(cameraPosition: event.point, zoomLevel: event.zoom, presentedObjects: clusterObject));
   }
 
   void _checkIfSettingsTriggered(CheckIfSettingsTriggered event, Emitter<MapState> emit) async {
@@ -208,6 +244,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     await yandexMapController.moveCamera(CameraUpdate.newCameraPosition(newPosition), animation: animation);
   }
 
+  bool isInVisibleRegion(Point point, VisibleRegion visibleRegion) {
+    final topLeft = visibleRegion.topLeft;
+    final bottomRight = visibleRegion.bottomRight;
+    return point.latitude <= topLeft.latitude &&
+        point.latitude >= bottomRight.latitude &&
+        point.longitude >= topLeft.longitude &&
+        point.longitude <= bottomRight.longitude;
+  }
+
   Future<PlacemarkMapObject> _getPlaceMarkObject(
       {required ValueChanged<ChargeLocationEntity> onTap, required ChargeLocationEntity location, required bool withLuminosity}) async {
     final point = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
@@ -237,7 +282,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   ClusterizedPlacemarkCollection _getClusterObject({required List<PlacemarkMapObject> placemarks, required bool withLuminosity}) {
     return ClusterizedPlacemarkCollection(
       mapId: const MapObjectId('cluster'),
-      radius: 15,
+      radius: 30,
       minZoom: 18,
       placemarks: placemarks,
       onClusterAdded: (self, cluster) async {
@@ -324,6 +369,28 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 ]
 ''';
+  }
+
+  bool _canDraw(double zoom, Point target) {
+    if (zoom < 10) return false;
+    double oldLat = state.cameraPosition?.latitude ?? 0;
+    double oldLong = state.cameraPosition?.latitude ?? 0;
+    double newLat = target.latitude;
+    double newLong = target.longitude;
+    double distanceInterval = 0.0;
+    double radius = MyFunctions.getRadiusFromZoom(zoom);
+    distanceInterval = (radius * 1000) * .5;
+    final distanceTraveled = MyFunctions.getDistanceBetweenTwoPoints(
+      Point(latitude: oldLat, longitude: oldLong),
+      Point(latitude: newLat, longitude: newLong),
+    );
+    if (state.zoomLevel - zoom > 4) {
+      return true;
+    } else if (distanceTraveled > distanceInterval) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);

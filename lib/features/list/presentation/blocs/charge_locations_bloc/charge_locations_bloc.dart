@@ -14,7 +14,6 @@ import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_pa
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
 import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
 import 'package:rxdart/transformers.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 part 'charge_locations_event.dart';
 part 'charge_locations_state.dart';
@@ -38,7 +37,6 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     on<SetSearchPatternEvent>(_setSearchPattern);
     on<SetFilterEvent>(_setFilter);
     on<ChangeSavedStateOfLocation>(_setSavedState, transformer: droppable());
-    on<SetPointEvent>(_setPoint);
     on<SetFavouriteEvent>(_setFavouriteEvent);
   }
 
@@ -119,13 +117,6 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     add(const GetChargeLocationsEvent());
   }
 
-  void _setPoint(SetPointEvent event, Emitter<ChargeLocationsState> emit) {
-    emit(state.copyWith(zoom: event.zoom, latitude: event.point.latitude, longitude: event.point.longitude));
-    if (_canFetch(event.zoom, event.point)) {
-      add(const GetChargeLocationsEvent());
-    }
-  }
-
   void _setSavedState(ChangeSavedStateOfLocation event, Emitter<ChargeLocationsState> emit) {
     final oldList = [...state.chargeLocations];
     for (int i = 0; i < oldList.length; i++) {
@@ -144,30 +135,4 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
   }
 
   EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);
-
-  bool _canFetch(double zoom, Point target) {
-    if (zoom < 10) return false;
-    double oldLat = state.latitude;
-    double oldLong = state.latitude;
-    double newLat = target.latitude;
-    double newLong = target.longitude;
-    double distanceInterval = 0.0;
-    double radius = MyFunctions.getRadiusFromZoom(zoom);
-    distanceInterval = (radius * 1000) * .5;
-    final distanceTraveled = MyFunctions.getDistanceBetweenTwoPoints(
-      Point(latitude: oldLat, longitude: oldLong),
-      Point(latitude: newLat, longitude: newLong),
-    );
-    print('Zoom: $zoom');
-    print('Distance: $distanceTraveled');
-    print('Distance Interval: $distanceInterval');
-
-    if (state.zoom - zoom > 4) {
-      return true;
-    } else if (distanceTraveled > distanceInterval) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

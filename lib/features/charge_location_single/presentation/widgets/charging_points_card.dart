@@ -11,16 +11,19 @@ import 'package:i_watt_app/features/charge_location_single/domain/entities/conne
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/connector_status_container.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class ConnectorsCard extends StatefulWidget {
+  final bool isIntegrated;
   final List<ChargerEntity> chargers;
   final VoidCallback onTap;
   const ConnectorsCard({
     super.key,
     required this.chargers,
     required this.onTap,
+    required this.isIntegrated,
   });
 
   @override
@@ -46,8 +49,18 @@ class _ConnectorsCardState extends State<ConnectorsCard> {
           allConnectors.length,
           (index) => WCustomTappableButton(
             onTap: () {
-              context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
-              widget.onTap();
+              if (widget.isIntegrated) {
+                context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
+                widget.onTap();
+              } else {
+                showCustomAdaptiveDialog(
+                  context,
+                  title: LocaleKeys.currently_this_vendor_is_not_integrated.tr(),
+                  confirmText: LocaleKeys.OK.tr(),
+                  hasCancel: false,
+                  onConfirm: () {},
+                );
+              }
             },
             borderRadius: getBorderRadius(index),
             rippleColor: AppColors.primaryRipple30,

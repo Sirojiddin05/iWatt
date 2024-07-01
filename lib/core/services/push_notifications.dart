@@ -67,7 +67,6 @@ class PushNotificationService {
     resolvePlatformSpecificImplementationIos();
 
     messaging = FirebaseMessaging.instance;
-    print('fcm token: ${await FirebaseMessaging.instance.getToken()}');
 
     StorageRepository.putBool(key: 'notification_token', value: true);
     // bloc.add(RegisterNotification(() {}, showError: false));

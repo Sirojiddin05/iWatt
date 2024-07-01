@@ -5,8 +5,12 @@ abstract class MapEvent {
 }
 
 class SetChargeLocations extends MapEvent {
+  const SetChargeLocations();
+}
+
+class SetFilteredLocations extends MapEvent {
+  const SetFilteredLocations(this.locations);
   final List<ChargeLocationEntity> locations;
-  const SetChargeLocations(this.locations);
 }
 
 class RequestLocationAccess extends MapEvent {
@@ -26,58 +30,65 @@ class SetLocationAccessStateEvent extends MapEvent {
 }
 
 class SetMyPositionEvent extends MapEvent {
-  final bool forceSet;
   const SetMyPositionEvent({this.forceSet = false});
+  final bool forceSet;
 }
 
 class InitializeMapControllerEvent extends MapEvent {
+  const InitializeMapControllerEvent({required this.mapController, required this.context});
+
   final YandexMapController mapController;
   final BuildContext context;
-
-  const InitializeMapControllerEvent({required this.mapController, required this.context});
 }
 
 class ChangeZoomEvent extends MapEvent {
-  final CameraUpdate cameraUpdate;
-
   const ChangeZoomEvent(this.cameraUpdate);
+
+  final CameraUpdate cameraUpdate;
 }
 
 class SaveZoomOnCameraPositionChanged extends MapEvent {
-  final double zoom;
-
   const SaveZoomOnCameraPositionChanged(this.zoom);
+
+  final double zoom;
 }
 
 class DrawChargeLocationsEvent extends MapEvent {
+  const DrawChargeLocationsEvent({required this.onLocationTap, this.withLuminosity = false});
+
   final ValueChanged<ChargeLocationEntity> onLocationTap;
   final bool withLuminosity;
-
-  const DrawChargeLocationsEvent({required this.onLocationTap, this.withLuminosity = false});
 }
 
 class SelectChargeLocationEvent extends MapEvent {
-  final ChargeLocationEntity location;
-
   const SelectChargeLocationEvent({required this.location});
+
+  final ChargeLocationEntity location;
 }
 
 class CheckIfSettingsTriggered extends MapEvent {}
 
 class ChangeLuminosityStateEvent extends MapEvent {
-  final bool hasLuminosity;
-
   const ChangeLuminosityStateEvent({required this.hasLuminosity});
+
+  final bool hasLuminosity;
 }
 
 class SetDraggableSheetOffsetEvent extends MapEvent {
-  final double offset;
-
   const SetDraggableSheetOffsetEvent(this.offset);
+
+  final double offset;
 }
 
 class SetCarOnMapEvent extends MapEvent {
-  final CarOnMap carOnMap;
-
   const SetCarOnMapEvent({required this.carOnMap});
+
+  final CarOnMap carOnMap;
+}
+
+class SetPresentPlaceMarks extends MapEvent {
+  const SetPresentPlaceMarks({required this.zoom, required this.point});
+
+  final double zoom;
+  final Point point;
 }

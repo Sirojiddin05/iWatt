@@ -3,9 +3,8 @@ part of 'map_bloc.dart';
 class MapState extends Equatable {
   const MapState({
     this.userLocationAccessingStatus = FormzSubmissionStatus.initial,
-    this.count = 0,
-    this.currentLat = 0,
-    this.currentLong = 0,
+    this.userCurrentLat = 0,
+    this.userCurrentLong = 0,
     this.next = '',
     this.locationSettingsTriggered = false,
     this.drawnMapObjects,
@@ -15,31 +14,31 @@ class MapState extends Equatable {
     this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
     this.hasLuminosity = false,
     this.isMapInitialized = false,
-    this.chargeLocations = const [],
-    this.selectedLocation = const ChargeLocationEntity(),
+    this.allChargeLocations = const [],
+    this.filteredChargeLocations = const [],
+    this.cameraPosition,
   });
 
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
-  final int count;
   final List<PlacemarkMapObject>? drawnMapObjects;
   final ClusterizedPlacemarkCollection? presentedObjects;
   final MapObject? userLocationObject;
-  final double currentLat;
-  final double currentLong;
+  final double userCurrentLat;
+  final double userCurrentLong;
+  final Point? cameraPosition;
   final double zoomLevel;
   final String next;
   final bool locationSettingsTriggered;
   final bool hasLuminosity;
   final bool isMapInitialized;
-  final List<ChargeLocationEntity> chargeLocations;
-  final ChargeLocationEntity selectedLocation;
+  final List<ChargeLocationEntity> allChargeLocations;
+  final List<ChargeLocationEntity> filteredChargeLocations;
 
   MapState copyWith({
     FormzSubmissionStatus? userLocationAccessingStatus,
-    int? count,
-    double? currentLat,
-    double? currentLong,
+    double? userCurrentLat,
+    double? userCurrentLong,
     String? next,
     bool? locationSettingsTriggered,
     List<PlacemarkMapObject>? drawnMapObjects,
@@ -49,13 +48,13 @@ class MapState extends Equatable {
     LocationPermissionStatus? locationAccessStatus,
     bool? hasLuminosity,
     bool? isMapInitialized,
-    List<ChargeLocationEntity>? chargeLocations,
-    ChargeLocationEntity? selectedLocation,
+    List<ChargeLocationEntity>? allChargeLocations,
+    List<ChargeLocationEntity>? filteredChargeLocations,
+    Point? cameraPosition,
   }) {
     return MapState(
-      count: count ?? this.count,
-      currentLat: currentLat ?? this.currentLat,
-      currentLong: currentLong ?? this.currentLong,
+      userCurrentLat: userCurrentLat ?? this.userCurrentLat,
+      userCurrentLong: userCurrentLong ?? this.userCurrentLong,
       next: next ?? this.next,
       locationSettingsTriggered: locationSettingsTriggered ?? this.locationSettingsTriggered,
       locationAccessStatus: locationAccessStatus ?? this.locationAccessStatus,
@@ -66,8 +65,9 @@ class MapState extends Equatable {
       zoomLevel: zoomLevel ?? this.zoomLevel,
       hasLuminosity: hasLuminosity ?? this.hasLuminosity,
       isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-      chargeLocations: chargeLocations ?? this.chargeLocations,
-      selectedLocation: selectedLocation ?? this.selectedLocation,
+      allChargeLocations: allChargeLocations ?? this.allChargeLocations,
+      filteredChargeLocations: filteredChargeLocations ?? this.filteredChargeLocations,
+      cameraPosition: cameraPosition ?? this.cameraPosition,
     );
   }
 
@@ -75,19 +75,18 @@ class MapState extends Equatable {
   List<Object?> get props => [
         userLocationAccessingStatus,
         locationAccessStatus,
-        count,
         drawnMapObjects,
+        presentedObjects,
         userLocationObject,
-        currentLat,
-        currentLong,
+        userCurrentLat,
+        userCurrentLong,
+        cameraPosition,
         zoomLevel,
         next,
         locationSettingsTriggered,
         hasLuminosity,
         isMapInitialized,
-        chargeLocations,
-        selectedLocation,
-        drawnMapObjects,
-        presentedObjects,
+        allChargeLocations,
+        filteredChargeLocations,
       ];
 }

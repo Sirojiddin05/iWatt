@@ -247,6 +247,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                     context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
                                                     onToggled();
                                                   },
+                                                  isIntegrated: vendor.integrated,
                                                 ),
                                                 FacilitiesCard(
                                                   facilities: facilities,
