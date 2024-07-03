@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/network/interceptor/token_refresh.dart';
@@ -39,11 +40,7 @@ class DioSettings {
           requestBody: true,
           request: true,
           requestHeader: true,
-          logPrint: (object) {
-            if (kDebugMode) {
-              debugPrint(object.toString());
-            }
-          },
+          logPrint: (object) => log(object.toString()),
         ),
         TokenRefreshInterceptor(dio: dio)
       ],

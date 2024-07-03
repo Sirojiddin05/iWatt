@@ -12,8 +12,14 @@ class QrButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+    return Container(
+      // padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+      margin: const EdgeInsets.fromLTRB(12, 0, 12, 28),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: AppColors.black.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: WCustomTappableButton(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
@@ -26,7 +32,7 @@ class QrButton extends StatelessWidget {
             boxShadow: [
               BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
               BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
-              BoxShadow(offset: const Offset(0, 0), blurRadius: 0, spreadRadius: 4, color: context.theme.shadowColor),
+              // BoxShadow(offset: const Offset(0, 0), blurRadius: 0, spreadRadius: 4, color: context.theme.shadowColor),
             ],
           ),
           child: AnimatedSwitcher(

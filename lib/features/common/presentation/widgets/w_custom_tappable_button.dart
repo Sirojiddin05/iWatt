@@ -8,7 +8,14 @@ class WCustomTappableButton extends StatefulWidget {
   final BorderRadius borderRadius;
   final Color rippleColor;
   final Widget child;
-  const WCustomTappableButton({super.key, required this.onTap, required this.borderRadius, required this.rippleColor, required this.child});
+  final Duration rippleDuration;
+  const WCustomTappableButton(
+      {super.key,
+      required this.onTap,
+      required this.borderRadius,
+      required this.rippleColor,
+      required this.child,
+      this.rippleDuration = const Duration(milliseconds: 120)});
 
   @override
   State<WCustomTappableButton> createState() => _WCustomTappableButtonState();
@@ -27,7 +34,7 @@ class _WCustomTappableButtonState extends State<WCustomTappableButton> {
         if (isTappable) {
           isTappable = false;
           setState(() {});
-          timer = Timer(const Duration(milliseconds: 120), () {
+          timer = Timer(widget.rippleDuration, () {
             if (timer.isActive) {
               timer.cancel();
             }

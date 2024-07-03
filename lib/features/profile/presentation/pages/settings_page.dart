@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/services/push_notifications.dart';
 import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -180,6 +181,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                       WCupertinoSwitch(
                                         isSwitched: areNotificationsOn,
                                         onChange: (v) {
+                                          if (!areNotificationsOn) {
+                                            PushNotificationService.initializeAndListenFirebaseMessaging();
+                                          }
                                           context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
                                         },
                                       )

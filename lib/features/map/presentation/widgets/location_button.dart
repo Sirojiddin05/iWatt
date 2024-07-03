@@ -13,24 +13,30 @@ class LocateMeButton extends StatelessWidget {
   const LocateMeButton({super.key, required this.onTap, required this.isLoading});
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
-        child: WCustomTappableButton(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
-          rippleColor: AppColors.cyprus.withAlpha(20),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [
-              BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
-              BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
-              BoxShadow(offset: const Offset(0, 0), blurRadius: 0, spreadRadius: 4, color: context.theme.shadowColor),
-            ]),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 150),
-              child: isLoading ? const AnimatedLocationIcon() : SvgPicture.asset(AppIcons.myLocation),
-            ),
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: AppColors.black.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: WCustomTappableButton(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        rippleColor: AppColors.cyprus.withAlpha(20),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [
+            BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
+            BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
+          ]),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            child: isLoading ? const AnimatedLocationIcon() : SvgPicture.asset(AppIcons.myLocation),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

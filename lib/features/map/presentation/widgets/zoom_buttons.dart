@@ -14,50 +14,56 @@ class MapZoomButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: context.colorScheme.background,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
-          BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
-          BoxShadow(offset: const Offset(0, 0), blurRadius: 0, spreadRadius: 4, color: context.theme.shadowColor),
-        ],
+        color: AppColors.black.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          WCustomTappableButton(
-            onTap: () => context.read<MapBloc>().add(ChangeZoomEvent(CameraUpdate.zoomIn())),
-            rippleColor: AppColors.cyprus.withAlpha(20),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(
-                AppIcons.plus,
-                width: 24,
-                height: 24,
+      child: Container(
+        decoration: BoxDecoration(
+          color: context.colorScheme.background,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
+            BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            WCustomTappableButton(
+              onTap: () => context.read<MapBloc>().add(ChangeZoomEvent(CameraUpdate.zoomIn())),
+              rippleColor: AppColors.cyprus.withAlpha(20),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  AppIcons.plus,
+                  width: 24,
+                  height: 24,
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.blueBayoux,
-              borderRadius: BorderRadius.circular(1),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.blueBayoux,
+                borderRadius: BorderRadius.circular(1),
+              ),
+              width: 24,
+              height: 1,
             ),
-            width: 24,
-            height: 1,
-          ),
-          WCustomTappableButton(
-            onTap: () => context.read<MapBloc>().add(ChangeZoomEvent(CameraUpdate.zoomOut())),
-            rippleColor: AppColors.cyprus.withAlpha(20),
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(AppIcons.minus, width: 24, height: 24),
+            WCustomTappableButton(
+              onTap: () => context.read<MapBloc>().add(ChangeZoomEvent(CameraUpdate.zoomOut())),
+              rippleColor: AppColors.cyprus.withAlpha(20),
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(AppIcons.minus, width: 24, height: 24),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

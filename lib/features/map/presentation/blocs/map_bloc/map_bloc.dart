@@ -50,6 +50,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
     yandexMapController = event.mapController;
+
     final lastLat = StorageRepository.getDouble(StorageKeys.latitude, defValue: -1);
     final lastLong = StorageRepository.getDouble(StorageKeys.longitude, defValue: -1);
     if (lastLat != -1 && lastLong != -1) _moveMapCamera(lastLat, lastLong, 16);
@@ -125,6 +126,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _setChargeLocations(SetChargeLocations event, Emitter<MapState> emit) async {
+    final date = DateTime.now();
+    print('_setChargeLocations {${date.hour}:${date.minute}:${date.second}}');
     final result = await getChargeLocationsUseCase.call(
       GetChargeLocationParamEntity(
         longitude: 69.2745949166718,
@@ -132,7 +135,28 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         radius: MyFunctions.getRadiusFromZoom(1),
       ),
     );
+    final afterDate = DateTime.now();
+    print('_setChargeLocations {${afterDate.hour}:${afterDate.minute}:${afterDate.second}}');
+    print('_setChargeLocations {${afterDate.difference(date).inMilliseconds}}');
+
     if (result.isRight) {
+      final date = DateTime.now();
+      print('_setLocationAppearence {${date.hour}:${date.minute}:${date.second}}');
+      for (final location in result.right.results) {
+        final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
+        if (location.logo.isNotEmpty) {
+          await precacheImage(CachedNetworkImageProvider(location.logo), context);
+        }
+        final locationAppearance = await _getLocationAppearance(
+          stationStatuses: statuses,
+          withLuminosity: false,
+          logo: location.logo,
+        );
+        await StorageRepository.putString('${StorageKeys.locationAppearance}_${location.id}', String.fromCharCodes(locationAppearance));
+      }
+      final after = DateTime.now();
+      print('_setLocationAppearence {${after.hour}:${after.minute}:${after.second}}');
+      print('_setLocationAppearence {${after.difference(date).inMilliseconds}}');
       emit(
         state.copyWith(
           allChargeLocations: result.right.results,
@@ -144,13 +168,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _setFilteredLocations(SetFilteredLocations event, Emitter<MapState> emit) {
     emit(state.copyWith(filteredChargeLocations: event.locations));
-    add(
-      SetPresentPlaceMarks(
-        zoom: state.zoomLevel,
-        point: state.cameraPosition!,
-        forceSet: true,
-      ),
-    );
+    // add(
+    //   SetPresentPlaceMarks(
+    //     zoom: state.zoomLevel,
+    //     point: state.cameraPosition!,
+    //     forceSet: true,
+    //   ),
+    // );
   }
 
   void _setLocationAccessState(SetLocationAccessStateEvent event, Emitter<MapState> emit) {
@@ -173,6 +197,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void _drawChargeLocation(DrawChargeLocationsEvent event, Emitter<MapState> emit) async {
     final List<PlacemarkMapObject> placeMarks = [];
     final locations = state.allChargeLocations;
+    final date = DateTime.now();
     for (var location in locations) {
       final placeMark = await _getPlaceMarkObject(
         onTap: event.onLocationTap,
@@ -183,15 +208,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       );
       placeMarks.add(placeMark);
     }
-    final clusterObject = _getClusterObject(
-      placemarks: placeMarks,
-      //TODO
-      // withLuminosity: state.hasLuminosity,
-      withLuminosity: false,
-    );
+    final after = DateTime.now();
     emit(
       state.copyWith(
-        presentedObjects: clusterObject,
+        drawnMapObjects: placeMarks,
       ),
     );
   }
@@ -203,15 +223,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       zoomThreshold: 1,
     );
     emit(state.copyWith(drawingObjects: true));
-    if (hasCameraPositionUpdatedCritically(event.point, event.zoom, criteria) || event.forceSet) {
+    final newPoint = event.point ?? state.cameraPosition!;
+    final newZoom = event.zoom ?? state.zoomLevel;
+    if (hasCameraPositionUpdatedCritically(newPoint, newZoom, criteria) || event.forceSet) {
       final placemarks = <PlacemarkMapObject>[];
       final visibleRegion = await yandexMapController.getVisibleRegion();
       for (final location in state.filteredChargeLocations) {
         final locationPoint = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
         final isVisible = isInVisibleRegion(locationPoint, visibleRegion);
         if (isVisible) {
-          final drawnMapObjects = state.drawnMapObjects;
-          placemarks.add(drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
+          placemarks.add(state.drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
         }
       }
       final clusterObject = _getClusterObject(
@@ -220,9 +241,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         // withLuminosity: state.hasLuminosity,
         withLuminosity: false,
       );
-      emit(
-        state.copyWith(presentedObjects: clusterObject),
-      );
+      emit(state.copyWith(presentedObjects: clusterObject));
       await Future.delayed(const Duration(seconds: 1));
     }
     emit(
@@ -280,8 +299,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   bool isInVisibleRegion(Point point, VisibleRegion visibleRegion) {
-    print(
-        'isInVisibleRegion location ${point.latitude} ${point.longitude} ${visibleRegion.topLeft.latitude} ${visibleRegion.topLeft.longitude} ${visibleRegion.bottomRight.latitude} ${visibleRegion.bottomRight.longitude},');
     final topLeft = visibleRegion.topLeft;
     final bottomRight = visibleRegion.bottomRight;
     return point.latitude <= topLeft.latitude &&
@@ -296,15 +313,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     required bool withLuminosity,
   }) async {
     final point = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
-    final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
-    if (location.logo.isNotEmpty) {
-      await precacheImage(CachedNetworkImageProvider(location.logo), context);
-    }
-    final locationAppearance = await _getLocationAppearance(
-      stationStatuses: statuses,
-      withLuminosity: false,
-      logo: location.logo,
-    );
     return PlacemarkMapObject(
       opacity: 1,
       onTap: (object, point) async {
@@ -313,7 +321,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         _moveMapCamera(object.point.latitude, object.point.longitude, 18);
         onTap(location);
       },
-      icon: getIcon(locationAppearance),
+      icon: getIcon(Uint8List.fromList(StorageRepository.getString('${StorageKeys.locationAppearance}_${location.id}').codeUnits)),
       mapId: MapObjectId('location_${location.id}'),
       point: point,
     );
@@ -412,7 +420,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   bool _canDraw(double zoom, Point target) {
-    if (zoom < 8) return false;
+    if (zoom < 12) return false;
     double oldLat = state.cameraPosition?.latitude ?? 0;
     double oldLong = state.cameraPosition?.latitude ?? 0;
     double newLat = target.latitude;

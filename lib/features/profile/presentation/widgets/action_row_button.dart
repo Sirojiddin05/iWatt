@@ -32,41 +32,21 @@ class IconTextButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: borderRadius,
       rippleColor: rippleColor ?? context.theme.primaryColor.withAlpha(30),
-      child: Column(
-        children: [
-          if (includeTopDivider) ...{
-            Divider(
-              height: 1,
-              thickness: 1,
-              color: context.theme.dividerColor,
-              indent: 48,
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: [
+            SvgPicture.asset(icon),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: context.textTheme.headlineSmall,
+              ),
             ),
-          },
-          Padding(
-            padding: padding,
-            child: Row(
-              children: [
-                SvgPicture.asset(icon),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: context.textTheme.headlineSmall,
-                  ),
-                ),
-                ...actions,
-              ],
-            ),
-          ),
-          if (includeBottomDivider) ...{
-            Divider(
-              height: 1,
-              thickness: 1,
-              color: context.theme.dividerColor,
-              indent: 48,
-            ),
-          },
-        ],
+            ...actions,
+          ],
+        ),
       ),
     );
   }

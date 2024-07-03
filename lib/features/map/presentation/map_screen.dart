@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
@@ -27,7 +29,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   late final AnimationController headerSizeController;
   late final ChargeLocationsBloc chargeLocationsBloc;
   late final MapBloc mapBloc;
-  OverlayEntry? overlayEntry;
 
   @override
   void initState() {
@@ -136,6 +137,19 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
             const MapOpacityContainer(),
             MapHeaderWidgets(sizeController: headerSizeController),
             MapControllers(headerSizeController: headerSizeController),
+            Positioned(
+              bottom: context.padding.bottom,
+              right: 0,
+              left: 0,
+              child: BlocBuilder<MapBloc, MapState>(builder: (context, state) {
+                if (state.drawingObjects) {
+                  return const LinearProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(AppColors.dodgerBlue),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+            ),
           ],
         ),
       ),
@@ -149,9 +163,14 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
-    // if (isFinished) {
-    //   mapBloc.add(SetPresentPlaceMarks(zoom: position.zoom, point: position.target));
-    // }
+    if (isFinished) {
+      mapBloc.add(
+        SetPresentPlaceMarks(
+          zoom: position.zoom,
+          point: position.target,
+        ),
+      );
+    }
     mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
   }
 
