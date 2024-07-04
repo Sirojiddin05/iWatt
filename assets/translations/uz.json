@@ -373,5 +373,6 @@
   "all_companies":"Barcha kompaniyalar",
   "select_all":"Hammasini tanlang",
   "OK":"KELISHDIKMI",
-  "currently_this_vendor_is_not_integrated":"Hozirda ushbu operator bizning tizimimizga integratsiyalanmagan"
+  "currently_this_vendor_is_not_integrated":"Hozirda ushbu operator bizning tizimimizga integratsiyalanmagan",
+  "notification_permission_denied": "Bildirishnomalar uchun ruxsat berilmadi"
 }

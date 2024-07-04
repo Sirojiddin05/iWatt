@@ -145,6 +145,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                 if (state.drawingObjects) {
                   return const LinearProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(AppColors.dodgerBlue),
+                    color: AppColors.white,
+                    minHeight: 2,
                   );
                 }
                 return const SizedBox.shrink();

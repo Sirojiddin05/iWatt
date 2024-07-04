@@ -249,21 +249,28 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                   },
                                                   isIntegrated: vendor.integrated,
                                                 ),
-                                                FacilitiesCard(
-                                                  facilities: facilities,
-                                                  onAll: () {
-                                                    isStationsSheet.value = 2;
-                                                    context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
-                                                    onToggled();
-                                                    //
-                                                  },
-                                                ),
-                                                ContactsCard(
-                                                  email: vendor.name,
-                                                  phone: vendor.phone,
-                                                  website: vendor.website,
-                                                  socialMedia: vendor.socialMedia,
-                                                ),
+                                                if (facilities.isNotEmpty) ...{
+                                                  FacilitiesCard(
+                                                    facilities: facilities,
+                                                    onAll: () {
+                                                      isStationsSheet.value = 2;
+                                                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                                                      onToggled();
+                                                      //
+                                                    },
+                                                  ),
+                                                },
+                                                if (vendor.name.isNotEmpty ||
+                                                    vendor.phone.isNotEmpty ||
+                                                    vendor.website.isNotEmpty ||
+                                                    vendor.socialMedia.isNotEmpty) ...{
+                                                  ContactsCard(
+                                                    email: vendor.name,
+                                                    phone: vendor.phone,
+                                                    website: vendor.website,
+                                                    socialMedia: vendor.socialMedia,
+                                                  ),
+                                                },
                                                 SizedBox(height: context.padding.bottom + 56),
                                               } else if (state.getSingleStatus.isInProgress) ...{
                                                 const LocationSingleLoaderView()

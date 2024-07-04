@@ -389,7 +389,8 @@ class CodegenLoader extends AssetLoader{
   "all_companies": "Все компании",
   "select_all": "Выбрать все",
   "OK": "ОК",
-  "currently_this_vendor_is_not_integrated": "В настоящее время этот оператор не интегрирован в нашу систему"
+  "currently_this_vendor_is_not_integrated": "В настоящее время этот оператор не интегрирован в нашу систему",
+  "notification_permission_denied": "Разрешение на уведомления отклонено"
 };
 static const Map<String,dynamic> en = {
   "other": {
@@ -766,7 +767,8 @@ static const Map<String,dynamic> en = {
   "all_companies": "All companies",
   "select_all": "Choose all",
   "OK": "OK",
-  "currently_this_vendor_is_not_integrated": "Currently this operator is not integrated into our system"
+  "currently_this_vendor_is_not_integrated": "Currently this operator is not integrated into our system",
+  "notification_permission_denied": "Notification permission denied"
 };
 static const Map<String,dynamic> uz = {
   "other": {
@@ -1143,7 +1145,8 @@ static const Map<String,dynamic> uz = {
   "all_companies": "Barcha kompaniyalar",
   "select_all": "Hammasini tanlang",
   "OK": "KELISHDIKMI",
-  "currently_this_vendor_is_not_integrated": "Hozirda ushbu operator bizning tizimimizga integratsiyalanmagan"
+  "currently_this_vendor_is_not_integrated": "Hozirda ushbu operator bizning tizimimizga integratsiyalanmagan",
+  "notification_permission_denied": "Bildirishnomalar uchun ruxsat berilmadi"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ru": ru, "en": en, "uz": uz};
 }

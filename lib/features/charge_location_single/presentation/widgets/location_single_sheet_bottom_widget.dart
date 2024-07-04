@@ -7,6 +7,7 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/action_sheet.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/saved_icon_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
@@ -24,8 +25,9 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
-        // buildWhen: (o, n) => o.location != n.location,
+        buildWhen: (o, n) => o.location != n.location,
         builder: (context, state) {
+          final isIntegrated = state.location.vendor.integrated;
           return Container(
             padding: EdgeInsets.only(bottom: context.padding.bottom),
             decoration: BoxDecoration(
@@ -64,7 +66,17 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                     color: AppColors.limeGreen,
                     rippleColor: AppColors.white.withAlpha(30),
                     onTap: () {
-                      onChargeTap();
+                      if (isIntegrated) {
+                        onChargeTap();
+                      } else {
+                        showCustomAdaptiveDialog(
+                          context,
+                          title: LocaleKeys.currently_this_vendor_is_not_integrated.tr(),
+                          confirmText: LocaleKeys.OK.tr(),
+                          hasCancel: false,
+                          onConfirm: () {},
+                        );
+                      }
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

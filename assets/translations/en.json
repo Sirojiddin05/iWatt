@@ -373,5 +373,6 @@
   "all_companies":"All companies",
   "select_all":"Choose all",
   "OK":"OK",
-  "currently_this_vendor_is_not_integrated":"Currently this operator is not integrated into our system"
+  "currently_this_vendor_is_not_integrated":"Currently this operator is not integrated into our system",
+  "notification_permission_denied": "Notification permission denied"
 }

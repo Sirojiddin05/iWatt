@@ -373,5 +373,6 @@
   "all_companies": "Все компании",
   "select_all": "Выбрать все",
   "OK": "ОК",
-  "currently_this_vendor_is_not_integrated": "В настоящее время этот оператор не интегрирован в нашу систему"
+  "currently_this_vendor_is_not_integrated": "В настоящее время этот оператор не интегрирован в нашу систему",
+  "notification_permission_denied": "Разрешение на уведомления отклонено"
 }

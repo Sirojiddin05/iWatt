@@ -7,7 +7,6 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
-import 'package:i_watt_app/core/services/push_notifications.dart';
 import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -23,6 +22,7 @@ import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_shee
 import 'package:i_watt_app/features/profile/presentation/widgets/lang_bottomsheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/white_wrapper_container.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -180,11 +180,24 @@ class _SettingsPageState extends State<SettingsPage> {
                                     actions: [
                                       WCupertinoSwitch(
                                         isSwitched: areNotificationsOn,
-                                        onChange: (v) {
-                                          if (!areNotificationsOn) {
-                                            PushNotificationService.initializeAndListenFirebaseMessaging();
+                                        onChange: (v) async {
+                                          if (areNotificationsOn) {
+                                            context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
+                                          } else {
+                                            final permissionIsGranted = await Permission.notification.isGranted;
+                                            if (permissionIsGranted) {
+                                              final requested = await Permission.notification.request();
+                                              if (requested.isGranted) {
+                                                context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: true));
+                                              } else {
+                                                context.showPopUp(
+                                                  context,
+                                                  PopUpStatus.failure,
+                                                  message: LocaleKeys.notification_permission_denied.tr(),
+                                                );
+                                              }
+                                            }
                                           }
-                                          context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
                                         },
                                       )
                                     ],

@@ -354,5 +354,6 @@ abstract class  LocaleKeys {
   static const select_all = 'select_all';
   static const OK = 'OK';
   static const currently_this_vendor_is_not_integrated = 'currently_this_vendor_is_not_integrated';
+  static const notification_permission_denied = 'notification_permission_denied';
 
 }

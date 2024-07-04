@@ -37,43 +37,49 @@ class ContactsCard extends StatelessWidget {
             style: context.textTheme.headlineLarge,
           ),
           const SizedBox(height: 8),
-          ContactsCardRow(
-            icon: AppIcons.phoneFill,
-            value: phone,
-            hint: LocaleKeys.show_phone_number.tr(),
-            onTap: () {
-              launchUrlString(
-                'tel:${phone}',
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-          ContactsCardRow(
-            icon: AppIcons.globe,
-            value: website,
-            hint: LocaleKeys.show_web_address.tr(),
-            onTap: () async {
-              await Clipboard.setData(ClipboardData(text: website));
-              context.showPopUp(
-                context,
-                PopUpStatus.success,
-                message: LocaleKeys.copied_to_clipboard.tr(),
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-          ContactsCardRow(
-            icon: AppIcons.sms,
-            value: email,
-            hint: LocaleKeys.show_web_address.tr(),
-            onTap: () {
-              launchUrlString(
-                "mailto:$email",
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
+          if (phone.isNotEmpty) ...{
+            ContactsCardRow(
+              icon: AppIcons.phoneFill,
+              value: phone,
+              hint: LocaleKeys.show_phone_number.tr(),
+              onTap: () {
+                launchUrlString(
+                  'tel:$phone',
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+          },
+          if (website.isNotEmpty) ...{
+            ContactsCardRow(
+              icon: AppIcons.globe,
+              value: website,
+              hint: LocaleKeys.show_web_address.tr(),
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: website));
+                context.showPopUp(
+                  context,
+                  PopUpStatus.success,
+                  message: LocaleKeys.copied_to_clipboard.tr(),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+          },
+          if (email.isNotEmpty) ...{
+            ContactsCardRow(
+              icon: AppIcons.sms,
+              value: email,
+              hint: LocaleKeys.show_web_address.tr(),
+              onTap: () {
+                launchUrlString(
+                  "mailto:$email",
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+            ),
+          },
           if (socialMedia.isNotEmpty) ...[
             const SizedBox(height: 16),
             const Divider(color: AppColors.aliceBlue, height: 1),

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:473069189351:android:913f666c88aee4a64a4a42",
+        "mobilesdk_app_id": "1:473069189351:android:3415031998c346604a4a42",
         "android_client_info": {
-          "package_name": "com.example.i_watt_app"
+          "package_name": "org.uicgroup.iwatt"
         }
       },
       "oauth_client": [],
