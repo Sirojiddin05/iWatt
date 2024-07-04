@@ -134,10 +134,10 @@ class _FilterHeaderState extends State<FilterHeader> {
               return AnimatedSwitcher(
                 duration: AppConstants.animationDuration,
                 child: page == 0
-                    ? const Divider(
+                    ? Divider(
                         height: 0,
                         thickness: 1,
-                        color: AppColors.fieldBorderZircon,
+                        color: context.theme.dividerColor,
                       )
                     : const SizedBox.shrink(),
               );

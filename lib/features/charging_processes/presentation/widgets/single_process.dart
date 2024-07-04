@@ -18,6 +18,7 @@ import 'package:i_watt_app/features/charging_processes/presentation/widgets/char
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/grid_Info_cards_widget.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/max_power_and_price_widget.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/parking_card.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/common_loader_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/info_container.dart';
@@ -27,6 +28,7 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 class SingleProcess extends StatefulWidget {
   final ConnectorEntity connector;
   final String locationName;
+
   const SingleProcess({super.key, required this.connector, required this.locationName});
 
   @override
@@ -86,129 +88,139 @@ class _SingleProcessState extends State<SingleProcess> {
             }
           },
           builder: (context, state) {
-            if (state.processes.isEmpty || state.processes[processIndex].connector.id != widget.connector.id) {
-              return const SizedBox.expand();
-            }
+            // if (state.processes.isEmpty || state.processes[processIndex].connector.id != widget.connector.id) {
+            //   return const SizedBox.shrink();
+            // }
             final process = state.processes[processIndex];
             return Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(top: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    topLeft: Radius.circular(16),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.baliHai.withOpacity(0.12),
-                      blurRadius: 32,
-                      offset: const Offset(0, -6),
-                    )
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: NotificationListener(
-                        onNotification: (OverscrollIndicatorNotification notification) {
-                          notification.disallowIndicator();
-                          return false;
-                        },
-                        child: SingleChildScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+              child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+                builder: (context, state) {
+                  return Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.primaryContainer,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(16),
+                        topLeft: Radius.circular(16),
+                      ),
+                      boxShadow: state.appTheme.isDark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: AppColors.baliHai.withOpacity(0.12),
+                                blurRadius: 32,
+                                offset: const Offset(0, -6),
+                              )
+                            ],
+                    ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: NotificationListener(
+                            onNotification: (OverscrollIndicatorNotification notification) {
+                              notification.disallowIndicator();
+                              return false;
+                            },
+                            child: SingleChildScrollView(
+                              physics: const ClampingScrollPhysics(),
+                              child: Column(
                                 children: [
-                                  SvgPicture.asset(
-                                    AppIcons.plugRight,
-                                    width: 16,
-                                    height: 16,
-                                    color: process.batteryPercent == -1 ? AppColors.brightSun : AppColors.limeGreen,
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        AppIcons.plugRight,
+                                        width: 16,
+                                        height: 16,
+                                        color: process.batteryPercent == -1 ? AppColors.brightSun : AppColors.limeGreen,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        getTitleText(process),
+                                        style: context.textTheme.headlineLarge!.copyWith(fontSize: 18),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    getTitleText(process),
-                                    style: context.textTheme.headlineLarge!.copyWith(fontSize: 18),
+                                  const SizedBox(height: 4),
+                                  // if(meterValue.vin)...{
+                                  //   Text("VIN: 1HGCM82633A004352", style: context.textTheme.titleLarge!.copyWith(color: taxBreak)),
+                                  //
+                                  // }
+                                  const SizedBox(height: 40),
+                                  ChargingCarAnimationWidget(
+                                    percentage: process.batteryPercent,
                                   ),
+                                  const SizedBox(height: 20),
+                                  GridInfoCardsWidget(
+                                    currentPower: '${process.currentKwh} ${LocaleKeys.kW.tr()}',
+                                    timeLeft: process.estimatedTime,
+                                    charged: "${process.consumedKwh} ${LocaleKeys.kW.tr()}",
+                                    paid: process.money.isEmpty ? '-' : "${process.money} ${LocaleKeys.sum.tr()}",
+                                  ),
+                                  const SizedBox(height: 12),
+                                  if (process.status == ChargingProcessStatus.PARKING.name) ...{
+                                    ParkingCard(
+                                      parkingPrice: MyFunctions.formatNumber(process.payedParkingPrice.toString()),
+                                      payedParkingLasts: process.payedParkingLasts,
+                                      payedParkingWillStartAfter: process.payedParkingWillStartAfter,
+                                      isPayedPeriodStarted: process.isPayedParkingStarted,
+                                    ),
+                                  }
                                 ],
                               ),
-                              const SizedBox(height: 4),
-                              // if(meterValue.vin)...{
-                              //   Text("VIN: 1HGCM82633A004352", style: context.textTheme.titleLarge!.copyWith(color: taxBreak)),
-                              //
-                              // }
-                              const SizedBox(height: 40),
-                              ChargingCarAnimationWidget(
-                                percentage: process.batteryPercent,
-                              ),
-                              const SizedBox(height: 20),
-                              GridInfoCardsWidget(
-                                currentPower: '${process.currentKwh} ${LocaleKeys.kW.tr()}',
-                                timeLeft: process.estimatedTime,
-                                charged: "${process.consumedKwh} ${LocaleKeys.kW.tr()}",
-                                paid: process.money.isEmpty ? '-' : "${process.money} ${LocaleKeys.sum.tr()}",
-                              ),
-                              const SizedBox(height: 12),
-                              if (process.status == ChargingProcessStatus.PARKING.name) ...{
-                                ParkingCard(
-                                  parkingPrice: MyFunctions.formatNumber(process.payedParkingPrice.toString()),
-                                  payedParkingLasts: process.payedParkingLasts,
-                                  payedParkingWillStartAfter: process.payedParkingWillStartAfter,
-                                  isPayedPeriodStarted: process.isPayedParkingStarted,
-                                ),
-                              }
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    AnimatedCrossFade(
-                      firstChild: WButton(
-                        onTap: () {
-                          showCustomAdaptiveDialog(
-                            context,
-                            title: LocaleKeys.stop_charging.tr(),
-                            description: LocaleKeys.with_this_action_you_stop_charging.tr(),
-                            confirmText: LocaleKeys.finish.tr(),
-                            onConfirm: () {
-                              context.read<ChargingProcessBloc>().add(StopChargingProcessEvent(transactionId: process.transactionId));
+                        AnimatedCrossFade(
+                          firstChild: WButton(
+                            onTap: () {
+                              showCustomAdaptiveDialog(
+                                context,
+                                title: LocaleKeys.stop_charging.tr(),
+                                description: LocaleKeys.with_this_action_you_stop_charging.tr(),
+                                confirmText: LocaleKeys.finish.tr(),
+                                onConfirm: () {
+                                  context
+                                      .read<ChargingProcessBloc>()
+                                      .add(StopChargingProcessEvent(transactionId: process.transactionId));
+                                },
+                              );
                             },
-                          );
-                        },
-                        height: 44,
-                        margin: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom + 16),
-                        color: AppColors.amaranth.withOpacity(0.1),
-                        rippleColor: AppColors.amaranth.withAlpha(30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(AppIcons.stopCharging),
-                            const SizedBox(width: 6),
-                            Text(
-                              LocaleKeys.stop_charging.tr(),
-                              style: context.textTheme.headlineLarge?.copyWith(
-                                fontSize: 15,
-                                color: AppColors.amaranth,
-                              ),
+                            height: 44,
+                            margin: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom + 16),
+                            color: AppColors.amaranth.withOpacity(0.1),
+                            rippleColor: AppColors.amaranth.withAlpha(30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(AppIcons.stopCharging),
+                                const SizedBox(width: 6),
+                                Text(
+                                  LocaleKeys.stop_charging.tr(),
+                                  style: context.textTheme.headlineLarge?.copyWith(
+                                    fontSize: 15,
+                                    color: AppColors.amaranth,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                          secondChild: InfoContainer(
+                            infoText: LocaleKeys.parking_is_over_disconnect_connector.tr(),
+                            color: AppColors.brightSun3.withOpacity(0.16),
+                            iconColor: AppColors.brightSun3,
+                            margin: EdgeInsets.fromLTRB(16, 8, 16, context.padding.bottom + 16),
+                          ),
+                          crossFadeState: process.status == ChargingProcessStatus.PARKING.name
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                          duration: AppConstants.animationDuration,
                         ),
-                      ),
-                      secondChild: InfoContainer(
-                        infoText: LocaleKeys.parking_is_over_disconnect_connector.tr(),
-                        color: AppColors.brightSun3.withOpacity(0.16),
-                        iconColor: AppColors.brightSun3,
-                        margin: EdgeInsets.fromLTRB(16, 8, 16, context.padding.bottom + 16),
-                      ),
-                      crossFadeState: process.status == ChargingProcessStatus.PARKING.name ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                      duration: AppConstants.animationDuration,
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             );
           },

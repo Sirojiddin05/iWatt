@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/data/repository_imlp/appeal_repository_impl.dart';
@@ -21,6 +20,7 @@ import 'package:i_watt_app/service_locator.dart';
 
 class AppealsList extends StatefulWidget {
   const AppealsList({super.key, required this.location});
+
   final int location;
 
   @override
@@ -76,7 +76,9 @@ class _AppealsListState extends State<AppealsList> {
               margin: EdgeInsets.only(
                 top: MediaQueryData.fromView(View.of(context)).padding.top,
               ),
-              decoration: BoxDecoration(color: context.colorScheme.background, borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: context.colorScheme.background,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -120,7 +122,7 @@ class _AppealsListState extends State<AppealsList> {
                                       AnimatedCrossFade(
                                         firstChild: Material(
                                           child: Container(
-                                            color: AppColors.white,
+                                            color: context.colorScheme.background,
                                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                                             child: DefaultTextField(
                                               controller: appealController,
@@ -140,7 +142,9 @@ class _AppealsListState extends State<AppealsList> {
                                           ),
                                         ),
                                         secondChild: SizedBox(width: MediaQuery.sizeOf(context).width),
-                                        crossFadeState: value == state.appeals.length - 1 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                                        crossFadeState: value == state.appeals.length - 1
+                                            ? CrossFadeState.showFirst
+                                            : CrossFadeState.showSecond,
                                         duration: const Duration(milliseconds: 150),
                                       ),
                                       const SizedBox(height: 8)

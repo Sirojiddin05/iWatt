@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
-import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 
@@ -27,7 +26,7 @@ class QrButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: context.colorScheme.background,
+            color: context.colorScheme.surface,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
@@ -37,7 +36,7 @@ class QrButton extends StatelessWidget {
           ),
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
-            child: SvgPicture.asset(AppIcons.qrScan),
+            child: SvgPicture.asset(context.themedIcons.qrScan),
           ),
         ),
       ),

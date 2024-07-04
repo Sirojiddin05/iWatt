@@ -17,8 +17,13 @@ class FilterSheet extends StatefulWidget {
   final List<int> selectedConnectorTypes;
   final List<IdNameEntity> selectedVendors;
 
-  const FilterSheet(
-      {super.key, required this.onChanged, required this.selectedPowerTypes, required this.selectedConnectorTypes, required this.selectedVendors});
+  const FilterSheet({
+    super.key,
+    required this.onChanged,
+    required this.selectedPowerTypes,
+    required this.selectedConnectorTypes,
+    required this.selectedVendors,
+  });
 
   @override
   State<FilterSheet> createState() => _FilterSheetState();
@@ -81,7 +86,7 @@ class _FilterSheetState extends State<FilterSheet> {
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
-            color: context.colorScheme.primaryContainer,
+            color: context.themedColors.whiteToTangaroa2,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

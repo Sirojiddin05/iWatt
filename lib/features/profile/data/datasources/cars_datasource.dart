@@ -18,7 +18,7 @@ abstract class CarsDatasource {
 class CarsDatasourceImpl extends CarsDatasource {
   final Dio _dio;
 
-  CarsDatasourceImpl(Dio this._dio);
+  CarsDatasourceImpl(this._dio);
 
   @override
   Future<GenericPagination<CarModel>> getCars() async {

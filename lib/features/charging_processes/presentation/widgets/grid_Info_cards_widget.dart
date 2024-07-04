@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
@@ -12,6 +11,7 @@ class GridInfoCardsWidget extends StatelessWidget {
   final String timeLeft;
   final String charged;
   final String paid;
+
   const GridInfoCardsWidget({
     super.key,
     required this.currentPower,
@@ -30,7 +30,7 @@ class GridInfoCardsWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: ChargingInfoCard(
-                  backgroundColor: AppColors.solitude,
+                  backgroundColor: context.themedColors.solitudeToSolitudeO4,
                   label: LocaleKeys.current_power.tr(),
                   value: currentPower,
                   icon: AppIcons.flash,
@@ -41,7 +41,7 @@ class GridInfoCardsWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ChargingInfoCard(
-                  backgroundColor: AppColors.solitude,
+                  backgroundColor: context.themedColors.solitudeToSolitudeO4,
                   label: LocaleKeys.time_left.tr(),
                   value: timeLeft,
                   icon: AppIcons.timerYellow,
@@ -55,7 +55,7 @@ class GridInfoCardsWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: ChargingInfoCard(
-                  backgroundColor: AppColors.solitude,
+                  backgroundColor: context.themedColors.solitudeToSolitudeO4,
                   label: LocaleKeys.charged.tr(),
                   value: charged,
                   icon: AppIcons.batteryChargeMinimalistic,
@@ -65,7 +65,7 @@ class GridInfoCardsWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ChargingInfoCard(
-                  backgroundColor: AppColors.solitude,
+                  backgroundColor: context.themedColors.solitudeToSolitudeO4,
                   label: LocaleKeys.payed.tr(),
                   value: MyFunctions.getPrice(paid),
                   icon: AppIcons.billCheck,

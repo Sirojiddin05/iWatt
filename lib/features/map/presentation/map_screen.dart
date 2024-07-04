@@ -7,6 +7,7 @@ import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
 import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
@@ -123,13 +124,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                   return arePlacemarksUpdated || isUserLocationUpdated;
                 },
                 builder: (context, state) {
-                  return YandexMap(
-                    mapObjects: _getMapObjects(state),
-                    onMapCreated: _onMapCreated,
-                    onCameraPositionChanged: _onCameraPositionChanged,
-                    onMapTap: _onMapTap,
-                    mode2DEnabled: true,
-                    rotateGesturesEnabled: false,
+                  return BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+                    builder: (context, themeState) {
+                      return YandexMap(
+                        mapObjects: _getMapObjects(state),
+                        onMapCreated: _onMapCreated,
+                        onCameraPositionChanged: _onCameraPositionChanged,
+                        onMapTap: _onMapTap,
+                        mode2DEnabled: true,
+                        rotateGesturesEnabled: false,
+                        nightModeEnabled: themeState.appTheme.isDark,
+                      );
+                    },
                   );
                 },
               ),

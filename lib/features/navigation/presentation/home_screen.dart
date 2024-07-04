@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/push_notifications.dart';
@@ -20,6 +19,7 @@ import 'package:i_watt_app/features/charging_processes/presentation/widgets/chec
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/payment_ckeck_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/no_internet_bottomsheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/present_back_wrapper.dart';
@@ -199,8 +199,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
               listenWhen: (o, n) => o.getVersionFeaturesStatus != n.getVersionFeaturesStatus,
               listener: (context, state) async {
                 if (state.getVersionFeaturesStatus.isSuccess) {
-                  StorageRepository.putList(
-                      StorageKeys.versionFeatures, [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
+                  StorageRepository.putList(StorageKeys.versionFeatures,
+                      [...(StorageRepository.getList(StorageKeys.versionFeatures)), state.version]);
                   showModalBottomSheet(
                     context: context,
                     useSafeArea: true,
@@ -240,58 +240,74 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                 child: child ?? const SizedBox.shrink(),
               );
             },
-            child: AnnotatedRegion(
-              value: SystemUiOverlayStyle.dark.copyWith(systemNavigationBarColor: AppColors.white),
-              child: HomeTabControllerProvider(
-                controller: _tabController,
-                child: PopScope(
-                  onPopInvoked: (bool didPop) async {
-                    final isFirstRouteInCurrentTab = !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
-                    if (isFirstRouteInCurrentTab) {
-                      _changePage(0);
-                    }
-                  },
-                  child: Scaffold(
-                    extendBody: true,
-                    resizeToAvoidBottomInset: false,
-                    body: TabBarView(
-                      controller: _tabController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _buildPageNavigator(NavItemEnum.map),
-                        _buildPageNavigator(NavItemEnum.list),
-                        _buildPageNavigator(NavItemEnum.chargingProcesses),
-                        _buildPageNavigator(NavItemEnum.profile),
-                      ],
-                    ),
-                    bottomNavigationBar: Container(
-                      decoration: BoxDecoration(
-                        color: context.bottomNavigationBarTheme.backgroundColor,
-                        border: Border.all(color: context.themedColors.lillyWhiteToTaxBreak),
-                        boxShadow: [
-                          BoxShadow(color: context.appBarTheme.shadowColor!, spreadRadius: 0, blurRadius: 40, offset: const Offset(0, -2)),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                          AppConstants.navBarSections.length,
-                          (index) => ValueListenableBuilder<int>(
-                            valueListenable: _currentIndex,
-                            builder: (context, val, child) {
-                              return NavigationBarWidget(
-                                index: index,
-                                onTap: () => _onTabChange(index),
-                                currentIndex: val,
-                              );
-                            },
-                          ),
+            child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+              builder: (context, themeState) {
+                return AnnotatedRegion(
+                  value: themeState.appTheme.isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+                  child: HomeTabControllerProvider(
+                    controller: _tabController,
+                    child: PopScope(
+                      onPopInvoked: (bool didPop) async {
+                        final isFirstRouteInCurrentTab =
+                            !await _navigatorKeys[NavItemEnum.values[_currentIndex.value]]!.currentState!.maybePop();
+                        if (isFirstRouteInCurrentTab) {
+                          _changePage(0);
+                        }
+                      },
+                      child: Scaffold(
+                        extendBody: true,
+                        resizeToAvoidBottomInset: false,
+                        body: TabBarView(
+                          controller: _tabController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            _buildPageNavigator(NavItemEnum.map),
+                            _buildPageNavigator(NavItemEnum.list),
+                            _buildPageNavigator(NavItemEnum.chargingProcesses),
+                            _buildPageNavigator(NavItemEnum.profile),
+                          ],
+                        ),
+                        bottomNavigationBar: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+                          builder: (context, state) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: context.bottomNavigationBarTheme.backgroundColor,
+                                border: Border(top: BorderSide(color: context.themedColors.lillyWhiteToTaxBreak)),
+                                boxShadow: state.appTheme.isDark
+                                    ? []
+                                    : [
+                                        BoxShadow(
+                                          color: context.appBarTheme.shadowColor!,
+                                          spreadRadius: 0,
+                                          blurRadius: 40,
+                                          offset: const Offset(0, -2),
+                                        ),
+                                      ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: List.generate(
+                                  AppConstants.navBarSections.length,
+                                  (index) => ValueListenableBuilder<int>(
+                                    valueListenable: _currentIndex,
+                                    builder: (context, val, child) {
+                                      return NavigationBarWidget(
+                                        index: index,
+                                        onTap: () => _onTabChange(index),
+                                        currentIndex: val,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -317,7 +333,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     }
   }
 
-  Widget _buildPageNavigator(NavItemEnum tabItem) => TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
+  Widget _buildPageNavigator(NavItemEnum tabItem) =>
+      TabNavigator(navigatorKey: _navigatorKeys[tabItem]!, tabItem: tabItem);
 
   Future<void> _changePage(int index) async {
     _tabController.animateTo(index);

@@ -10,6 +10,7 @@ class AppIcons {
   static const splashLogoLight = 'assets/icons/ic_splash_logo.png';
   static const splashLogoDark = 'assets/icons/ic_splash_logo_dark.png';
   static const plugAlt = 'assets/icons/ic_plug_alt.svg';
+  static const plugAltDark = 'assets/icons/ic_plug_alt_dark.svg';
   static const search = 'assets/icons/ic_search.svg';
   static const filter = 'assets/icons/ic_filter.svg';
   static const filterSelected = 'assets/icons/ic_filter_selected.svg';
@@ -19,6 +20,7 @@ class AppIcons {
   static const myLocationOutlined = 'assets/icons/ic_my_location_outlined.svg';
   static const myLocationCenter = 'assets/icons/ic_my_location_center.svg';
   static const qrScan = 'assets/icons/ic_qr_scan.svg';
+  static const qrScanDark = 'assets/icons/ic_qr_scan_dark.svg';
   static const plus = 'assets/icons/ic_plus.svg';
   static const plusWhite = 'assets/icons/ic_plus_white.svg';
   static const minus = 'assets/icons/ic_minus.svg';

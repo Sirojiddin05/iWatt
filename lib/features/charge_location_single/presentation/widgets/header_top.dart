@@ -6,13 +6,15 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animatio
 
 class LocationSingleHeaderTop extends SliverPersistentHeaderDelegate {
   final String locationName;
+
   const LocationSingleHeaderTop({required this.locationName});
+
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       height: 70,
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 6),
-      color: context.colorScheme.background,
+      color: context.colorScheme.primaryContainer,
       child: Row(
         children: [
           Expanded(

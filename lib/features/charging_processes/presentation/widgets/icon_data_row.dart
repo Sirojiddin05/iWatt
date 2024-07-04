@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class IconDataRow extends StatelessWidget {
@@ -23,7 +22,7 @@ class IconDataRow extends StatelessWidget {
           child: Text(
             getValue(),
             overflow: TextOverflow.ellipsis,
-            style: context.textTheme.labelLarge!.copyWith(color: AppColors.cyprus),
+            style: context.textTheme.labelLarge!.copyWith(color: context.themedColors.cyprusToWhite),
           ),
         )
       ],

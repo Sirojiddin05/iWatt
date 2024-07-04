@@ -18,6 +18,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final VerifyCodeUseCase verifyCodeUseCase;
   final LoginWithQrUseCase loginWithQrUseCase;
   Timer _otpTimer = Timer(Duration.zero, () {});
+
   SignInBloc({
     required this.loginUseCase,
     required this.verifyCodeUseCase,
@@ -38,7 +39,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   void _signIn(SignIn event, Emitter<SignInState> emit) async {
     emit(state.copyWith(signInStatus: FormzSubmissionStatus.inProgress));
-    if (state.tempPhone != state.verifiedPhone && state.codeAvailableTime != 0) {
+    if (state.tempPhone != state.verifiedPhone || state.codeAvailableTime == 0) {
       final result = await loginUseCase(state.tempPhone);
       if (result.isRight) {
         emit(

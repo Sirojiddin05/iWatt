@@ -42,6 +42,7 @@ class MapZoomButtons extends StatelessWidget {
                   AppIcons.plus,
                   width: 24,
                   height: 24,
+                  color: AppColors.blueBayoux,
                 ),
               ),
             ),
@@ -59,7 +60,12 @@ class MapZoomButtons extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(AppIcons.minus, width: 24, height: 24),
+                child: SvgPicture.asset(
+                  AppIcons.minus,
+                  width: 24,
+                  height: 24,
+                  color: AppColors.blueBayoux,
+                ),
               ),
             ),
           ],

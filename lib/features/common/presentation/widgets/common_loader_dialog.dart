@@ -18,7 +18,7 @@ showCommonLoaderDialog(BuildContext context) {
 }
 
 class AnimatedLoaderIndicator extends StatefulWidget {
-  const AnimatedLoaderIndicator({Key? key}) : super(key: key);
+  const AnimatedLoaderIndicator({super.key});
 
   @override
   State<AnimatedLoaderIndicator> createState() => _AnimatedLoaderIndicatorState();

@@ -37,7 +37,8 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
   void initState() {
     super.initState();
     language = AppConstants.languageList.firstWhere(
-      (element) => element.locale.languageCode == StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'ru'),
+      (element) =>
+          element.locale.languageCode == StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'ru'),
     );
     changeLanguageBloc = ChangeLanguageBloc(ChangeLanguageUseCase(serviceLocator<ChangeLanguageRepositoryImpl>()));
   }
@@ -47,7 +48,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     return BlocProvider.value(
       value: changeLanguageBloc,
       child: SheetWrapper(
-        color: context.colorScheme.background,
+        color: context.colorScheme.surface,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

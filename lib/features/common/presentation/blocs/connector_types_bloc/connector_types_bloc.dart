@@ -11,7 +11,7 @@ part 'connector_types_state.dart';
 
 class ConnectorTypesBloc extends Bloc<ConnectorTypesEvent, ConnectorTypesState> {
   final GetConnectorTypesUseCase getConnectorTypesUseCase;
-  ConnectorTypesBloc(this.getConnectorTypesUseCase) : super(ConnectorTypesState()) {
+  ConnectorTypesBloc(this.getConnectorTypesUseCase) : super(const ConnectorTypesState()) {
     on<GetConnectorTypesEvent>((event, emit) async {
       emit(state.copyWith(getConnectorTypesStatus: FormzSubmissionStatus.inProgress));
       final result = await getConnectorTypesUseCase.call(NoParams());

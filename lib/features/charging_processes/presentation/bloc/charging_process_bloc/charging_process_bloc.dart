@@ -44,6 +44,7 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
   late final StreamSubscription<MeterValueMessageEntity> meterValueStreamSubscription;
   late final StreamSubscription<TransactionMessageEntity> transactionMessageStreamSubscription;
   late final StreamSubscription<ParkingDataMessageEntity> parkingDataStreamSubscription;
+
   ChargingProcessBloc({
     required this.startChargingProcessUseCase,
     required this.stopChargingProcessUseCase,
@@ -196,7 +197,8 @@ class ChargingProcessBloc extends Bloc<ChargingProcessEvent, ChargingProcessStat
           emit(
             state.copyWith(
               startProcessStatus: FormzSubmissionStatus.failure,
-              startProcessErrorMessage: '${LocaleKeys.did_not_manage_to_do_your_request.tr()} ${LocaleKeys.try_again.tr()}',
+              startProcessErrorMessage:
+                  '${LocaleKeys.did_not_manage_to_do_your_request.tr()} ${LocaleKeys.try_again.tr()}',
             ),
           );
           add(DeleteChargingProcessEvent(state.processes.length - 1));

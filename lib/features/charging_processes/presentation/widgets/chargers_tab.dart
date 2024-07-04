@@ -6,6 +6,7 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class ChargersTab extends StatelessWidget {
   final TabController tabController;
+
   const ChargersTab({super.key, required this.tabController});
 
   @override
@@ -13,7 +14,7 @@ class ChargersTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: AppColors.solitude,
+        color: context.themedColors.solitudeToSolitudeO4,
         borderRadius: BorderRadius.circular(8),
       ),
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 15),
@@ -22,7 +23,7 @@ class ChargersTab extends StatelessWidget {
         indicatorPadding: const EdgeInsets.all(0),
         controller: tabController,
         indicator: BoxDecoration(
-          color: AppColors.white,
+          color: context.themedColors.whiteToWhiteO4,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
@@ -42,7 +43,7 @@ class ChargersTab extends StatelessWidget {
           Padding(padding: const EdgeInsets.all(6), child: Text(LocaleKeys.history.tr())),
         ],
         dividerHeight: 0,
-        labelColor: AppColors.cyprus,
+        labelColor: context.themedColors.cyprusToWhite,
         unselectedLabelColor: AppColors.taxBreak,
         labelStyle: context.textTheme.bodySmall?.copyWith(fontSize: 13),
         unselectedLabelStyle: context.textTheme.titleLarge?.copyWith(fontSize: 13),

@@ -37,7 +37,8 @@ class DefaultTextField extends StatefulWidget {
   final TextStyle? titleStyle;
   final TextStyle? prefixTextStyle;
   final Color? fillColor;
-  final Widget? Function(BuildContext, {required int currentLength, required bool isFocused, required int? maxLength})? buildCounter;
+  final Widget? Function(BuildContext, {required int currentLength, required bool isFocused, required int? maxLength})?
+      buildCounter;
 
   const DefaultTextField({
     this.autoFocus = false,
@@ -147,9 +148,15 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
               counterText: '',
               filled: widget.fill,
               fillColor: widget.fillColor ?? context.theme.colorScheme.surface,
-              enabledBorder: widget.hasError ? context.theme.inputDecorationTheme.errorBorder : context.theme.inputDecorationTheme.enabledBorder,
-              border: widget.hasError ? context.theme.inputDecorationTheme.errorBorder : context.theme.inputDecorationTheme.border,
-              focusedBorder: widget.hasError ? context.theme.inputDecorationTheme.errorBorder : context.theme.inputDecorationTheme.focusedBorder,
+              enabledBorder: widget.hasError
+                  ? context.theme.inputDecorationTheme.errorBorder
+                  : context.theme.inputDecorationTheme.enabledBorder,
+              border: widget.hasError
+                  ? context.theme.inputDecorationTheme.errorBorder
+                  : context.theme.inputDecorationTheme.border,
+              focusedBorder: widget.hasError
+                  ? context.theme.inputDecorationTheme.errorBorder
+                  : context.theme.inputDecorationTheme.focusedBorder,
             ),
             onChanged: widget.onChanged,
             onSubmitted: widget.onSubmitted,

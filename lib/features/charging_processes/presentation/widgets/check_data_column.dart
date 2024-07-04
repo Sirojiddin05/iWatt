@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class CheckDataColumn extends StatelessWidget {
   final String title;
   final String data;
   final EdgeInsets padding;
+
   const CheckDataColumn({
     super.key,
     required this.title,
@@ -23,7 +23,7 @@ class CheckDataColumn extends StatelessWidget {
           Text(
             title,
             style: context.textTheme.titleSmall?.copyWith(
-              color: AppColors.taxBreak,
+              color: context.themedColors.taxBreakToZircon,
               fontSize: 12,
             ),
           ),

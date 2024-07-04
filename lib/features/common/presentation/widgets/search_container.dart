@@ -37,6 +37,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
     return Padding(
       padding: widget.padding ?? EdgeInsets.fromLTRB(12, context.padding.top + 16, 12, 4),
       child: SearchFilterWrapper(
+        // backgroundColor: ,
         children: [
           Expanded(
             child: WCustomTappableButton(
@@ -59,7 +60,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                   children: [
-                    SvgPicture.asset(AppIcons.plugAlt),
+                    SvgPicture.asset(context.themedIcons.plugAlt),
                     const SizedBox(width: 10),
                     Text(
                       LocaleKeys.search_stations.tr(),
@@ -87,7 +88,9 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                   return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged;
                 },
                 builder: (context, state) {
-                  final isActive = state.selectedPowerTypes.isNotEmpty || state.selectedConnectorTypes.isNotEmpty || state.selectedVendors.isNotEmpty;
+                  final isActive = state.selectedPowerTypes.isNotEmpty ||
+                      state.selectedConnectorTypes.isNotEmpty ||
+                      state.selectedVendors.isNotEmpty;
                   return FilterIconCard(
                     isActive: isActive,
                     onTap: () {

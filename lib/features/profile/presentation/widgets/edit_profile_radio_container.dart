@@ -29,7 +29,7 @@ class EditProfileRadioContainer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 13),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.fieldBorderZircon, width: 1),
+          border: Border.all(color: context.theme.dividerColor, width: 1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

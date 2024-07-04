@@ -95,7 +95,7 @@ class _AnimatedScaleSizeWidgetState extends State<AnimatedScaleSizeWidget> with 
             padding: const EdgeInsets.fromLTRB(8, 8, 10, 8),
             margin: const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
             decoration: BoxDecoration(
-              color: context.colorScheme.background,
+              color: context.colorScheme.surface,
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
@@ -117,7 +117,8 @@ class _AnimatedScaleSizeWidgetState extends State<AnimatedScaleSizeWidget> with 
                 if (widget.iconPath.contains('.png')) ...{
                   RotationTransition(turns: _sizeAnimation, child: Image.asset(widget.iconPath, width: 36, height: 36)),
                 } else ...{
-                  RotationTransition(turns: _sizeAnimation, child: SvgPicture.asset(widget.iconPath, width: 36, height: 36)),
+                  RotationTransition(
+                      turns: _sizeAnimation, child: SvgPicture.asset(widget.iconPath, width: 36, height: 36)),
                 },
                 SizeTransition(
                   sizeFactor: _sizeAnimation,

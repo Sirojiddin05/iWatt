@@ -143,7 +143,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final date = DateTime.now();
       print('_setLocationAppearence {${date.hour}:${date.minute}:${date.second}}');
       for (final location in result.right.results) {
-        final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
+        final statuses = List.generate(
+            location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
         if (location.logo.isNotEmpty) {
           await precacheImage(CachedNetworkImageProvider(location.logo), context);
         }
@@ -152,7 +153,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           withLuminosity: false,
           logo: location.logo,
         );
-        await StorageRepository.putString('${StorageKeys.locationAppearance}_${location.id}', String.fromCharCodes(locationAppearance));
+        await StorageRepository.putString(
+            '${StorageKeys.locationAppearance}_${location.id}', String.fromCharCodes(locationAppearance));
       }
       final after = DateTime.now();
       print('_setLocationAppearence {${after.hour}:${after.minute}:${after.second}}');
@@ -187,7 +189,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _changeZoom(ChangeZoomEvent event, Emitter<MapState> emit) async {
-    yandexMapController.moveCamera(event.cameraUpdate, animation: const MapAnimation(duration: 0.3, type: MapAnimationType.smooth));
+    yandexMapController.moveCamera(event.cameraUpdate,
+        animation: const MapAnimation(duration: 0.3, type: MapAnimationType.smooth));
   }
 
   void _saveZoomOnCameraPositionChanged(SaveZoomOnCameraPositionChanged event, Emitter<MapState> emit) {
@@ -229,10 +232,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final placemarks = <PlacemarkMapObject>[];
       final visibleRegion = await yandexMapController.getVisibleRegion();
       for (final location in state.filteredChargeLocations) {
-        final locationPoint = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
+        final locationPoint = Point(
+            latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
         final isVisible = isInVisibleRegion(locationPoint, visibleRegion);
         if (isVisible) {
-          placemarks.add(state.drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
+          placemarks
+              .add(state.drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
         }
       }
       final clusterObject = _getClusterObject(
@@ -312,7 +317,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     required ChargeLocationEntity location,
     required bool withLuminosity,
   }) async {
-    final point = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
+    final point = Point(
+        latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
     return PlacemarkMapObject(
       opacity: 1,
       onTap: (object, point) async {
@@ -321,21 +327,25 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         _moveMapCamera(object.point.latitude, object.point.longitude, 18);
         onTap(location);
       },
-      icon: getIcon(Uint8List.fromList(StorageRepository.getString('${StorageKeys.locationAppearance}_${location.id}').codeUnits)),
+      icon: getIcon(Uint8List.fromList(
+          StorageRepository.getString('${StorageKeys.locationAppearance}_${location.id}').codeUnits)),
       mapId: MapObjectId('location_${location.id}'),
       point: point,
     );
   }
 
-  ClusterizedPlacemarkCollection _getClusterObject({required List<PlacemarkMapObject> placemarks, required bool withLuminosity}) {
+  ClusterizedPlacemarkCollection _getClusterObject(
+      {required List<PlacemarkMapObject> placemarks, required bool withLuminosity}) {
     return ClusterizedPlacemarkCollection(
       mapId: const MapObjectId('cluster'),
       radius: 30,
       minZoom: 18,
       placemarks: placemarks,
       onClusterAdded: (self, cluster) async {
-        final appearance = await _getClusterAppearance(placeCount: cluster.placemarks.length, withLuminosity: withLuminosity);
-        return cluster.copyWith(appearance: cluster.appearance.copyWith(opacity: 1, icon: getIcon(appearance, const Offset(0.5, 0.5))));
+        final appearance =
+            await _getClusterAppearance(placeCount: cluster.placemarks.length, withLuminosity: withLuminosity);
+        return cluster.copyWith(
+            appearance: cluster.appearance.copyWith(opacity: 1, icon: getIcon(appearance, const Offset(0.5, 0.5))));
       },
       onClusterTap: (self, cluster) async {
         add(const ChangeLuminosityStateEvent(hasLuminosity: false));
@@ -349,7 +359,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Future<Uint8List> _getLocationAppearance(
-      {required List<ConnectorStatus> stationStatuses, required String logo, bool isSelected = false, bool withLuminosity = false}) async {
+      {required List<ConnectorStatus> stationStatuses,
+      required String logo,
+      bool isSelected = false,
+      bool withLuminosity = false}) async {
     final image = await MyFunctions.createImageFromWidget(
       LocationPinWidget(
         logo: logo,
@@ -445,10 +458,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final latDiff = (oldLat - newPoint.latitude).abs();
     final lonDiff = (oldLong - newPoint.longitude).abs();
     final zoomDiff = (oldZoom - newZoom).abs();
-    return latDiff > criteria.latitudeThreshold || lonDiff > criteria.longitudeThreshold || zoomDiff > criteria.zoomThreshold;
+    return latDiff > criteria.latitudeThreshold ||
+        lonDiff > criteria.longitudeThreshold ||
+        zoomDiff > criteria.zoomThreshold;
   }
 
-  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) =>
+      (events, mapper) => events.debounceTime(duration).flatMap(mapper);
   EventTransformer<MyEvent> switchMap<MyEvent>() {
     return (events, mapper) => events.switchMap(mapper);
   }

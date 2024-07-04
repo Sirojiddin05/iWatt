@@ -45,7 +45,7 @@ class SearchHistoryWidget extends StatelessWidget {
                       showCustomAdaptiveDialog(
                         context,
                         title: LocaleKeys.clear_search_history.tr(),
-                        description: LocaleKeys.clear_search_history.tr() + '?',
+                        description: '${LocaleKeys.clear_search_history.tr()}?',
                         cancelStyle: context.textTheme.headlineLarge?.copyWith(
                           fontSize: 17,
                           color: AppColors.dodgerBlue,
@@ -97,7 +97,8 @@ class SearchHistoryWidget extends StatelessWidget {
                               showCustomAdaptiveDialog(
                                 context,
                                 title: LocaleKeys.search_histories.tr(),
-                                description: LocaleKeys.delete_single_from_search_history.tr(args: ["\"${searchHistory[index].locationName}\""]),
+                                description: LocaleKeys.delete_single_from_search_history
+                                    .tr(args: ["\"${searchHistory[index].locationName}\""]),
                                 cancelStyle: context.textTheme.headlineLarge?.copyWith(
                                   fontSize: 17,
                                   color: AppColors.dodgerBlue,
@@ -108,7 +109,9 @@ class SearchHistoryWidget extends StatelessWidget {
                                   color: AppColors.amaranth,
                                 ),
                                 onConfirm: () {
-                                  context.read<SearchHistoryBloc>().add(DeleteSingleSearchHistoryEvent(searchHistory[index].id));
+                                  context
+                                      .read<SearchHistoryBloc>()
+                                      .add(DeleteSingleSearchHistoryEvent(searchHistory[index].id));
                                 },
                               );
                             },
