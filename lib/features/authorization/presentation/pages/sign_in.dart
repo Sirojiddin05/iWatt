@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
@@ -121,7 +120,7 @@ class _SignInPageState extends State<SignInPage> {
               }
             },
             child: WButton(
-              color: AppColors.solitude,
+              color: context.themedColors.solitudeToSolitudeO4,
               margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
