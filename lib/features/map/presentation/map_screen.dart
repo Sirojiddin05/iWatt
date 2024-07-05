@@ -5,12 +5,13 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
 import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
+import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/map_controllers.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/map_header_widgets.dart';
@@ -38,7 +39,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
       getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
       saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
     );
-    mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc = MapBloc(GetClustersUseCase(serviceLocator<MapRepositoryImpl>()));
     WidgetsBinding.instance.addObserver(this);
     headerSizeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
   }
@@ -82,7 +83,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
               ],
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
-                  final areChargeLocationsUpdated = o.allChargeLocations != n.allChargeLocations;
+                  final areChargeLocationsUpdated = o.clusters != n.clusters;
                   // final isLuminosityUpdated = o.hasLuminosity != n.hasLuminosity;
                   return areChargeLocationsUpdated;
                 },
@@ -91,34 +92,34 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                     mapBloc.add(
                       DrawChargeLocationsEvent(
                         onLocationTap: (location) {
-                          headerSizeController.reverse();
-                          showModalBottomSheet(
-                            context: context,
-                            useRootNavigator: true,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            barrierColor: Colors.transparent,
-                            builder: (ctx) {
-                              return LocationSingleSheet(
-                                title: '${location.vendorName} "${location.locationName}"',
-                                address: location.address,
-                                distance: location.distance.toString(),
-                                midSize: false,
-                                id: location.id,
-                                latitude: location.latitude,
-                                longitude: location.longitude,
-                              );
-                            },
-                          ).then((value) {
-                            headerSizeController.forward();
-                          });
+                          // headerSizeController.reverse();
+                          // showModalBottomSheet(
+                          //   context: context,
+                          //   useRootNavigator: true,
+                          //   isScrollControlled: true,
+                          //   backgroundColor: Colors.transparent,
+                          //   barrierColor: Colors.transparent,
+                          //   builder: (ctx) {
+                          //     return LocationSingleSheet(
+                          //       title: '${location.vendorName} "${location.locationName}"',
+                          //       address: location.address,
+                          //       distance: location.distance.toString(),
+                          //       midSize: false,
+                          //       id: location.id,
+                          //       latitude: location.latitude,
+                          //       longitude: location.longitude,
+                          //     );
+                          //   },
+                          // ).then((value) {
+                          //   headerSizeController.forward();
+                          // });
                         },
                       ),
                     );
                   }
                 },
                 buildWhen: (o, n) {
-                  final arePlacemarksUpdated = o.presentedObjects != n.presentedObjects;
+                  final arePlacemarksUpdated = o.drawnMapObjects != n.drawnMapObjects;
                   final isUserLocationUpdated = o.userLocationObject != n.userLocationObject;
                   return arePlacemarksUpdated || isUserLocationUpdated;
                 },
@@ -167,7 +168,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
     if (isFinished) {
       mapBloc.add(
-        SetPresentPlaceMarks(
+        SetClusters(
           zoom: position.zoom,
           point: position.target,
         ),
@@ -183,8 +184,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     if (state.userLocationObject != null) {
       mapObjects.add(state.userLocationObject!);
     }
-    if (state.presentedObjects != null) {
-      mapObjects.add(state.presentedObjects!);
+    if (state.drawnMapObjects != null) {
+      mapObjects.addAll(state.drawnMapObjects!);
     }
     return mapObjects;
   }

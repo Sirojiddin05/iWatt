@@ -4,8 +4,10 @@ abstract class MapEvent {
   const MapEvent();
 }
 
-class SetChargeLocations extends MapEvent {
-  const SetChargeLocations();
+class SetClusters extends MapEvent {
+  final double zoom;
+  final Point point;
+  const SetClusters({required this.zoom, required this.point});
 }
 
 class SetFilteredLocations extends MapEvent {
@@ -56,7 +58,7 @@ class SaveZoomOnCameraPositionChanged extends MapEvent {
 class DrawChargeLocationsEvent extends MapEvent {
   const DrawChargeLocationsEvent({required this.onLocationTap, this.withLuminosity = false});
 
-  final ValueChanged<ChargeLocationEntity> onLocationTap;
+  final ValueChanged<ClusterEntity> onLocationTap;
   final bool withLuminosity;
 }
 

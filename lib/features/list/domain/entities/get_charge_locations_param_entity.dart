@@ -9,19 +9,20 @@ class GetChargeLocationParamEntity {
   final double longitude;
   final double latitude;
   final bool isForMap;
+  final double zoom;
 
-  const GetChargeLocationParamEntity({
-    this.isFavourite = false,
-    this.powerType = const [],
-    this.connectorType = const [],
-    this.vendors = const [],
-    this.next = '',
-    this.searchPattern = '',
-    this.radius = -1,
-    this.longitude = -1,
-    this.latitude = -1,
-    this.isForMap = false,
-  });
+  const GetChargeLocationParamEntity(
+      {this.isFavourite = false,
+      this.powerType = const [],
+      this.connectorType = const [],
+      this.vendors = const [],
+      this.next = '',
+      this.searchPattern = '',
+      this.radius = -1,
+      this.longitude = -1,
+      this.latitude = -1,
+      this.isForMap = false,
+      this.zoom = -1});
   Map<String, dynamic> toJson() {
     Map<String, dynamic> params = {};
     if (isFavourite) {
@@ -36,6 +37,9 @@ class GetChargeLocationParamEntity {
     }
     if (radius != -1 && !isForMap) {
       params.putIfAbsent('radius', () => radius);
+    }
+    if (zoom != -1) {
+      params.putIfAbsent('zoom', () => zoom.toInt());
     }
     if (powerType.isNotEmpty) {
       String power = powerType.join(', ');

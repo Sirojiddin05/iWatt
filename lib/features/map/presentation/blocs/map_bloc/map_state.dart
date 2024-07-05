@@ -8,22 +8,20 @@ class MapState extends Equatable {
     this.next = '',
     this.locationSettingsTriggered = false,
     this.drawnMapObjects,
-    this.presentedObjects,
     this.userLocationObject,
     this.zoomLevel = 15,
     this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
     this.hasLuminosity = false,
     this.isMapInitialized = false,
-    this.allChargeLocations = const [],
-    this.filteredChargeLocations = const [],
     this.cameraPosition,
     this.drawingObjects = false,
+    this.clusters = const [],
   });
 
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
-  final List<PlacemarkMapObject>? drawnMapObjects;
-  final ClusterizedPlacemarkCollection? presentedObjects;
+  final List<MapObject>? drawnMapObjects;
+  final List<ClusterEntity> clusters;
   final MapObject? userLocationObject;
   final double userCurrentLat;
   final double userCurrentLong;
@@ -33,8 +31,6 @@ class MapState extends Equatable {
   final bool locationSettingsTriggered;
   final bool hasLuminosity;
   final bool isMapInitialized;
-  final List<ChargeLocationEntity> allChargeLocations;
-  final List<ChargeLocationEntity> filteredChargeLocations;
   final bool drawingObjects;
 
   MapState copyWith({
@@ -43,17 +39,15 @@ class MapState extends Equatable {
     double? userCurrentLong,
     String? next,
     bool? locationSettingsTriggered,
-    List<PlacemarkMapObject>? drawnMapObjects,
-    ClusterizedPlacemarkCollection? presentedObjects,
+    List<MapObject>? drawnMapObjects,
     MapObject? userLocationObject,
     double? zoomLevel,
     LocationPermissionStatus? locationAccessStatus,
     bool? hasLuminosity,
     bool? isMapInitialized,
-    List<ChargeLocationEntity>? allChargeLocations,
-    List<ChargeLocationEntity>? filteredChargeLocations,
     Point? cameraPosition,
     bool? drawingObjects,
+    List<ClusterEntity>? clusters,
   }) {
     return MapState(
       userCurrentLat: userCurrentLat ?? this.userCurrentLat,
@@ -62,16 +56,14 @@ class MapState extends Equatable {
       locationSettingsTriggered: locationSettingsTriggered ?? this.locationSettingsTriggered,
       locationAccessStatus: locationAccessStatus ?? this.locationAccessStatus,
       drawnMapObjects: drawnMapObjects ?? this.drawnMapObjects,
-      presentedObjects: presentedObjects ?? this.presentedObjects,
       userLocationObject: userLocationObject ?? this.userLocationObject,
       userLocationAccessingStatus: userLocationAccessingStatus ?? this.userLocationAccessingStatus,
       zoomLevel: zoomLevel ?? this.zoomLevel,
       hasLuminosity: hasLuminosity ?? this.hasLuminosity,
       isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-      allChargeLocations: allChargeLocations ?? this.allChargeLocations,
-      filteredChargeLocations: filteredChargeLocations ?? this.filteredChargeLocations,
       cameraPosition: cameraPosition ?? this.cameraPosition,
       drawingObjects: drawingObjects ?? this.drawingObjects,
+      clusters: clusters ?? this.clusters,
     );
   }
 
@@ -80,7 +72,6 @@ class MapState extends Equatable {
         userLocationAccessingStatus,
         locationAccessStatus,
         drawnMapObjects,
-        presentedObjects,
         userLocationObject,
         userCurrentLat,
         userCurrentLong,
@@ -90,8 +81,7 @@ class MapState extends Equatable {
         locationSettingsTriggered,
         hasLuminosity,
         isMapInitialized,
-        allChargeLocations,
-        filteredChargeLocations,
-        drawingObjects
+        drawingObjects,
+        clusters,
       ];
 }

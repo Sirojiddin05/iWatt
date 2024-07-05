@@ -57,9 +57,6 @@ import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/p
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
-import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
-import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
-import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
@@ -105,12 +102,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-            create: (context) =>
-                MapBloc(GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()))..add(const SetChargeLocations())),
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
-        // BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
         BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),

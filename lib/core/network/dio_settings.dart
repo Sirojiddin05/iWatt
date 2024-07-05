@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
@@ -40,7 +38,7 @@ class DioSettings {
           requestBody: true,
           request: true,
           requestHeader: true,
-          logPrint: (object) => log(object.toString()),
+          logPrint: (object) => print(object.toString()),
         ),
         TokenRefreshInterceptor(dio: dio)
       ],

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,8 @@ import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
-import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/entities/cluste_entity.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/location_pin_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_sheet.dart';
 import 'package:rxdart/rxdart.dart';
@@ -28,13 +28,13 @@ part 'map_event.dart';
 part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
-  final GetChargeLocationsUseCase getChargeLocationsUseCase;
+  final GetClustersUseCase getClustersUseCase;
   late final YandexMapController yandexMapController;
   late final BuildContext context;
 
-  MapBloc(this.getChargeLocationsUseCase) : super(const MapState()) {
-    on<SetChargeLocations>(_setChargeLocations);
-    on<SetFilteredLocations>(_setFilteredLocations);
+  MapBloc(this.getClustersUseCase) : super(const MapState()) {
+    on<SetClusters>(_setClusters);
+    // on<SetFilteredLocations>(_setFilteredLocations);
     on<RequestLocationAccess>(_requestLocationAccess);
     on<CheckIfSettingsTriggered>(_checkIfSettingsTriggered);
     on<SetLocationAccessStateEvent>(_setLocationAccessState);
@@ -42,10 +42,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<InitializeMapControllerEvent>(_initializeController);
     on<ChangeZoomEvent>(_changeZoom, transformer: droppable());
     on<SaveZoomOnCameraPositionChanged>(_saveZoomOnCameraPositionChanged);
-    on<DrawChargeLocationsEvent>(_drawChargeLocation);
+    on<DrawChargeLocationsEvent>(_drawChargeLocation, transformer: _composedTransformer());
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetCarOnMapEvent>(_setCarOnMap);
-    on<SetPresentPlaceMarks>(_setPresentPlaceMarks, transformer: _composedTransformer());
+    // on<SetPresentPlaceMarks>(_setPresentPlaceMarks, transformer: _composedTransformer());
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
@@ -125,57 +125,51 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  void _setChargeLocations(SetChargeLocations event, Emitter<MapState> emit) async {
-    final date = DateTime.now();
-    print('_setChargeLocations {${date.hour}:${date.minute}:${date.second}}');
-    final result = await getChargeLocationsUseCase.call(
-      GetChargeLocationParamEntity(
-        longitude: 69.2745949166718,
-        latitude: 41.26825524558951,
-        radius: MyFunctions.getRadiusFromZoom(1),
-      ),
+  void _setClusters(SetClusters event, Emitter<MapState> emit) async {
+    emit(state.copyWith(drawingObjects: true));
+    final criteria = CameraPositionUpdateCriteria(
+      latitudeThreshold: 0.1,
+      longitudeThreshold: 0.1,
+      zoomThreshold: 1,
     );
-    final afterDate = DateTime.now();
-    print('_setChargeLocations {${afterDate.hour}:${afterDate.minute}:${afterDate.second}}');
-    print('_setChargeLocations {${afterDate.difference(date).inMilliseconds}}');
-
-    if (result.isRight) {
-      final date = DateTime.now();
-      print('_setLocationAppearence {${date.hour}:${date.minute}:${date.second}}');
-      for (final location in result.right.results) {
-        final statuses = List.generate(location.connectorsStatus.length, (index) => ConnectorStatus.fromString(location.connectorsStatus[index]));
-        if (location.logo.isNotEmpty) {
-          await precacheImage(CachedNetworkImageProvider(location.logo), context);
-        }
-        final locationAppearance = await _getLocationAppearance(
-          stationStatuses: statuses,
-          withLuminosity: false,
-          logo: location.logo,
+    if (hasCameraPositionUpdatedCritically(event.point, event.zoom, criteria)) {
+      final result = await getClustersUseCase.call(
+        GetChargeLocationParamEntity(
+          latitude: event.point.latitude,
+          longitude: event.point.longitude,
+          zoom: event.zoom,
+          radius: MyFunctions.getRadiusFromZoom(event.zoom),
+        ),
+      );
+      if (result.isRight) {
+        emit(
+          state.copyWith(
+            clusters: result.right.results,
+            cameraPosition: event.point,
+            zoomLevel: event.zoom,
+          ),
         );
-        await StorageRepository.putString('${StorageKeys.locationAppearance}_${location.id}', String.fromCharCodes(locationAppearance));
       }
-      final after = DateTime.now();
-      print('_setLocationAppearence {${after.hour}:${after.minute}:${after.second}}');
-      print('_setLocationAppearence {${after.difference(date).inMilliseconds}}');
+    } else {
       emit(
         state.copyWith(
-          allChargeLocations: result.right.results,
-          filteredChargeLocations: result.right.results,
+          cameraPosition: event.point,
+          zoomLevel: event.zoom,
         ),
       );
     }
   }
 
-  void _setFilteredLocations(SetFilteredLocations event, Emitter<MapState> emit) {
-    emit(state.copyWith(filteredChargeLocations: event.locations));
-    // add(
-    //   SetPresentPlaceMarks(
-    //     zoom: state.zoomLevel,
-    //     point: state.cameraPosition!,
-    //     forceSet: true,
-    //   ),
-    // );
-  }
+  // void _setFilteredLocations(SetFilteredLocations event, Emitter<MapState> emit) {
+  //   emit(state.copyWith(filteredChargeLocations: event.locations));
+  //   // add(
+  //   //   SetPresentPlaceMarks(
+  //   //     zoom: state.zoomLevel,
+  //   //     point: state.cameraPosition!,
+  //   //     forceSet: true,
+  //   //   ),
+  //   // );
+  // }
 
   void _setLocationAccessState(SetLocationAccessStateEvent event, Emitter<MapState> emit) {
     emit(
@@ -196,62 +190,66 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _drawChargeLocation(DrawChargeLocationsEvent event, Emitter<MapState> emit) async {
     final List<PlacemarkMapObject> placeMarks = [];
-    final locations = state.allChargeLocations;
-    final date = DateTime.now();
-    for (var location in locations) {
-      final placeMark = await _getPlaceMarkObject(
-        onTap: event.onLocationTap,
-        location: location,
-        //TODO
-        // withLuminosity: state.hasLuminosity,
+    final clusters = [...state.clusters];
+    for (var cluster in clusters) {
+      final placeMark = await _getClusterAppearance(
+        placeCount: cluster.count,
         withLuminosity: false,
       );
-      placeMarks.add(placeMark);
+      placeMarks.add(
+        PlacemarkMapObject(
+          opacity: 1,
+          onTap: (object, point) async {
+            add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+            // add(SelectUnSelectMapObject(locationId: location.id));
+            _moveMapCamera(object.point.latitude, object.point.longitude, 18);
+            event.onLocationTap(cluster);
+          },
+          icon: getIcon(placeMark),
+          mapId: MapObjectId('cluster_${cluster.quadkey}'),
+          point: Point(latitude: cluster.avgLatitude, longitude: cluster.avgLongitude),
+        ),
+      );
     }
-    final after = DateTime.now();
-    emit(
-      state.copyWith(
-        drawnMapObjects: placeMarks,
-      ),
-    );
+    emit(state.copyWith(drawnMapObjects: placeMarks, drawingObjects: false));
   }
 
-  void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
-    final criteria = CameraPositionUpdateCriteria(
-      latitudeThreshold: 0.1,
-      longitudeThreshold: 0.1,
-      zoomThreshold: 1,
-    );
-    emit(state.copyWith(drawingObjects: true));
-    final newPoint = event.point ?? state.cameraPosition!;
-    final newZoom = event.zoom ?? state.zoomLevel;
-    if (hasCameraPositionUpdatedCritically(newPoint, newZoom, criteria) || event.forceSet) {
-      final placemarks = <PlacemarkMapObject>[];
-      final visibleRegion = await yandexMapController.getVisibleRegion();
-      for (final location in state.filteredChargeLocations) {
-        final locationPoint = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
-        final isVisible = isInVisibleRegion(locationPoint, visibleRegion);
-        if (isVisible) {
-          placemarks.add(state.drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
-        }
-      }
-      final clusterObject = _getClusterObject(
-        placemarks: placemarks,
-        //TODO
-        // withLuminosity: state.hasLuminosity,
-        withLuminosity: false,
-      );
-      emit(state.copyWith(presentedObjects: clusterObject));
-      await Future.delayed(const Duration(seconds: 1));
-    }
-    emit(
-      state.copyWith(
-        drawingObjects: false,
-        cameraPosition: event.point,
-        zoomLevel: event.zoom,
-      ),
-    );
-  }
+  // void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
+  //   final criteria = CameraPositionUpdateCriteria(
+  //     latitudeThreshold: 0.1,
+  //     longitudeThreshold: 0.1,
+  //     zoomThreshold: 1,
+  //   );
+  //   emit(state.copyWith(drawingObjects: true));
+  //   final newPoint = event.point ?? state.cameraPosition!;
+  //   final newZoom = event.zoom ?? state.zoomLevel;
+  //   if (hasCameraPositionUpdatedCritically(newPoint, newZoom, criteria) || event.forceSet) {
+  //     final placemarks = <PlacemarkMapObject>[];
+  //     final visibleRegion = await yandexMapController.getVisibleRegion();
+  //     for (final location in state.filteredChargeLocations) {
+  //       final locationPoint = Point(latitude: double.tryParse(location.latitude) ?? 0.0, longitude: double.tryParse(location.longitude) ?? 0.0);
+  //       final isVisible = isInVisibleRegion(locationPoint, visibleRegion);
+  //       if (isVisible) {
+  //         placemarks.add(state.drawnMapObjects!.firstWhere((element) => element.mapId.value == 'location_${location.id}'));
+  //       }
+  //     }
+  //     final clusterObject = _getClusterObject(
+  //       placemarks: placemarks,
+  //       //TODO
+  //       // withLuminosity: state.hasLuminosity,
+  //       withLuminosity: false,
+  //     );
+  //     emit(state.copyWith(presentedObjects: clusterObject));
+  //     await Future.delayed(const Duration(seconds: 1));
+  //   }
+  //   emit(
+  //     state.copyWith(
+  //       drawingObjects: false,
+  //       cameraPosition: event.point,
+  //       zoomLevel: event.zoom,
+  //     ),
+  //   );
+  // }
 
   void _checkIfSettingsTriggered(CheckIfSettingsTriggered event, Emitter<MapState> emit) async {
     if (state.locationSettingsTriggered) {

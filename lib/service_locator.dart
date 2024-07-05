@@ -33,6 +33,8 @@ import 'package:i_watt_app/features/common/data/repositories_impl/socket_reposit
 import 'package:i_watt_app/features/common/data/repositories_impl/vendors_repository_impl.dart';
 import 'package:i_watt_app/features/list/data/datasources/charge_locations_data_source.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
+import 'package:i_watt_app/features/map/data/datasource/map_data_source.dart';
+import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/data/datasources/instructions_datasource.dart';
 import 'package:i_watt_app/features/navigation/data/datasources/version_check_datasource.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
@@ -70,6 +72,8 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => PowerTypesRepositoryImpl(serviceLocator<PowerTypesDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => VendorsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => VendorsRepositoryImpl(serviceLocator<VendorsDataSourceImpl>()));
+  serviceLocator.registerLazySingleton(() => MapDataSourceImpl(serviceLocator<DioSettings>().dio));
+  serviceLocator.registerLazySingleton(() => MapRepositoryImpl(serviceLocator<MapDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => ChargeLocationsRepositoryImpl(serviceLocator<ChargeLocationsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => VersionCheckDataSourceImpl(serviceLocator<DioSettings>().dio));
