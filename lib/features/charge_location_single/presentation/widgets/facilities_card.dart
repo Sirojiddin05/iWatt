@@ -40,7 +40,7 @@ class FacilitiesCard extends StatelessWidget {
                 child: WCustomTappableButton(
                   onTap: onAll,
                   borderRadius: BorderRadius.circular(16),
-                  rippleColor: AppColors.cyprus.withAlpha(15),
+                  rippleColor: context.themedColors.cyprusToWhite.withAlpha(15),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
                     child: Row(

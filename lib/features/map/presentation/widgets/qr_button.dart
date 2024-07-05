@@ -15,6 +15,7 @@ class QrButton extends StatelessWidget {
       // padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
       margin: const EdgeInsets.fromLTRB(12, 0, 12, 28),
       padding: const EdgeInsets.all(4),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppColors.black.withOpacity(0.08),
         borderRadius: BorderRadius.circular(10),
@@ -22,7 +23,7 @@ class QrButton extends StatelessWidget {
       child: WCustomTappableButton(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
-        rippleColor: AppColors.cyprus.withAlpha(20),
+        rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

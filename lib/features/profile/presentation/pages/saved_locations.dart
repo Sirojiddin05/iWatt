@@ -57,13 +57,15 @@ class _SavedLocationsState extends State<SavedLocations> {
               title: LocaleKeys.saved_stations.tr(),
             ),
             body: BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
-              buildWhen: (o, n) => o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
+              buildWhen: (o, n) =>
+                  o.getChargeLocationsStatus != n.getChargeLocationsStatus || o.chargeLocations != n.chargeLocations,
               builder: (context, state) {
                 if (state.getChargeLocationsStatus.isInProgress) {
                   return const ChargeLocationCardsLoader();
                 } else if (state.getChargeLocationsStatus.isSuccess) {
                   if (state.chargeLocations.isEmpty) {
                     return RefreshIndicator(
+                      backgroundColor: context.colorScheme.primaryContainer,
                       onRefresh: () async {
                         context.read<ChargeLocationsBloc>().add(const GetChargeLocationsEvent());
                       },
@@ -84,6 +86,7 @@ class _SavedLocationsState extends State<SavedLocations> {
                   }
                   final itemNumber = state.chargeLocations.length;
                   return RefreshIndicator(
+                    backgroundColor: context.colorScheme.primaryContainer,
                     onRefresh: () async {
                       context.read<ChargeLocationsBloc>().add(const GetChargeLocationsEvent());
                     },

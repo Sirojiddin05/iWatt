@@ -25,6 +25,7 @@ class ChargingProcessList extends StatelessWidget {
         } else if (state.getChargingProcesses.isSuccess) {
           if (state.processes.isEmpty) {
             return RefreshIndicator(
+              backgroundColor: context.colorScheme.primaryContainer,
               onRefresh: () async {
                 context.read<ChargingProcessBloc>().add(GetChargingProcessesEvent());
               },

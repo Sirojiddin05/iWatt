@@ -42,7 +42,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
           Expanded(
             child: WCustomTappableButton(
               borderRadius: BorderRadius.circular(8),
-              rippleColor: AppColors.cyprus.withAlpha(20),
+              rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
               onTap: () {
                 Navigator.of(
                   context,

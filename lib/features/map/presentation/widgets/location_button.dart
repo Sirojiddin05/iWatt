@@ -24,7 +24,7 @@ class LocateMeButton extends StatelessWidget {
       child: WCustomTappableButton(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
-        rippleColor: AppColors.cyprus.withAlpha(20),
+        rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

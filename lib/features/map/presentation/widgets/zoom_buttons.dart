@@ -30,11 +30,13 @@ class MapZoomButtons extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 2),
             WCustomTappableButton(
               onTap: () => context.read<MapBloc>().add(ChangeZoomEvent(CameraUpdate.zoomIn())),
-              rippleColor: AppColors.cyprus.withAlpha(20),
+              rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -56,7 +58,7 @@ class MapZoomButtons extends StatelessWidget {
             ),
             WCustomTappableButton(
               onTap: () => context.read<MapBloc>().add(ChangeZoomEvent(CameraUpdate.zoomOut())),
-              rippleColor: AppColors.cyprus.withAlpha(20),
+              rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
