@@ -113,10 +113,10 @@ PODS:
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - yandex_mapkit (0.0.1):
+  - yandex_maps_mapkit (1.0.0):
     - Flutter
-    - YandexMapsMobile (= 4.6.1-lite)
-  - YandexMapsMobile (4.6.1-lite)
+    - YandexMapsMobile (= 4.6.1-beta3-full-flutter)
+  - YandexMapsMobile (4.6.1-beta3-full-flutter)
 
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
@@ -140,7 +140,7 @@ DEPENDENCIES:
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
-  - yandex_mapkit (from `.symlinks/plugins/yandex_mapkit/ios`)
+  - yandex_maps_mapkit (from `.symlinks/plugins/yandex_maps_mapkit/ios`)
 
 SPEC REPOS:
   trunk:
@@ -200,8 +200,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
-  yandex_mapkit:
-    :path: ".symlinks/plugins/yandex_mapkit/ios"
+  yandex_maps_mapkit:
+    :path: ".symlinks/plugins/yandex_maps_mapkit/ios"
 
 SPEC CHECKSUMS:
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
@@ -236,8 +236,8 @@ SPEC CHECKSUMS:
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
   video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
-  yandex_mapkit: 99516c0d4d24d61bcb3711b5944223e8a3d70b46
-  YandexMapsMobile: 7e20ef4db180b901c96f8107fade91d6349248a0
+  yandex_maps_mapkit: 15f26e86f0f6040a10cb4a25a0103548d394c75a
+  YandexMapsMobile: 2e565b399274b186e41be89b144ee9a03b2bd343
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 

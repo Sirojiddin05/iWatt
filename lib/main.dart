@@ -74,10 +74,12 @@ import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/firebase_options.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:yandex_maps_mapkit/init.dart' as init;
 
 void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await init.initMapkit(apiKey: 'bf6967bc-3e1d-4d4b-9012-62607ca3a4af');
     await EasyLocalization.ensureInitialized();
     await setupLocator();
     //TODO uncomment to production

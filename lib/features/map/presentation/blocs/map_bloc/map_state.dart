@@ -20,12 +20,12 @@ class MapState extends Equatable {
 
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
-  final List<MapObject>? drawnMapObjects;
+  final List<map_kit.MapObject>? drawnMapObjects;
   final List<ClusterEntity> clusters;
-  final MapObject? userLocationObject;
+  final map_kit.MapObject? userLocationObject;
   final double userCurrentLat;
   final double userCurrentLong;
-  final Point? cameraPosition;
+  final map_kit.Point? cameraPosition;
   final double zoomLevel;
   final String next;
   final bool locationSettingsTriggered;
@@ -39,13 +39,13 @@ class MapState extends Equatable {
     double? userCurrentLong,
     String? next,
     bool? locationSettingsTriggered,
-    List<MapObject>? drawnMapObjects,
-    MapObject? userLocationObject,
+    List<map_kit.MapObject>? drawnMapObjects,
+    map_kit.MapObject? userLocationObject,
     double? zoomLevel,
     LocationPermissionStatus? locationAccessStatus,
     bool? hasLuminosity,
     bool? isMapInitialized,
-    Point? cameraPosition,
+    map_kit.Point? cameraPosition,
     bool? drawingObjects,
     List<ClusterEntity>? clusters,
   }) {

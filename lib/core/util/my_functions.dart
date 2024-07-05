@@ -18,7 +18,7 @@ import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:yandex_maps_mapkit/mapkit.dart' as map_kit;
 
 class MyFunctions {
   const MyFunctions._();
@@ -417,7 +417,7 @@ class MyFunctions {
     return theme;
   }
 
-  static double getDistanceBetweenTwoPoints(Point firstPoint, Point secondPoint) {
+  static double getDistanceBetweenTwoPoints(map_kit.Point firstPoint, map_kit.Point secondPoint) {
     final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
@@ -463,7 +463,7 @@ class MyFunctions {
     final pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
     if (shouldAddShadow) {
-      Rect rect = Rect.fromCircle(center: Offset(width / 2, height / 2), radius: 8);
+      Rect rect = ui.Rect.fromCircle(center: Offset(width / 2, height / 2), radius: 8);
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
@@ -573,29 +573,29 @@ class MyFunctions {
     }
   }
 
-  static Future<MapObject> getMyIcon({
-    required BuildContext context,
-    required Function(PlacemarkMapObject object, Point point) onObjectTap,
-    required Point value,
-    required String userIcon,
-  }) async {
-    final pictureRecorder = ui.PictureRecorder();
-
-    final iconData = await MyFunctions.getBytesFromCanvas(
-        width: 180, height: 214, image: userIcon, context: context, offset: const Offset(0, 0), shouldAddShadow: false);
-    final newMarker = PlacemarkMapObject(
-      opacity: 1,
-      onTap: onObjectTap,
-      icon: PlacemarkIcon.single(
-        PlacemarkIconStyle(
-          image: BitmapDescriptor.fromBytes(iconData),
-          scale: 1,
-        ),
-      ),
-      point: Point(latitude: value.latitude, longitude: value.longitude),
-      mapId: MapObjectId(userIcon),
-    );
-
-    return newMarker;
-  }
+  // static Future<MapObject> getMyIcon({
+  //   required BuildContext context,
+  //   required Function(PlacemarkMapObject object, Point point) onObjectTap,
+  //   required Point value,
+  //   required String userIcon,
+  // }) async {
+  //   final pictureRecorder = ui.PictureRecorder();
+  //
+  //   final iconData = await MyFunctions.getBytesFromCanvas(
+  //       width: 180, height: 214, image: userIcon, context: context, offset: const Offset(0, 0), shouldAddShadow: false);
+  //   final newMarker = PlacemarkMapObject(
+  //     opacity: 1,
+  //     onTap: onObjectTap,
+  //     icon: PlacemarkIcon.single(
+  //       PlacemarkIconStyle(
+  //         image: BitmapDescriptor.fromBytes(iconData),
+  //         scale: 1,
+  //       ),
+  //     ),
+  //     point: Point(latitude: value.latitude, longitude: value.longitude),
+  //     mapId: MapObjectId(userIcon),
+  //   );
+  //
+  //   return newMarker;
+  // }
 }

@@ -6,7 +6,7 @@ abstract class MapEvent {
 
 class SetClusters extends MapEvent {
   final double zoom;
-  final Point point;
+  final map_kit.Point point;
   const SetClusters({required this.zoom, required this.point});
 }
 
@@ -39,14 +39,14 @@ class SetMyPositionEvent extends MapEvent {
 class InitializeMapControllerEvent extends MapEvent {
   const InitializeMapControllerEvent({required this.mapController, required this.context});
 
-  final YandexMapController mapController;
+  final CustomMapController mapController;
   final BuildContext context;
 }
 
 class ChangeZoomEvent extends MapEvent {
-  const ChangeZoomEvent(this.cameraUpdate);
+  const ChangeZoomEvent();
 
-  final CameraUpdate cameraUpdate;
+  // final CameraUpdate cameraUpdate;
 }
 
 class SaveZoomOnCameraPositionChanged extends MapEvent {

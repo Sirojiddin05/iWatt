@@ -5,6 +5,7 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/map_controller/map_controller.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_usecase.dart';
@@ -17,7 +18,7 @@ import 'package:i_watt_app/features/map/presentation/widgets/map_controllers.dar
 import 'package:i_watt_app/features/map/presentation/widgets/map_header_widgets.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/opacity_container.dart';
 import 'package:i_watt_app/service_locator.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:yandex_maps_mapkit/yandex_map.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -30,6 +31,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   late final AnimationController headerSizeController;
   late final ChargeLocationsBloc chargeLocationsBloc;
   late final MapBloc mapBloc;
+  late final CustomMapController mapController;
 
   @override
   void initState() {
@@ -125,12 +127,22 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                 },
                 builder: (context, state) {
                   return YandexMap(
-                    mapObjects: _getMapObjects(state),
-                    onMapCreated: _onMapCreated,
-                    onCameraPositionChanged: _onCameraPositionChanged,
-                    onMapTap: _onMapTap,
-                    mode2DEnabled: true,
-                    rotateGesturesEnabled: false,
+                    // mapObjects: _getMapObjects(state),
+                    onMapCreated: (mapWindow) {
+                      mapController = CustomMapController(
+                        mapWindow: mapWindow,
+                        onCameraChanged: (map, position, reason, isFinished) {
+                          if(isFinished){
+                            mapBloc.add(SetClusters(zoom: position.zoom, point: position.target));
+
+                          }
+                        },
+                      );
+                    },
+                    // onCameraPositionChanged: _onCameraPositionChanged,
+                    // onMapTap: _onMapTap,
+                    // mode2DEnabled: true,
+                    // rotateGesturesEnabled: false,
                   );
                 },
               ),
@@ -159,36 +171,36 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     );
   }
 
-  void _onMapCreated(YandexMapController controller) async {
-    mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
-    await Future.delayed(const Duration(seconds: 1));
-    headerSizeController.forward();
-  }
-
-  void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
-    if (isFinished) {
-      mapBloc.add(
-        SetClusters(
-          zoom: position.zoom,
-          point: position.target,
-        ),
-      );
-    }
-    mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
-  }
-
-  void _onMapTap(Point point) {}
-
-  List<MapObject> _getMapObjects(MapState state) {
-    final List<MapObject> mapObjects = [];
-    if (state.userLocationObject != null) {
-      mapObjects.add(state.userLocationObject!);
-    }
-    if (state.drawnMapObjects != null) {
-      mapObjects.addAll(state.drawnMapObjects!);
-    }
-    return mapObjects;
-  }
+  // void _onMapCreated(YandexMapController controller) async {
+  //   mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   headerSizeController.forward();
+  // }
+  //
+  // void _onCameraPositionChanged(CameraPosition position, CameraUpdateReason reason, bool isFinished) {
+  //   if (isFinished) {
+  //     mapBloc.add(
+  //       SetClusters(
+  //         zoom: position.zoom,
+  //         point: position.target,
+  //       ),
+  //     );
+  //   }
+  //   mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+  // }
+  //
+  // void _onMapTap(Point point) {}
+  //
+  // List<MapObject> _getMapObjects(MapState state) {
+  //   final List<MapObject> mapObjects = [];
+  //   if (state.userLocationObject != null) {
+  //     mapObjects.add(state.userLocationObject!);
+  //   }
+  //   if (state.drawnMapObjects != null) {
+  //     mapObjects.addAll(state.drawnMapObjects!);
+  //   }
+  //   return mapObjects;
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
