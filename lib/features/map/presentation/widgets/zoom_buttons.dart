@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
+import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 
 class MapZoomButtons extends StatelessWidget {
   const MapZoomButtons({super.key});
@@ -30,7 +32,7 @@ class MapZoomButtons extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             WCustomTappableButton(
-              onTap: () {},
+              onTap: () => context.read<MapBloc>().add(const ZoomInEvent()),
               rippleColor: AppColors.cyprus.withAlpha(20),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
               child: Padding(
@@ -51,7 +53,7 @@ class MapZoomButtons extends StatelessWidget {
               height: 1,
             ),
             WCustomTappableButton(
-              onTap: () {},
+              onTap: () => context.read<MapBloc>().add(const ZoomOutEvent()),
               rippleColor: AppColors.cyprus.withAlpha(20),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
               child: Padding(

@@ -7,31 +7,37 @@ class MapState extends Equatable {
     this.userCurrentLong = 0,
     this.next = '',
     this.locationSettingsTriggered = false,
-    this.drawnMapObjects,
+    this.presentedMapObjects = const [],
     this.userLocationObject,
     this.zoomLevel = 15,
     this.locationAccessStatus = LocationPermissionStatus.permissionGranted,
     this.hasLuminosity = false,
     this.isMapInitialized = false,
-    this.cameraPosition,
     this.drawingObjects = false,
     this.clusters = const [],
+    this.locations = const [],
+    this.filteredLocations = const [],
+    this.cameraPosition = const LatLng(0, 0),
+    this.drawnMapObjects = const [],
   });
 
   final FormzSubmissionStatus userLocationAccessingStatus;
   final LocationPermissionStatus locationAccessStatus;
-  final List<map_kit.MapObject>? drawnMapObjects;
+  final List<Marker> presentedMapObjects;
+  final List<Marker> drawnMapObjects;
   final List<ClusterEntity> clusters;
-  final map_kit.MapObject? userLocationObject;
+  final List<ChargeLocationEntity> locations;
+  final List<ChargeLocationEntity> filteredLocations;
+  final Marker? userLocationObject;
   final double userCurrentLat;
   final double userCurrentLong;
-  final map_kit.Point? cameraPosition;
   final double zoomLevel;
   final String next;
   final bool locationSettingsTriggered;
   final bool hasLuminosity;
   final bool isMapInitialized;
   final bool drawingObjects;
+  final LatLng cameraPosition;
 
   MapState copyWith({
     FormzSubmissionStatus? userLocationAccessingStatus,
@@ -39,15 +45,18 @@ class MapState extends Equatable {
     double? userCurrentLong,
     String? next,
     bool? locationSettingsTriggered,
-    List<map_kit.MapObject>? drawnMapObjects,
-    map_kit.MapObject? userLocationObject,
+    List<Marker>? presentedMapObjects,
+    List<Marker>? drawnMapObjects,
+    Marker? userLocationObject,
     double? zoomLevel,
     LocationPermissionStatus? locationAccessStatus,
     bool? hasLuminosity,
     bool? isMapInitialized,
-    map_kit.Point? cameraPosition,
+    LatLng? cameraPosition,
     bool? drawingObjects,
     List<ClusterEntity>? clusters,
+    List<ChargeLocationEntity>? locations,
+    List<ChargeLocationEntity>? filteredLocations,
   }) {
     return MapState(
       userCurrentLat: userCurrentLat ?? this.userCurrentLat,
@@ -55,15 +64,18 @@ class MapState extends Equatable {
       next: next ?? this.next,
       locationSettingsTriggered: locationSettingsTriggered ?? this.locationSettingsTriggered,
       locationAccessStatus: locationAccessStatus ?? this.locationAccessStatus,
-      drawnMapObjects: drawnMapObjects ?? this.drawnMapObjects,
+      presentedMapObjects: presentedMapObjects ?? this.presentedMapObjects,
       userLocationObject: userLocationObject ?? this.userLocationObject,
       userLocationAccessingStatus: userLocationAccessingStatus ?? this.userLocationAccessingStatus,
       zoomLevel: zoomLevel ?? this.zoomLevel,
       hasLuminosity: hasLuminosity ?? this.hasLuminosity,
       isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-      cameraPosition: cameraPosition ?? this.cameraPosition,
       drawingObjects: drawingObjects ?? this.drawingObjects,
       clusters: clusters ?? this.clusters,
+      locations: locations ?? this.locations,
+      cameraPosition: cameraPosition ?? this.cameraPosition,
+      filteredLocations: filteredLocations ?? this.filteredLocations,
+      drawnMapObjects: drawnMapObjects ?? this.drawnMapObjects,
     );
   }
 
@@ -71,11 +83,10 @@ class MapState extends Equatable {
   List<Object?> get props => [
         userLocationAccessingStatus,
         locationAccessStatus,
-        drawnMapObjects,
+        presentedMapObjects,
         userLocationObject,
         userCurrentLat,
         userCurrentLong,
-        cameraPosition,
         zoomLevel,
         next,
         locationSettingsTriggered,
@@ -83,5 +94,9 @@ class MapState extends Equatable {
         isMapInitialized,
         drawingObjects,
         clusters,
+        locations,
+        cameraPosition,
+        filteredLocations,
+        drawnMapObjects,
       ];
 }

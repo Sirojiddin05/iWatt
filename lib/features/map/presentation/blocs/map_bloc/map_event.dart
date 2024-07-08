@@ -4,11 +4,11 @@ abstract class MapEvent {
   const MapEvent();
 }
 
-class SetClusters extends MapEvent {
-  final double zoom;
-  final map_kit.Point point;
-  const SetClusters({required this.zoom, required this.point});
-}
+// class SetClusters extends MapEvent {
+//   final double zoom;
+//   // final map_kit.Point point;
+//   const SetClusters({required this.zoom, required this.point});
+// }
 
 class SetFilteredLocations extends MapEvent {
   const SetFilteredLocations(this.locations);
@@ -39,26 +39,14 @@ class SetMyPositionEvent extends MapEvent {
 class InitializeMapControllerEvent extends MapEvent {
   const InitializeMapControllerEvent({required this.mapController, required this.context});
 
-  final CustomMapController mapController;
+  final GoogleMapController mapController;
   final BuildContext context;
-}
-
-class ChangeZoomEvent extends MapEvent {
-  const ChangeZoomEvent();
-
-  // final CameraUpdate cameraUpdate;
-}
-
-class SaveZoomOnCameraPositionChanged extends MapEvent {
-  const SaveZoomOnCameraPositionChanged(this.zoom);
-
-  final double zoom;
 }
 
 class DrawChargeLocationsEvent extends MapEvent {
   const DrawChargeLocationsEvent({required this.onLocationTap, this.withLuminosity = false});
 
-  final ValueChanged<ClusterEntity> onLocationTap;
+  final ValueChanged<ChargeLocationEntity> onLocationTap;
   final bool withLuminosity;
 }
 
@@ -89,9 +77,20 @@ class SetCarOnMapEvent extends MapEvent {
 }
 
 class SetPresentPlaceMarks extends MapEvent {
-  const SetPresentPlaceMarks({this.zoom, this.point, this.forceSet = false});
+  const SetPresentPlaceMarks({required this.zoom, required this.point});
 
   final double? zoom;
-  final Point? point;
-  final bool forceSet;
+  final LatLng? point;
+}
+
+class ZoomInEvent extends MapEvent {
+  const ZoomInEvent();
+}
+
+class ZoomOutEvent extends MapEvent {
+  const ZoomOutEvent();
+}
+
+class GetAllLocationsEvent extends MapEvent {
+  const GetAllLocationsEvent();
 }

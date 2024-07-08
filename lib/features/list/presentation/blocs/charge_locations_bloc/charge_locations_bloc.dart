@@ -7,7 +7,6 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/usecases/base_usecase.dart';
-import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
@@ -22,6 +21,7 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
   final GetChargeLocationsUseCase getChargeLocationsUseCase;
   final SaveUnSaveStreamUseCase saveStreamUseCase;
   final bool isForMap;
+
   late final StreamSubscription<ChargeLocationEntity> chargeLocationSaveSubscription;
 
   ChargeLocationsBloc({
@@ -50,7 +50,6 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
       state.selectedVendors.length,
       (index) => state.selectedVendors[index].id,
     );
-    final radius = state.zoom != -1 ? MyFunctions.getRadiusFromZoom(state.zoom) : -1.0;
     final result = await getChargeLocationsUseCase.call(
       GetChargeLocationParamEntity(
         powerType: state.selectedPowerTypes,
@@ -60,7 +59,7 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
         longitude: longitude,
         latitude: latitude,
         isFavourite: state.isFavourite,
-        radius: radius,
+        isForMap: state.isForMap,
       ),
     );
     if (result.isRight) {

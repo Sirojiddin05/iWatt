@@ -57,6 +57,11 @@ import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/p
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
+import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_location_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_map_locations_usecase.dart';
+import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
@@ -74,12 +79,10 @@ import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/firebase_options.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:yandex_maps_mapkit/init.dart' as init;
 
 void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await init.initMapkit(apiKey: 'bf6967bc-3e1d-4d4b-9012-62607ca3a4af');
     await EasyLocalization.ensureInitialized();
     await setupLocator();
     //TODO uncomment to production
@@ -92,6 +95,8 @@ void main() async {
     return runApp(const App());
     // }
   }, (error, stack) async {
+    print('Caught error: $error');
+    print('Stack trace: $stack');
     //TODO uncomment to production
     // await Sentry.captureException(error, stackTrace: stack);
   });
@@ -105,6 +110,12 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => CarOnMapBloc()),
+        BlocProvider(
+            create: (context) => MapBloc(
+                  GetClustersUseCase(serviceLocator<MapRepositoryImpl>()),
+                  GetMapLocationUseCase(serviceLocator<MapRepositoryImpl>()),
+                  GetMapLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
+                )..add(const GetAllLocationsEvent())),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
         BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),

@@ -105,16 +105,16 @@ class _FilterHeaderState extends State<FilterHeader> {
                 buildWhen: (previous, current) => previous.page != current.page,
                 builder: (context, state) {
                   final page = state.page;
-                  return AnimatedSwitcher(
-                    // alignment: page == 1 ? Alignment.centerLeft : Alignment.center,
-                    transitionBuilder: (ctx, anim) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(context.sizeOf.width / 2, 10),
-                          end: Offset.zero,
-                        ).animate(anim),
-                      );
-                    },
+                  return AnimatedAlign(
+                    alignment: page == 1 ? Alignment.centerLeft : Alignment.center,
+                    // transitionBuilder: (ctx, anim) {
+                    //   return SlideTransition(
+                    //     position: Tween<Offset>(
+                    //       begin: Offset(context.sizeOf.width / 2, 10),
+                    //       end: Offset.zero,
+                    //     ).animate(anim),
+                    //   );
+                    // },
                     duration: AppConstants.animationDuration,
                     child: GestureDetector(
                       onTap: () {

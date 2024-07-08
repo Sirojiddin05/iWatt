@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
-import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
@@ -18,7 +18,6 @@ import 'package:i_watt_app/core/util/enums/location_permission_status.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:yandex_maps_mapkit/mapkit.dart' as map_kit;
 
 class MyFunctions {
   const MyFunctions._();
@@ -270,7 +269,7 @@ class MyFunctions {
     return 0;
   }
 
-  static String getCarNumberType(int type) => CarNumberType.values.firstWhereOrNull((e) => e.type.contains(type))?.value ?? '';
+  static String getCarNumberType(int type) => CarNumberType.values.firstWhere((e) => e.type.contains(type)).value ?? '';
 
   static String getFormattedDate(DateTime dateTime) {
     return DateFormat("dd.MM.yyyy").format(dateTime).toString();
@@ -417,7 +416,7 @@ class MyFunctions {
     return theme;
   }
 
-  static double getDistanceBetweenTwoPoints(map_kit.Point firstPoint, map_kit.Point secondPoint) {
+  static double getDistanceBetweenTwoPoints(LatLng firstPoint, LatLng secondPoint) {
     final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
@@ -573,29 +572,40 @@ class MyFunctions {
     }
   }
 
-  // static Future<MapObject> getMyIcon({
-  //   required BuildContext context,
-  //   required Function(PlacemarkMapObject object, Point point) onObjectTap,
-  //   required Point value,
-  //   required String userIcon,
-  // }) async {
-  //   final pictureRecorder = ui.PictureRecorder();
-  //
-  //   final iconData = await MyFunctions.getBytesFromCanvas(
-  //       width: 180, height: 214, image: userIcon, context: context, offset: const Offset(0, 0), shouldAddShadow: false);
-  //   final newMarker = PlacemarkMapObject(
-  //     opacity: 1,
-  //     onTap: onObjectTap,
-  //     icon: PlacemarkIcon.single(
-  //       PlacemarkIconStyle(
-  //         image: BitmapDescriptor.fromBytes(iconData),
-  //         scale: 1,
-  //       ),
-  //     ),
-  //     point: Point(latitude: value.latitude, longitude: value.longitude),
-  //     mapId: MapObjectId(userIcon),
-  //   );
-  //
-  //   return newMarker;
-  // }
+  static Future<Marker> getMyIcon({
+    required BuildContext context,
+    required Function() onObjectTap,
+    required LatLng value,
+    required String userIcon,
+  }) async {
+    final iconData = await MyFunctions.getBytesFromCanvas(
+      width: 180,
+      height: 214,
+      image: userIcon,
+      context: context,
+      offset: const Offset(0, 0),
+      shouldAddShadow: false,
+    );
+    // final newMarker = PlacemarkMapObject(
+    //   opacity: 1,
+    //   onTap: onObjectTap,
+    //   icon: PlacemarkIcon.single(
+    //     PlacemarkIconStyle(
+    //       image: BitmapDescriptor.fromBytes(iconData),
+    //       scale: 1,
+    //     ),
+    //   ),
+    //
+    //   point: Point(latitude: value.latitude, longitude: value.longitude),
+    //   mapId: MapObjectId(userIcon),
+    // );
+    final newMarker = Marker(
+      markerId: const MarkerId('user'),
+      onTap: onObjectTap,
+      icon: BitmapDescriptor.fromBytes(iconData),
+      position: value,
+      anchor: const Offset(0.5, 0.5),
+    );
+    return newMarker;
+  }
 }

@@ -36,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     _searchController = TextEditingController();
     focusNode = FocusNode()..requestFocus();
-    chargeLocationsBloc = chargeLocationsBloc = ChargeLocationsBloc(
+    chargeLocationsBloc = ChargeLocationsBloc(
       getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
       saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
     );

@@ -20,7 +20,7 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
     late final String baseUrl;
     if (paramEntity.next.isNotEmpty) {
       baseUrl = paramEntity.next;
-    } else if (paramEntity.radius != -1) {
+    } else if (paramEntity.isForMap) {
       baseUrl = 'chargers/MapLocationList/';
     } else if (paramEntity.isFavourite) {
       baseUrl = 'chargers/SavedLocationList/';
@@ -33,7 +33,8 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
         queryParameters: baseUrl != paramEntity.next ? paramEntity.toJson() : null,
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson(response.data, (p0) => ChargeLocationModel.fromJson(p0 as Map<String, dynamic>));
+        final data = paramEntity.isForMap ? {'results': response.data} : response.data;
+        return GenericPagination.fromJson(data, (p0) => ChargeLocationModel.fromJson(p0 as Map<String, dynamic>));
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
