@@ -38,11 +38,8 @@ class LocateMeButton extends StatelessWidget {
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
             child: isLoading
-                ? AnimatedLocationIcon(color: context.themedColors.cyprusToTaxBreak)
-                : SvgPicture.asset(
-                    AppIcons.myLocation,
-                    color: AppColors.blueBayoux,
-                  ),
+                ? AnimatedLocationIcon(color: context.themedColors.cyprusToBlueBayoux)
+                : SvgPicture.asset(AppIcons.myLocation, color: context.themedColors.cyprusToBlueBayoux),
           ),
         ),
       ),

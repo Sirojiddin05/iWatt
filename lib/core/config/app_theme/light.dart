@@ -111,6 +111,7 @@ abstract class LightTheme {
         ),
         extensions: {
           ThemedColors(
+            cyprusToBlueBayoux: AppColors.cyprus,
             lillyWhiteToTaxBreak: AppColors.lillyWhite,
             whiteToCyprusO8: AppColors.white,
             cyprusToTaxBreak: AppColors.cyprus,

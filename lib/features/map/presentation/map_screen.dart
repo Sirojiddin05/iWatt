@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/map_style.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -125,21 +126,26 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                   return areChargeLocationsUpdated || userLocationUpdated;
                 },
                 builder: (context, state) {
-                  return GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(
-                        StorageRepository.getDouble(StorageKeys.latitude, defValue: 0),
-                        StorageRepository.getDouble(StorageKeys.longitude, defValue: 0),
-                      ),
-                      zoom: 18,
-                    ),
-                    onMapCreated: _onMapCreated,
-                    markers: _getMapObjects(state),
-                    onCameraMove: (position) {
-                      cameraPosition = position;
-                      mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+                  return BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+                    builder: (context, themeState) {
+                      return GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            StorageRepository.getDouble(StorageKeys.latitude, defValue: 0),
+                            StorageRepository.getDouble(StorageKeys.longitude, defValue: 0),
+                          ),
+                          zoom: 18,
+                        ),
+                        onMapCreated: _onMapCreated,
+                        markers: _getMapObjects(state),
+                        onCameraMove: (position) {
+                          cameraPosition = position;
+                          mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
+                        },
+                        onCameraIdle: _onCameraIdle,
+                        style: themeState.appTheme.isLight ? null : MapStyle.night,
+                      );
                     },
-                    onCameraIdle: _onCameraIdle,
                   );
                 },
               ),

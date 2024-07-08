@@ -107,6 +107,7 @@ abstract class DarkTheme {
         ),
         extensions: {
           ThemedColors(
+            cyprusToBlueBayoux: AppColors.blueBayoux,
             lillyWhiteToTaxBreak: AppColors.taxBreak.withOpacity(.4),
             whiteToCyprusO8: AppColors.cyprus.withOpacity(.8),
             cyprusToTaxBreak: AppColors.taxBreak,
