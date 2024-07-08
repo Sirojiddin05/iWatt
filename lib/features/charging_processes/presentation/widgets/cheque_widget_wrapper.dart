@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class ChequeWidgetWrapper extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
+
   const ChequeWidgetWrapper({
     super.key,
     required this.child,
@@ -14,7 +16,7 @@ class ChequeWidgetWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(

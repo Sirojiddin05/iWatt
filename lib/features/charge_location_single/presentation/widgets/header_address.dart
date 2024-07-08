@@ -8,11 +8,13 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 class LocationSingleHeaderAddress extends SliverPersistentHeaderDelegate {
   final String locationAddress;
   final String distance;
+
   const LocationSingleHeaderAddress({required this.locationAddress, required this.distance});
+
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: context.colorScheme.background,
+      color: context.colorScheme.primaryContainer,
       height: 56,
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       child: Column(

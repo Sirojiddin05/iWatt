@@ -51,7 +51,7 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
           systemNavigationBarColor: AppColors.white,
         ),
         child: Scaffold(
-          backgroundColor: AppColors.white,
+          backgroundColor: context.themedColors.whiteToCyprusO8,
           body: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,9 +92,10 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
                           ),
                         ),
                       ),
-                      const Divider(color: AppColors.solitude, height: 1, thickness: 1),
+                      Divider(color: context.theme.dividerColor, height: 1, thickness: 1),
                       BlocBuilder<CreditCardsBloc, CreditCardsState>(
-                        buildWhen: (p, c) => p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
+                        buildWhen: (p, c) =>
+                            p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
                         builder: (context, creditCards) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),

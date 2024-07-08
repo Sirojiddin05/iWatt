@@ -374,7 +374,7 @@ class MyFunctions {
     if (title.contains('charging')) {
       return 'assets/app_icons/charge_type_icons/${title.replaceAll('charging', '')}/charging.svg';
     }
-    final ConnectorStatus? s = getConnectorStatus(status);
+    final ConnectorStatus s = getConnectorStatus(status);
     switch (s) {
       case ConnectorStatus.free:
         return 'assets/app_icons/charge_type_icons/$title/free.svg';

@@ -24,16 +24,25 @@ class LocateMeButton extends StatelessWidget {
       child: WCustomTappableButton(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
-        rippleColor: AppColors.cyprus.withAlpha(20),
+        rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
         child: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [
-            BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
-            BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
-          ]),
+          decoration: BoxDecoration(
+            color: context.colorScheme.background,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(offset: const Offset(0, 4), blurRadius: 6, color: context.theme.shadowColor),
+              BoxShadow(offset: const Offset(0, 1), spreadRadius: 1, color: context.theme.shadowColor),
+            ],
+          ),
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
-            child: isLoading ? const AnimatedLocationIcon() : SvgPicture.asset(AppIcons.myLocation),
+            child: isLoading
+                ? AnimatedLocationIcon(color: context.themedColors.cyprusToTaxBreak)
+                : SvgPicture.asset(
+                    AppIcons.myLocation,
+                    color: AppColors.blueBayoux,
+                  ),
           ),
         ),
       ),

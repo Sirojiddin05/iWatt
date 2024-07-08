@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class WCupertinoSwitch extends StatefulWidget {
   final Color activeColor;
@@ -84,7 +85,7 @@ class _WCupertinoSwitchState extends State<WCupertinoSwitch> {
                 height: widget.height,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(widget.height / 2),
-                  color: isSwitched ? widget.activeColor : widget.inactiveColor,
+                  color: isSwitched ? widget.activeColor : context.themedColors.geyserToZirconO2,
                 ),
               ),
               AnimatedPositioned(

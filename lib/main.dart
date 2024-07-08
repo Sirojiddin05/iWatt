@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
+import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
@@ -56,6 +57,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/search_history_bloc/search_history_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
 import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
@@ -95,8 +97,6 @@ void main() async {
     return runApp(const App());
     // }
   }, (error, stack) async {
-    print('Caught error: $error');
-    print('Stack trace: $stack');
     //TODO uncomment to production
     // await Sentry.captureException(error, stackTrace: stack);
   });
@@ -117,6 +117,7 @@ class App extends StatelessWidget {
                   GetMapLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
                 )..add(const GetAllLocationsEvent())),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
+        BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
         BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
@@ -276,34 +277,38 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-      child: MaterialApp(
-        title: 'iWatt',
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        navigatorKey: _navigatorKey,
-        theme: LightTheme.theme(),
-        themeAnimationDuration: AppConstants.animationDuration,
-        onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
-        builder: (context, child) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            child: child,
-            listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
-            listener: (context, state) async {
-              if (state.authenticationStatus.isAuthenticated) {
-                context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
-              } else {
-                context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
-              }
-              if (!state.authenticationStatus.isUnKnown) {
-                _navigator.pushAndRemoveUntil(
-                  MaterialWithModalsPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                  (route) => false,
-                );
-              }
+      child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+        builder: (context, themeState) {
+          return MaterialApp(
+            title: 'iWatt',
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            navigatorKey: _navigatorKey,
+            theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
+            themeAnimationDuration: AppConstants.animationDuration,
+            onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
+            builder: (context, child) {
+              return BlocListener<AuthenticationBloc, AuthenticationState>(
+                child: child,
+                listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
+                listener: (context, state) async {
+                  if (state.authenticationStatus.isAuthenticated) {
+                    context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
+                  } else {
+                    context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
+                  }
+                  if (!state.authenticationStatus.isUnKnown) {
+                    _navigator.pushAndRemoveUntil(
+                      MaterialWithModalsPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  }
+                },
+              );
             },
           );
         },

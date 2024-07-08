@@ -40,6 +40,7 @@ class TransactionHistoryList extends StatelessWidget {
           }
           final itemNumber = state.transactionHistory.length;
           return RefreshIndicator(
+            backgroundColor: context.colorScheme.primaryContainer,
             onRefresh: () async {
               await Future.delayed(const Duration(milliseconds: 200));
               context.read<TransactionHistoryBloc>().add(GetTransactionHistoryEvent());

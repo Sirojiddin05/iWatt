@@ -4,7 +4,9 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class SearchFilterWrapper extends StatelessWidget {
   final List<Widget> children;
-  const SearchFilterWrapper({super.key, required this.children});
+  final Color? backgroundColor;
+
+  const SearchFilterWrapper({super.key, required this.children, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class SearchFilterWrapper extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: context.theme.colorScheme.primaryContainer,
+          color: context.themedColors.whiteToTangaroa2,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(

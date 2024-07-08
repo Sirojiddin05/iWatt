@@ -68,6 +68,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ],
       ),
       body: RefreshIndicator(
+        backgroundColor: context.colorScheme.primaryContainer,
         onRefresh: () async {
           bloc.add(GetNotifications());
           return Future.value();

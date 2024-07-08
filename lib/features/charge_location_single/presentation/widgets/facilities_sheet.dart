@@ -10,6 +10,7 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class FacilitiesSheet extends StatelessWidget {
   final VoidCallback onClose;
+
   const FacilitiesSheet({super.key, required this.onClose});
 
   @override
@@ -19,12 +20,12 @@ class FacilitiesSheet extends StatelessWidget {
         final facilities = state.location.facilities;
         return Container(
           margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            color: AppColors.white,
+            color: context.theme.scaffoldBackgroundColor,
           ),
           clipBehavior: Clip.hardEdge,
           child: Column(
@@ -54,7 +55,7 @@ class FacilitiesSheet extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(height: 1, color: AppColors.solitude),
+              Divider(height: 1, color: context.theme.dividerColor),
               Expanded(
                 child: NotificationListener(
                   onNotification: (OverscrollIndicatorNotification notification) {

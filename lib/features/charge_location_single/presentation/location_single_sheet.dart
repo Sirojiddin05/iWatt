@@ -202,7 +202,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                           widget.id != -1 &&
                                           !isOpened) {
                                         isOpened = true;
-                                        context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(widget.connectorId));
+                                        context
+                                            .read<ChargeLocationSingleBloc>()
+                                            .add(ChangeSelectedStationIndexByConnectorId(widget.connectorId));
                                         isStationsSheet.value = 1;
                                         onToggled();
                                       }
@@ -244,7 +246,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                   chargers: chargers,
                                                   onTap: () {
                                                     isStationsSheet.value = 1;
-                                                    context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                                                    context
+                                                        .read<PresentBottomSheetBloc>()
+                                                        .add(ShowPresentBottomSheet(isPresented: true));
                                                     onToggled();
                                                   },
                                                   isIntegrated: vendor.integrated,
@@ -254,7 +258,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                     facilities: facilities,
                                                     onAll: () {
                                                       isStationsSheet.value = 2;
-                                                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                                                      context
+                                                          .read<PresentBottomSheetBloc>()
+                                                          .add(ShowPresentBottomSheet(isPresented: true));
                                                       onToggled();
                                                       //
                                                     },
@@ -324,7 +330,8 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
 
   void _onDragStart(DragStartDetails details) {
     bool isDragOpenFromLeft = animationController.isDismissed && details.globalPosition.dy < stationSingleSheetHeight;
-    bool isDragCloseFromRight = animationController.isCompleted && details.globalPosition.dy > context.sizeOf.height - stationSingleSheetHeight;
+    bool isDragCloseFromRight =
+        animationController.isCompleted && details.globalPosition.dy > context.sizeOf.height - stationSingleSheetHeight;
     _canBeDragged = isDragOpenFromLeft || isDragCloseFromRight;
   }
 

@@ -39,6 +39,7 @@ class AppColors {
   static const deepFir = Color(0xff0F221B);
   static const redOrange = Color(0xffFF3B30);
   static const tangaroa = Color(0xff121C25);
+  static const tangaroa2 = Color(0xff101921);
   static const lavender = Color(0xffECF3FA);
   static const shuttleGrey = Color(0xff596066);
   static const solitude2 = Color(0xffF5F6F7);

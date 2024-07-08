@@ -67,7 +67,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             BlocListener<ProfileBloc, ProfileState>(
               listener: (context, state) {
                 if (state.deleteAccountStatus.isSuccess) {
-                  context.read<AuthenticationBloc>().add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
+                  context
+                      .read<AuthenticationBloc>()
+                      .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
                   Navigator.pop(context);
                   Navigator.pop(context);
                 } else if (state.deleteAccountStatus.isFailure) {
@@ -226,7 +228,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.fieldBorderZircon, width: 1),
+                          border: Border.all(color: context.theme.dividerColor, width: 1),
                         ),
                         child: Row(
                           children: [

@@ -31,9 +31,9 @@ class NoInternetBottomSheet extends StatelessWidget {
               right: 16,
               bottom: 16,
             ),
-            decoration: const BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: context.theme.scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(16),
                 topLeft: Radius.circular(16),
               ),

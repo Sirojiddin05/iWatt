@@ -47,17 +47,18 @@ class AboutUsPage extends StatelessWidget {
                   children: [
                     Hero(
                       tag: 'mainLogo',
-                      child: Image.asset(AppImages.logo, width: context.sizeOf.width * .5),
+                      child: Image.asset(context.themedIcons.splashLogo, width: context.sizeOf.width * .5),
                     ),
                     const SizedBox(height: 32),
                     BlocBuilder<AboutUsBloc, AboutUsState>(
                       builder: (context, state) {
-                        String data = "<p><span id=\"title\">I-WATT</span> - ${state.aboutUs.content.replaceAll("<p>", '')}";
+                        String data =
+                            "<p><span id=\"title\">I-WATT</span> - ${state.aboutUs.content.replaceAll("<p>", '')}";
                         return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: context.appBarTheme.backgroundColor,
+                            color: context.colorScheme.primaryContainer,
                           ),
                           child: Html(
                             data: data,
@@ -84,12 +85,13 @@ class AboutUsPage extends StatelessWidget {
                     WCustomTappableButton(
                       onTap: _rateApp,
                       borderRadius: BorderRadius.circular(12),
-                      rippleColor: (Theme.of(context).textTheme.displayLarge?.color ?? AppColors.cyprus).withOpacity(.15),
+                      rippleColor:
+                          (Theme.of(context).textTheme.displayLarge?.color ?? AppColors.cyprus).withOpacity(.15),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: context.appBarTheme.backgroundColor,
+                          color: context.colorScheme.primaryContainer,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

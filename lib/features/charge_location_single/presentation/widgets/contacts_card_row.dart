@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 
 class ContactsCardRow extends StatefulWidget {
@@ -8,6 +7,7 @@ class ContactsCardRow extends StatefulWidget {
   final String value;
   final String hint;
   final VoidCallback onTap;
+
   const ContactsCardRow({
     super.key,
     required this.icon,
@@ -22,6 +22,7 @@ class ContactsCardRow extends StatefulWidget {
 
 class _ContactsCardRowState extends State<ContactsCardRow> {
   bool show = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,8 +33,12 @@ class _ContactsCardRowState extends State<ContactsCardRow> {
         children: [
           Container(
             padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.solitude),
-            child: SvgPicture.asset(widget.icon),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8), color: context.themedColors.solitudeToAliceBlueO4),
+            child: SvgPicture.asset(
+              widget.icon,
+              color: context.themedColors.blueBayouxToWhite,
+            ),
           ),
           const SizedBox(width: 12),
           Builder(builder: (ctx) {
@@ -42,7 +47,7 @@ class _ContactsCardRowState extends State<ContactsCardRow> {
                 padding: const EdgeInsets.symmetric(vertical: 5.5),
                 child: SelectableText(
                   widget.value,
-                  style: context.textTheme.headlineMedium!.copyWith(color: AppColors.cyprus),
+                  style: context.textTheme.headlineMedium!.copyWith(color: context.themedColors.cyprusToWhite),
                   onTap: widget.onTap,
                 ),
               );
@@ -51,13 +56,13 @@ class _ContactsCardRowState extends State<ContactsCardRow> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: AppColors.aliceBlue,
+                color: context.themedColors.solitudeToAliceBlueO4,
               ),
               child: Text(
                 widget.hint,
                 style: context.textTheme.headlineSmall!.copyWith(
                   fontSize: 13,
-                  color: AppColors.prussianBlue,
+                  color: context.themedColors.prussianBlueToWhite,
                 ),
               ),
             );

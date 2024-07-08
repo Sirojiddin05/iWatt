@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/search_text_field.dart';
 
@@ -14,7 +14,7 @@ class SearchSliverDelegate extends SliverPersistentHeaderDelegate {
         opacity: getOpacity(shrinkOffset),
         child: SearchField(
           searchIcon: AppIcons.searchLong,
-          fillColor: AppColors.solitude,
+          fillColor: context.themedColors.solitudeToSolitudeO4,
           onChanged: (v) {
             context.read<VendorsBloc>().add(SearchVendorsEvent(searchPattern: v));
           },

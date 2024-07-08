@@ -11,6 +11,7 @@ class ChargingInfoCard extends StatelessWidget {
   final Color? iconColor;
   final Color? backgroundColor;
   final TextStyle? valueTextStyle;
+
   const ChargingInfoCard({
     super.key,
     required this.label,
@@ -40,7 +41,8 @@ class ChargingInfoCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 getValue(),
-                style: valueTextStyle ?? context.textTheme.headlineSmall!.copyWith(color: AppColors.cyprus),
+                style: valueTextStyle ??
+                    context.textTheme.headlineSmall!.copyWith(color: context.themedColors.cyprusToWhite),
               ),
             ],
           ),

@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -46,7 +45,7 @@ class SelectedVendorContainer extends StatelessWidget {
             icon: AppIcons.chevronRightGrey,
             boxDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: AppColors.solitude,
+              color: context.themedColors.solitudeToSolitudeO4,
             ),
             onTap: () {
               context.read<FilterBloc>().add(const SetTemporaryVendors());

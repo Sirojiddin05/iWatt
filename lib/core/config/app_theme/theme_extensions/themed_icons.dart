@@ -5,8 +5,17 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
   final String power;
   final String runner;
   final String station;
+  final String qrScan;
+  final String plugAlt;
 
-  ThemedIcons({required this.splashLogo, required this.power, required this.runner, required this.station});
+  ThemedIcons({
+    required this.splashLogo,
+    required this.power,
+    required this.runner,
+    required this.station,
+    required this.qrScan,
+    required this.plugAlt,
+  });
 
   @override
   ThemeExtension<ThemedIcons> copyWith({
@@ -14,12 +23,16 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
     String? power,
     String? runner,
     String? station,
+    String? qrScan,
+    String? plugAlt,
   }) {
     return ThemedIcons(
       splashLogo: splashLogo ?? this.splashLogo,
       power: power ?? this.power,
       runner: runner ?? this.runner,
       station: station ?? this.station,
+      qrScan: qrScan ?? this.qrScan,
+      plugAlt: plugAlt ?? this.plugAlt,
     );
   }
 
@@ -33,6 +46,8 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
       power: power,
       runner: runner,
       station: station,
+      qrScan: qrScan,
+      plugAlt: plugAlt,
     );
   }
 }
