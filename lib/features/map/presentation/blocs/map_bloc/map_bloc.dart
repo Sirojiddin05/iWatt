@@ -38,7 +38,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   late final BuildContext context;
 
   MapBloc(this.getClustersUseCase, this.getLocationUseCase, this.getLocationsUseCase) : super(const MapState()) {
-    // on<SetClusters>(_setClusters, transformer: restartable());
     on<SetFilteredLocations>(_setFilteredLocations);
     on<RequestLocationAccess>(_requestLocationAccess);
     on<CheckIfSettingsTriggered>(_checkIfSettingsTriggered);
@@ -51,10 +50,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<ChangeLuminosityStateEvent>(_changeLuminosityState, transformer: droppable());
     on<SetCarOnMapEvent>(_setCarOnMap);
     on<GetAllLocationsEvent>(_getAllLocations);
-    // on<SetFilteredLocations>(_setFilteredLocations);
-    on<SetPresentPlaceMarks>(
-      _setPresentPlaceMarks,
-    );
+    on<SetPresentPlaceMarks>(_setPresentPlaceMarks);
   }
 
   void _initializeController(InitializeMapControllerEvent event, Emitter<MapState> emit) async {
@@ -147,40 +143,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  // void _setClusters(SetClusters event, Emitter<MapState> emit) async {
-  //   // print('_setClusters');
-  //   // final clusters = <map_kit.MapObject>[];
-  //   // if (_canGet(event.zoom, event.point)) {
-  //   //   print('_canDraw');
-  //   //   emit(state.copyWith(drawingObjects: true));
-  //   //   final result = await getClustersUseCase.call(
-  //   //     GetChargeLocationParamEntity(
-  //   //       latitude: event.point.latitude,
-  //   //       longitude: event.point.longitude,
-  //   //       zoom: event.zoom,
-  //   //       radius: MyFunctions.getRadiusFromZoom(event.zoom),
-  //   //     ),
-  //   //   );
-  //   //   if (result.isRight) {
-  //   //     print('clusters are fetched successfully ${result.right.results.length}');
-  //   //     emit(
-  //   //       state.copyWith(
-  //   //         clusters: result.right.results,
-  //   //         cameraPosition: event.point,
-  //   //         zoomLevel: event.zoom,
-  //   //       ),
-  //   //     );
-  //   //   }
-  //   // } else {
-  //   //   emit(
-  //   //     state.copyWith(
-  //   //       cameraPosition: event.point,
-  //   //       zoomLevel: event.zoom,
-  //   //     ),
-  //   //   );
-  //   // }
-  // }
-
   void _setFilteredLocations(SetFilteredLocations event, Emitter<MapState> emit) {
     final allLocations = [...state.locations];
     final filtered = <ChargeLocationEntity>[];
@@ -240,34 +202,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       );
     }
     emit(state.copyWith(drawnMapObjects: drawnMapObjects));
-
-    // cluster.clusterPlacemarks(clusterRadius: 30, minZoom: 18);
-
-    // drawnMapObjects.add(cluster);
-
-    // mapWindow.map.mapObjects.addPlacemarkWithImageStyle(points[i], images[i], styles[i])
-    //   ..geometry = points[i]
-    //   ..opacity = 1
-    //   ..addTapListener(onObjectTap[i])
-    // drawnMapObjects.addAll(yandexMapController.addPlaceMarks(
-    //   points: points,
-    //   styles: styles,
-    //   images: images,
-    //   onObjectTap: onTaps,
-    // ));
-    // print('cluster added ${drawnMapObjects.length}');
   }
 
   void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
-    print('setPresentPlaceMarks');
     emit(state.copyWith(drawingObjects: true));
     final newPoint = event.point ?? state.cameraPosition;
     final newZoom = event.zoom ?? state.zoomLevel;
     if (_canGet(newZoom, newPoint)) {
-      print('_canGet');
       final placemarks = <Marker>[];
       final visibleRegion = await mapController.getVisibleRegion();
-      print('state.filteredLocations ${state.filteredLocations.length}');
       for (final location in state.filteredLocations) {
         final locationPoint = LatLng(double.tryParse(location.latitude) ?? 0.0, double.tryParse(location.longitude) ?? 0.0);
         final isVisible = isLocationInVisibleRegion(locationPoint.latitude, locationPoint.longitude, visibleRegion);
@@ -276,7 +219,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           placemarks.add(object);
         }
       }
-      print('placemarks ${placemarks.length}');
       // final clusterObject = _getClusterObject(
       //   placemarks: placemarks,
       //   //TODO
@@ -420,10 +362,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
   }
 
-  // PlacemarkIcon getIcon(Uint8List appearance, [Offset anchor = const Offset(0.5, 1)]) {
-  //   return PlacemarkIcon.single(PlacemarkIconStyle(image: BitmapDescriptor.fromBytes(appearance), anchor: anchor));
-  // }
-
   // Point _getAveragePointOfClusterPlacemarks(List<PlacemarkMapObject> placemarks) {
   //   double averageLatitude = placemarks.map((e) => e.point.latitude).reduce((a, b) => a + b) / placemarks.length;
   //   double averageLongitude = placemarks.map((e) => e.point.longitude).reduce((a, b) => a + b) / placemarks.length;
@@ -481,25 +419,4 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
     return false;
   }
-  // bool hasCameraPositionUpdatedCritically(map_kit.Point newPoint, double newZoom, CameraPositionUpdateCriteria criteria) {
-  //   final oldLat = state.cameraPosition?.latitude ?? 0;
-  //   final oldLong = state.cameraPosition?.latitude ?? 0;
-  //   final oldZoom = state.zoomLevel;
-  //   final latDiff = (oldLat - newPoint.latitude).abs();
-  //   final lonDiff = (oldLong - newPoint.longitude).abs();
-  //   final zoomDiff = (oldZoom - newZoom).abs();
-  //   return latDiff > criteria.latitudeThreshold || lonDiff > criteria.longitudeThreshold || zoomDiff > criteria.zoomThreshold;
-  // }
-}
-
-class CameraPositionUpdateCriteria {
-  final double latitudeThreshold;
-  final double longitudeThreshold;
-  final double zoomThreshold;
-
-  CameraPositionUpdateCriteria({
-    required this.latitudeThreshold,
-    required this.longitudeThreshold,
-    required this.zoomThreshold,
-  });
 }

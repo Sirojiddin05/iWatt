@@ -4,12 +4,6 @@ abstract class MapEvent {
   const MapEvent();
 }
 
-// class SetClusters extends MapEvent {
-//   final double zoom;
-//   // final map_kit.Point point;
-//   const SetClusters({required this.zoom, required this.point});
-// }
-
 class SetFilteredLocations extends MapEvent {
   const SetFilteredLocations(this.locations);
   final List<ChargeLocationEntity> locations;
