@@ -27,11 +27,13 @@ class ChargingStationsBottomWidget extends StatelessWidget {
         builder: (context, state) {
           return Row(
             children: [
-              if (state.location.chargers.length > 1 && state.selectedStationIndex == 0) ...{
+              if (!(state.location.chargers.length > 1 && state.selectedStationIndex == 0)) ...{
                 LocationSingleActionsWrapper(
                   onTap: () {
                     if (state.selectedStationIndex != 0) {
-                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(state.selectedStationIndex - 1));
+                      context
+                          .read<ChargeLocationSingleBloc>()
+                          .add(ChangeSelectedStationIndex(state.selectedStationIndex - 1));
                     }
                   },
                   child: SvgPicture.asset(
@@ -74,11 +76,14 @@ class ChargingStationsBottomWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              if (state.location.chargers.length > 1 && state.selectedStationIndex == (state.location.chargers.length - 1)) ...{
+              if (!(state.location.chargers.length > 1 &&
+                  state.selectedStationIndex == (state.location.chargers.length - 1))) ...{
                 LocationSingleActionsWrapper(
                   onTap: () {
                     if (state.selectedStationIndex != (state.location.chargers.length - 1)) {
-                      context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndex(state.selectedStationIndex + 1));
+                      context
+                          .read<ChargeLocationSingleBloc>()
+                          .add(ChangeSelectedStationIndex(state.selectedStationIndex + 1));
                     }
                   },
                   child: SvgPicture.asset(

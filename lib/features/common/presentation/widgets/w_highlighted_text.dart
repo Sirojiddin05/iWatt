@@ -39,12 +39,14 @@ class HighlightedText extends StatelessWidget {
     final String textLC = caseSensitive ? allText : allText.toLowerCase();
     // ignore: unnecessary_parenthesis
     final List<String> termList = [highlightedText ?? '', ...(terms ?? [])];
-    final List<String> termListLC = termList.where((s) => s.isNotEmpty).map((s) => caseSensitive ? s : s.toLowerCase()).toList();
+    final List<String> termListLC =
+        termList.where((s) => s.isNotEmpty).map((s) => caseSensitive ? s : s.toLowerCase()).toList();
     List<InlineSpan> children = [];
     int start = 0;
     int idx = 0;
     while (idx < textLC.length) {
-      nonHighlightAdd(int end) => children.add(TextSpan(text: allText.substring(start, end), style: textStyle ?? context.textTheme.headlineLarge));
+      nonHighlightAdd(int end) => children
+          .add(TextSpan(text: allText.substring(start, end), style: textStyle ?? context.textTheme.headlineLarge));
       int iNearest = -1;
       int idxNearest = __int64MaxValue;
       for (int i = 0; i < termListLC.length; i++) {
@@ -76,6 +78,7 @@ class HighlightedText extends StatelessWidget {
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: Container(
+              margin: const EdgeInsets.only(bottom: 2),
               decoration: BoxDecoration(
                 color: highlightColor,
                 borderRadius: BorderRadius.circular(4),

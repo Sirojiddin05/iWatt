@@ -81,7 +81,7 @@ class TransactionHistoryItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '- ${MyFunctions.getPrice(transaction.totalPrice)} UZS',
+                      '- ${MyFunctions.getPrice(transaction.totalPrice)}',
                       style: context.textTheme.headlineMedium!.copyWith(
                         color: AppColors.amaranth,
                       ),

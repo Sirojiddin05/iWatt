@@ -201,7 +201,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                     child: DraggableScrollableSheet(
                       snap: true,
                       snapSizes: const [.5, .83, 1],
-                      minChildSize: .5,
+                      minChildSize: .45,
                       initialChildSize: widget.midSize ? .83 : .5,
                       controller: draggableScrollableController,
                       builder: (context, controller) {

@@ -16,6 +16,7 @@ class BalanceInfoItem extends StatelessWidget {
   final String balance;
   final bool isMain;
   final VoidCallback onTap;
+
   const BalanceInfoItem({
     super.key,
     required this.balance,
@@ -68,9 +69,8 @@ class BalanceInfoItem extends StatelessWidget {
                       children: [
                         Text(
                           LocaleKeys.balance.tr(),
-                          style: context.textTheme.labelMedium?.copyWith(
-                            color: AppColors.white.withOpacity(0.8),
-                          ),
+                          style: context.textTheme.labelMedium
+                              ?.copyWith(color: AppColors.white.withOpacity(0.8), fontSize: 13),
                         ),
                         const SizedBox(height: 2),
                         Text(
