@@ -9,6 +9,7 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class ChequeWidget extends StatelessWidget {
   final TransactionMessageEntity cheque;
+
   const ChequeWidget({super.key, required this.cheque});
 
   @override
@@ -116,6 +117,9 @@ class ChequeWidget extends StatelessWidget {
     }
     if (minutes != 0) {
       sb.write("$minutes ${MyFunctions.getMinutesDueToQuantity(minutes).tr()} ");
+    }
+    if (seconds != 0) {
+      sb.write("$seconds ${MyFunctions.getSecondsDueToQuantity(seconds).tr()} ");
     }
     return sb.toString();
   }

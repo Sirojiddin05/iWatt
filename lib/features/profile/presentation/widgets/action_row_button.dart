@@ -13,6 +13,7 @@ class IconTextButton extends StatelessWidget {
   final Color? rippleColor;
   final bool includeTopDivider;
   final bool includeBottomDivider;
+
   const IconTextButton({
     required this.title,
     required this.onTap,
@@ -39,10 +40,7 @@ class IconTextButton extends StatelessWidget {
             SvgPicture.asset(icon),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                title,
-                style: context.textTheme.headlineSmall,
-              ),
+              child: Text(title, style: context.textTheme.titleLarge?.copyWith(fontSize: 15)),
             ),
             ...actions,
           ],

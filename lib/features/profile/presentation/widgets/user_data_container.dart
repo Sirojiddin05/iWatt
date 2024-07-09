@@ -54,7 +54,8 @@ class UserDataContainer extends StatelessWidget {
                     if (state.user.photo.contains('https://')) {
                       showGeneralDialog(
                         context: context,
-                        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                        pageBuilder:
+                            (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
                           return UserImageDialog(
                             imageUrl: state.user.photo,
                             animation: animation,
@@ -108,8 +109,7 @@ class UserDataContainer extends StatelessWidget {
                             user.phone,
                             style: context.textTheme.titleMedium?.copyWith(
                               fontSize: 12,
-                              //TODO theme
-                              color: AppColors.taxBreak,
+                              color: context.themedColors.taxBreakToZircon,
                             ),
                           ),
                         }
@@ -132,6 +132,7 @@ class UserDataContainer extends StatelessWidget {
 class UserImageDialog extends StatelessWidget {
   final Animation animation;
   final String imageUrl;
+
   const UserImageDialog({
     super.key,
     required this.imageUrl,

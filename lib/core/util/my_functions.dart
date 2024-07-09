@@ -123,7 +123,7 @@ class MyFunctions {
 
   static String getPrice(String price) {
     final p = price.split('.').toList().first.split(',').toList().first;
-    return '${formatNumber(p)} UZS';
+    return formatNumber(p).isEmpty ? '' : '${formatNumber(p)} UZS';
   }
 
   static String getParkingTitle(bool isPayedParkingStarted) {
@@ -417,7 +417,8 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(LatLng firstPoint, LatLng secondPoint) {
-    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(
+        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -466,7 +467,8 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(
+        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

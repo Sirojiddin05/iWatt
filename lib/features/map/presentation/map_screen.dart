@@ -99,6 +99,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                             context: context,
                             useRootNavigator: true,
                             isScrollControlled: true,
+                            isDismissible: true,
                             backgroundColor: Colors.transparent,
                             barrierColor: Colors.transparent,
                             builder: (ctx) {
