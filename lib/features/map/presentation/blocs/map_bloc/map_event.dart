@@ -38,10 +38,7 @@ class InitializeMapControllerEvent extends MapEvent {
 }
 
 class DrawChargeLocationsEvent extends MapEvent {
-  const DrawChargeLocationsEvent({required this.onLocationTap, this.withLuminosity = false});
-
-  final ValueChanged<ChargeLocationEntity> onLocationTap;
-  final bool withLuminosity;
+  const DrawChargeLocationsEvent();
 }
 
 class SelectChargeLocationEvent extends MapEvent {
@@ -87,4 +84,30 @@ class ZoomOutEvent extends MapEvent {
 
 class GetAllLocationsEvent extends MapEvent {
   const GetAllLocationsEvent();
+}
+
+class CameraMovedEvent extends MapEvent {
+  const CameraMovedEvent({required this.cameraPosition});
+
+  final CameraPosition cameraPosition;
+}
+
+class CameraIdled extends MapEvent {}
+
+class SetMapStyleEvent extends MapEvent {
+  const SetMapStyleEvent({required this.mapStyle});
+
+  final String mapStyle;
+}
+
+class SetMarkersEvent extends MapEvent {
+  const SetMarkersEvent({required this.markers});
+
+  final Set<Marker> markers;
+}
+
+class SetLocationSingleOpened extends MapEvent {
+  const SetLocationSingleOpened({required this.isOpened});
+
+  final bool isOpened;
 }

@@ -1,7 +1,7 @@
 class MapStyle {
   MapStyle._();
   static const night = '''
-  [
+[
   {
     "elementType": "geometry",
     "stylers": [
@@ -187,5 +187,46 @@ class MapStyle {
     ]
   }
 ]
+  ''';
+  static const withSaturation = '''
+[
+  {
+    "featureType": "all",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "saturation": -100
+      }
+    ]
+  },
+  {
+    "featureType": "all",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "saturation": -100
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "saturation": -100
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "saturation": -100
+      }
+    ]
+  }
+]
+
   ''';
 }

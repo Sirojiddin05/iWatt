@@ -7,7 +7,6 @@ import 'package:i_watt_app/core/config/map_style.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
-import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
@@ -82,6 +81,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                     mapBloc.add(SetCarOnMapEvent(carOnMap: state.carOnMap));
                   },
                 ),
+                BlocListener<MapBloc, MapState>(
+                  listenWhen: (o, n) => o.locationSingleOpened != n.locationSingleOpened,
+                  listener: (context, state) {
+                    if (state.locationSingleOpened) {
+                      headerSizeController.reverse();
+                    } else {
+                      headerSizeController.forward();
+                    }
+                  },
+                ),
               ],
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
@@ -92,58 +101,33 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                 listener: (context, state) {
                   if (state.isMapInitialized) {
                     mapBloc.add(
-                      DrawChargeLocationsEvent(
-                        onLocationTap: (location) {
-                          headerSizeController.reverse();
-                          showModalBottomSheet(
-                            context: context,
-                            useRootNavigator: true,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            barrierColor: Colors.transparent,
-                            builder: (ctx) {
-                              return LocationSingleSheet(
-                                title: '${location.vendorName} "${location.locationName}"',
-                                address: location.address,
-                                distance: location.distance.toString(),
-                                midSize: false,
-                                id: location.id,
-                                latitude: location.latitude,
-                                longitude: location.longitude,
-                              );
-                            },
-                          ).then((value) {
-                            headerSizeController.forward();
-                          });
-                        },
-                      ),
+                      DrawChargeLocationsEvent(),
                     );
                   }
                 },
                 buildWhen: (o, n) {
                   final areChargeLocationsUpdated = o.presentedMapObjects != n.presentedMapObjects;
+                  final luminosityUpdated = o.hasLuminosity != n.hasLuminosity;
                   final userLocationUpdated = o.userLocationObject != n.userLocationObject;
-                  return areChargeLocationsUpdated || userLocationUpdated;
+                  return areChargeLocationsUpdated || userLocationUpdated || luminosityUpdated;
                 },
-                builder: (context, state) {
+                builder: (context, mapState) {
                   return BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
-                    builder: (context, themeState) {
+                    builder: (BuildContext context, ThemeSwitcherState themeState) {
                       return GoogleMap(
                         initialCameraPosition: CameraPosition(
                           target: LatLng(
                             StorageRepository.getDouble(StorageKeys.latitude, defValue: 0),
                             StorageRepository.getDouble(StorageKeys.longitude, defValue: 0),
                           ),
-                          zoom: 18,
+                          zoom: 16,
                         ),
                         onMapCreated: _onMapCreated,
-                        markers: _getMapObjects(state),
-                        onCameraMove: (position) {
-                          cameraPosition = position;
-                          mapBloc.add(const ChangeLuminosityStateEvent(hasLuminosity: false));
-                        },
+                        markers: _getMapObjects(mapState),
+                        onCameraMove: _onCameraMoved,
                         onCameraIdle: _onCameraIdle,
-                        style: themeState.appTheme.isLight ? null : MapStyle.night,
+                        style: getMapStyle(themeState, mapState),
+                        compassEnabled: false,
                       );
                     },
                   );
@@ -176,10 +160,24 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     );
   }
 
+  String? getMapStyle(ThemeSwitcherState themeState, MapState mapState) {
+    if (mapState.hasLuminosity) {
+      return MapStyle.withSaturation;
+    } else if (themeState.appTheme.isDark) {
+      return MapStyle.night;
+    }
+    return null;
+  }
+
   void _onMapCreated(GoogleMapController controller) async {
     mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
     await Future.delayed(const Duration(seconds: 1));
     headerSizeController.forward();
+  }
+
+  void _onCameraMoved(CameraPosition position) {
+    cameraPosition = position;
+    mapBloc.add(CameraMovedEvent(cameraPosition: position));
   }
 
   void _onCameraIdle() {
@@ -191,16 +189,12 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     );
   }
 
-  // void _onMapTap(Point point) {}
-  //
   Set<Marker> _getMapObjects(MapState state) {
     final Set<Marker> mapObjects = {};
     if (state.userLocationObject != null) {
       mapObjects.add(state.userLocationObject!);
     }
     mapObjects.addAll(state.presentedMapObjects);
-    print('Map objects: $mapObjects');
-    print('Map objects: ${mapObjects.length}');
     return mapObjects;
   }
 

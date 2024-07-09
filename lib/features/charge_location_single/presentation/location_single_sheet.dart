@@ -26,7 +26,29 @@ import 'package:i_watt_app/features/common/domain/usecases/connector_status_stre
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/present_back_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
+import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/service_locator.dart';
+
+Future<void> showLocationSingle(BuildContext context, ChargeLocationEntity location) async {
+  await showModalBottomSheet(
+    context: context,
+    useRootNavigator: true,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    barrierColor: Colors.transparent,
+    builder: (ctx) {
+      return LocationSingleSheet(
+        title: '${location.vendorName} "${location.locationName}"',
+        address: location.address,
+        distance: location.distance.toString(),
+        midSize: false,
+        id: location.id,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      );
+    },
+  );
+}
 
 class LocationSingleSheet extends StatefulWidget {
   final String title;
@@ -202,9 +224,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                           widget.id != -1 &&
                                           !isOpened) {
                                         isOpened = true;
-                                        context
-                                            .read<ChargeLocationSingleBloc>()
-                                            .add(ChangeSelectedStationIndexByConnectorId(widget.connectorId));
+                                        context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(widget.connectorId));
                                         isStationsSheet.value = 1;
                                         onToggled();
                                       }
@@ -246,9 +266,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                   chargers: chargers,
                                                   onTap: () {
                                                     isStationsSheet.value = 1;
-                                                    context
-                                                        .read<PresentBottomSheetBloc>()
-                                                        .add(ShowPresentBottomSheet(isPresented: true));
+                                                    context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
                                                     onToggled();
                                                   },
                                                   isIntegrated: vendor.integrated,
@@ -258,9 +276,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                     facilities: facilities,
                                                     onAll: () {
                                                       isStationsSheet.value = 2;
-                                                      context
-                                                          .read<PresentBottomSheetBloc>()
-                                                          .add(ShowPresentBottomSheet(isPresented: true));
+                                                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
                                                       onToggled();
                                                       //
                                                     },
@@ -330,8 +346,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
 
   void _onDragStart(DragStartDetails details) {
     bool isDragOpenFromLeft = animationController.isDismissed && details.globalPosition.dy < stationSingleSheetHeight;
-    bool isDragCloseFromRight =
-        animationController.isCompleted && details.globalPosition.dy > context.sizeOf.height - stationSingleSheetHeight;
+    bool isDragCloseFromRight = animationController.isCompleted && details.globalPosition.dy > context.sizeOf.height - stationSingleSheetHeight;
     _canBeDragged = isDragOpenFromLeft || isDragCloseFromRight;
   }
 

@@ -49,4 +49,7 @@ class AppConstants {
     RegExp("^[0-9]{2}M[0-9]{5,6}\$"), //01M123456 //green
     RegExp("^[0-9]{2}H[0-9]{5,6}\$"), //01H123456 //orange
   ];
+
+  static const locationDb = 'charge_locations.db';
+  static const locationsTable = 'locations';
 }
