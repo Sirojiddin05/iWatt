@@ -9,7 +9,6 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/saved_icon_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_highlighted_text.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/w_image.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_card_data_row.dart';
 import 'package:i_watt_app/features/list/presentation/widgets/location_connector_statuses_widget.dart';
@@ -100,31 +99,19 @@ class ChargeLocationCard extends StatelessWidget {
                         return ConnectorStatus.fromString(status);
                       },
                     ),
+                    logo: location.logo,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
-                        child: HighlightedText(
-                          allText: "${location.locationName} ${location.vendorName}",
-                          highlightedText: highlightedTitle,
-                          textAlign: TextAlign.left,
-                          maxLines: 2,
-                        ),
-                      ),
-                      if (location.logo.isNotEmpty) ...{
-                        const SizedBox(height: 6),
-                        WImage(
-                          height: 20,
-                          imageUrl: location.logo,
-                          placeholder: const SizedBox(height: 20),
-                        ),
-                      }
-                    ],
+                  child: Padding(
+                    padding: EdgeInsets.only(top: hasSavedIcon ? 16 : 0),
+                    child: HighlightedText(
+                      allText: "${location.locationName} ${location.vendorName}",
+                      highlightedText: highlightedTitle,
+                      textAlign: TextAlign.left,
+                      maxLines: 2,
+                    ),
                   ),
                 ),
                 if (hasSavedIcon) ...{

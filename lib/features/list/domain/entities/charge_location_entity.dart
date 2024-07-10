@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,6 +16,7 @@ class ChargeLocationEntity {
   final List<num> maxElectricPowers;
   final String logo;
   final int chargersCount;
+  final Uint8List? locationAppearance;
 
   const ChargeLocationEntity({
     this.id = -1,
@@ -30,23 +32,24 @@ class ChargeLocationEntity {
     this.maxElectricPowers = const [],
     this.logo = '',
     this.chargersCount = -1,
+    this.locationAppearance,
   });
 
-  ChargeLocationEntity copyWith({
-    int? id,
-    String? latitude,
-    String? longitude,
-    String? address,
-    int? connectorsCount,
-    List<String>? connectorsStatus,
-    double? distance,
-    String? vendorName,
-    String? locationName,
-    bool? isFavorite,
-    List<num>? maxElectricPowers,
-    String? logo,
-    int? chargersCount,
-  }) {
+  ChargeLocationEntity copyWith(
+      {int? id,
+      String? latitude,
+      String? longitude,
+      String? address,
+      int? connectorsCount,
+      List<String>? connectorsStatus,
+      double? distance,
+      String? vendorName,
+      String? locationName,
+      bool? isFavorite,
+      List<num>? maxElectricPowers,
+      String? logo,
+      int? chargersCount,
+      Uint8List? locationAppearance}) {
     return ChargeLocationEntity(
       id: id ?? this.id,
       latitude: latitude ?? this.latitude,
@@ -61,6 +64,7 @@ class ChargeLocationEntity {
       maxElectricPowers: maxElectricPowers ?? this.maxElectricPowers,
       logo: logo ?? this.logo,
       chargersCount: chargersCount ?? this.chargersCount,
+      locationAppearance: locationAppearance ?? this.locationAppearance,
     );
   }
 }

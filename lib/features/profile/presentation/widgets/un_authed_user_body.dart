@@ -8,6 +8,7 @@ import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/pages/about_us.dart';
+import 'package:i_watt_app/features/profile/presentation/pages/settings_page.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/help_sheet.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/login_to_system_container.dart';
@@ -36,18 +37,18 @@ class _UnAuthedUserBodyState extends State<UnAuthedUserBody> {
           WhiteWrapperContainer(
             child: Column(
               children: [
-                // IconTextButton(
-                //   title: LocaleKeys.settings.tr(),
-                //   icon: AppIcons.settings,
-                //   padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                //   borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                //   onTap: () => Navigator.of(context, rootNavigator: true).push(
-                //     MaterialWithModalsPageRoute(
-                //       builder: (ctx) => const SettingsPage(),
-                //     ),
-                //   ),
-                // ),
-                // Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
+                IconTextButton(
+                  title: LocaleKeys.settings.tr(),
+                  icon: AppIcons.settings,
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                  onTap: () => Navigator.of(context, rootNavigator: true).push(
+                    MaterialWithModalsPageRoute(
+                      builder: (ctx) => const SettingsPage(),
+                    ),
+                  ),
+                ),
+                Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                 IconTextButton(
                   title: LocaleKeys.usage_instructions.tr(),
                   onTap: () {

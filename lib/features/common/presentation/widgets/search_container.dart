@@ -76,7 +76,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
           Row(
             children: [
               Container(
-                decoration: const BoxDecoration(color: AppColors.whiteSmoke),
+                decoration: const BoxDecoration(color: AppColors.blueBayoux),
                 width: 0.5,
                 height: 24,
               ),
@@ -88,9 +88,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                   return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged;
                 },
                 builder: (context, state) {
-                  final isActive = state.selectedPowerTypes.isNotEmpty ||
-                      state.selectedConnectorTypes.isNotEmpty ||
-                      state.selectedVendors.isNotEmpty;
+                  final isActive = state.selectedPowerTypes.isNotEmpty || state.selectedConnectorTypes.isNotEmpty || state.selectedVendors.isNotEmpty;
                   return FilterIconCard(
                     isActive: isActive,
                     onTap: () {

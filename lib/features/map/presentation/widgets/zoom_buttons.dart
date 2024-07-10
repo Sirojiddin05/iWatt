@@ -47,7 +47,7 @@ class MapZoomButtons extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: context.themedColors.cyprusToBlueBayoux,
+                color: AppColors.blueBayoux,
                 borderRadius: BorderRadius.circular(1),
               ),
               width: 24,

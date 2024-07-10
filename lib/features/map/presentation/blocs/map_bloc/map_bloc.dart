@@ -98,6 +98,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _getAllLocations(GetAllLocationsEvent event, Emitter<MapState> emit) async {
+    emit(state.copyWith(drawingObjects: true));
     final result = await getLocationsUseCase.call(NoParams());
     if (result.isRight) {
       emit(state.copyWith(locations: [...result.right], filteredLocations: [...result.right]));
@@ -226,7 +227,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         ),
       );
     }
-    emit(state.copyWith(drawnMapObjects: drawnMapObjects));
+    emit(state.copyWith(drawnMapObjects: drawnMapObjects, drawingObjects: false));
   }
 
   void _setLocationSingleOpened(SetLocationSingleOpened event, Emitter<MapState> emit) {
@@ -234,7 +235,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
-    emit(state.copyWith(drawingObjects: true));
     final newPoint = event.point ?? state.cameraPosition;
     final newZoom = event.zoom ?? state.zoomLevel;
     if (_canGet(newZoom, newPoint)) {
@@ -253,7 +253,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         final point = LatLng(double.tryParse(cItems[index].latitude) ?? 0.0, double.tryParse(cItems[index].longitude) ?? 0.0);
         return MyClusterItem(id: cItems[index].id, position: point);
       }));
-      emit(state.copyWith(cameraPosition: event.point, zoomLevel: event.zoom, drawingObjects: false));
+      emit(state.copyWith(cameraPosition: event.point, zoomLevel: event.zoom));
     } else {
       emit(
         state.copyWith(
@@ -421,7 +421,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   int _determineZoomLevel(double distance, {double minZoom = 4, double maxZoom = 18}) {
-    const double scale = 400;
+    const double scale = 246;
     const double base = 2;
     double zoomLevel = maxZoom - log(distance / scale) / log(base);
     return zoomLevel.toInt();

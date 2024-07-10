@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/w_image.dart';
 
 class LocationStatusesWidget extends StatelessWidget {
   final List<ConnectorStatus> connectorStatuses;
-  const LocationStatusesWidget({super.key, required this.connectorStatuses});
+  final String logo;
+  const LocationStatusesWidget({super.key, required this.connectorStatuses, required this.logo});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class LocationStatusesWidget extends StatelessWidget {
         foregroundPainter: _StatusIconPainter(statuses: connectorStatuses),
         child: Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(90),
             boxShadow: [
@@ -35,7 +37,7 @@ class LocationStatusesWidget extends StatelessWidget {
             ),
           ),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 3),
+            // padding: const EdgeInsets.symmetric(vertical: 3),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.limeGreen,
@@ -45,16 +47,15 @@ class LocationStatusesWidget extends StatelessWidget {
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
                   blurRadius: 4.5,
-                  color: AppColors.black.withOpacity(.12),
+                  color: AppColors.black.withOpacity(.05),
                   offset: const Offset(0, 3),
                 ),
-                BoxShadow(
-                  blurRadius: 18,
-                  color: AppColors.black.withOpacity(.2),
-                  offset: const Offset(0, 15),
-                ),
               ]),
-              child: SvgPicture.asset(AppIcons.union),
+              child: WImage(
+                imageUrl: logo,
+                borderRadius: BorderRadius.circular(15),
+                errorWidget: SvgPicture.asset(AppIcons.union),
+              ),
             ),
           ),
         ),

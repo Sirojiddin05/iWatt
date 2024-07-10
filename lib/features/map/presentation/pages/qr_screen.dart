@@ -53,29 +53,6 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
               onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
             ),
             Positioned(
-              left: context.sizeOf.width * 0.415,
-              bottom: context.sizeOf.height * 0.08,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: WScaleAnimation(
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                    padding: const EdgeInsets.all(6),
-                    decoration: ShapeDecoration(
-                      shape: const OvalBorder(),
-                      color: AppColors.white.withOpacity(.1),
-                    ),
-                    child: SvgPicture.asset(
-                      AppIcons.qrScreenXMark,
-                      height: 32,
-                      width: 32,
-                    ),
-                  ),
-                  onTap: () => Navigator.pop(context),
-                ),
-              ),
-            ),
-            Positioned(
               right: 16,
               left: 16,
               top: MediaQuery.of(context).size.height * 0.17,
@@ -104,28 +81,56 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
               ),
             ),
             Positioned(
-              left: context.sizeOf.width * 0.42,
-              bottom: context.sizeOf.height * 0.16,
-              child: WScaleAnimation(
-                onTap: () {
-                  onFlash ? _turnOffFlash(context) : _turnOnFlash(context);
-                },
-                child: Container(
-                  height: 68,
-                  width: 68,
-                  clipBehavior: Clip.antiAlias,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: onFlash ? AppColors.white : AppColors.black.withOpacity(.4),
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(18),
+              bottom: context.padding.bottom + 12,
+              right: 0,
+              left: 0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  WScaleAnimation(
+                    onTap: () {
+                      onFlash ? _turnOffFlash(context) : _turnOnFlash(context);
+                    },
+                    child: Container(
+                      height: 68,
+                      width: 68,
+                      clipBehavior: Clip.antiAlias,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: onFlash ? AppColors.white : AppColors.black.withOpacity(.4),
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: SvgPicture.asset(
+                        onFlash ? AppIcons.flashLightOf : AppIcons.flashLightOn,
+                        width: 40,
+                        height: 40,
+                      ),
+                    ),
                   ),
-                  child: SvgPicture.asset(
-                    onFlash ? AppIcons.flashLightOf : AppIcons.flashLightOn,
-                    width: 40,
-                    height: 40,
+                  const SizedBox(height: 42),
+                  WScaleAnimation(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(32),
+                      clipBehavior: Clip.hardEdge,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.white.withOpacity(.6),
+                          backgroundBlendMode: BlendMode.srcATop,
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: SvgPicture.asset(
+                          AppIcons.qrScreenXMark,
+                          height: 32,
+                          width: 32,
+                        ),
+                      ),
+                    ),
+                    onTap: () => Navigator.pop(context),
                   ),
-                ),
+                ],
               ),
             )
           ],
@@ -144,16 +149,10 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
         final code = scanData.code;
 
         ///  https://app.i-watt.uz/?location_id=3,station_id=3connector_id=2
-        if (code != null &&
-            code.contains("connector_id") &&
-            code.contains("station_id") &&
-            code.contains("connector_id")) {
+        if (code != null && code.contains("connector_id") && code.contains("station_id") && code.contains("connector_id")) {
           await qrController.pauseCamera();
           qrController.dispose();
-          cleanedText = code
-              .replaceAll('https://app.i-watt.uz/?location_id=', '')
-              .replaceAll('station_id=', '')
-              .replaceAll('connector_id=', '');
+          cleanedText = code.replaceAll('https://app.i-watt.uz/?location_id=', '').replaceAll('station_id=', '').replaceAll('connector_id=', '');
           final split = cleanedText.split(',');
           locationId = split[0];
           stationId = split[1];
