@@ -86,17 +86,17 @@ class CustomAdaptiveDialog extends StatelessWidget {
       return CupertinoAlertDialog(
         title: Text(
           title,
-          style: titleStyle?.copyWith(fontFamily: 'SFProText', letterSpacing: 0) ??
-              context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SFProText', letterSpacing: 0),
+          style: titleStyle?.copyWith(fontFamily: 'SF Pro', letterSpacing: 0) ??
+              context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SF Pro', letterSpacing: 0),
         ),
         content: description == null
             ? null
             : Text(
                 description!,
-                style: descriptionStyle?.copyWith(fontFamily: 'SFProText', letterSpacing: 0) ??
+                style: descriptionStyle?.copyWith(fontFamily: 'SF Pro', letterSpacing: 0) ??
                     context.textTheme.titleLarge?.copyWith(
                       fontSize: 13,
-                      fontFamily: 'SFProText',
+                      fontFamily: 'SF Pro',
                       letterSpacing: 0,
                     ),
               ),
@@ -105,13 +105,13 @@ class CustomAdaptiveDialog extends StatelessWidget {
             CupertinoDialogAction(
               onPressed: onCancel ?? () => Navigator.pop(context),
               textStyle: cancelStyle?.copyWith(
-                    fontFamily: 'SFProText',
+                    fontFamily: 'SF Pro',
                     letterSpacing: 0,
                   ) ??
                   context.textTheme.headlineLarge?.copyWith(
                     fontWeight: FontWeight.w400,
                     color: AppColors.dodgerBlue,
-                    fontFamily: 'SFProText',
+                    fontFamily: 'SF Pro',
                     letterSpacing: 0,
                   ),
               child: Text(
@@ -125,12 +125,12 @@ class CustomAdaptiveDialog extends StatelessWidget {
               onConfirm();
             },
             textStyle: confirmStyle?.copyWith(
-                  fontFamily: 'SFProText',
+                  fontFamily: 'SF Pro',
                   letterSpacing: 0,
                 ) ??
                 context.textTheme.headlineLarge?.copyWith(
                   color: AppColors.dodgerBlue,
-                  fontFamily: 'SFProText',
+                  fontFamily: 'SF Pro',
                   letterSpacing: 0,
                 ),
             child: Text(confirmText),
@@ -141,7 +141,7 @@ class CustomAdaptiveDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         title,
-        style: titleStyle?.copyWith(fontFamily: 'SFProText') ??
+        style: titleStyle?.copyWith(fontFamily: 'SF Pro') ??
             context.textTheme.headlineLarge?.copyWith(
               fontSize: 24,
               fontWeight: FontWeight.w400,
@@ -151,7 +151,7 @@ class CustomAdaptiveDialog extends StatelessWidget {
           ? const SizedBox()
           : Text(
               description!,
-              style: descriptionStyle?.copyWith(fontFamily: 'SFProText') ??
+              style: descriptionStyle?.copyWith(fontFamily: 'SF Pro') ??
                   context.textTheme.headlineLarge?.copyWith(
                     fontSize: 14,
                     color: const Color(0xff49454F),

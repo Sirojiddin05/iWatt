@@ -174,6 +174,21 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
               child: Stack(
                 children: [
                   BackgroundImage(headerOpacity: headerOpacity),
+                  ValueListenableBuilder(
+                    valueListenable: headerOpacity,
+                    builder: (context, value, child) {
+                      return Positioned.fill(
+                        child: (value != 1)
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const ColoredBox(color: Colors.transparent),
+                              )
+                            : const SizedBox(),
+                      );
+                    },
+                  ),
                   Positioned.fill(
                     top: MediaQueryData.fromView(View.of(context)).padding.top,
                     child: DraggableScrollableSheet(

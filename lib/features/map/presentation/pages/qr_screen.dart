@@ -53,34 +53,26 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
               onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
             ),
             Positioned(
-              left: 0,
-              right: 0,
-              top: MediaQuery.of(context).padding.top,
-              child: Row(
-                children: [
-                  const Spacer(),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: WScaleAnimation(
-                        child: Container(
-                          margin: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                          padding: const EdgeInsets.all(6),
-                          decoration: ShapeDecoration(
-                            shape: const OvalBorder(),
-                            color: AppColors.white.withOpacity(.1),
-                          ),
-                          child: SvgPicture.asset(
-                            AppIcons.cancel,
-                            height: 16,
-                            width: 16,
-                          ),
-                        ),
-                        onTap: () => Navigator.pop(context),
-                      ),
+              left: context.sizeOf.width * 0.415,
+              bottom: context.sizeOf.height * 0.08,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: WScaleAnimation(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+                    padding: const EdgeInsets.all(6),
+                    decoration: ShapeDecoration(
+                      shape: const OvalBorder(),
+                      color: AppColors.white.withOpacity(.1),
                     ),
-                  )
-                ],
+                    child: SvgPicture.asset(
+                      AppIcons.qrScreenXMark,
+                      height: 32,
+                      width: 32,
+                    ),
+                  ),
+                  onTap: () => Navigator.pop(context),
+                ),
               ),
             ),
             Positioned(
@@ -152,10 +144,16 @@ class _ScanStationState extends State<ScanStation> with TickerProviderStateMixin
         final code = scanData.code;
 
         ///  https://app.i-watt.uz/?location_id=3,station_id=3connector_id=2
-        if (code != null && code.contains("connector_id") && code.contains("station_id") && code.contains("connector_id")) {
+        if (code != null &&
+            code.contains("connector_id") &&
+            code.contains("station_id") &&
+            code.contains("connector_id")) {
           await qrController.pauseCamera();
           qrController.dispose();
-          cleanedText = code.replaceAll('https://app.i-watt.uz/?location_id=', '').replaceAll('station_id=', '').replaceAll('connector_id=', '');
+          cleanedText = code
+              .replaceAll('https://app.i-watt.uz/?location_id=', '')
+              .replaceAll('station_id=', '')
+              .replaceAll('connector_id=', '');
           final split = cleanedText.split(',');
           locationId = split[0];
           stationId = split[1];

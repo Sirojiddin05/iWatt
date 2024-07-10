@@ -23,9 +23,9 @@ class GetChargeLocationParamEntity {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> params = {};
-    if (isFavourite) {
-      params.putIfAbsent('favorite_address', () => isFavourite);
-    }
+    // if (isFavourite) {
+    //   params.putIfAbsent('favorite_address', () => isFavourite);
+    // }
     if (searchPattern.isNotEmpty) {
       params.putIfAbsent('search', () => searchPattern);
     }

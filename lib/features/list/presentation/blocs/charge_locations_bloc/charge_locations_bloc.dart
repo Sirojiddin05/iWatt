@@ -80,6 +80,7 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
         powerType: state.selectedPowerTypes,
         connectorType: state.selectedConnectorTypes,
         searchPattern: state.searchPattern,
+        isFavourite: true,
         next: state.next,
       ),
     );
@@ -135,5 +136,6 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     }
   }
 
-  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) =>
+      (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }

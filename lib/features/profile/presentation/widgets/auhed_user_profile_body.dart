@@ -38,6 +38,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
+        verticalDirection: VerticalDirection.up,
         children: [
           const UserDataContainer(),
           const BalanceMessage(),
@@ -164,7 +165,8 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
                   title: LocaleKeys.about_us.tr(),
                   icon: AppIcons.aboutUs,
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                   actions: [
                     Text(
                       MyFunctions.getCurrentVersionSync(),
@@ -185,7 +187,7 @@ class _AuthedUserProfileBodyState extends State<AuthedUserProfileBody> {
               ],
             ),
           ),
-        ],
+        ].reversed.toList(),
       ),
     );
   }

@@ -80,7 +80,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-#    - assets/map_styles/
+    #    - assets/map_styles/
     - assets/icons/
     - assets/lotties/
     - assets/images/
@@ -105,18 +105,14 @@ flutter:
           weight: 700
         - asset: assets/fonts/inter/Inter-ExtraBold.ttf
           weight: 800
-    - family: SFProText
+    - family: SF Pro
       fonts:
-        - asset: assets/fonts/SFProText/SFProText-Light.ttf
-          weight: 300
-        - asset: assets/fonts/SFProText/SFProText-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/SFProText/SFProText-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/SFProText/SFProText-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/SFProText/SFProText-Bold.ttf
+        - asset: assets/fonts/SF_Pro/SFProDisplayBold.ttf
           weight: 700
+        - asset: assets/fonts/SF_Pro/SFProDisplaySemibold.ttf
+          weight: 600
+        - asset: assets/fonts/SF_Pro/SFProDisplayRegular.ttf
+          weight: 400
     - family: UZBauto
       fonts:
         - asset: assets/fonts/UZBAUTO_0.TTF

@@ -140,4 +140,5 @@ class AppIcons {
   static const qrIcon = 'assets/icons/ic_qr_icon.svg';
   static const backButton = 'assets/icons/ic_back_button.svg';
   static const selectAll = 'assets/icons/ic_select_all.svg';
+  static const qrScreenXMark = 'assets/icons/ic_qr_screen_xmark.svg';
 }

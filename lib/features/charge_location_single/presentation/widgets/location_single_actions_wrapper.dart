@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappable_button.dart';
 
 class LocationSingleActionsWrapper extends StatelessWidget {
@@ -18,7 +19,7 @@ class LocationSingleActionsWrapper extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.zircon, width: 1),
+          border: Border.all(color: context.theme.dividerColor, width: 1),
         ),
         child: child,
       ),
