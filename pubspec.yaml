@@ -80,7 +80,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    #    - assets/map_styles/
     - assets/icons/
     - assets/lotties/
     - assets/images/
