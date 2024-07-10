@@ -21,12 +21,12 @@ class StationSingleSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
-        color: AppColors.solitude,
+        color: context.theme.scaffoldBackgroundColor,
       ),
       clipBehavior: Clip.hardEdge,
       child: Column(

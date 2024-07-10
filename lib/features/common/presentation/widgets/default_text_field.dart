@@ -134,6 +134,7 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
             maxLength: widget.maxLength,
             maxLines: widget.isObscure ? 1 : widget.maxLines,
             cursorWidth: 1,
+            cursorColor: context.themedColors.cyprusToWhite,
             buildCounter: widget.buildCounter,
             decoration: InputDecoration(
               hintText: widget.hintText,

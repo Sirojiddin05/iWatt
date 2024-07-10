@@ -20,7 +20,7 @@ class IconTextButton extends StatelessWidget {
     required this.icon,
     this.actions = const [],
     this.borderRadius = BorderRadius.zero,
-    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    this.padding = const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
     super.key,
     this.rippleColor,
     this.includeTopDivider = false,
@@ -37,7 +37,7 @@ class IconTextButton extends StatelessWidget {
         padding: padding,
         child: Row(
           children: [
-            SvgPicture.asset(icon),
+            SvgPicture.asset(icon, height: 24, width: 24),
             const SizedBox(width: 12),
             Expanded(
               child: Text(title, style: context.textTheme.titleLarge?.copyWith(fontSize: 15)),

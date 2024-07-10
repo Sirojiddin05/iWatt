@@ -45,7 +45,7 @@ class ConnectorCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
