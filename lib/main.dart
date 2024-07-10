@@ -11,6 +11,7 @@ import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/core/util/db_helper.dart';
 import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
@@ -87,6 +88,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
     await setupLocator();
+    await serviceLocator<DBHelper>().init();
     //TODO uncomment to production
     // await SentryFlutter.init((options) {
     //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';

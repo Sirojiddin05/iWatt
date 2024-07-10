@@ -67,6 +67,24 @@ class ChargeLocationEntity {
       locationAppearance: locationAppearance ?? this.locationAppearance,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'location_id': id,
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': address,
+      'connectors_count': connectorsCount,
+      'vendor_name': longitude,
+      'location_name': locationName,
+      'logo': logo,
+      'connectors_status': connectorsStatus.join(','),
+      'distance': distance,
+      'is_favorite': isFavorite,
+      'max_electric_powers': maxElectricPowers.join(','),
+      'appearance': locationAppearance,
+    };
+  }
 }
 
 class ChargeLocationConverter<S> implements JsonConverter<ChargeLocationEntity, Map<String, dynamic>?> {

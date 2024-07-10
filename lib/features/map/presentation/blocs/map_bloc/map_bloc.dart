@@ -371,8 +371,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   //   );
   // }
 
-  Future<Uint8List> _getLocationAppearance(
-      {required List<ConnectorStatus> stationStatuses, required String logo, bool isSelected = false, bool withLuminosity = false}) async {
+  Future<Uint8List> _getLocationAppearance({
+    required List<ConnectorStatus> stationStatuses,
+    required String logo,
+    bool isSelected = false,
+    bool withLuminosity = false,
+  }) async {
     if (logo.isNotEmpty) {
       await precacheImage(CachedNetworkImageProvider(logo), context);
     }

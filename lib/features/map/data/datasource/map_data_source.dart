@@ -6,15 +6,15 @@ import 'package:i_watt_app/features/list/data/models/charge_location_model.dart'
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
 import 'package:i_watt_app/features/map/data/models/cluster_model.dart';
 
-abstract class MapDataSource {
+abstract class MapRemoteDataSource {
   Future<GenericPagination<ClusterModel>> getClusters({required GetChargeLocationParamEntity params});
   Future<ChargeLocationModel> getLocation({required String key});
   Future<List<ChargeLocationModel>> getMapLocations();
 }
 
-class MapDataSourceImpl implements MapDataSource {
+class MapRemoteDataSourceImpl implements MapRemoteDataSource {
   final Dio _dio;
-  const MapDataSourceImpl(this._dio);
+  const MapRemoteDataSourceImpl(this._dio);
   @override
   Future<GenericPagination<ClusterModel>> getClusters({required GetChargeLocationParamEntity params}) async {
     try {

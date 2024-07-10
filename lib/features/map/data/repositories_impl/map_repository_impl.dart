@@ -6,16 +6,18 @@ import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
 import 'package:i_watt_app/features/map/data/datasource/map_data_source.dart';
+import 'package:i_watt_app/features/map/data/datasource/map_local_data_source.dart';
 import 'package:i_watt_app/features/map/data/models/cluster_model.dart';
 import 'package:i_watt_app/features/map/domain/repositories/map_repository.dart';
 
 class MapRepositoryImpl implements MapRepository {
-  final MapDataSource _dataSource;
-  const MapRepositoryImpl(this._dataSource);
+  final MapRemoteDataSource _remoteDataSource;
+  final MapLocalDataSource _localDataSource;
+  const MapRepositoryImpl(this._remoteDataSource, this._localDataSource);
   @override
   Future<Either<Failure, GenericPagination<ClusterModel>>> getClusters({required GetChargeLocationParamEntity params}) async {
     try {
-      final result = await _dataSource.getClusters(params: params);
+      final result = await _remoteDataSource.getClusters(params: params);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));
@@ -30,7 +32,7 @@ class MapRepositoryImpl implements MapRepository {
   @override
   Future<Either<Failure, ChargeLocationEntity>> getLocation({required String key}) async {
     try {
-      final result = await _dataSource.getLocation(key: key);
+      final result = await _remoteDataSource.getLocation(key: key);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));
@@ -45,7 +47,7 @@ class MapRepositoryImpl implements MapRepository {
   @override
   Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocations() async {
     try {
-      final result = await _dataSource.getMapLocations();
+      final result = await _remoteDataSource.getMapLocations();
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));
@@ -54,6 +56,16 @@ class MapRepositoryImpl implements MapRepository {
       return Left(DioFailure(errorMessage: message));
     } on ParsingException catch (e) {
       return Left(ParsingFailure(errorMessage: e.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveLocationList(List<ChargeLocationEntity> locations) async {
+    try {
+      final result = await _localDataSource.saveLocationList(locations);
+      return Right(result);
+    } catch (e) {
+      throw CacheException(errorMessage: e.toString());
     }
   }
 }

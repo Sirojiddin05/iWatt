@@ -9,4 +9,5 @@ abstract class MapRepository {
   Future<Either<Failure, GenericPagination<ClusterEntity>>> getClusters({required GetChargeLocationParamEntity params});
   Future<Either<Failure, ChargeLocationEntity>> getLocation({required String key});
   Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocations();
+  Future<Either<Failure, void>> saveLocationList(List<ChargeLocationEntity> locations);
 }
