@@ -25,6 +25,7 @@ class AppImages {
   static const logo = 'assets/images/logo.png';
   static const qrLogo = 'assets/images/qr_logo.png';
   static const uicLogo = 'assets/images/uic_logo.png';
+  static const uicLogoDark = 'assets/images/uic_logo_dark.png';
   static const notificationsEmpty = 'assets/images/notifications_empty.png';
   static const humo = 'assets/images/humo.png';
   static const masterCard = 'assets/images/master_card.png';
@@ -35,4 +36,5 @@ class AppImages {
   static const transparentCar = 'assets/images/transparent_car.png';
   static const carIwatt = 'assets/images/car_iwatt.png';
   static const balanceWallet = 'assets/images/balance_wallet.png';
+  static const iWattSymbol = 'assets/images/iwatt_symbol.svg';
 }

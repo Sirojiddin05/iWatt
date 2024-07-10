@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
-import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/about_us_bloc.dart';
@@ -113,7 +112,7 @@ class AboutUsPage extends StatelessWidget {
                       onTap: () => launchUrlString('https://uic.group/portfolio', mode: LaunchMode.externalApplication),
                       behavior: HitTestBehavior.opaque,
                       child: Image.asset(
-                        AppImages.uicLogo,
+                        context.themedIcons.uicLogo,
                         width: context.sizeOf.width * .37,
                       ),
                     ),

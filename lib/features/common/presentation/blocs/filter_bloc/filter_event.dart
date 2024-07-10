@@ -17,6 +17,8 @@ class SelectPowerTypeEvent extends FilterEvent {
   final int powerType;
 }
 
+class SwitchIntegratedEvent extends FilterEvent {}
+
 class SelectVendorEvent extends FilterEvent {
   const SelectVendorEvent({required this.vendor});
 

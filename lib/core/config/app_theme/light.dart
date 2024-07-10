@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_colors.dart';
 import 'package:i_watt_app/core/config/app_theme/theme_extensions/themed_icons.dart';
 
@@ -133,6 +134,7 @@ abstract class LightTheme {
             station: AppIcons.station,
             qrScan: AppIcons.qrScan,
             plugAlt: AppIcons.plugAlt,
+            uicLogo: AppImages.uicLogo,
           ),
         },
       );

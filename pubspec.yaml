@@ -67,6 +67,7 @@ dependencies:
   google_maps_cluster_manager: ^3.1.0
   sqflite: ^2.3.3+1
   path: ^1.9.0
+  flutter_gradient_animation_text: ^1.0.2
 
 dev_dependencies:
   flutter_test:

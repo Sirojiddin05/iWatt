@@ -17,6 +17,7 @@ import 'package:i_watt_app/features/charge_location_single/presentation/widgets/
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/facilities_sheet.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/header_address.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/header_top.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/integrated_card.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_body_wrapper.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_loader_view.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_sheet_bottom_widget.dart';
@@ -274,6 +275,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                           SliverList.list(
                                             children: [
                                               if (state.getSingleStatus.isSuccess) ...{
+                                                if (vendor.integrated) ...{
+                                                  const IntegratedCard(),
+                                                },
                                                 if (vendor.minimumBalance.isNotEmpty) ...{
                                                   MinBalanceCard(minBalance: vendor.minimumBalance),
                                                 },
