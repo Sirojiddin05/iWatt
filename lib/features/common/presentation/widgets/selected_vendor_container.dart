@@ -1,12 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/filter_bloc/filter_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/companies_state_text.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/option_container.dart';
+import 'package:i_watt_app/features/common/presentation/widgets/selected_companies_logos.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class SelectedVendorContainer extends StatelessWidget {
@@ -21,23 +22,15 @@ class SelectedVendorContainer extends StatelessWidget {
         builder: (context, state) {
           final vendors = getVendors(state.vendors);
           return OptionContainer(
-            content: Align(
-              alignment: Alignment.centerLeft,
-              child: AnimatedSwitcher(
-                duration: AppConstants.animationDuration,
-                transitionBuilder: (child, animation) => SizeTransition(
-                  axisAlignment: 1,
-                  sizeFactor: animation,
-                  child: child,
-                ),
-                child: Text(
-                  vendors,
-                  key: ValueKey(vendors),
-                  maxLines: 2,
-                  textAlign: TextAlign.left,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.textTheme.headlineSmall?.copyWith(fontSize: 15),
-                ),
+            content: SizedBox(
+              height: 30,
+              child: Builder(
+                builder: (context) {
+                  if (state.vendors.isEmpty || state.vendors.any((e) => e.id == 0)) {
+                    return CompaniesStateText(vendors: vendors);
+                  }
+                  return SelectedCompaniesLogos(vendors: state.vendors);
+                },
               ),
             ),
             title: LocaleKeys.companies.tr(),

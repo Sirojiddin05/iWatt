@@ -7,6 +7,7 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
   final String station;
   final String qrScan;
   final String plugAlt;
+  final String uicLogo;
 
   ThemedIcons({
     required this.splashLogo,
@@ -15,6 +16,7 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
     required this.station,
     required this.qrScan,
     required this.plugAlt,
+    required this.uicLogo,
   });
 
   @override
@@ -25,6 +27,7 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
     String? station,
     String? qrScan,
     String? plugAlt,
+    String? uicLogo,
   }) {
     return ThemedIcons(
       splashLogo: splashLogo ?? this.splashLogo,
@@ -33,6 +36,7 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
       station: station ?? this.station,
       qrScan: qrScan ?? this.qrScan,
       plugAlt: plugAlt ?? this.plugAlt,
+      uicLogo: uicLogo ?? this.uicLogo,
     );
   }
 
@@ -48,6 +52,7 @@ class ThemedIcons extends ThemeExtension<ThemedIcons> {
       station: station,
       qrScan: qrScan,
       plugAlt: plugAlt,
+      uicLogo: uicLogo,
     );
   }
 }

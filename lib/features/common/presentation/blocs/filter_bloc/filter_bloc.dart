@@ -31,9 +31,15 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     on<SetPageEvent>(_setPage);
     on<ClearFilterEvent>(_clearFilter);
     on<ChangeVendorsList>(_changeVendorsList);
+    on<SwitchIntegratedEvent>(_switchIntegrated);
   }
+
   void _selectConnectorType(SelectConnectorTypeEvent event, Emitter<FilterState> emit) {
     emit(state.copyWith(connectorTypes: event.connectorTypes));
+  }
+
+  void _switchIntegrated(SwitchIntegratedEvent event, Emitter<FilterState> emit) {
+    emit(state.copyWith(integrated: !state.integrated));
   }
 
   void _selectPowerType(SelectPowerTypeEvent event, Emitter<FilterState> emit) {

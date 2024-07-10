@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/is_integrated_switch_card.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/filter_bloc/filter_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/connector_types_list.dart';
@@ -24,6 +25,7 @@ class FilterFirstPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SelectedVendorContainer(),
+          const IsIntegratedSwitchCard(),
           BlocBuilder<FilterBloc, FilterState>(
             buildWhen: (previous, current) => previous.connectorTypes != current.connectorTypes,
             builder: (ctx, state) {

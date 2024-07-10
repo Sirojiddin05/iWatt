@@ -2,6 +2,7 @@ part of 'filter_bloc.dart';
 
 class FilterState extends Equatable {
   const FilterState({
+    this.integrated = false,
     this.connectorTypes = const [],
     this.powerTypes = const [],
     this.allVendors = const [],
@@ -15,9 +16,11 @@ class FilterState extends Equatable {
   final List<IdNameEntity> allVendors;
   final List<IdNameEntity> vendors;
   final List<IdNameEntity> temporaryVendors;
+  final bool integrated;
   final int page;
 
   FilterState copyWith({
+    bool? integrated,
     List<int>? connectorTypes,
     List<int>? powerTypes,
     List<IdNameEntity>? vendors,
@@ -26,6 +29,7 @@ class FilterState extends Equatable {
     int? page,
   }) {
     return FilterState(
+      integrated: integrated ?? this.integrated,
       connectorTypes: connectorTypes ?? this.connectorTypes,
       powerTypes: powerTypes ?? this.powerTypes,
       allVendors: allVendors ?? this.allVendors,
@@ -37,6 +41,7 @@ class FilterState extends Equatable {
 
   @override
   List<Object> get props => [
+        integrated,
         connectorTypes,
         powerTypes,
         vendors,
