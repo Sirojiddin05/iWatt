@@ -21,7 +21,8 @@ class DBHelper {
         log(error.toString());
       }
     }
-    database = await openDatabase(path, readOnly: false, onOpen: (db) => _createTable());
+    database = await openDatabase(path, readOnly: false, onOpen: (db) {});
+    _createTable();
   }
 
   void _createTable() {

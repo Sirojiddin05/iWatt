@@ -80,7 +80,7 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(
     () => MapRepositoryImpl(
       serviceLocator<MapRemoteDataSourceImpl>(),
-      serviceLocator<MapLocalDataSource>(),
+      serviceLocator<MapLocalDataSourceImpl>(),
     ),
   );
   serviceLocator.registerLazySingleton(() => ChargeLocationsDataSourceImpl(serviceLocator<DioSettings>().dio));
