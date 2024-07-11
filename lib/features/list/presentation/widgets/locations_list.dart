@@ -52,9 +52,13 @@ class LocationsList extends StatelessWidget {
                   textStyle: context.textTheme.bodySmall!.copyWith(fontSize: 12),
                   color: context.colorScheme.primaryContainer,
                   onTap: () {
-                    context
-                        .read<ChargeLocationsBloc>()
-                        .add(const SetFilterEvent(powerTypes: [], connectorTypes: [], vendors: []));
+                    context.read<ChargeLocationsBloc>().add(const SetFilterEvent(
+                          powerTypes: [],
+                          connectorTypes: [],
+                          vendors: [],
+                          locationStatuses: [],
+                          integrated: false,
+                        ));
                   },
                 ),
               ),

@@ -11,6 +11,8 @@ class ChargeLocationsState extends Equatable {
   final List<int> selectedPowerTypes;
   final List<int> selectedConnectorTypes;
   final List<IdNameEntity> selectedVendors;
+  final List<String> selectedStatuses;
+  final bool integrated;
   final double zoom;
   final int radius;
   final double latitude;
@@ -33,6 +35,8 @@ class ChargeLocationsState extends Equatable {
     this.longitude = -1,
     this.isFavourite = false,
     this.selectedVendors = const [],
+    this.selectedStatuses = const [],
+    this.integrated = false,
     this.radius = -1,
     required this.isForMap,
   });
@@ -48,6 +52,8 @@ class ChargeLocationsState extends Equatable {
     List<int>? selectedPowerTypes,
     List<int>? selectedConnectorTypes,
     List<IdNameEntity>? selectedVendors,
+    List<String>? selectedStatuses,
+    bool? integrated,
     double? zoom,
     double? latitude,
     double? longitude,
@@ -65,6 +71,8 @@ class ChargeLocationsState extends Equatable {
       selectedPowerTypes: selectedPowerTypes ?? this.selectedPowerTypes,
       selectedConnectorTypes: selectedConnectorTypes ?? this.selectedConnectorTypes,
       selectedVendors: selectedVendors ?? this.selectedVendors,
+      selectedStatuses: selectedStatuses ?? this.selectedStatuses,
+      integrated: integrated ?? this.integrated,
       zoom: zoom ?? this.zoom,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
@@ -92,5 +100,7 @@ class ChargeLocationsState extends Equatable {
         isFavourite,
         radius,
         isForMap,
+        integrated,
+        selectedStatuses,
       ];
 }

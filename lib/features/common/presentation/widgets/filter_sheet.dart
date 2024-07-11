@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,10 +14,18 @@ import 'package:i_watt_app/features/common/presentation/widgets/filter_second_pa
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class FilterSheet extends StatefulWidget {
-  final Function(List<int> powerTypes, List<int> connectorType, List<IdNameEntity> vendors) onChanged;
+  final Function(
+    List<int> powerTypes,
+    List<int> connectorType,
+    List<IdNameEntity> vendors,
+    List<String> locationStatuses,
+    bool integrated,
+  ) onChanged;
   final List<int> selectedPowerTypes;
   final List<int> selectedConnectorTypes;
   final List<IdNameEntity> selectedVendors;
+  final List<String> locationStatuses;
+  final bool integrated;
 
   const FilterSheet({
     super.key,
@@ -23,6 +33,8 @@ class FilterSheet extends StatefulWidget {
     required this.selectedPowerTypes,
     required this.selectedConnectorTypes,
     required this.selectedVendors,
+    required this.locationStatuses,
+    required this.integrated,
   });
 
   @override
@@ -44,6 +56,8 @@ class _FilterSheetState extends State<FilterSheet> {
       defaultSelectedConnectorTypes: widget.selectedConnectorTypes,
       defaultSelectedPowerTypes: widget.selectedPowerTypes,
       defaultSelectedVendors: widget.selectedVendors,
+      defaultSelectedStatuses: widget.locationStatuses,
+      integrated: widget.integrated,
     );
     pageController = PageController();
     firstPageController = ScrollController()..addListener(firstPageControllerListener);
@@ -117,6 +131,8 @@ class _FilterSheetState extends State<FilterSheet> {
                           state.powerTypes,
                           state.connectorTypes,
                           state.vendors,
+                          state.filterKeys,
+                          state.integrated,
                         );
                       } else {
                         context.read<FilterBloc>().add(const SetVendorsEvent());

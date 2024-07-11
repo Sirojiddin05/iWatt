@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradient_animation_text/flutter_gradient_animation_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_images.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
+import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class IntegratedCard extends StatelessWidget {
   const IntegratedCard({super.key});
@@ -28,13 +30,13 @@ class IntegratedCard extends StatelessWidget {
                   transform: const GradientRotation(pi / 4),
                   colors: const [Color(0xff02191B), Color(0xff09C6D9)],
                   text: Text(
-                    "Зарядка через iWatt",
+                    LocaleKeys.charging_via_iwatt.tr(),
                     style: context.textTheme.bodyLarge,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Можно начать зарядку сейчас же в этом приложении",
+                  LocaleKeys.charging_via_iwatt_description.tr(),
                   style: context.textTheme.labelMedium?.copyWith(color: context.textTheme.titleLarge?.color),
                 ),
               ],
