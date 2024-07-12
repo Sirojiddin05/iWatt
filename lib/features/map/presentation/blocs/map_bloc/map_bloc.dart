@@ -304,7 +304,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _cameraMoved(CameraMovedEvent event, Emitter<MapState> emit) async {
     clusterManager.onCameraMove(event.cameraPosition);
-    print('position: ${event.cameraPosition.zoom}');
     add(const ChangeLuminosityStateEvent(hasLuminosity: false));
   }
 
