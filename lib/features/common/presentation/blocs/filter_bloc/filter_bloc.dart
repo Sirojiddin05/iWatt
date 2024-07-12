@@ -14,13 +14,18 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     required List<int> defaultSelectedConnectorTypes,
     required List<int> defaultSelectedPowerTypes,
     required List<IdNameEntity> defaultSelectedVendors,
+    required List<String> defaultSelectedStatuses,
+    required bool integrated,
   }) : super(FilterState(
+          integrated: integrated,
+          filterKeys: defaultSelectedStatuses,
           connectorTypes: defaultSelectedConnectorTypes,
           powerTypes: defaultSelectedPowerTypes,
           vendors: defaultSelectedVendors,
           temporaryVendors: defaultSelectedVendors,
         )) {
     on<SelectConnectorTypeEvent>(_selectConnectorType);
+    on<SelectStatusesEvent>(_selectStatuses);
     on<SelectPowerTypeEvent>(_selectPowerType);
     on<SelectAllVendorsEvent>(_selectAllVendors);
     on<UnSelectAllVendorsEvent>(_unSelectAllVendors);
@@ -32,6 +37,10 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     on<ClearFilterEvent>(_clearFilter);
     on<ChangeVendorsList>(_changeVendorsList);
     on<SwitchIntegratedEvent>(_switchIntegrated);
+  }
+
+  void _selectStatuses(SelectStatusesEvent event, Emitter<FilterState> emit) {
+    emit(state.copyWith(filterKeys: event.statuses));
   }
 
   void _selectConnectorType(SelectConnectorTypeEvent event, Emitter<FilterState> emit) {

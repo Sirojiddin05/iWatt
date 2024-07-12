@@ -52,12 +52,20 @@ class LocationsList extends StatelessWidget {
                   textStyle: context.textTheme.bodySmall!.copyWith(fontSize: 12),
                   color: context.colorScheme.primaryContainer,
                   onTap: () {
-                    context.read<ChargeLocationsBloc>().add(const SetFilterEvent(powerTypes: [], connectorTypes: [], vendors: []));
+                    context.read<ChargeLocationsBloc>().add(const SetFilterEvent(
+                          powerTypes: [],
+                          connectorTypes: [],
+                          vendors: [],
+                          locationStatuses: [],
+                          integrated: false,
+                        ));
                   },
                 ),
               ),
               secondChild: SizedBox(width: MediaQuery.sizeOf(context).width),
-              crossFadeState: state.selectedConnectorTypes.isNotEmpty || state.selectedPowerTypes.isNotEmpty || state.selectedVendors.isNotEmpty
+              crossFadeState: state.selectedConnectorTypes.isNotEmpty ||
+                      state.selectedPowerTypes.isNotEmpty ||
+                      state.selectedVendors.isNotEmpty
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               duration: AppConstants.animationDuration,

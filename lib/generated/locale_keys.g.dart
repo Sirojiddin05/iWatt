@@ -355,5 +355,9 @@ abstract class  LocaleKeys {
   static const OK = 'OK';
   static const currently_this_vendor_is_not_integrated = 'currently_this_vendor_is_not_integrated';
   static const notification_permission_denied = 'notification_permission_denied';
+  static const charging_via_iwatt = 'charging_via_iwatt';
+  static const charging_via_iwatt_description = 'charging_via_iwatt_description';
+  static const charging_via_iwatt_filter_description = 'charging_via_iwatt_filter_description';
+  static const location_status = 'location_status';
 
 }

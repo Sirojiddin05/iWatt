@@ -24,6 +24,7 @@ import 'package:i_watt_app/features/charging_processes/domain/usecases/stop_char
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/about_us_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/connector_types_repository_impl.dart';
+import 'package:i_watt_app/features/common/data/repositories_impl/location_filter_key_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/notifications_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/power_groups_repository_impl.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/search_history_repository_impl.dart';
@@ -36,6 +37,7 @@ import 'package:i_watt_app/features/common/domain/usecases/disconnect_from_socke
 import 'package:i_watt_app/features/common/domain/usecases/get_about_us_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_connector_types_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_help_usecase.dart';
+import 'package:i_watt_app/features/common/domain/usecases/get_location_filter_keys_usecase.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_notification.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_notification_detail.dart';
 import 'package:i_watt_app/features/common/domain/usecases/get_power_groups_usecase.dart';
@@ -54,6 +56,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/abou
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/location_filter_key_bloc/location_filter_key_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
@@ -126,7 +129,9 @@ class App extends StatelessWidget {
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
-        BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
+        BlocProvider(
+            create: (context) =>
+                InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(
@@ -188,6 +193,13 @@ class App extends StatelessWidget {
               serviceLocator<PowerTypesRepositoryImpl>(),
             ),
           )..add(GetPowerTypesEvent()),
+        ),
+        BlocProvider(
+          create: (context) => LocationFilterKeyBloc(
+            GetLocationFilterKeysUseCase(
+              serviceLocator<LocationFilterKeyRepositoryImpl>(),
+            ),
+          )..add(GetLocationFilterKeysEvent()),
         ),
         BlocProvider(
           create: (context) => AboutUsBloc(

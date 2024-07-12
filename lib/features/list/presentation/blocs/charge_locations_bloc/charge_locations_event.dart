@@ -20,6 +20,7 @@ class GetSingleChargeLocationEvent extends ChargeLocationsEvent {
 
 class SetSearchPatternEvent extends ChargeLocationsEvent {
   final String pattern;
+
   const SetSearchPatternEvent(this.pattern);
 }
 
@@ -27,11 +28,15 @@ class SetFilterEvent extends ChargeLocationsEvent {
   final List<int> connectorTypes;
   final List<int> powerTypes;
   final List<IdNameEntity> vendors;
+  final List<String> locationStatuses;
+  final bool integrated;
 
   const SetFilterEvent({
     required this.connectorTypes,
     required this.powerTypes,
     required this.vendors,
+    required this.locationStatuses,
+    required this.integrated,
   });
 }
 

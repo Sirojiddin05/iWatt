@@ -6,7 +6,7 @@
   },
   "map": "Карта",
   "stations": "Станции",
-  "charging_processes":{
+  "charging_processes": {
     "singular": "Зарядка",
     "singular_genitive": "Зарядки",
     "plural_nominative": "Зарядки",
@@ -221,11 +221,11 @@
   "close": "Закрыть",
   "next": "Далее",
   "you_sure_you_want_start_charging": "Вы уверены, что хотите начать зарядку?",
-  "max_power" : "Макс. мощность",
-  "price" : "Цена",
-  "charging_is_starting" : "Зарядка начинается",
-  "charging_is_ended" : "Зарядка завершена",
-  "charging" : "Заряжается",
+  "max_power": "Макс. мощность",
+  "price": "Цена",
+  "charging_is_starting": "Зарядка начинается",
+  "charging_is_ended": "Зарядка завершена",
+  "charging": "Заряжается",
   "current_power": "Текущая мощность",
   "time_left": "Оставшееся время",
   "charged": "Заряжен",
@@ -269,13 +269,13 @@
     "short": "сек."
   },
   "total_charging_price": "Общая сумма зарядки",
-  "to_back":"Вернуться",
+  "to_back": "Вернуться",
   "payed_parking_will_start": "Платная парковка начнется через",
   "payed_parking_is_going": "Идёт платная парковка",
   "time_passed": "Прошло времени",
   "total": "Итого",
-  "yet" : "ещё",
-  "pause" : "Пауза",
+  "yet": "ещё",
+  "pause": "Пауза",
   "parking_is_over_disconnect_connector": "Процесс зардяки закончился, отсоедините свой автомобиль от станции",
   "no_charging_cars": "Нет заряжаемых автомобилей",
   "connect_to_charging_station": "Подключитесь к ЭЗС и вы сможете увидеть процесс зарядки в этом окне",
@@ -374,5 +374,9 @@
   "select_all": "Выбрать все",
   "OK": "ОК",
   "currently_this_vendor_is_not_integrated": "В настоящее время этот оператор не интегрирован в нашу систему",
-  "notification_permission_denied": "Разрешение на уведомления отклонено"
+  "notification_permission_denied": "Разрешение на уведомления отклонено",
+  "charging_via_iwatt": "Зарядка через iWatt",
+  "charging_via_iwatt_description": "Можно начать зарядку сейчас же в этом приложении",
+  "charging_via_iwatt_filter_description": "Показать на карте только те локации, на которых можно начать зарядную сессию через iWatt",
+  "location_status": "Статус локации"
 }

@@ -4,6 +4,8 @@ class GetChargeLocationParamEntity {
     this.powerType = const [],
     this.connectorType = const [],
     this.vendors = const [],
+    this.locationStatuses = const [],
+    this.integrated = false,
     this.next = '',
     this.searchPattern = '',
     this.longitude = -1,
@@ -15,6 +17,8 @@ class GetChargeLocationParamEntity {
   final List<int> powerType;
   final List<int> connectorType;
   final List<int> vendors;
+  final List<String> locationStatuses;
+  final bool integrated;
   final String searchPattern;
   final String next;
   final double longitude;
@@ -23,6 +27,13 @@ class GetChargeLocationParamEntity {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> params = {};
+
+    if (integrated) params.putIfAbsent('integrated', () => true);
+    if (locationStatuses.isNotEmpty) {
+      for (var status in locationStatuses) {
+        params.putIfAbsent(status, () => true);
+      }
+    }
     if (searchPattern.isNotEmpty) {
       params.putIfAbsent('search', () => searchPattern);
     }
