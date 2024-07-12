@@ -87,11 +87,7 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                   final isVendorsChanged = o.selectedVendors != n.selectedVendors;
                   final isStatusesChanged = o.selectedStatuses != n.selectedStatuses;
                   final isIntegratedChanged = o.integrated != n.integrated;
-                  return isConnectorTypesChanged ||
-                      isPowerTypesChanged ||
-                      isVendorsChanged ||
-                      isStatusesChanged ||
-                      isIntegratedChanged;
+                  return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged || isStatusesChanged || isIntegratedChanged;
                 },
                 builder: (context, state) {
                   final isActive = state.selectedPowerTypes.isNotEmpty ||
