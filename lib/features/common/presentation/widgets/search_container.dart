@@ -37,7 +37,6 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
     return Padding(
       padding: widget.padding ?? EdgeInsets.fromLTRB(12, context.padding.top + 16, 12, 4),
       child: SearchFilterWrapper(
-        // backgroundColor: ,
         children: [
           Expanded(
             child: WCustomTappableButton(
@@ -73,54 +72,50 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
               ),
             ),
           ),
-          Row(
-            children: [
-              Container(
-                decoration: const BoxDecoration(color: AppColors.blueBayoux),
-                width: 0.5,
-                height: 24,
-              ),
-              BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
-                buildWhen: (o, n) {
-                  final isConnectorTypesChanged = o.selectedConnectorTypes != n.selectedConnectorTypes;
-                  final isPowerTypesChanged = o.selectedPowerTypes != n.selectedPowerTypes;
-                  final isVendorsChanged = o.selectedVendors != n.selectedVendors;
-                  return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged;
-                },
-                builder: (context, state) {
-                  final isActive = state.selectedPowerTypes.isNotEmpty || state.selectedConnectorTypes.isNotEmpty || state.selectedVendors.isNotEmpty;
-                  return FilterIconCard(
-                    isActive: isActive,
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        constraints: BoxConstraints(maxHeight: context.sizeOf.height - kToolbarHeight),
-                        builder: (ctx) {
-                          return FilterSheet(
-                            onChanged: (List<int> powerTypes, List<int> connectorType, List<IdNameEntity> vendors) {
-                              context.read<ChargeLocationsBloc>().add(
-                                    SetFilterEvent(
-                                      powerTypes: powerTypes,
-                                      connectorTypes: connectorType,
-                                      vendors: vendors,
-                                    ),
-                                  );
-                              Navigator.pop(ctx);
-                            },
-                            selectedPowerTypes: state.selectedPowerTypes,
-                            selectedConnectorTypes: state.selectedConnectorTypes,
-                            selectedVendors: state.selectedVendors,
-                          );
+          Container(
+            decoration: const BoxDecoration(color: AppColors.blueBayoux),
+            width: 0.5,
+            height: 24,
+          ),
+          BlocBuilder<ChargeLocationsBloc, ChargeLocationsState>(
+            buildWhen: (o, n) {
+              final isConnectorTypesChanged = o.selectedConnectorTypes != n.selectedConnectorTypes;
+              final isPowerTypesChanged = o.selectedPowerTypes != n.selectedPowerTypes;
+              final isVendorsChanged = o.selectedVendors != n.selectedVendors;
+              return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged;
+            },
+            builder: (context, state) {
+              final isActive = state.selectedPowerTypes.isNotEmpty || state.selectedConnectorTypes.isNotEmpty || state.selectedVendors.isNotEmpty;
+              return FilterIconCard(
+                isActive: isActive,
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    constraints: BoxConstraints(maxHeight: context.sizeOf.height - kToolbarHeight),
+                    builder: (ctx) {
+                      return FilterSheet(
+                        onChanged: (List<int> powerTypes, List<int> connectorType, List<IdNameEntity> vendors) {
+                          context.read<ChargeLocationsBloc>().add(
+                                SetFilterEvent(
+                                  powerTypes: powerTypes,
+                                  connectorTypes: connectorType,
+                                  vendors: vendors,
+                                ),
+                              );
+                          Navigator.pop(ctx);
                         },
+                        selectedPowerTypes: state.selectedPowerTypes,
+                        selectedConnectorTypes: state.selectedConnectorTypes,
+                        selectedVendors: state.selectedVendors,
                       );
                     },
                   );
                 },
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),

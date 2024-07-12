@@ -9,13 +9,17 @@ abstract class MapLocalDataSource {
 }
 
 class MapLocalDataSourceImpl implements MapLocalDataSource {
-  final DBHelper dbHelper;
+  final LocationsDbHelper dbHelper;
 
   const MapLocalDataSourceImpl(this.dbHelper);
   @override
-  Future<List<ChargeLocationModel>> getMapLocations() {
-    // TODO: implement getMapLocations
-    throw UnimplementedError();
+  Future<List<ChargeLocationModel>> getMapLocations() async {
+    try {
+      final result = await dbHelper.fetchLocations();
+      return result;
+    } catch (e) {
+      throw CacheException(errorMessage: e.toString());
+    }
   }
 
   @override

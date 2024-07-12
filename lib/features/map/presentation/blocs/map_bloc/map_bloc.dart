@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -25,7 +25,9 @@ import 'package:i_watt_app/features/map/domain/entities/cluste_entity.dart';
 import 'package:i_watt_app/features/map/domain/entities/cluster_item.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_location_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_map_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/save_location_list_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/location_pin_widget.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_sheet.dart';
 
@@ -36,13 +38,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   final GetClustersUseCase getClustersUseCase;
   final GetMapLocationUseCase getLocationUseCase;
   final GetMapLocationsUseCase getLocationsUseCase;
+  final SaveLocationListUseCase saveLocationListUseCase;
+  final GetLocationsFromLocalSourceUseCase getLocationsFromLocalSourceUseCase;
 
   late final GoogleMapController mapController;
   late final ClusterManager clusterManager;
   late final BuildContext context;
   final List<MyClusterItem> clusterItems = [];
 
-  MapBloc(this.getClustersUseCase, this.getLocationUseCase, this.getLocationsUseCase) : super(const MapState()) {
+  MapBloc(
+    this.getClustersUseCase,
+    this.getLocationUseCase,
+    this.getLocationsUseCase,
+    this.saveLocationListUseCase,
+    this.getLocationsFromLocalSourceUseCase,
+  ) : super(const MapState()) {
     clusterManager = ClusterManager<MyClusterItem>(
       clusterItems,
       (Set<Marker> markers) => add(SetMarkersEvent(markers: markers)),
@@ -50,16 +60,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       stopClusteringZoom: 18,
       maxDistParams: MaxDistParams(8),
       markerBuilder: (Cluster<MyClusterItem> cluster) async {
-        late final Uint8List appearence;
+        late final Uint8List appearance;
         if (cluster.isMultiple) {
-          appearence = await _getClusterAppearance(
+          appearance = await _getClusterAppearance(
             placeCount: cluster.items.length,
             withLuminosity: false,
           );
           return Marker(
             markerId: MarkerId('cluster_${cluster.getId()}'),
             position: cluster.location,
-            icon: BitmapDescriptor.fromBytes(appearence),
+            icon: BitmapDescriptor.fromBytes(appearance),
             onTap: () async {
               final point = _getAveragePointOfClusterPlacemarks(cluster.items.toList());
               final distance = _getDistanceBetweenClusterPlacemarks(cluster.items.toList());
@@ -91,6 +101,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<CameraIdled>(_cameraIdled);
     on<SetMarkersEvent>(_setMarkers);
     on<SetLocationSingleOpened>(_setLocationSingleOpened);
+    final areLocationsFetchedBefore = StorageRepository.getBool(StorageKeys.areLocationsFetched, defValue: false);
+    if (!areLocationsFetchedBefore) {
+      add(const GetAllLocationsEvent());
+    }
   }
 
   void _setMarkers(SetMarkersEvent event, Emitter<MapState> emit) {
@@ -101,7 +115,32 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(drawingObjects: true));
     final result = await getLocationsUseCase.call(NoParams());
     if (result.isRight) {
-      emit(state.copyWith(locations: [...result.right], filteredLocations: [...result.right]));
+      final locationList = [...result.right];
+      for (int i = 0; i < locationList.length; i++) {
+        final locationAppearance = await _getLocationAppearance(
+          logo: locationList[i].logo,
+          stationStatuses: List<ConnectorStatus>.generate(
+            locationList[i].connectorsStatus.length,
+            (index) => ConnectorStatus.fromString(locationList[i].connectorsStatus[index]),
+          ),
+        );
+        locationList[i] = locationList[i].copyWith(locationAppearance: base64Encode(locationAppearance));
+      }
+      final saveResult = await saveLocations(locationList);
+      if (saveResult) {
+        await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: true);
+      } else {
+        await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: false);
+      }
+    }
+  }
+
+  Future<bool> saveLocations(List<ChargeLocationEntity> locations) async {
+    try {
+      final result = await saveLocationListUseCase.call(locations);
+      return result.isRight;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -202,15 +241,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final drawnMapObjects = <Marker>[];
     for (int i = 0; i < locations.length; i++) {
       final location = locations[i];
-      final appearance = await _getLocationAppearance(
-        logo: location.logo,
-        stationStatuses: List<ConnectorStatus>.generate(
-          location.connectorsStatus.length,
-          (index) => ConnectorStatus.fromString(location.connectorsStatus[index]),
-        ),
-        // withLuminosity: event.withLuminosity,
-        withLuminosity: false,
-      );
+      final appearance = base64Decode(location.locationAppearance);
       final position = LatLng(double.tryParse(location.latitude) ?? 0.0, double.tryParse(location.longitude) ?? 0.0);
       drawnMapObjects.add(
         Marker(
@@ -227,6 +258,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         ),
       );
     }
+
     emit(state.copyWith(drawnMapObjects: drawnMapObjects, drawingObjects: false));
   }
 
@@ -289,7 +321,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final hasLocationAccess = state.locationAccessStatus.isPermissionGranted;
       if (event.hasLuminosity) {
         if (!hasLocationAccess) {
-          // await yandexMapController.setMapStyle(getLuminosityStyle(state.zoomLevel.toInt()));
           emit(state.copyWith(hasLuminosity: true));
         }
       } else {
@@ -304,7 +335,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _cameraMoved(CameraMovedEvent event, Emitter<MapState> emit) async {
     clusterManager.onCameraMove(event.cameraPosition);
-    print('position: ${event.cameraPosition.zoom}');
     add(const ChangeLuminosityStateEvent(hasLuminosity: false));
   }
 

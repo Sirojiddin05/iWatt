@@ -36,7 +36,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   void initState() {
     super.initState();
     chargeLocationsBloc = ChargeLocationsBloc(
-      isForMap: true,
       getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
       saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
     );
@@ -95,14 +94,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
               child: BlocConsumer<MapBloc, MapState>(
                 listenWhen: (o, n) {
                   final areChargeLocationsUpdated = o.locations != n.locations;
-                  // final isLuminosityUpdated = o.hasLuminosity != n.hasLuminosity;
                   return areChargeLocationsUpdated;
                 },
                 listener: (context, state) {
                   if (state.isMapInitialized) {
-                    mapBloc.add(
-                      DrawChargeLocationsEvent(),
-                    );
+                    mapBloc.add(const DrawChargeLocationsEvent());
                   }
                 },
                 buildWhen: (o, n) {

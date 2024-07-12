@@ -10,6 +10,6 @@ class SaveLocationListUseCase implements UseCase<void, List<ChargeLocationEntity
 
   @override
   Future<Either<Failure, void>> call(List<ChargeLocationEntity> params) async {
-    return await repo.getMapLocations();
+    return await repo.saveLocationList(params);
   }
 }

@@ -31,61 +31,58 @@ class SocketDataSourceImpl implements SocketDataSource {
   final StreamController<TransactionMessageModel> _transactionChequeStream = StreamController.broadcast(sync: true);
 
   WebSocketChannel? _channel;
+  bool isReconnecting = false;
 
   SocketDataSourceImpl();
 
   @override
   Future<void> connectToSocket() async {
-    print('Connecting to socket');
     final token = StorageRepository.getString(StorageKeys.accessToken).replaceAll('Bearer ', '');
-    print('token: $token');
     final url = "wss://app.i-watt.uz/ws/v1/mobile/?token=$token";
     final wsUrl = Uri.parse(url);
     _channel = WebSocketChannel.connect(wsUrl);
-    await _channel?.ready;
-    _channel?.stream.listen((jsonMessage) {
-      final message = jsonDecode(jsonMessage);
-      final messageType = message["type"];
-      final messageData = message["data"];
-      print('type $messageType');
-      print('data $messageData');
+    try {
+      await _channel?.ready;
+      _channel?.stream.listen(
+        (jsonMessage) {
+          final message = jsonDecode(jsonMessage);
+          final messageType = message["type"];
+          final messageData = message["data"];
+          if (messageType == SocketType.connector.name) {
+            _connectorStatusStream.add(ConnectorStatusMessageModel.fromJson(messageData));
+          } else if (messageType == SocketType.command_result.name) {
+            final commandResult = CommandResultMessageModel.fromJson(messageData);
+            if (commandResult.commandType == 'REMOTE_START_TRANSACTION') {
+              _startCommandResultStream.add(commandResult);
+            } else if (commandResult.commandType == 'REMOTE_STOP_TRANSACTION') {
+              _stopCommandResultStream.add(commandResult);
+            }
+          } else if (messageType == SocketType.meter_values_data.name) {
+            _meterValueStream.add(MeterValueMessageModel.fromJson(messageData));
+          } else if (messageType == SocketType.parking_data.name) {
+            _parkingDataStream.add(ParkingDataMessageModel.fromJson(messageData));
+          } else if (messageType == SocketType.transaction_cheque.name) {
+            _transactionChequeStream.add(TransactionMessageModel.fromJson(messageData));
+          }
+        },
+        onError: (error) {
+          reconnect();
+        },
+        onDone: () {
+          reconnect();
+        },
+      );
+    } catch (e) {}
+  }
 
-      if (messageType == SocketType.connector.name) {
-        final connectorResult = ConnectorStatusMessageModel.fromJson(messageData);
-        _connectorStatusStream.add(connectorResult);
-      } else if (messageType == SocketType.command_result.name) {
-        final commandResult = CommandResultMessageModel.fromJson(messageData);
-        if (commandResult.commandType == 'REMOTE_START_TRANSACTION') {
-          _startCommandResultStream.add(commandResult);
-        } else if (commandResult.commandType == 'REMOTE_STOP_TRANSACTION') {
-          _stopCommandResultStream.add(commandResult);
-        }
-      } else if (messageType == SocketType.meter_values_data.name) {
-        final meterValue = MeterValueMessageModel.fromJson(messageData);
-        _meterValueStream.add(meterValue);
-      } else if (messageType == SocketType.parking_data.name) {
-        print('parking_data');
-        late final parkingData;
-        try {
-          parkingData = ParkingDataMessageModel.fromJson(messageData);
-        } catch (e) {
-          print('error $e');
-        }
-        print('parking_data1 $messageData');
-        print('parking_data2 $messageData');
-        _parkingDataStream.add(parkingData);
-      } else if (messageType == SocketType.transaction_cheque.name) {
-        late final transactionCheque;
-        try {
-          transactionCheque = TransactionMessageModel.fromJson(messageData);
-        } catch (e) {
-          print('error $e');
-        }
-        print('transaction_cheque $messageType');
-        print('messageData $messageData');
-        _transactionChequeStream.add(transactionCheque);
-      }
-    });
+  void reconnect() {
+    if (!isReconnecting) {
+      isReconnecting = true;
+      Future.delayed(const Duration(seconds: 3), () {
+        isReconnecting = false;
+        connectToSocket();
+      });
+    }
   }
 
   @override

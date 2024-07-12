@@ -111,3 +111,9 @@ class SetLocationSingleOpened extends MapEvent {
 
   final bool isOpened;
 }
+
+class SaveLocationListEvent extends MapEvent {
+  const SaveLocationListEvent({required this.locations});
+
+  final List<ChargeLocationEntity> locations;
+}

@@ -87,7 +87,11 @@ class CustomAdaptiveDialog extends StatelessWidget {
         title: Text(
           title,
           style: titleStyle?.copyWith(fontFamily: 'SF Pro', letterSpacing: 0) ??
-              context.textTheme.headlineLarge?.copyWith(fontSize: 17, fontFamily: 'SF Pro', letterSpacing: 0),
+              context.textTheme.headlineLarge?.copyWith(
+                fontSize: 17,
+                fontFamily: 'SF Pro',
+                letterSpacing: 0,
+              ),
         ),
         content: description == null
             ? null

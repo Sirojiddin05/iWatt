@@ -1,23 +1,6 @@
 part of 'charge_locations_bloc.dart';
 
 class ChargeLocationsState extends Equatable {
-  final List<ChargeLocationEntity> chargeLocations;
-  final FormzSubmissionStatus getChargeLocationsStatus;
-  final ChargeLocationEntity singleChargeLocation;
-  final FormzSubmissionStatus getSingleChargeLocationStatus;
-  final String next;
-  final bool fetchMore;
-  final String searchPattern;
-  final List<int> selectedPowerTypes;
-  final List<int> selectedConnectorTypes;
-  final List<IdNameEntity> selectedVendors;
-  final double zoom;
-  final int radius;
-  final double latitude;
-  final double longitude;
-  final bool isFavourite;
-  final bool isForMap;
-
   const ChargeLocationsState({
     this.chargeLocations = const [],
     this.getChargeLocationsStatus = FormzSubmissionStatus.initial,
@@ -34,8 +17,23 @@ class ChargeLocationsState extends Equatable {
     this.isFavourite = false,
     this.selectedVendors = const [],
     this.radius = -1,
-    required this.isForMap,
   });
+
+  final List<ChargeLocationEntity> chargeLocations;
+  final FormzSubmissionStatus getChargeLocationsStatus;
+  final ChargeLocationEntity singleChargeLocation;
+  final FormzSubmissionStatus getSingleChargeLocationStatus;
+  final String next;
+  final bool fetchMore;
+  final String searchPattern;
+  final List<int> selectedPowerTypes;
+  final List<int> selectedConnectorTypes;
+  final List<IdNameEntity> selectedVendors;
+  final double zoom;
+  final int radius;
+  final double latitude;
+  final double longitude;
+  final bool isFavourite;
 
   ChargeLocationsState copyWith({
     List<ChargeLocationEntity>? chargeLocations,
@@ -70,7 +68,6 @@ class ChargeLocationsState extends Equatable {
       longitude: longitude ?? this.longitude,
       isFavourite: isFavourite ?? this.isFavourite,
       radius: radius ?? this.radius,
-      isForMap: isForMap,
     );
   }
 
@@ -91,6 +88,5 @@ class ChargeLocationsState extends Equatable {
         longitude,
         isFavourite,
         radius,
-        isForMap,
       ];
 }

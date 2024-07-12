@@ -144,11 +144,17 @@ class _LoginWithQrState extends State<LoginWithQr> {
     );
   }
 
+  bool isProcessing = false;
+
   void _onQRViewCreated(BuildContext ctx) {
     String token = '';
     qrController.scannedDataStream.listen(
       (scanData) async {
         final code = scanData.code;
+        if (isProcessing) {
+          return;
+        }
+        isProcessing = true;
         if (code != null && code.contains("i-watt:")) {
           await qrController.pauseCamera();
           qrController.dispose();
@@ -158,6 +164,7 @@ class _LoginWithQrState extends State<LoginWithQr> {
         if (token.isNotEmpty) {
           Navigator.pop(ctx, decryptedToken);
         }
+        isProcessing = false;
       },
     );
   }
@@ -200,7 +207,6 @@ class _LoginWithQrState extends State<LoginWithQr> {
     final iv = encrypt.IV.fromBase64(ivBase64);
     final encrypter = encrypt.Encrypter(encrypt.AES(encrypt.Key.fromUtf8(key), mode: encrypt.AESMode.cbc));
     final decrypted = encrypter.decrypt64(encryptedTokenBase64, iv: iv);
-    print('decrypted ${decrypted}');
     return 'refresh $decrypted';
   }
 

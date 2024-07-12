@@ -8,6 +8,7 @@ import 'package:i_watt_app/features/map/domain/entities/cluste_entity.dart';
 abstract class MapRepository {
   Future<Either<Failure, GenericPagination<ClusterEntity>>> getClusters({required GetChargeLocationParamEntity params});
   Future<Either<Failure, ChargeLocationEntity>> getLocation({required String key});
-  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocations();
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote();
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal();
   Future<Either<Failure, void>> saveLocationList(List<ChargeLocationEntity> locations);
 }

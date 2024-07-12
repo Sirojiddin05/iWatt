@@ -19,6 +19,7 @@ class ChargeLocationModel extends ChargeLocationEntity {
     super.chargersCount,
     super.logo,
     super.maxElectricPowers,
+    super.locationAppearance,
   });
   factory ChargeLocationModel.fromJson(Map<String, dynamic> json) => _$ChargeLocationModelFromJson(json);
   Map<String, dynamic> toJson() => _$ChargeLocationModelToJson(this);

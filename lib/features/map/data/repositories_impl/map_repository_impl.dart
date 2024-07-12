@@ -45,7 +45,7 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocations() async {
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote() async {
     try {
       final result = await _remoteDataSource.getMapLocations();
       return Right(result);
@@ -65,7 +65,17 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _localDataSource.saveLocationList(locations);
       return Right(result);
     } catch (e) {
-      throw CacheException(errorMessage: e.toString());
+      return Left(CacheFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal() async {
+    try {
+      final result = await _localDataSource.getMapLocations();
+      return Right(result);
+    } catch (e) {
+      return Left(CacheFailure(errorMessage: e.toString()));
     }
   }
 }

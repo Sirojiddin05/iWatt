@@ -62,7 +62,7 @@ Future<void> setupLocator() async {
     value: dotenv.env[StorageKeys.encryptionKey] ?? '',
   );
   serviceLocator.registerLazySingleton(() => DioSettings());
-  serviceLocator.registerLazySingleton(() => DBHelper());
+  serviceLocator.registerLazySingleton(() => LocationsDbHelper());
   serviceLocator.registerFactory(() => AuthenticationDatasourceImpl(dio: serviceLocator<DioSettings>().dio));
   serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(serviceLocator<AuthenticationDatasourceImpl>()));
   serviceLocator.registerLazySingleton(() => SignInDataSourceImpl(serviceLocator<DioSettings>().dio));
@@ -76,7 +76,7 @@ Future<void> setupLocator() async {
   serviceLocator.registerLazySingleton(() => VendorsDataSourceImpl(serviceLocator<DioSettings>().dio));
   serviceLocator.registerLazySingleton(() => VendorsRepositoryImpl(serviceLocator<VendorsDataSourceImpl>()));
   serviceLocator.registerLazySingleton(() => MapRemoteDataSourceImpl(serviceLocator<DioSettings>().dio));
-  serviceLocator.registerLazySingleton(() => MapLocalDataSourceImpl(serviceLocator<DBHelper>()));
+  serviceLocator.registerLazySingleton(() => MapLocalDataSourceImpl(serviceLocator<LocationsDbHelper>()));
   serviceLocator.registerLazySingleton(
     () => MapRepositoryImpl(
       serviceLocator<MapRemoteDataSourceImpl>(),

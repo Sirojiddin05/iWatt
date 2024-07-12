@@ -63,7 +63,9 @@ import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendo
 import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_location_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_map_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/save_location_list_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
@@ -88,7 +90,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
     await setupLocator();
-    await serviceLocator<DBHelper>().init();
+    await serviceLocator<LocationsDbHelper>().init();
     //TODO uncomment to production
     // await SentryFlutter.init((options) {
     //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
@@ -113,11 +115,14 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(
-            create: (context) => MapBloc(
-                  GetClustersUseCase(serviceLocator<MapRepositoryImpl>()),
-                  GetMapLocationUseCase(serviceLocator<MapRepositoryImpl>()),
-                  GetMapLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
-                )..add(const GetAllLocationsEvent())),
+          create: (context) => MapBloc(
+            GetClustersUseCase(serviceLocator<MapRepositoryImpl>()),
+            GetMapLocationUseCase(serviceLocator<MapRepositoryImpl>()),
+            GetMapLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
+            SaveLocationListUseCase(serviceLocator<MapRepositoryImpl>()),
+            GetLocationsFromLocalSourceUseCase(serviceLocator<MapRepositoryImpl>()),
+          )..add(const GetAllLocationsEvent()),
+        ),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),

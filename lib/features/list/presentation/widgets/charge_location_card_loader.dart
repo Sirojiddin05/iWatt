@@ -10,7 +10,7 @@ class ChargeLocationCardLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 114,
+      height: 108,
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       decoration: BoxDecoration(
@@ -46,14 +46,7 @@ class ChargeLocationCardLoader extends StatelessWidget {
               children: [
                 const ShimmerContainer(width: 42, height: 42, borderRadius: 90),
                 const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShimmerContainer(height: 18, width: context.sizeOf.width * .34, borderRadius: 4),
-                    const SizedBox(height: 8),
-                    const ShimmerContainer(height: 18, width: 76, borderRadius: 4),
-                  ],
-                ),
+                ShimmerContainer(height: 40, width: context.sizeOf.width * .6, borderRadius: 4),
               ],
             ),
             const SizedBox(height: 12),

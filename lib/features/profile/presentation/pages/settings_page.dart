@@ -56,25 +56,19 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: AppIcons.language,
                       rippleColor: context.theme.splashColor,
                       padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                      borderRadius:
-                          const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                       actions: [
                         Row(
                           children: [
                             SvgPicture.asset(
-                              AppConstants.languageList
-                                  .firstWhere((element) => element.locale.languageCode == context.locale.languageCode)
-                                  .icon,
+                              AppConstants.languageList.firstWhere((element) => element.locale.languageCode == context.locale.languageCode).icon,
                               width: 16,
                               height: 16,
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              AppConstants.languageList
-                                  .firstWhere((element) => element.locale.languageCode == context.locale.languageCode)
-                                  .title,
-                              style: context.theme.textTheme.titleMedium
-                                  ?.copyWith(color: AppColors.taxBreak, fontSize: 12),
+                              AppConstants.languageList.firstWhere((element) => element.locale.languageCode == context.locale.languageCode).title,
+                              style: context.theme.textTheme.titleMedium?.copyWith(color: AppColors.taxBreak, fontSize: 12),
                             ),
                           ],
                         )
@@ -138,8 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ? const EdgeInsets.fromLTRB(12, 8, 12, 12)
                                   : const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                               borderRadius: !isAuthenticated
-                                  ? const BorderRadius.only(
-                                      bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
+                                  ? const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
                                   : BorderRadius.zero,
                               actions: [
                                 BlocBuilder<CarOnMapBloc, CarOnMapState>(
@@ -163,8 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                               BlocConsumer<ProfileBloc, ProfileState>(
                                 listenWhen: (o, n) {
-                                  final notificationsChanged =
-                                      o.user.isNotificationEnabled != n.user.isNotificationEnabled;
+                                  final notificationsChanged = o.user.isNotificationEnabled != n.user.isNotificationEnabled;
                                   final updateStatusChanged = o.updateProfileStatus != n.updateProfileStatus;
                                   return notificationsChanged && updateStatusChanged;
                                 },
@@ -185,24 +177,19 @@ class _SettingsPageState extends State<SettingsPage> {
                                     icon: AppIcons.notificationsGrey,
                                     rippleColor: context.theme.splashColor,
                                     padding: const EdgeInsets.fromLTRB(12, 8, 12, 14),
-                                    borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                                     actions: [
                                       WCupertinoSwitch(
                                         isSwitched: areNotificationsOn,
                                         onChange: (v) async {
                                           if (areNotificationsOn) {
-                                            context
-                                                .read<ProfileBloc>()
-                                                .add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
+                                            context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
                                           } else {
                                             final permissionIsGranted = await Permission.notification.isGranted;
                                             if (permissionIsGranted) {
                                               final requested = await Permission.notification.request();
                                               if (requested.isGranted) {
-                                                context
-                                                    .read<ProfileBloc>()
-                                                    .add(UpdateProfile(isNotificationEnabled: true));
+                                                context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: true));
                                               } else {
                                                 context.showPopUp(
                                                   context,
@@ -216,9 +203,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       )
                                     ],
                                     onTap: () {
-                                      context
-                                          .read<ProfileBloc>()
-                                          .add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
+                                      context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
                                     },
                                   );
                                 },
@@ -235,38 +220,41 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
         ),
-        bottomNavigationBar: WButton(
-          onTap: () {
-            showCustomAdaptiveDialog(
-              context,
-              title: LocaleKeys.log_out_from_account.tr(),
-              description: LocaleKeys.are_you_sure_you_want_to_log_out.tr(),
-              confirmText: LocaleKeys.log_out.tr(),
-              confirmStyle: context.textTheme.titleLarge?.copyWith(color: AppColors.redOrange, fontSize: 17),
-              onConfirm: () {
-                context.read<AuthenticationBloc>().add(AuthenticationStatusChanged(
-                    authenticationStatus: AuthenticationStatus.unauthenticated, isRebuild: true));
-              },
-            );
+        bottomNavigationBar: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (ctx, state) {
+            if (state.authenticationStatus.isAuthenticated) {
+              return WButton(
+                onTap: () {
+                  showCustomAdaptiveDialog(
+                    context,
+                    title: LocaleKeys.log_out_from_account.tr(),
+                    description: LocaleKeys.are_you_sure_you_want_to_log_out.tr(),
+                    confirmText: LocaleKeys.log_out.tr(),
+                    confirmStyle: context.textTheme.titleLarge?.copyWith(color: AppColors.redOrange, fontSize: 17),
+                    onConfirm: () {
+                      context
+                          .read<AuthenticationBloc>()
+                          .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated, isRebuild: true));
+                    },
+                  );
+                },
+                margin: EdgeInsets.fromLTRB(16, 16, 16, context.padding.bottom + 16),
+                color: AppColors.amaranth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      LocaleKeys.log_out.tr(),
+                      style: context.textTheme.bodySmall?.copyWith(color: AppColors.white),
+                    ),
+                    const SizedBox(width: 4),
+                    SvgPicture.asset(AppIcons.logOutIcon)
+                  ],
+                ),
+              );
+            }
+            return const SizedBox.shrink();
           },
-          margin: EdgeInsets.fromLTRB(
-            16,
-            16,
-            16,
-            context.padding.bottom + 16,
-          ),
-          color: AppColors.amaranth,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                LocaleKeys.log_out.tr(),
-                style: context.textTheme.bodySmall?.copyWith(color: AppColors.white),
-              ),
-              const SizedBox(width: 4),
-              SvgPicture.asset(AppIcons.logOutIcon)
-            ],
-          ),
         ),
       ),
     );

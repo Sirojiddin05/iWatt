@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/error/exception_handler.dart';
+import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:path/path.dart' show dirname, join;
 import 'package:sqflite/sqflite.dart';
 
-class DBHelper {
-  DBHelper();
+class LocationsDbHelper {
+  LocationsDbHelper();
   late final Database database;
   Future<void> init() async {
     var databasesPath = await getDatabasesPath();
@@ -22,12 +23,12 @@ class DBHelper {
       }
     }
     database = await openDatabase(path, readOnly: false, onOpen: (db) {});
-    _createTable();
+    await _createTable();
   }
 
-  void _createTable() {
-    database.execute('''CREATE TABLE IF NOT EXISTS ${AppConstants.locationDb}(
-            location_id INTEGER PRIMARY KEY,
+  Future<void> _createTable() async {
+    await database.execute('''CREATE TABLE IF NOT EXISTS ${AppConstants.locationsTable}(
+            id INTEGER PRIMARY KEY,
             latitude TEXT NOT NULL,
             longitude TEXT NOT NULL,
             address TEXT NOT NULL,
@@ -39,7 +40,7 @@ class DBHelper {
             distance REAL NOT NULL,
             is_favorite INTEGER NOT NULL,
             max_electric_powers TEXT,
-            appearance BLOB
+            location_appearance TEXT
         )''');
   }
 
@@ -47,14 +48,71 @@ class DBHelper {
     try {
       if (database.isOpen) {
         for (var element in locations) {
+          print('element: ${element.locationAppearance}');
           var values = element.toJson();
-          await database.insert(
-            AppConstants.locationsTable,
-            values,
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
+          try {
+            await database.insert(
+              AppConstants.locationsTable,
+              values,
+              conflictAlgorithm: ConflictAlgorithm.replace,
+            );
+          } catch (e) {
+            log('saveLocationsListError: ${e.toString()}');
+          }
         }
       }
+    } catch (e) {
+      throw CacheException(errorMessage: e.toString());
+    }
+  }
+
+  Future<List<ChargeLocationModel>> fetchLocations({
+    List<String>? columns,
+    bool? distinct,
+    String? groupBy,
+    String? having,
+    int? limit,
+    int? offset,
+    String? orderBy,
+    String? where,
+    List<Object>? whereArgs,
+  }) async {
+    try {
+      final results = await database.query(
+        AppConstants.locationsTable,
+        columns: columns,
+        distinct: distinct,
+        groupBy: groupBy,
+        having: having,
+        limit: limit,
+        offset: offset,
+        orderBy: orderBy,
+        where: where,
+        whereArgs: whereArgs,
+      );
+      final locations = List.generate(
+        results.length,
+        (index) {
+          final connectorsStatus = (results[index]['connectors_status'] as String).split(',');
+          return ChargeLocationModel.fromJson(
+            {
+              "id": results[index]['id'],
+              "latitude": results[index]['latitude'],
+              "longitude": results[index]['longitude'],
+              "address": results[index]['address'],
+              "vendor_name": results[index]['vendor_name'],
+              "location_name": results[index]['location_name'],
+              "logo": results[index]['logo'],
+              "distance": results[index]['distance'],
+              "is_favorite": results[index]['is_favorite'] == 1,
+              "connectors_count": results[index]['connectors_count'],
+              "location_appearance": results[index]['location_appearance'],
+              "connectors_status": connectorsStatus,
+            },
+          );
+        },
+      );
+      return locations;
     } catch (e) {
       throw CacheException(errorMessage: e.toString());
     }

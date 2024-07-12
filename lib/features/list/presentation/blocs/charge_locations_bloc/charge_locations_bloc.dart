@@ -20,15 +20,13 @@ part 'charge_locations_state.dart';
 class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsState> {
   final GetChargeLocationsUseCase getChargeLocationsUseCase;
   final SaveUnSaveStreamUseCase saveStreamUseCase;
-  final bool isForMap;
 
   late final StreamSubscription<ChargeLocationEntity> chargeLocationSaveSubscription;
 
   ChargeLocationsBloc({
     required this.getChargeLocationsUseCase,
     required this.saveStreamUseCase,
-    this.isForMap = false,
-  }) : super(ChargeLocationsState(isForMap: isForMap)) {
+  }) : super(const ChargeLocationsState()) {
     chargeLocationSaveSubscription = saveStreamUseCase.call(NoParams()).listen((location) {
       if (!isClosed) {
         add(ChangeSavedStateOfLocation(location: location));
@@ -38,8 +36,8 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     on<GetMoreChargeLocationsEvent>(_getMoreLocations);
     on<SetSearchPatternEvent>(_setSearchPattern);
     on<SetFilterEvent>(_setFilter);
-    on<ChangeSavedStateOfLocation>(_setSavedState, transformer: droppable());
     on<SetFavouriteEvent>(_setFavouriteEvent);
+    on<ChangeSavedStateOfLocation>(_setSavedState, transformer: droppable());
   }
 
   void _getLocations(GetChargeLocationsEvent event, Emitter<ChargeLocationsState> emit) async {
@@ -59,7 +57,6 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
         longitude: longitude,
         latitude: latitude,
         isFavourite: state.isFavourite,
-        isForMap: state.isForMap,
       ),
     );
     if (result.isRight) {
@@ -136,6 +133,5 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
     }
   }
 
-  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) =>
-      (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) => (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }

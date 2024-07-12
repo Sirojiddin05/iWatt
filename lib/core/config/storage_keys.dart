@@ -15,4 +15,5 @@ class StorageKeys {
   static const onBoarding = 'on_boarding';
   static const encryptionKey = 'ENCRYPTION_KEY';
   static const locationAppearance = 'location';
+  static const areLocationsFetched = 'are_locations_fetched';
 }

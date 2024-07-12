@@ -27,6 +27,7 @@ ChargeLocationModel _$ChargeLocationModelFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as num)
               .toList() ??
           const [],
+      locationAppearance: json['location_appearance'] as String? ?? '',
     );
 
 Map<String, dynamic> _$ChargeLocationModelToJson(
@@ -45,4 +46,5 @@ Map<String, dynamic> _$ChargeLocationModelToJson(
       'max_electric_powers': instance.maxElectricPowers,
       'logo': instance.logo,
       'chargers_count': instance.chargersCount,
+      'location_appearance': instance.locationAppearance,
     };

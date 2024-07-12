@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -16,7 +15,7 @@ class ChargeLocationEntity {
   final List<num> maxElectricPowers;
   final String logo;
   final int chargersCount;
-  final Uint8List? locationAppearance;
+  final String locationAppearance;
 
   const ChargeLocationEntity({
     this.id = -1,
@@ -32,24 +31,25 @@ class ChargeLocationEntity {
     this.maxElectricPowers = const [],
     this.logo = '',
     this.chargersCount = -1,
-    this.locationAppearance,
+    this.locationAppearance = '',
   });
 
-  ChargeLocationEntity copyWith(
-      {int? id,
-      String? latitude,
-      String? longitude,
-      String? address,
-      int? connectorsCount,
-      List<String>? connectorsStatus,
-      double? distance,
-      String? vendorName,
-      String? locationName,
-      bool? isFavorite,
-      List<num>? maxElectricPowers,
-      String? logo,
-      int? chargersCount,
-      Uint8List? locationAppearance}) {
+  ChargeLocationEntity copyWith({
+    int? id,
+    String? latitude,
+    String? longitude,
+    String? address,
+    int? connectorsCount,
+    List<String>? connectorsStatus,
+    double? distance,
+    String? vendorName,
+    String? locationName,
+    bool? isFavorite,
+    List<num>? maxElectricPowers,
+    String? logo,
+    int? chargersCount,
+    String? locationAppearance,
+  }) {
     return ChargeLocationEntity(
       id: id ?? this.id,
       latitude: latitude ?? this.latitude,
@@ -70,7 +70,7 @@ class ChargeLocationEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'location_id': id,
+      'id': id,
       'latitude': latitude,
       'longitude': longitude,
       'address': address,
@@ -80,9 +80,9 @@ class ChargeLocationEntity {
       'logo': logo,
       'connectors_status': connectorsStatus.join(','),
       'distance': distance,
-      'is_favorite': isFavorite,
+      'is_favorite': isFavorite ? 1 : 0,
       'max_electric_powers': maxElectricPowers.join(','),
-      'appearance': locationAppearance,
+      'location_appearance': locationAppearance,
     };
   }
 }
