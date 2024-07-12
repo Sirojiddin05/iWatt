@@ -390,7 +390,11 @@ class CodegenLoader extends AssetLoader{
   "select_all": "Выбрать все",
   "OK": "ОК",
   "currently_this_vendor_is_not_integrated": "В настоящее время этот оператор не интегрирован в нашу систему",
-  "notification_permission_denied": "Разрешение на уведомления отклонено"
+  "notification_permission_denied": "Разрешение на уведомления отклонено",
+  "charging_via_iwatt": "Зарядка через iWatt",
+  "charging_via_iwatt_description": "Можно начать зарядку сейчас же в этом приложении",
+  "charging_via_iwatt_filter_description": "Показать на карте только те локации, на которых можно начать зарядную сессию через iWatt",
+  "location_status": "Статус локации"
 };
 static const Map<String,dynamic> en = {
   "other": {
@@ -768,7 +772,11 @@ static const Map<String,dynamic> en = {
   "select_all": "Choose all",
   "OK": "OK",
   "currently_this_vendor_is_not_integrated": "Currently this operator is not integrated into our system",
-  "notification_permission_denied": "Notification permission denied"
+  "notification_permission_denied": "Notification permission denied",
+  "charging_via_iwatt": "Charging via iWatt",
+  "charging_via_iwatt_description": "You can start charging now in this app",
+  "charging_via_iwatt_filter_description": "Show on the map only those locations where you can start a charging session via iWatt",
+  "location_status": "Location status"
 };
 static const Map<String,dynamic> uz = {
   "other": {
@@ -1146,7 +1154,11 @@ static const Map<String,dynamic> uz = {
   "select_all": "Hammasini tanlang",
   "OK": "KELISHDIKMI",
   "currently_this_vendor_is_not_integrated": "Hozirda ushbu operator bizning tizimimizga integratsiyalanmagan",
-  "notification_permission_denied": "Bildirishnomalar uchun ruxsat berilmadi"
+  "notification_permission_denied": "Bildirishnomalar uchun ruxsat berilmadi",
+  "charging_via_iwatt": "IWatt orqali zaryadlash",
+  "charging_via_iwatt_description": "Siz hozir ushbu ilovada zaryadlashni boshlashingiz mumkin",
+  "charging_via_iwatt_filter_description": "Xaritada faqat iwatt orqali zaryadlash seansini boshlashingiz mumkin bo'lgan joylarni ko'rsating",
+  "location_status": "Joylashuv holati"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ru": ru, "en": en, "uz": uz};
 }

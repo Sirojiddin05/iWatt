@@ -60,6 +60,8 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
         latitude: latitude,
         isFavourite: state.isFavourite,
         isForMap: state.isForMap,
+        integrated: state.integrated,
+        locationStatuses: state.selectedStatuses,
       ),
     );
     if (result.isRight) {
@@ -110,6 +112,8 @@ class ChargeLocationsBloc extends Bloc<ChargeLocationsEvent, ChargeLocationsStat
       selectedConnectorTypes: event.connectorTypes,
       selectedPowerTypes: event.powerTypes,
       selectedVendors: event.vendors,
+      selectedStatuses: event.locationStatuses,
+      integrated: event.integrated,
     ));
     add(const GetChargeLocationsEvent());
   }

@@ -11,6 +11,12 @@ class SelectConnectorTypeEvent extends FilterEvent {
   final List<int> connectorTypes;
 }
 
+class SelectStatusesEvent extends FilterEvent {
+  const SelectStatusesEvent({required this.statuses});
+
+  final List<String> statuses;
+}
+
 class SelectPowerTypeEvent extends FilterEvent {
   const SelectPowerTypeEvent({required this.powerType});
 
