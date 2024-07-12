@@ -1,22 +1,22 @@
-part of 'location_filter_key_bloc.dart';
+part of 'location_statuses_bloc.dart';
 
-class LocationFilterKeyState extends Equatable {
+class LocationStatuesState extends Equatable {
   final List<LocationFilterKeyEntity> filterKeys;
   final FormzSubmissionStatus filterKeysStatus;
   final String filterKeysError;
 
-  const LocationFilterKeyState({
+  const LocationStatuesState({
     this.filterKeys = const [],
     this.filterKeysStatus = FormzSubmissionStatus.initial,
     this.filterKeysError = '',
   });
 
-  LocationFilterKeyState copyWith({
+  LocationStatuesState copyWith({
     List<LocationFilterKeyEntity>? filterKeys,
     FormzSubmissionStatus? filterKeysStatus,
     String? filterKeysError,
   }) =>
-      LocationFilterKeyState(
+      LocationStatuesState(
           filterKeys: filterKeys ?? this.filterKeys,
           filterKeysStatus: filterKeysStatus ?? this.filterKeysStatus,
           filterKeysError: filterKeysError ?? this.filterKeysError);

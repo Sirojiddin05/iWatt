@@ -63,9 +63,7 @@ class LocationsList extends StatelessWidget {
                 ),
               ),
               secondChild: SizedBox(width: MediaQuery.sizeOf(context).width),
-              crossFadeState: state.selectedConnectorTypes.isNotEmpty ||
-                      state.selectedPowerTypes.isNotEmpty ||
-                      state.selectedVendors.isNotEmpty
+              crossFadeState: state.selectedConnectorTypes.isNotEmpty || state.selectedPowerTypes.isNotEmpty || state.selectedVendors.isNotEmpty
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               duration: AppConstants.animationDuration,

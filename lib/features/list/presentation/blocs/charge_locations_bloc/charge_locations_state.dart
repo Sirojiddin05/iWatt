@@ -1,8 +1,6 @@
 part of 'charge_locations_bloc.dart';
 
 class ChargeLocationsState extends Equatable {
-
-
   const ChargeLocationsState({
     this.chargeLocations = const [],
     this.getChargeLocationsStatus = FormzSubmissionStatus.initial,
@@ -40,7 +38,6 @@ class ChargeLocationsState extends Equatable {
   final double latitude;
   final double longitude;
   final bool isFavourite;
-  final bool isForMap;
 
   ChargeLocationsState copyWith({
     List<ChargeLocationEntity>? chargeLocations,
@@ -99,7 +96,6 @@ class ChargeLocationsState extends Equatable {
         longitude,
         isFavourite,
         radius,
-        isForMap,
         integrated,
         selectedStatuses,
       ];

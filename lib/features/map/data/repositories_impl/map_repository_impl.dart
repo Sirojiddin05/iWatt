@@ -8,6 +8,7 @@ import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_pa
 import 'package:i_watt_app/features/map/data/datasource/map_data_source.dart';
 import 'package:i_watt_app/features/map/data/datasource/map_local_data_source.dart';
 import 'package:i_watt_app/features/map/data/models/cluster_model.dart';
+import 'package:i_watt_app/features/map/domain/entities/get_locations_from_local_params.dart';
 import 'package:i_watt_app/features/map/domain/repositories/map_repository.dart';
 
 class MapRepositoryImpl implements MapRepository {
@@ -45,9 +46,9 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote() async {
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote(GetChargeLocationParamEntity params) async {
     try {
-      final result = await _remoteDataSource.getMapLocations();
+      final result = await _remoteDataSource.getMapLocations(params);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));
@@ -70,9 +71,9 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal() async {
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal(GetLocationsFromLocalParams params) async {
     try {
-      final result = await _localDataSource.getMapLocations();
+      final result = await _localDataSource.getMapLocations(params);
       return Right(result);
     } catch (e) {
       return Left(CacheFailure(errorMessage: e.toString()));

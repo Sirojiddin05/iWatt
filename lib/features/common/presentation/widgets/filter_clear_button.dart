@@ -19,13 +19,17 @@ class FilterClearButton extends StatelessWidget {
         final isConnectorTypesChanged = previous.connectorTypes != current.connectorTypes;
         final isPowerTypesChanged = previous.powerTypes != current.powerTypes;
         final isVendorsChanged = previous.vendors != current.vendors;
-        return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged;
+        final isStatusesChanged = previous.statuses != current.statuses;
+        final isIntegratedChanged = previous.integrated != current.integrated;
+        return isConnectorTypesChanged || isPowerTypesChanged || isVendorsChanged || isStatusesChanged || isIntegratedChanged;
       },
       builder: (context, state) {
         final connectorTypes = state.connectorTypes;
         final powers = state.powerTypes;
         final vendors = state.vendors;
-        final isActive = powers.isNotEmpty || connectorTypes.isNotEmpty || vendors.isNotEmpty;
+        final statuses = state.statuses;
+        final integrated = state.integrated;
+        final isActive = powers.isNotEmpty || connectorTypes.isNotEmpty || vendors.isNotEmpty || statuses.isNotEmpty || integrated;
         return IgnorePointer(
           ignoring: !isActive,
           child: WScaleAnimation(

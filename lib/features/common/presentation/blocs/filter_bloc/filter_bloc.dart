@@ -18,7 +18,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     required bool integrated,
   }) : super(FilterState(
           integrated: integrated,
-          filterKeys: defaultSelectedStatuses,
+          statuses: defaultSelectedStatuses,
           connectorTypes: defaultSelectedConnectorTypes,
           powerTypes: defaultSelectedPowerTypes,
           vendors: defaultSelectedVendors,
@@ -40,7 +40,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   }
 
   void _selectStatuses(SelectStatusesEvent event, Emitter<FilterState> emit) {
-    emit(state.copyWith(filterKeys: event.statuses));
+    emit(state.copyWith(statuses: event.statuses));
   }
 
   void _selectConnectorType(SelectConnectorTypeEvent event, Emitter<FilterState> emit) {
@@ -110,6 +110,8 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
       powerTypes: [],
       connectorTypes: [],
       vendors: [],
+      statuses: [],
+      integrated: false,
     ));
   }
 

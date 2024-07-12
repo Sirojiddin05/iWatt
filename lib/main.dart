@@ -56,7 +56,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/about_us_bloc/abou
 import 'package:i_watt_app/features/common/presentation/blocs/car_on_map_bloc/car_on_map_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/connector_types_bloc/connector_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/internet_bloc/internet_bloc.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/location_filter_key_bloc/location_filter_key_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/location_statuses_bloc/location_statuses_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/notification_bloc/notification_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/power_types_bloc/power_types_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
@@ -64,12 +64,10 @@ import 'package:i_watt_app/features/common/presentation/blocs/search_history_blo
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
 import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
-import 'package:i_watt_app/features/map/domain/usecases/get_clusters_usecase.dart';
-import 'package:i_watt_app/features/map/domain/usecases/get_location_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_map_locations_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/save_location_list_usecase.dart';
-import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
+import 'package:i_watt_app/features/map/presentation/blocs/map_locations_bloc/map_locations_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
@@ -118,20 +116,17 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(
-          create: (context) => MapBloc(
-            GetClustersUseCase(serviceLocator<MapRepositoryImpl>()),
-            GetMapLocationUseCase(serviceLocator<MapRepositoryImpl>()),
+          create: (context) => MapLocationsBloc(
+            GetLocationsFromLocalSourceUseCase(serviceLocator<MapRepositoryImpl>()),
             GetMapLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
             SaveLocationListUseCase(serviceLocator<MapRepositoryImpl>()),
-            GetLocationsFromLocalSourceUseCase(serviceLocator<MapRepositoryImpl>()),
-          )..add(const GetAllLocationsEvent()),
+            context,
+          ),
         ),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
-        BlocProvider(
-            create: (context) =>
-                InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
+        BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(
@@ -195,11 +190,11 @@ class App extends StatelessWidget {
           )..add(GetPowerTypesEvent()),
         ),
         BlocProvider(
-          create: (context) => LocationFilterKeyBloc(
+          create: (context) => LocationStatusesBloc(
             GetLocationFilterKeysUseCase(
               serviceLocator<LocationFilterKeyRepositoryImpl>(),
             ),
-          )..add(GetLocationFilterKeysEvent()),
+          )..add(GetLocationStatusesEvent()),
         ),
         BlocProvider(
           create: (context) => AboutUsBloc(

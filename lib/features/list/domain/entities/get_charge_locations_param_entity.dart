@@ -10,7 +10,6 @@ class GetChargeLocationParamEntity {
     this.searchPattern = '',
     this.longitude = -1,
     this.latitude = -1,
-    this.isForMap = false,
   });
 
   final bool isFavourite;
@@ -23,11 +22,9 @@ class GetChargeLocationParamEntity {
   final String next;
   final double longitude;
   final double latitude;
-  final bool isForMap;
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> params = {};
-
     if (integrated) params.putIfAbsent('integrated', () => true);
     if (locationStatuses.isNotEmpty) {
       for (var status in locationStatuses) {
@@ -37,7 +34,7 @@ class GetChargeLocationParamEntity {
     if (searchPattern.isNotEmpty) {
       params.putIfAbsent('search', () => searchPattern);
     }
-    if (longitude != -1 && latitude != -1 && !isForMap) {
+    if (longitude != -1 && latitude != -1) {
       params.putIfAbsent('user_latitude', () => latitude);
       params.putIfAbsent('user_longitude', () => longitude);
     }

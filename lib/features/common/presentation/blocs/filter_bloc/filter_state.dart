@@ -5,7 +5,7 @@ class FilterState extends Equatable {
     this.integrated = false,
     this.connectorTypes = const [],
     this.powerTypes = const [],
-    this.filterKeys = const [],
+    this.statuses = const [],
     this.allVendors = const [],
     this.vendors = const [],
     this.temporaryVendors = const [],
@@ -14,7 +14,7 @@ class FilterState extends Equatable {
 
   final List<int> connectorTypes;
   final List<int> powerTypes;
-  final List<String> filterKeys;
+  final List<String> statuses;
   final List<IdNameEntity> allVendors;
   final List<IdNameEntity> vendors;
   final List<IdNameEntity> temporaryVendors;
@@ -25,7 +25,7 @@ class FilterState extends Equatable {
     bool? integrated,
     List<int>? connectorTypes,
     List<int>? powerTypes,
-    List<String>? filterKeys,
+    List<String>? statuses,
     List<IdNameEntity>? vendors,
     List<IdNameEntity>? allVendors,
     List<IdNameEntity>? temporaryVendors,
@@ -35,7 +35,7 @@ class FilterState extends Equatable {
       integrated: integrated ?? this.integrated,
       connectorTypes: connectorTypes ?? this.connectorTypes,
       powerTypes: powerTypes ?? this.powerTypes,
-      filterKeys: filterKeys ?? this.filterKeys,
+      statuses: statuses ?? this.statuses,
       allVendors: allVendors ?? this.allVendors,
       vendors: vendors ?? this.vendors,
       temporaryVendors: temporaryVendors ?? this.temporaryVendors,
@@ -48,7 +48,7 @@ class FilterState extends Equatable {
         integrated,
         connectorTypes,
         powerTypes,
-        filterKeys,
+        statuses,
         vendors,
         temporaryVendors,
         page,

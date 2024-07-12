@@ -1,6 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/map_style.dart';
@@ -14,6 +14,7 @@ import 'package:i_watt_app/features/list/domain/usecases/get_charge_locations_us
 import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
 import 'package:i_watt_app/features/list/presentation/blocs/charge_locations_bloc/charge_locations_bloc.dart';
 import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
+import 'package:i_watt_app/features/map/presentation/blocs/map_locations_bloc/map_locations_bloc.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/map_controllers.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/map_header_widgets.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/opacity_container.dart';
@@ -30,6 +31,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   late final AnimationController headerSizeController;
   late final ChargeLocationsBloc chargeLocationsBloc;
   late final MapBloc mapBloc;
+  late final MapLocationsBloc mapLocationsBloc;
+  late final GoogleMapController mapController;
   CameraPosition? cameraPosition;
 
   @override
@@ -39,20 +42,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
       getChargeLocationsUseCase: GetChargeLocationsUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
       saveStreamUseCase: SaveUnSaveStreamUseCase(serviceLocator<ChargeLocationsRepositoryImpl>()),
     );
-    mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc = MapBloc();
+    mapLocationsBloc = BlocProvider.of<MapLocationsBloc>(context);
     WidgetsBinding.instance.addObserver(this);
     headerSizeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
-  }
-
-  @override
-  Future<void> didChangeDependencies() async {
-    final previousLocale = StorageRepository.getString(StorageKeys.previousLanguage);
-    final currentLocale = context.locale.languageCode;
-    if (previousLocale != currentLocale) {
-      chargeLocationsBloc.add(const GetChargeLocationsEvent());
-      await StorageRepository.putString(StorageKeys.previousLanguage, currentLocale);
-    }
-    super.didChangeDependencies();
   }
 
   @override
@@ -68,10 +61,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
           children: [
             MultiBlocListener(
               listeners: [
-                BlocListener<ChargeLocationsBloc, ChargeLocationsState>(
+                BlocListener<MapLocationsBloc, MapLocationsState>(
                   listenWhen: (o, n) => o.chargeLocations != n.chargeLocations,
-                  listener: (context, state) {
-                    mapBloc.add(SetFilteredLocations(state.chargeLocations));
+                  listener: (ctx, state) {
+                    mapBloc.add(SetPresentPlaceMarks(state.chargeLocations));
                   },
                 ),
                 BlocListener<CarOnMapBloc, CarOnMapState>(
@@ -91,16 +84,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                   },
                 ),
               ],
-              child: BlocConsumer<MapBloc, MapState>(
-                listenWhen: (o, n) {
-                  final areChargeLocationsUpdated = o.locations != n.locations;
-                  return areChargeLocationsUpdated;
-                },
-                listener: (context, state) {
-                  if (state.isMapInitialized) {
-                    mapBloc.add(const DrawChargeLocationsEvent());
-                  }
-                },
+              child: BlocBuilder<MapBloc, MapState>(
                 buildWhen: (o, n) {
                   final areChargeLocationsUpdated = o.presentedMapObjects != n.presentedMapObjects;
                   final luminosityUpdated = o.hasLuminosity != n.hasLuminosity;
@@ -137,9 +121,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
               bottom: context.padding.bottom,
               right: 0,
               left: 0,
-              child: BlocBuilder<MapBloc, MapState>(
+              child: BlocBuilder<MapLocationsBloc, MapLocationsState>(
                 builder: (context, state) {
-                  if (state.drawingObjects) {
+                  final drawingObjects = state.getLocationsFromRemoteStatus.isInProgress || state.getChargeLocationsStatus.isInProgress;
+                  if (drawingObjects) {
                     return const LinearProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(AppColors.dodgerBlue),
                       color: AppColors.white,
@@ -166,6 +151,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   void _onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
     mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
     await Future.delayed(const Duration(seconds: 1));
     headerSizeController.forward();
@@ -176,13 +162,9 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
     mapBloc.add(CameraMovedEvent(cameraPosition: position));
   }
 
-  void _onCameraIdle() {
-    mapBloc.add(
-      SetPresentPlaceMarks(
-        zoom: cameraPosition!.zoom,
-        point: cameraPosition!.target,
-      ),
-    );
+  void _onCameraIdle() async {
+    final visibleRegion = await mapController.getVisibleRegion();
+    mapLocationsBloc.add(SetVisibleRegionBounds(bounds: visibleRegion));
   }
 
   Set<Marker> _getMapObjects(MapState state) {

@@ -4,6 +4,7 @@ import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/search_container.dart';
+import 'package:i_watt_app/features/list/presentation/widgets/list_filter_widget.dart';
 
 class SearchFilterList extends StatelessWidget {
   const SearchFilterList({super.key});
@@ -29,6 +30,7 @@ class SearchFilterList extends StatelessWidget {
             ),
             child: const SearchFilterContainer(
               padding: EdgeInsets.zero,
+              filter: ListFilterWidget(),
             ),
           );
         },

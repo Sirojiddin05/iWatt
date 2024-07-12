@@ -58,8 +58,14 @@ class _FilterSecondPageState extends State<FilterSecondPage> with AutomaticKeepA
                 final vendor = vendors[index];
                 return BlocBuilder<FilterBloc, FilterState>(
                   buildWhen: (o, n) {
-                    final oldSelectedVendors = List<int>.generate(o.temporaryVendors.length, (index) => o.temporaryVendors[index].id);
-                    final newSelectedVendors = List<int>.generate(n.temporaryVendors.length, (index) => n.temporaryVendors[index].id);
+                    final oldSelectedVendors = List<int>.generate(
+                      o.temporaryVendors.length,
+                      (index) => o.temporaryVendors[index].id,
+                    );
+                    final newSelectedVendors = List<int>.generate(
+                      n.temporaryVendors.length,
+                      (index) => n.temporaryVendors[index].id,
+                    );
 
                     return oldSelectedVendors.contains(vendor.id) != newSelectedVendors.contains(vendor.id);
                   },

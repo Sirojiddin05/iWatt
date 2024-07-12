@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:i_watt_app/features/common/presentation/blocs/location_filter_key_bloc/location_filter_key_bloc.dart';
+import 'package:i_watt_app/features/common/presentation/blocs/location_statuses_bloc/location_statuses_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/filter_category_title.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_switch_tile.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
@@ -36,7 +34,7 @@ class _StationStatusSwitchesState extends State<StationStatusSwitches> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LocationFilterKeyBloc, LocationFilterKeyState>(
+    return BlocBuilder<LocationStatusesBloc, LocationStatuesState>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

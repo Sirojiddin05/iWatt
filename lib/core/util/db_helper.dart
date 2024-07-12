@@ -40,6 +40,7 @@ class LocationsDbHelper {
             distance REAL NOT NULL,
             is_favorite INTEGER NOT NULL,
             max_electric_powers TEXT,
+            status TEXT,
             location_appearance TEXT
         )''');
   }
@@ -48,7 +49,6 @@ class LocationsDbHelper {
     try {
       if (database.isOpen) {
         for (var element in locations) {
-          print('element: ${element.locationAppearance}');
           var values = element.toJson();
           try {
             await database.insert(
@@ -67,33 +67,19 @@ class LocationsDbHelper {
   }
 
   Future<List<ChargeLocationModel>> fetchLocations({
-    List<String>? columns,
-    bool? distinct,
-    String? groupBy,
-    String? having,
-    int? limit,
-    int? offset,
-    String? orderBy,
     String? where,
-    List<Object>? whereArgs,
+    List<dynamic>? whereArgs,
   }) async {
     try {
-      final results = await database.query(
-        AppConstants.locationsTable,
-        columns: columns,
-        distinct: distinct,
-        groupBy: groupBy,
-        having: having,
-        limit: limit,
-        offset: offset,
-        orderBy: orderBy,
-        where: where,
-        whereArgs: whereArgs,
+      final results = await database.rawQuery(
+        'SELECT * FROM ${AppConstants.locationsTable} $where',
+        whereArgs,
       );
       final locations = List.generate(
         results.length,
         (index) {
           final connectorsStatus = (results[index]['connectors_status'] as String).split(',');
+          final statuses = (results[index]['status'] as String).split(',');
           return ChargeLocationModel.fromJson(
             {
               "id": results[index]['id'],
@@ -108,12 +94,14 @@ class LocationsDbHelper {
               "connectors_count": results[index]['connectors_count'],
               "location_appearance": results[index]['location_appearance'],
               "connectors_status": connectorsStatus,
+              "status": statuses,
             },
           );
         },
       );
       return locations;
     } catch (e) {
+      print('fetchLocations $e');
       throw CacheException(errorMessage: e.toString());
     }
   }

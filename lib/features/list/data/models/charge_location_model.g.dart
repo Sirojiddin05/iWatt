@@ -28,6 +28,10 @@ ChargeLocationModel _$ChargeLocationModelFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       locationAppearance: json['location_appearance'] as String? ?? '',
+      status: (json['status'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$ChargeLocationModelToJson(
@@ -47,4 +51,5 @@ Map<String, dynamic> _$ChargeLocationModelToJson(
       'logo': instance.logo,
       'chargers_count': instance.chargersCount,
       'location_appearance': instance.locationAppearance,
+      'status': instance.status,
     };

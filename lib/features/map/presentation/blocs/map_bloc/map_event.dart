@@ -68,10 +68,9 @@ class SetCarOnMapEvent extends MapEvent {
 }
 
 class SetPresentPlaceMarks extends MapEvent {
-  const SetPresentPlaceMarks({required this.zoom, required this.point});
+  const SetPresentPlaceMarks(this.locations);
 
-  final double? zoom;
-  final LatLng? point;
+  final List<ChargeLocationEntity> locations;
 }
 
 class ZoomInEvent extends MapEvent {
@@ -80,10 +79,6 @@ class ZoomInEvent extends MapEvent {
 
 class ZoomOutEvent extends MapEvent {
   const ZoomOutEvent();
-}
-
-class GetAllLocationsEvent extends MapEvent {
-  const GetAllLocationsEvent();
 }
 
 class CameraMovedEvent extends MapEvent {

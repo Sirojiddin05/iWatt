@@ -28,9 +28,9 @@ class FilterFirstPage extends StatelessWidget {
           const SelectedVendorContainer(),
           const IsIntegratedSwitchCard(),
           BlocBuilder<FilterBloc, FilterState>(
-            buildWhen: (previous, current) => previous.filterKeys != current.filterKeys,
+            buildWhen: (previous, current) => previous.statuses != current.statuses,
             builder: (ctx, state) {
-              final filterKeys = state.filterKeys;
+              final filterKeys = state.statuses;
               return StationStatusSwitches(
                 defaultSelectedStatuses: filterKeys,
                 onChanged: (List<String> value) {

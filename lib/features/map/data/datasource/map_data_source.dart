@@ -9,7 +9,7 @@ import 'package:i_watt_app/features/map/data/models/cluster_model.dart';
 abstract class MapRemoteDataSource {
   Future<GenericPagination<ClusterModel>> getClusters({required GetChargeLocationParamEntity params});
   Future<ChargeLocationModel> getLocation({required String key});
-  Future<List<ChargeLocationModel>> getMapLocations();
+  Future<List<ChargeLocationModel>> getMapLocations(GetChargeLocationParamEntity params);
 }
 
 class MapRemoteDataSourceImpl implements MapRemoteDataSource {
@@ -72,10 +72,11 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
   }
 
   @override
-  Future<List<ChargeLocationModel>> getMapLocations() async {
+  Future<List<ChargeLocationModel>> getMapLocations(GetChargeLocationParamEntity params) async {
     try {
       final response = await _dio.get(
         'chargers/MapLocationList/',
+        queryParameters: params.toJson(),
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
         final data = GenericPagination<ChargeLocationModel>.fromJson(

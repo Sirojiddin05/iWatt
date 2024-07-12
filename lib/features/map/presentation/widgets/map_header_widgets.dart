@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/search_container.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/location_denied_container.dart';
+import 'package:i_watt_app/features/map/presentation/widgets/map_filter_widget.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/parking_message_container.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/top_up_balance_message_container.dart';
 
@@ -37,7 +38,7 @@ class _MapHeaderWidgetsState extends State<MapHeaderWidgets> {
         sizeFactor: widget.sizeController,
         child: Column(
           children: [
-            const SearchFilterContainer(isForMap: true),
+            const SearchFilterContainer(isForMap: true, filter: MapFilterWidget()),
             ValueListenableBuilder<bool>(
               valueListenable: showNotifications,
               builder: (ctx, show, child) {

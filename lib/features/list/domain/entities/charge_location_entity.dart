@@ -16,6 +16,7 @@ class ChargeLocationEntity {
   final String logo;
   final int chargersCount;
   final String locationAppearance;
+  final List<String> status;
 
   const ChargeLocationEntity({
     this.id = -1,
@@ -32,24 +33,25 @@ class ChargeLocationEntity {
     this.logo = '',
     this.chargersCount = -1,
     this.locationAppearance = '',
+    this.status = const [],
   });
 
-  ChargeLocationEntity copyWith({
-    int? id,
-    String? latitude,
-    String? longitude,
-    String? address,
-    int? connectorsCount,
-    List<String>? connectorsStatus,
-    double? distance,
-    String? vendorName,
-    String? locationName,
-    bool? isFavorite,
-    List<num>? maxElectricPowers,
-    String? logo,
-    int? chargersCount,
-    String? locationAppearance,
-  }) {
+  ChargeLocationEntity copyWith(
+      {int? id,
+      String? latitude,
+      String? longitude,
+      String? address,
+      int? connectorsCount,
+      List<String>? connectorsStatus,
+      double? distance,
+      String? vendorName,
+      String? locationName,
+      bool? isFavorite,
+      List<num>? maxElectricPowers,
+      String? logo,
+      int? chargersCount,
+      String? locationAppearance,
+      List<String>? status}) {
     return ChargeLocationEntity(
       id: id ?? this.id,
       latitude: latitude ?? this.latitude,
@@ -65,6 +67,7 @@ class ChargeLocationEntity {
       logo: logo ?? this.logo,
       chargersCount: chargersCount ?? this.chargersCount,
       locationAppearance: locationAppearance ?? this.locationAppearance,
+      status: status ?? this.status,
     );
   }
 
@@ -83,6 +86,7 @@ class ChargeLocationEntity {
       'is_favorite': isFavorite ? 1 : 0,
       'max_electric_powers': maxElectricPowers.join(','),
       'location_appearance': locationAppearance,
+      'status': status.join(','),
     };
   }
 }
