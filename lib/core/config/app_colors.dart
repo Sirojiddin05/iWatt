@@ -49,6 +49,7 @@ class AppColors {
   static const amazon = Color(0xff347143);
   static const himalaya = Color(0xff716334);
   static const dividerSolitude = Color(0xffF3F5F6);
+  static const sun = Color(0xffEBA132);
   static final cyprusRipple30 = AppColors.cyprus.withAlpha(30);
   static final primaryRipple30 = AppColors.dodgerBlue.withAlpha(30);
   static const List<Color> stationActiveGradient = [

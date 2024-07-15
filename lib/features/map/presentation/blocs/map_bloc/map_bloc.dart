@@ -29,7 +29,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   late final GoogleMapController mapController;
   late final ClusterManager clusterManager;
   late final BuildContext context;
-  final List<MyClusterItem> clusterItems = [];
+  List<MyClusterItem> clusterItems = [];
 
   MapBloc() : super(const MapState()) {
     clusterManager = ClusterManager<MyClusterItem>(
@@ -37,7 +37,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       (Set<Marker> markers) => add(SetMarkersEvent(markers: markers)),
       clusterAlgorithm: ClusterAlgorithm.MAX_DIST,
       stopClusteringZoom: 18,
-      maxDistParams: MaxDistParams(8),
+      maxDistParams: MaxDistParams(12),
       markerBuilder: (Cluster<MyClusterItem> cluster) async {
         late final Uint8List appearance;
         if (cluster.isMultiple) {
@@ -173,15 +173,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _setPresentPlaceMarks(SetPresentPlaceMarks event, Emitter<MapState> emit) async {
     final cItems = [...event.locations];
+    clusterItems = List<MyClusterItem>.generate(
+      cItems.length,
+      (index) {
+        return MyClusterItem(
+          locationEntity: cItems[index],
+        );
+      },
+    );
     clusterManager.setItems(
-      List<MyClusterItem>.generate(
-        cItems.length,
-        (index) {
-          return MyClusterItem(
-            locationEntity: cItems[index],
-          );
-        },
-      ),
+      clusterItems,
     );
   }
 

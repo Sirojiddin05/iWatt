@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "473069189351",
+    "project_id": "i-watt-4c001",
+    "storage_bucket": "i-watt-4c001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473069189351:android:3415031998c346604a4a42",
+        "android_client_info": {
+          "package_name": "org.uicgroup.iwatt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6DxZMZptRn3WN2NPfBEm4KOAsy4oI2kc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

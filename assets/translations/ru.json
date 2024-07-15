@@ -378,5 +378,6 @@
   "charging_via_iwatt": "Зарядка через iWatt",
   "charging_via_iwatt_description": "Можно начать зарядку сейчас же в этом приложении",
   "charging_via_iwatt_filter_description": "Показать на карте только те локации, на которых можно начать зарядную сессию через iWatt",
-  "location_status": "Статус локации"
+  "location_status": "Статус локации",
+  "route": "Маршрут"
 }

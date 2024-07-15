@@ -359,5 +359,6 @@ abstract class  LocaleKeys {
   static const charging_via_iwatt_description = 'charging_via_iwatt_description';
   static const charging_via_iwatt_filter_description = 'charging_via_iwatt_filter_description';
   static const location_status = 'location_status';
+  static const route = 'route';
 
 }

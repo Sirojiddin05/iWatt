@@ -98,6 +98,9 @@ class AppIcons {
   static const edit = 'assets/icons/ic_edit.svg';
   static const circleClose = 'assets/icons/circle_close.svg';
   static const share = 'assets/icons/ic_share.svg';
+  static const shareBig = 'assets/icons/ic_share_icon.svg';
+  static const compliance = 'assets/icons/ic_compliance.svg';
+  static const route = 'assets/icons/ic_route.svg';
   static const alert = 'assets/icons/ic_alert.svg';
   static const dotsHorizontal = 'assets/icons/ic_dots_horizontal.svg';
   static const logoPlaceholder = 'assets/icons/ic_logo_placeholder.svg';

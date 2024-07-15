@@ -378,5 +378,6 @@
   "charging_via_iwatt": "Charging via iWatt",
   "charging_via_iwatt_description": "You can start charging now in this app",
   "charging_via_iwatt_filter_description": "Show on the map only those locations where you can start a charging session via iWatt",
-  "location_status": "Location status"
+  "location_status": "Location status",
+  "route": "Route"
 }

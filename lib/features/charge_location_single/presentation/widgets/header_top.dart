@@ -13,9 +13,10 @@ class LocationSingleHeaderTop extends SliverPersistentHeaderDelegate {
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       height: 70,
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 6),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
       color: context.colorScheme.primaryContainer,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Text(
@@ -27,7 +28,12 @@ class LocationSingleHeaderTop extends SliverPersistentHeaderDelegate {
           const SizedBox(width: 12),
           WScaleAnimation(
             onTap: () => Navigator.pop(context),
-            child: SvgPicture.asset(AppIcons.circleClose),
+            child: SvgPicture.asset(
+              AppIcons.clearRounded,
+              height: 28,
+              width: 28,
+              // color: AppColors.dodgerBlue,
+            ),
           ),
         ],
       ),

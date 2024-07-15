@@ -78,7 +78,7 @@ class ChargeLocationEntity {
       'longitude': longitude,
       'address': address,
       'connectors_count': connectorsCount,
-      'vendor_name': longitude,
+      'vendor_name': vendorName,
       'location_name': locationName,
       'logo': logo,
       'connectors_status': connectorsStatus.join(','),
