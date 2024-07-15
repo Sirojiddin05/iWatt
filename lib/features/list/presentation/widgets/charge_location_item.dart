@@ -167,7 +167,7 @@ class ChargeLocationCard extends StatelessWidget {
   }
 
   String get distanceValue {
-    final distance = location.distance;
-    return '${location.distance} ${LocaleKeys.km.tr()}';
+    final distance = location.distance.toStringAsFixed(1);
+    return '$distance ${LocaleKeys.km.tr()}';
   }
 }

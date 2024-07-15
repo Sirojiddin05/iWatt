@@ -95,7 +95,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
   void _unSelectVendor(UnSelectVendorEvent event, Emitter<FilterState> emit) {
     final vendors = List<IdNameEntity>.from(state.temporaryVendors);
-    vendors.remove(event.vendor);
+    vendors.removeWhere((e) => e.id == event.vendor.id);
     vendors.removeWhere((e) => e.id == 0);
     emit(state.copyWith(temporaryVendors: vendors));
   }

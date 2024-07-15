@@ -291,41 +291,49 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-      child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
-        builder: (context, themeState) {
-          return MaterialApp(
-            title: 'iWatt',
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            navigatorKey: _navigatorKey,
-            theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
-            themeAnimationDuration: AppConstants.animationDuration,
-            onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
-            builder: (context, child) {
-              return BlocListener<AuthenticationBloc, AuthenticationState>(
-                child: child,
-                listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
-                listener: (context, state) async {
-                  if (state.authenticationStatus.isAuthenticated) {
-                    context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
-                  } else {
-                    context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
-                  }
-                  if (!state.authenticationStatus.isUnKnown) {
-                    _navigator.pushAndRemoveUntil(
-                      MaterialWithModalsPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  }
-                },
-              );
-            },
-          );
+      child: BlocListener<CreditCardsBloc, CreditCardsState>(
+        listenWhen: (o, n) => o.creditCards != n.creditCards,
+        listener: (context, state) {
+          if (state.creditCards.isNotEmpty) {
+            context.read<PaymentBloc>().add(InitializeSelectedUserCardEvent(state.creditCards.first.id));
+          }
         },
+        child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
+          builder: (context, themeState) {
+            return MaterialApp(
+              title: 'iWatt',
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              navigatorKey: _navigatorKey,
+              theme: themeState.appTheme.isLight ? LightTheme.theme() : DarkTheme.theme(),
+              themeAnimationDuration: AppConstants.animationDuration,
+              onGenerateRoute: (settings) => MaterialPageRoute(builder: (ctx) => const SplashScreen()),
+              builder: (context, child) {
+                return BlocListener<AuthenticationBloc, AuthenticationState>(
+                  child: child,
+                  listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus && n.isRebuild,
+                  listener: (context, state) async {
+                    if (state.authenticationStatus.isAuthenticated) {
+                      context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
+                    } else {
+                      context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
+                    }
+                    if (!state.authenticationStatus.isUnKnown) {
+                      _navigator.pushAndRemoveUntil(
+                        MaterialWithModalsPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

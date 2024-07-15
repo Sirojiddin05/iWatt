@@ -36,5 +36,10 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     on<SelectUserCardEvent>((event, emit) {
       emit(state.copyWith(selectUserCardId: event.id));
     });
+    on<InitializeSelectedUserCardEvent>((event, emit) {
+      if (state.selectUserCardId == -1) {
+        emit(state.copyWith(selectUserCardId: event.id));
+      }
+    });
   }
 }

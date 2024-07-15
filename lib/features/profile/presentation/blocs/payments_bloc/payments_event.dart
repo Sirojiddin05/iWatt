@@ -7,6 +7,11 @@ abstract class PaymentEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class InitializeSelectedUserCardEvent extends PaymentEvent {
+  final int id;
+  const InitializeSelectedUserCardEvent(this.id);
+}
+
 class SelectUserCardEvent extends PaymentEvent {
   final int id;
   const SelectUserCardEvent({required this.id});

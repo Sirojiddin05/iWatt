@@ -20,6 +20,7 @@ import 'package:i_watt_app/features/profile/presentation/widgets/add_card_bottom
 import 'package:i_watt_app/features/profile/presentation/widgets/add_card_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/balance_message.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/credit_card_item.dart';
+import 'package:i_watt_app/features/profile/presentation/widgets/sum_suggestion.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -34,13 +35,18 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
   late final TextEditingController amountController;
   late final PaymentBloc paymentsBloc;
   late int selectedCardId;
+  final List<String> sumSuggestions = ['50 000', '120 000', '250 000'];
 
   @override
   void initState() {
     super.initState();
     paymentsBloc = BlocProvider.of<PaymentBloc>(context);
     selectedCardId = paymentsBloc.state.selectUserCardId;
-    amountController = TextEditingController();
+    amountController = TextEditingController()
+      ..addListener(() {
+        paymentsBloc.add(SavePaymentSumEvent(amountController.text.replaceAll(" ", "")));
+      });
+    amountController.text = sumSuggestions[0];
   }
 
   @override
@@ -69,16 +75,14 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                         child: DefaultTextField(
                           title: LocaleKeys.input_the_sum.tr(),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                             const ThousandsSeparatorInputFormatter(),
                           ],
-                          onChanged: (value) {
-                            paymentsBloc.add(SavePaymentSumEvent(value.replaceAll(" ", "")));
-                          },
+                          onChanged: (value) {},
                           hintText: '0',
                           keyboardType: TextInputType.number,
                           controller: amountController,
@@ -92,10 +96,22 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, bottom: 20),
+                        child: Row(
+                          children: List.generate(3, (index) {
+                            return SumSuggestion(
+                              sum: sumSuggestions[index],
+                              onTap: () {
+                                amountController.text = sumSuggestions[index];
+                              },
+                            );
+                          }),
+                        ),
+                      ),
                       Divider(color: context.theme.dividerColor, height: 1, thickness: 1),
                       BlocBuilder<CreditCardsBloc, CreditCardsState>(
-                        buildWhen: (p, c) =>
-                            p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
+                        buildWhen: (p, c) => p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
                         builder: (context, creditCards) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
