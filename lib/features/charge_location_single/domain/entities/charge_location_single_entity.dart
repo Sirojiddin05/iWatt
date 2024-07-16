@@ -14,6 +14,8 @@ class ChargeLocationSingleEntity {
   final VendorEntity vendor;
   @IdNameConverter()
   final List<IdNameEntity> facilities;
+  final String latitude;
+  final String longitude;
 
   const ChargeLocationSingleEntity({
     this.id = -1,
@@ -24,6 +26,8 @@ class ChargeLocationSingleEntity {
     this.isFavorite = false,
     this.vendor = const VendorEntity(),
     this.facilities = const [],
+    this.latitude = '',
+    this.longitude = '',
   });
 
   ChargeLocationSingleEntity copyWith({
@@ -35,6 +39,8 @@ class ChargeLocationSingleEntity {
     bool? isFavorite,
     VendorEntity? vendor,
     List<IdNameEntity>? facilities,
+    String? latitude,
+    String? longitude,
   }) {
     return ChargeLocationSingleEntity(
       id: id ?? this.id,
@@ -45,6 +51,8 @@ class ChargeLocationSingleEntity {
       isFavorite: isFavorite ?? this.isFavorite,
       vendor: vendor ?? this.vendor,
       facilities: facilities ?? this.facilities,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 }

@@ -116,6 +116,14 @@ class CustomAdaptiveDialog extends StatelessWidget {
                   ),
               child: Text(
                 cancelText ?? LocaleKeys.cancel.tr(),
+                style: cancelStyle?.copyWith(
+                      letterSpacing: 0,
+                    ) ??
+                    context.textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.dodgerBlue,
+                      letterSpacing: 0,
+                    ),
               ),
             ),
           },
@@ -131,7 +139,16 @@ class CustomAdaptiveDialog extends StatelessWidget {
                   color: AppColors.dodgerBlue,
                   letterSpacing: 0,
                 ),
-            child: Text(confirmText),
+            child: Text(
+              confirmText,
+              style: confirmStyle?.copyWith(
+                    letterSpacing: 0,
+                  ) ??
+                  context.textTheme.headlineLarge?.copyWith(
+                    color: AppColors.dodgerBlue,
+                    letterSpacing: 0,
+                  ),
+            ),
           ),
         ],
       );

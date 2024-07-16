@@ -22,11 +22,12 @@ class ConnectorsCard extends StatefulWidget {
   final String locationName;
   final String locationAddress;
   final String distance;
-  final String? vendorName;
-  final String? vendorLogo;
-  final String? organizationName;
-  final String? appStoreUrl;
-  final String? playMarketUrl;
+  final String vendorName;
+  final String vendorLogo;
+  final String organizationName;
+  final String appStoreUrl;
+  final String playMarketUrl;
+  final String appName;
 
   const ConnectorsCard({
     super.key,
@@ -36,11 +37,12 @@ class ConnectorsCard extends StatefulWidget {
     required this.locationName,
     required this.locationAddress,
     required this.distance,
-    this.vendorName,
-    this.vendorLogo,
-    this.organizationName,
-    this.appStoreUrl,
-    this.playMarketUrl,
+    required this.vendorName,
+    required this.vendorLogo,
+    required this.organizationName,
+    required this.appStoreUrl,
+    required this.playMarketUrl,
+    required this.appName,
   });
 
   @override
@@ -69,7 +71,9 @@ class _ConnectorsCardState extends State<ConnectorsCard> {
             return WCustomTappableButton(
               onTap: () {
                 if (widget.isIntegrated) {
-                  context.read<ChargeLocationSingleBloc>().add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
+                  context
+                      .read<ChargeLocationSingleBloc>()
+                      .add(ChangeSelectedStationIndexByConnectorId(allConnectors[index].id));
                   widget.onTap();
                 } else {
                   showModalBottomSheet(
@@ -86,6 +90,7 @@ class _ConnectorsCardState extends State<ConnectorsCard> {
                       organizationName: widget.organizationName,
                       appStoreUrl: widget.appStoreUrl,
                       playMarketUrl: widget.playMarketUrl,
+                      appName: widget.appName,
                     ),
                   );
                 }
@@ -93,7 +98,8 @@ class _ConnectorsCardState extends State<ConnectorsCard> {
               borderRadius: getBorderRadius(index),
               rippleColor: AppColors.primaryRipple30,
               child: Padding(
-                padding: index == 0 ? const EdgeInsets.fromLTRB(16, 16, 12, 10) : const EdgeInsets.fromLTRB(16, 10, 12, 10),
+                padding:
+                    index == 0 ? const EdgeInsets.fromLTRB(16, 16, 12, 10) : const EdgeInsets.fromLTRB(16, 10, 12, 10),
                 child: Row(
                   children: [
                     SvgPicture.network(

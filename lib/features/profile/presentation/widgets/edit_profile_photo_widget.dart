@@ -18,7 +18,16 @@ class EditProfilePhotoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showGetPhotoSheet(context).then((value) {
+        showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(12),
+            ),
+          ),
+          builder: (context) => const GetPhotoSheet(),
+        ).then((value) {
           if (value is String) onChanged(value);
         });
       },

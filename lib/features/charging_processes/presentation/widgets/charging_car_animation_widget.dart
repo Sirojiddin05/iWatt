@@ -40,9 +40,7 @@ class ChargingCarAnimationWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Transform.scale(
                   scale: batteryScale,
-                  child: BatteryContainer(
-                    percent: getPercent(),
-                  ),
+                  child: BatteryContainer(percent: getPercent()),
                 ),
               ),
             ),

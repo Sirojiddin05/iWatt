@@ -397,7 +397,7 @@ class CodegenLoader extends AssetLoader{
   "location_status": "Статус локации",
   "route": "Маршрут",
   "download": "Скачать",
-  "not_integrated_hint_text": "Зарядить электромобиль на этой станции можно в приложении TOK BOR."
+  "not_integrated_hint_text": "Зарядить электромобиль на этой станции можно в приложении {}."
 };
 static const Map<String,dynamic> en = {
   "other": {
@@ -782,7 +782,7 @@ static const Map<String,dynamic> en = {
   "location_status": "Location status",
   "route": "Route",
   "download": "Download",
-  "not_integrated_hint_text": "You can charge an electric car at this station in the TOK BOR app."
+  "not_integrated_hint_text": "You can charge an electric car at this station in the {} app."
 };
 static const Map<String,dynamic> uz = {
   "other": {
@@ -1167,7 +1167,7 @@ static const Map<String,dynamic> uz = {
   "location_status": "Joylashuv holati",
   "route": "Yo‘nalish",
   "download": "Yuklab olish",
-  "not_integrated_hint_text": "Ushbu stantsiyada elektr transport vositasini TOK BOR ilovasida zaryadlashingiz mumkin."
+  "not_integrated_hint_text": "Ushbu shoxobchada avtomobilingizni {} ilovasida quvvatlashingiz mumkin"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ru": ru, "en": en, "uz": uz};
 }

@@ -28,6 +28,8 @@ ChargeLocationSingleModel _$ChargeLocationSingleModelFromJson(
                   const IdNameConverter().fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      latitude: json['latitude'] as String? ?? '',
+      longitude: json['longitude'] as String? ?? '',
     );
 
 Map<String, dynamic> _$ChargeLocationSingleModelToJson(
@@ -43,4 +45,6 @@ Map<String, dynamic> _$ChargeLocationSingleModelToJson(
       'vendor': const VendorConverter().toJson(instance.vendor),
       'facilities':
           instance.facilities.map(const IdNameConverter().toJson).toList(),
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };

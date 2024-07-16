@@ -45,7 +45,10 @@ class _BatteryContainerState extends State<BatteryContainer> {
     if (widget.percent == 0) {
       colorBackground = colorBackground1;
       colorForeground = colorForeground1;
-    } else if (widget.percent > 20 && widget.percent < 50) {
+    } else if (widget.percent <= 20) {
+      colorBackground = colorBackground3;
+      colorForeground = colorForeground3;
+    } else if (widget.percent >= 20 && widget.percent < 50) {
       colorBackground = colorBackground3;
       colorForeground = colorForeground3;
     } else if (widget.percent > 50) {
@@ -72,7 +75,7 @@ class _BatteryContainerState extends State<BatteryContainer> {
                   ..rotateX(-.8),
                 alignment: FractionalOffset.center,
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
+                  duration: const Duration(milliseconds: 200),
                   height: 24,
                   width: 66,
                   decoration: BoxDecoration(color: colorBackground),
@@ -97,7 +100,7 @@ class _BatteryContainerState extends State<BatteryContainer> {
                     ..rotateX(-.8),
                   alignment: FractionalOffset.center,
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
+                    duration: const Duration(milliseconds: 200),
                     height: 22,
                     width: 65,
                     padding: const EdgeInsets.all(.7),
@@ -154,7 +157,7 @@ class _BatteryContainerState extends State<BatteryContainer> {
                     height: 22,
                     alignment: Alignment.centerLeft,
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 200),
                       height: 22,
                       width: 65 * (widget.percent / 100),
                       decoration: BoxDecoration(color: colorForeground),
@@ -165,7 +168,7 @@ class _BatteryContainerState extends State<BatteryContainer> {
               Positioned(
                 bottom: .3,
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
+                  duration: const Duration(milliseconds: 200),
                   height: 3.14,
                   width: 72,
                   decoration: BoxDecoration(color: colorBackground),
@@ -184,7 +187,7 @@ class _BatteryContainerState extends State<BatteryContainer> {
               Positioned(
                 bottom: .8,
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
+                  duration: const Duration(milliseconds: 200),
                   height: 2,
                   width: 70,
                   decoration: BoxDecoration(color: colorBackground),

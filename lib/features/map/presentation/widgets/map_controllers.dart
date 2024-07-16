@@ -28,6 +28,7 @@ class MapControllers extends StatelessWidget {
       bottom: context.padding.bottom,
       child: SizeTransition(
         axis: Axis.horizontal,
+        axisAlignment: -1,
         sizeFactor: headerSizeController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

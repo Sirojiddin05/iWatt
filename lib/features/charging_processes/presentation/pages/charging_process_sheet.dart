@@ -75,7 +75,6 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
               },
               listener: (ctx, state) {
                 if (state.stopProcessStatus.isFailure) {
-                  print('isFailure pop loader dialog');
                   Navigator.pop(ctx);
                   context.showPopUp(
                     context,
@@ -83,10 +82,8 @@ class _ChargingProcessSheetState extends State<ChargingProcessSheet> {
                     message: state.stopProcessErrorMessage,
                   );
                 } else if (state.stopProcessStatus.isInProgress) {
-                  print('show loader dialog');
                   showCommonLoaderDialog(ctx);
                 } else if (state.stopProcessStatus.isSuccess) {
-                  print('isSuccess pop loader dialog');
                   Navigator.pop(ctx);
                 }
               },

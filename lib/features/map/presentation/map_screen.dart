@@ -73,18 +73,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                     mapBloc.add(SetCarOnMapEvent(carOnMap: state.carOnMap));
                   },
                 ),
-                BlocListener<MapBloc, MapState>(
-                  listenWhen: (o, n) => o.locationSingleOpened != n.locationSingleOpened,
-                  listener: (context, state) {
-                    if (state.locationSingleOpened) {
-                      headerSizeController.reverse();
-                    } else {
-                      headerSizeController.forward();
-                    }
-                  },
-                ),
               ],
-              child: BlocBuilder<MapBloc, MapState>(
+              child: BlocConsumer<MapBloc, MapState>(
+                listenWhen: (o, n) => o.locationSingleOpened != n.locationSingleOpened,
+                listener: (context, state) {
+                  if (state.locationSingleOpened) {
+                    headerSizeController.reverse();
+                  } else {
+                    headerSizeController.forward();
+                  }
+                },
                 buildWhen: (o, n) {
                   final areChargeLocationsUpdated = o.presentedMapObjects != n.presentedMapObjects;
                   final luminosityUpdated = o.hasLuminosity != n.hasLuminosity;
@@ -123,7 +121,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
               left: 0,
               child: BlocBuilder<MapLocationsBloc, MapLocationsState>(
                 builder: (context, state) {
-                  final drawingObjects = state.getLocationsFromRemoteStatus.isInProgress || state.getChargeLocationsStatus.isInProgress;
+                  final drawingObjects =
+                      state.getLocationsFromRemoteStatus.isInProgress || state.getChargeLocationsStatus.isInProgress;
                   if (drawingObjects) {
                     return const LinearProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(AppColors.dodgerBlue),
@@ -151,10 +150,15 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   void _onMapCreated(GoogleMapController controller) async {
-    mapController = controller;
-    mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
-    await Future.delayed(const Duration(seconds: 1));
-    headerSizeController.forward();
+    try {
+      mapController = controller;
+      mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
+      await Future.delayed(const Duration(seconds: 1));
+      headerSizeController.forward();
+      print('error in _onMapCreated: ${headerSizeController.status}');
+    } catch (e) {
+      print('error in _onMapCreated: $e');
+    }
   }
 
   void _onCameraMoved(CameraPosition position) {

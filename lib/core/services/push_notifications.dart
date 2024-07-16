@@ -29,7 +29,8 @@ class PushNotificationService {
   );
   static late FirebaseMessaging messaging;
 
-  static const AndroidNotificationChannel channel = AndroidNotificationChannel("high importance channel", "High importance Notifications",
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      "high importance channel", "High importance Notifications",
       description: "This channel is used for important notifications", importance: Importance.max);
 
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -55,11 +56,17 @@ class PushNotificationService {
     }
   }
 
-  static Future<void> setForegroundNotificationPresentationOptions() async =>
-      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+  static Future<void> setForegroundNotificationPresentationOptions() async => await FirebaseMessaging.instance
+      .setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
   static Future<void> messagingRequestPermission() async => await messaging.requestPermission(
-      alert: true, announcement: false, badge: true, carPlay: false, criticalAlert: false, provisional: false, sound: true);
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true);
 
   static Future<void> configurationFirebaseNotification() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -79,8 +86,21 @@ class PushNotificationService {
   static void initializeFlutterLocalNotificationsPlugin() {
     var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = const DarwinInitializationSettings();
-    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  static Future<NotificationSettings> requestPermission() {
+    return messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
   }
 
   static void listenFireBaseOnMessage() {

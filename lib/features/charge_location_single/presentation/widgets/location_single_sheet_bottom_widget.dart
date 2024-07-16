@@ -87,6 +87,7 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                             organizationName: state.location.vendor.organizationName,
                             appStoreUrl: state.location.vendor.appStoreUrl,
                             playMarketUrl: state.location.vendor.playMarketUrl,
+                            appName: state.location.vendor.appName,
                           ),
                         );
                       }

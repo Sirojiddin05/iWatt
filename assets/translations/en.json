@@ -381,5 +381,5 @@
   "location_status": "Location status",
   "route": "Route",
   "download": "Download",
-  "not_integrated_hint_text": "You can charge an electric car at this station in the TOK BOR app."
+  "not_integrated_hint_text": "You can charge an electric car at this station in the {} app."
 }

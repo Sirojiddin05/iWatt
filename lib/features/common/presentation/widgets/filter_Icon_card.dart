@@ -15,33 +15,37 @@ class FilterIconCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WCustomTappableButton(
-      rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.all(4),
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: isActive ? AppColors.dodgerBlue.withOpacity(.12) : null,
-        ),
-        child: Row(
-          children: [
-            if (isActive) ...{
-              SvgPicture.asset(
-                AppIcons.filterSelected,
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: WCustomTappableButton(
+        rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(7),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          // margin: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: isActive ? AppColors.dodgerBlue.withOpacity(.12) : null,
+          ),
+          child: Row(
+            children: [
+              if (isActive) ...{
+                SvgPicture.asset(
+                  AppIcons.filterSelected,
+                )
+              } else ...{
+                SvgPicture.asset(AppIcons.filter)
+              },
+              const SizedBox(width: 4),
+              Text(
+                LocaleKeys.filter.tr(),
+                style: context.textTheme.headlineSmall!
+                    .copyWith(color: isActive ? AppColors.dodgerBlue : AppColors.blueBayoux),
               )
-            } else ...{
-              SvgPicture.asset(AppIcons.filter)
-            },
-            const SizedBox(width: 4),
-            Text(
-              LocaleKeys.filter.tr(),
-              style: context.textTheme.headlineSmall!.copyWith(color: isActive ? AppColors.dodgerBlue : AppColors.blueBayoux),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

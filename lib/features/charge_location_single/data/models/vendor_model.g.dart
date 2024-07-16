@@ -22,6 +22,7 @@ VendorModel _$VendorModelFromJson(Map<String, dynamic> json) => VendorModel(
       appStoreUrl: json['app_store_url'] as String? ?? '',
       playMarketUrl: json['play_market_url'] as String? ?? '',
       organizationName: json['organization_name'] as String? ?? '',
+      appName: json['app_name'] as String? ?? '',
     );
 
 Map<String, dynamic> _$VendorModelToJson(VendorModel instance) =>
@@ -38,4 +39,5 @@ Map<String, dynamic> _$VendorModelToJson(VendorModel instance) =>
       'app_store_url': instance.appStoreUrl,
       'play_market_url': instance.playMarketUrl,
       'organization_name': instance.organizationName,
+      'app_name': instance.appName,
     };

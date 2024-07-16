@@ -18,6 +18,7 @@ class VendorModel extends VendorEntity {
     super.appStoreUrl,
     super.playMarketUrl,
     super.organizationName,
+    super.appName,
   });
 
   factory VendorModel.fromJson(Map<String, dynamic> json) => _$VendorModelFromJson(json);

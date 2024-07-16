@@ -35,35 +35,38 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
       child: SearchFilterWrapper(
         children: [
           Expanded(
-            child: WCustomTappableButton(
-              borderRadius: BorderRadius.circular(8),
-              rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
-              onTap: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(
-                  MaterialWithModalsPageRoute(
-                    builder: (ctx) => HomeTabControllerProvider(
-                      controller: HomeTabControllerProvider.of(context).controller,
-                      child: SearchPage(isForMap: widget.isForMap),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: WCustomTappableButton(
+                borderRadius: BorderRadius.circular(7),
+                rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(
+                    MaterialWithModalsPageRoute(
+                      builder: (ctx) => HomeTabControllerProvider(
+                        controller: HomeTabControllerProvider.of(context).controller,
+                        child: SearchPage(isForMap: widget.isForMap),
+                      ),
                     ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(context.themedIcons.plugAlt),
+                      const SizedBox(width: 10),
+                      Text(
+                        LocaleKeys.search_stations.tr(),
+                        style: context.textTheme.headlineSmall!.copyWith(color: AppColors.blueBayoux),
+                      ),
+                      const Spacer(),
+                      SvgPicture.asset(AppIcons.search),
+                    ],
                   ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(context.themedIcons.plugAlt),
-                    const SizedBox(width: 10),
-                    Text(
-                      LocaleKeys.search_stations.tr(),
-                      style: context.textTheme.headlineSmall!.copyWith(color: AppColors.blueBayoux),
-                    ),
-                    const Spacer(),
-                    SvgPicture.asset(AppIcons.search),
-                  ],
                 ),
               ),
             ),

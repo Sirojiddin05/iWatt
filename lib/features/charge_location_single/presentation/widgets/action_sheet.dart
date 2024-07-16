@@ -6,16 +6,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/charge_location_single/domain/entities/charge_location_single_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/appeals_list.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/available_maps_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_close_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_header_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/sheet_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/generated/locale_keys.g.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ActionSheet extends StatelessWidget {
@@ -55,42 +58,12 @@ class ActionSheet extends StatelessWidget {
             const SizedBox(height: 16),
             Row(
               children: [
-                // IconTextButton(
-                //   title: LocaleKeys.share.tr(),
-                //   icon: AppIcons.share,
-                //   rippleColor: AppColors.brightSun.withAlpha(30),
-                //   padding: const EdgeInsets.fromLTRB(12, 14, 12, 8),
-                //   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                //   onTap: () async {
-                //     Navigator.pop(context);
-                //     await Share.share('${location.vendor.name} "${location.name}"\napp.i-watt.uz/location/${location.id}');
-                //   },
-                // ),
-                // Divider(color: context.theme.dividerColor, height: 1, indent: 44),
-                // IconTextButton(
-                //   title: LocaleKeys.to_complain.tr(),
-                //   icon: AppIcons.alert,
-                //   rippleColor: AppColors.amaranth.withAlpha(30),
-                //   padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
-                //   borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //     showModalBottomSheet(
-                //       context: context,
-                //       isScrollControlled: true,
-                //       enableDrag: true,
-                //       backgroundColor: Colors.transparent,
-                //       builder: (context) => AppealsList(
-                //         location: location.id,
-                //       ),
-                //     );
-                //   },
-                // ),
                 const SizedBox(width: 16),
                 WButton(
                   onTap: () async {
                     Navigator.pop(context);
-                    await Share.share('${location.vendor.name} "${location.name}"\napp.i-watt.uz/location/${location.id}');
+                    await Share.share(
+                        '${location.vendor.name} "${location.name}"\napp.i-watt.uz/location/${location.id}');
                   },
                   color: AppColors.sun.withOpacity(0.18),
                   rippleColor: AppColors.sun.withAlpha(30),
@@ -100,7 +73,30 @@ class ActionSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: WButton(
-                    onTap: () {},
+                    onTap: () async {
+                      final maps = await MapLauncher.installedMaps;
+                      print('maps $maps');
+                      final destinationLat = location.latitude;
+                      final destinationLong = location.longitude;
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        useRootNavigator: true,
+                        builder: (ctx) {
+                          return AvailableMapsSheet(
+                            availableMaps: maps,
+                            coordinates: Coords(
+                              double.tryParse(destinationLat) ?? 0,
+                              double.tryParse(destinationLong) ?? 0,
+                            ),
+                            title: location.vendor.name + location.name,
+                            description: location.address,
+                          );
+                        },
+                      );
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

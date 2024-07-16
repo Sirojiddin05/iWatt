@@ -17,6 +17,8 @@ class ChargeLocationSingleModel extends ChargeLocationSingleEntity {
     super.isFavorite,
     super.vendor,
     super.facilities,
+    super.latitude,
+    super.longitude,
   });
 
   factory ChargeLocationSingleModel.fromJson(Map<String, dynamic> json) => _$ChargeLocationSingleModelFromJson(json);

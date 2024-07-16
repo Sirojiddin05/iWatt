@@ -15,6 +15,7 @@ class VendorEntity {
   final String appStoreUrl;
   final String playMarketUrl;
   final String organizationName;
+  final String appName;
 
   const VendorEntity({
     this.name = '',
@@ -28,6 +29,7 @@ class VendorEntity {
     this.appStoreUrl = '',
     this.playMarketUrl = '',
     this.organizationName = '',
+    this.appName = '',
   });
 }
 

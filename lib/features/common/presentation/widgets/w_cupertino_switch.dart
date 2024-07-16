@@ -65,15 +65,13 @@ class _WCupertinoSwitchState extends State<WCupertinoSwitch> {
         },
         child: GestureDetector(
           onTap: () {
-            isSwitched = !isSwitched;
-            widget.onChange(isSwitched);
+            widget.onChange(!isSwitched);
             setState(() {});
           },
           onHorizontalDragEnd: (details) {
             isClicked = false;
-            isSwitched = !isSwitched;
 
-            widget.onChange(isSwitched);
+            widget.onChange(!isSwitched);
             setState(() {});
           },
           child: Stack(

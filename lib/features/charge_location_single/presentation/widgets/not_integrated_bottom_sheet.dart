@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/location_single_card_wrapper.dart';
@@ -18,16 +19,18 @@ class NotIntegratedBottomSheet extends StatelessWidget {
   final String locationName;
   final String locationAddress;
   final String distance;
-  final String? vendorName;
-  final String? vendorLogo;
-  final String? organizationName;
-  final String? appStoreUrl;
-  final String? playMarketUrl;
+  final String vendorName;
+  final String vendorLogo;
+  final String appName;
+  final String organizationName;
+  final String appStoreUrl;
+  final String playMarketUrl;
 
   const NotIntegratedBottomSheet({
     super.key,
     required this.locationName,
     required this.locationAddress,
+    required this.appName,
     required this.distance,
     required this.vendorName,
     required this.vendorLogo,
@@ -111,7 +114,7 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                   child: Text(
-                    LocaleKeys.not_integrated_hint_text.tr(),
+                    LocaleKeys.not_integrated_hint_text.tr(args: [appName]),
                     style: context.textTheme.titleMedium?.copyWith(fontSize: 12),
                   ),
                 ),
@@ -124,22 +127,25 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                         width: 100,
                         height: 100,
                         borderRadius: BorderRadius.circular(24),
-                        imageUrl: vendorLogo ?? '',
-                        errorWidget: Padding(padding: const EdgeInsets.all(16), child: SvgPicture.asset(AppIcons.logoPlaceholder)),
+                        imageUrl: vendorLogo,
+                        errorWidget: Padding(
+                            padding: const EdgeInsets.all(16), child: SvgPicture.asset(AppIcons.logoPlaceholder)),
                       ),
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(vendorName ?? "", style: context.textTheme.displayMedium),
-                          Text(organizationName ?? "", style: context.textTheme.labelMedium),
+                          Text(vendorName, style: context.textTheme.displayMedium),
+                          const SizedBox(height: 2),
+                          Text(organizationName,
+                              style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
                           const SizedBox(height: 20),
                           WButton(
                             onTap: () {
                               if (Platform.isAndroid) {
-                                launchUrlString(playMarketUrl!);
+                                launchUrlString(playMarketUrl);
                               } else if (Platform.isIOS) {
-                                launchUrlString(appStoreUrl!);
+                                launchUrlString(appStoreUrl);
                               }
                             },
                             color: context.colorScheme.primary,

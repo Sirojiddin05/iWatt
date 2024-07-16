@@ -9,19 +9,6 @@ import 'package:i_watt_app/features/common/presentation/widgets/w_custom_tappabl
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 import 'package:image_picker/image_picker.dart';
 
-Future<String?> showGetPhotoSheet(BuildContext context) async {
-  return await showModalBottomSheet(
-    context: context,
-    useRootNavigator: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(12),
-      ),
-    ),
-    builder: (context) => const GetPhotoSheet(),
-  );
-}
-
 class GetPhotoSheet extends StatefulWidget {
   const GetPhotoSheet({super.key});
 
@@ -53,7 +40,7 @@ class _GetPhotoSheetState extends State<GetPhotoSheet> {
                     borderRadius: BorderRadius.circular(8),
                     rippleColor: context.theme.primaryColor.withAlpha(50),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 50),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: AppColors.fieldBorderZircon),
                         borderRadius: BorderRadius.circular(8),
@@ -87,7 +74,7 @@ class _GetPhotoSheetState extends State<GetPhotoSheet> {
                     borderRadius: BorderRadius.circular(8),
                     rippleColor: context.theme.primaryColor.withAlpha(50),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 50),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: AppColors.fieldBorderZircon),
                         borderRadius: BorderRadius.circular(8),

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/services/push_notifications.dart';
 import 'package:i_watt_app/core/util/enums/authentication_status.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
@@ -16,6 +18,7 @@ import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.
 import 'package:i_watt_app/features/common/presentation/widgets/app_bar_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_cupertino_switch.dart';
+import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/action_row_button.dart';
 import 'package:i_watt_app/features/profile/presentation/widgets/car_on_map_sheet.dart';
@@ -32,7 +35,15 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage> with WidgetsBindingObserver {
+  bool areAppSettingsOpened = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
@@ -56,19 +67,25 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: AppIcons.language,
                       rippleColor: context.theme.splashColor,
                       padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                      borderRadius:
+                          const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                       actions: [
                         Row(
                           children: [
                             SvgPicture.asset(
-                              AppConstants.languageList.firstWhere((element) => element.locale.languageCode == context.locale.languageCode).icon,
+                              AppConstants.languageList
+                                  .firstWhere((element) => element.locale.languageCode == context.locale.languageCode)
+                                  .icon,
                               width: 16,
                               height: 16,
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              AppConstants.languageList.firstWhere((element) => element.locale.languageCode == context.locale.languageCode).title,
-                              style: context.theme.textTheme.titleMedium?.copyWith(color: AppColors.taxBreak, fontSize: 12),
+                              AppConstants.languageList
+                                  .firstWhere((element) => element.locale.languageCode == context.locale.languageCode)
+                                  .title,
+                              style: context.theme.textTheme.titleMedium
+                                  ?.copyWith(color: AppColors.taxBreak, fontSize: 12),
                             ),
                           ],
                         )
@@ -132,7 +149,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ? const EdgeInsets.fromLTRB(12, 8, 12, 12)
                                   : const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                               borderRadius: !isAuthenticated
-                                  ? const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
+                                  ? const BorderRadius.only(
+                                      bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
                                   : BorderRadius.zero,
                               actions: [
                                 BlocBuilder<CarOnMapBloc, CarOnMapState>(
@@ -156,7 +174,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               Divider(height: 1, thickness: 1, color: context.theme.dividerColor, indent: 48),
                               BlocConsumer<ProfileBloc, ProfileState>(
                                 listenWhen: (o, n) {
-                                  final notificationsChanged = o.user.isNotificationEnabled != n.user.isNotificationEnabled;
+                                  final notificationsChanged =
+                                      o.user.isNotificationEnabled != n.user.isNotificationEnabled;
                                   final updateStatusChanged = o.updateProfileStatus != n.updateProfileStatus;
                                   return notificationsChanged && updateStatusChanged;
                                 },
@@ -177,33 +196,18 @@ class _SettingsPageState extends State<SettingsPage> {
                                     icon: AppIcons.notificationsGrey,
                                     rippleColor: context.theme.splashColor,
                                     padding: const EdgeInsets.fromLTRB(12, 8, 12, 14),
-                                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                    borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                                     actions: [
                                       WCupertinoSwitch(
                                         isSwitched: areNotificationsOn,
                                         onChange: (v) async {
-                                          if (areNotificationsOn) {
-                                            context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
-                                          } else {
-                                            final permissionIsGranted = await Permission.notification.isGranted;
-                                            if (permissionIsGranted) {
-                                              final requested = await Permission.notification.request();
-                                              if (requested.isGranted) {
-                                                context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: true));
-                                              } else {
-                                                context.showPopUp(
-                                                  context,
-                                                  PopUpStatus.failure,
-                                                  message: LocaleKeys.notification_permission_denied.tr(),
-                                                );
-                                              }
-                                            }
-                                          }
+                                          areAppSettingsOpened = await openAppSettings();
                                         },
-                                      )
+                                      ),
                                     ],
-                                    onTap: () {
-                                      context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: !areNotificationsOn));
+                                    onTap: () async {
+                                      areAppSettingsOpened = await openAppSettings();
                                     },
                                   );
                                 },
@@ -232,9 +236,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     confirmText: LocaleKeys.log_out.tr(),
                     confirmStyle: context.textTheme.titleLarge?.copyWith(color: AppColors.redOrange, fontSize: 17),
                     onConfirm: () {
-                      context
-                          .read<AuthenticationBloc>()
-                          .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated, isRebuild: true));
+                      context.read<AuthenticationBloc>().add(AuthenticationStatusChanged(
+                          authenticationStatus: AuthenticationStatus.unauthenticated, isRebuild: true));
                     },
                   );
                 },
@@ -258,5 +261,21 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      if (areAppSettingsOpened) {
+        areAppSettingsOpened = false;
+        final permissionIsGranted = await Permission.notification.status;
+        if (permissionIsGranted.isGranted) {
+          context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: true));
+        } else {
+          context.read<ProfileBloc>().add(UpdateProfile(isNotificationEnabled: false));
+        }
+      }
+    }
+    super.didChangeAppLifecycleState(state);
   }
 }
