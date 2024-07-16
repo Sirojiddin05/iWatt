@@ -395,7 +395,9 @@ class CodegenLoader extends AssetLoader{
   "charging_via_iwatt_description": "Можно начать зарядку сейчас же в этом приложении",
   "charging_via_iwatt_filter_description": "Показать на карте только те локации, на которых можно начать зарядную сессию через iWatt",
   "location_status": "Статус локации",
-  "route": "Маршрут"
+  "route": "Маршрут",
+  "download": "Скачать",
+  "not_integrated_hint_text": "Зарядить электромобиль на этой станции можно в приложении TOK BOR."
 };
 static const Map<String,dynamic> en = {
   "other": {
@@ -778,7 +780,9 @@ static const Map<String,dynamic> en = {
   "charging_via_iwatt_description": "You can start charging now in this app",
   "charging_via_iwatt_filter_description": "Show on the map only those locations where you can start a charging session via iWatt",
   "location_status": "Location status",
-  "route": "Route"
+  "route": "Route",
+  "download": "Download",
+  "not_integrated_hint_text": "You can charge an electric car at this station in the TOK BOR app."
 };
 static const Map<String,dynamic> uz = {
   "other": {
@@ -1161,7 +1165,9 @@ static const Map<String,dynamic> uz = {
   "charging_via_iwatt_description": "Siz hoziroq ilovamiz orqali quvvatlashni boshlashingiz mumkin",
   "charging_via_iwatt_filter_description": "Xaritada faqat iWatt orqali zaryadlash seansini boshlashingiz mumkin bo'lgan joylarni ko'rsating",
   "location_status": "Joylashuv holati",
-  "route": "Yo‘nalish"
+  "route": "Yo‘nalish",
+  "download": "Yuklab olish",
+  "not_integrated_hint_text": "Ushbu stantsiyada elektr transport vositasini TOK BOR ilovasida zaryadlashingiz mumkin."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ru": ru, "en": en, "uz": uz};
 }

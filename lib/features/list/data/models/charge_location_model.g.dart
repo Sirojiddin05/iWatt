@@ -32,6 +32,8 @@ ChargeLocationModel _$ChargeLocationModelFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      vendor: _$JsonConverterFromJson<Map<String, dynamic>, VendorEntity>(
+          json['vendor'], const VendorConverter().fromJson),
     );
 
 Map<String, dynamic> _$ChargeLocationModelToJson(
@@ -52,4 +54,18 @@ Map<String, dynamic> _$ChargeLocationModelToJson(
       'chargers_count': instance.chargersCount,
       'location_appearance': instance.locationAppearance,
       'status': instance.status,
+      'vendor': _$JsonConverterToJson<Map<String, dynamic>, VendorEntity>(
+          instance.vendor, const VendorConverter().toJson),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

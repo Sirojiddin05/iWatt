@@ -379,5 +379,7 @@
   "charging_via_iwatt_description": "Siz hoziroq ilovamiz orqali quvvatlashni boshlashingiz mumkin",
   "charging_via_iwatt_filter_description": "Xaritada faqat iWatt orqali zaryadlash seansini boshlashingiz mumkin bo'lgan joylarni ko'rsating",
   "location_status": "Joylashuv holati",
-  "route": "Yo‘nalish"
+  "route": "Yo‘nalish",
+  "download": "Yuklab olish",
+  "not_integrated_hint_text": "Ushbu stantsiyada elektr transport vositasini TOK BOR ilovasida zaryadlashingiz mumkin."
 }

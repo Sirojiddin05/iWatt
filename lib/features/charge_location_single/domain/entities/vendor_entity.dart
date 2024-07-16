@@ -12,6 +12,9 @@ class VendorEntity {
   @IdNameConverter()
   final List<IdNameEntity> socialMedia;
   final bool integrated;
+  final String appStoreUrl;
+  final String playMarketUrl;
+  final String organizationName;
 
   const VendorEntity({
     this.name = '',
@@ -22,6 +25,9 @@ class VendorEntity {
     this.phone = '',
     this.socialMedia = const [],
     this.integrated = false,
+    this.appStoreUrl = '',
+    this.playMarketUrl = '',
+    this.organizationName = '',
   });
 }
 

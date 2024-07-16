@@ -379,5 +379,7 @@
   "charging_via_iwatt_description": "Можно начать зарядку сейчас же в этом приложении",
   "charging_via_iwatt_filter_description": "Показать на карте только те локации, на которых можно начать зарядную сессию через iWatt",
   "location_status": "Статус локации",
-  "route": "Маршрут"
+  "route": "Маршрут",
+  "download": "Скачать",
+  "not_integrated_hint_text": "Зарядить электромобиль на этой станции можно в приложении TOK BOR."
 }

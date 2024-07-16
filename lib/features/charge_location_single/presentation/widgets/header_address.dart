@@ -20,26 +20,6 @@ class LocationSingleHeaderAddress extends SliverPersistentHeaderDelegate {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Row(
-          //   children: [
-          //     for (int i = 0; i < 5; i++)
-          //       Padding(
-          //         padding: const EdgeInsets.only(right: 2.0),
-          //         child: SvgPicture.asset(AppIcons.star),
-          //       ),
-          //     const SizedBox(width: 2),
-          //     Text(
-          //       "5.0",
-          //       style: context.textTheme.bodySmall!.copyWith(fontSize: 12, color: cyprus),
-          //     ),
-          //     const SizedBox(width: 4),
-          //     Text(
-          //       "(325)",
-          //       style: context.textTheme.titleLarge!.copyWith(fontSize: 12, color: blueBayoux),
-          //     ),
-          //   ],
-          // ),
-          // const SizedBox(height: 12),
           Row(
             children: [
               Expanded(

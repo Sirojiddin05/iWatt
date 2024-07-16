@@ -1,3 +1,4 @@
+import 'package:i_watt_app/features/charge_location_single/domain/entities/vendor_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -21,7 +22,10 @@ class ChargeLocationModel extends ChargeLocationEntity {
     super.maxElectricPowers,
     super.locationAppearance,
     super.status,
+    super.vendor,
   });
+
   factory ChargeLocationModel.fromJson(Map<String, dynamic> json) => _$ChargeLocationModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$ChargeLocationModelToJson(this);
 }

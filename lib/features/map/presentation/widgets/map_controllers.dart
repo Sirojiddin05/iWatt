@@ -6,6 +6,7 @@ import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
+import 'package:i_watt_app/features/charge_location_single/domain/entities/vendor_entity.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/map/presentation/blocs/map_bloc/map_bloc.dart';
 import 'package:i_watt_app/features/map/presentation/pages/qr_screen.dart';
@@ -17,6 +18,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapControllers extends StatelessWidget {
   final AnimationController headerSizeController;
+
   const MapControllers({super.key, required this.headerSizeController});
 
   @override
@@ -40,7 +42,8 @@ class MapControllers extends StatelessWidget {
               },
               buildWhen: (o, n) {
                 final isLocationAccessStatusChanged = o.locationAccessStatus != n.locationAccessStatus;
-                final isUserLocationAccessingStatusChanged = o.userLocationAccessingStatus != n.userLocationAccessingStatus;
+                final isUserLocationAccessingStatusChanged =
+                    o.userLocationAccessingStatus != n.userLocationAccessingStatus;
                 return isLocationAccessStatusChanged || isUserLocationAccessingStatusChanged;
               },
               builder: (context, state) {
@@ -52,7 +55,9 @@ class MapControllers extends StatelessWidget {
             ),
             QrButton(
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(builder: (ctx) => const ScanStation())).then(
+                Navigator.of(context, rootNavigator: true)
+                    .push(CupertinoPageRoute(builder: (ctx) => const ScanStation()))
+                    .then(
                   (result) {
                     if (result is Map) {
                       final isValidLocation = result.containsKey('location_id') && result['location_id'] != 0;

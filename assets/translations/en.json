@@ -379,5 +379,7 @@
   "charging_via_iwatt_description": "You can start charging now in this app",
   "charging_via_iwatt_filter_description": "Show on the map only those locations where you can start a charging session via iWatt",
   "location_status": "Location status",
-  "route": "Route"
+  "route": "Route",
+  "download": "Download",
+  "not_integrated_hint_text": "You can charge an electric car at this station in the TOK BOR app."
 }

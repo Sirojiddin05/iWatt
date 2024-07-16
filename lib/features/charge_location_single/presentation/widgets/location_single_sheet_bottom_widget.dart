@@ -7,7 +7,7 @@ import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/blocs/charge_location_single_bloc/charge_location_single_bloc.dart';
 import 'package:i_watt_app/features/charge_location_single/presentation/widgets/action_sheet.dart';
-import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/widgets/not_integrated_bottom_sheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/saved_icon_container.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_button.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_scale_animation.dart';
@@ -16,7 +16,11 @@ import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class LocationSingleSheetBottomWidget extends StatelessWidget {
   final VoidCallback onChargeTap;
-  const LocationSingleSheetBottomWidget({super.key, required this.onChargeTap});
+
+  const LocationSingleSheetBottomWidget({
+    super.key,
+    required this.onChargeTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +73,21 @@ class LocationSingleSheetBottomWidget extends StatelessWidget {
                       if (isIntegrated) {
                         onChargeTap();
                       } else {
-                        showCustomAdaptiveDialog(
-                          context,
-                          title: LocaleKeys.currently_this_vendor_is_not_integrated.tr(),
-                          confirmText: LocaleKeys.OK.tr(),
-                          hasCancel: false,
-                          onConfirm: () {},
+                        showModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (BuildContext context) => NotIntegratedBottomSheet(
+                            locationName: state.location.name,
+                            locationAddress: state.location.address,
+                            distance: state.location.distance.toString(),
+                            vendorLogo: state.location.vendor.logo,
+                            vendorName: state.location.vendor.name,
+                            organizationName: state.location.vendor.organizationName,
+                            appStoreUrl: state.location.vendor.appStoreUrl,
+                            playMarketUrl: state.location.vendor.playMarketUrl,
+                          ),
                         );
                       }
                     },

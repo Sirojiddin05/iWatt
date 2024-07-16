@@ -360,5 +360,7 @@ abstract class  LocaleKeys {
   static const charging_via_iwatt_filter_description = 'charging_via_iwatt_filter_description';
   static const location_status = 'location_status';
   static const route = 'route';
+  static const download = 'download';
+  static const not_integrated_hint_text = 'not_integrated_hint_text';
 
 }

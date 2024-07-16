@@ -289,6 +289,14 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                     onToggled();
                                                   },
                                                   isIntegrated: vendor.integrated,
+                                                  locationName: widget.title,
+                                                  locationAddress: widget.address,
+                                                  distance: widget.distance,
+                                                  vendorLogo: state.location.vendor.logo,
+                                                  vendorName: state.location.vendor.name,
+                                                  organizationName: state.location.vendor.organizationName,
+                                                  appStoreUrl: state.location.vendor.appStoreUrl,
+                                                  playMarketUrl: state.location.vendor.playMarketUrl,
                                                 ),
                                                 if (facilities.isNotEmpty) ...{
                                                   FacilitiesCard(
@@ -331,11 +339,23 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                       },
                     ),
                   ),
-                  LocationSingleSheetBottomWidget(
-                    onChargeTap: () {
-                      isStationsSheet.value = 1;
-                      context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
-                      onToggled();
+                  BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
+                    builder: (context, state) {
+                      return LocationSingleSheetBottomWidget(
+                        // locationName: widget.title,
+                        // locationAddress: widget.address,
+                        // distance: widget.distance,
+                        // vendorLogo: state.location.vendor.logo,
+                        // vendorName: state.location.vendor.name,
+                        // organizationName: state.location.vendor.organizationName,
+                        // appStoreUrl: state.location.vendor.appStoreUrl,
+                        // playMarketUrl: state.location.vendor.playMarketUrl,
+                        onChargeTap: () {
+                          isStationsSheet.value = 1;
+                          context.read<PresentBottomSheetBloc>().add(ShowPresentBottomSheet(isPresented: true));
+                          onToggled();
+                        },
+                      );
                     },
                   ),
                 ],

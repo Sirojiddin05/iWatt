@@ -1,3 +1,5 @@
+import 'package:i_watt_app/features/charge_location_single/data/models/vendor_model.dart';
+import 'package:i_watt_app/features/charge_location_single/domain/entities/vendor_entity.dart';
 import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -17,6 +19,8 @@ class ChargeLocationEntity {
   final int chargersCount;
   final String locationAppearance;
   final List<String> status;
+  @VendorConverter()
+  final VendorEntity? vendor;
 
   const ChargeLocationEntity({
     this.id = -1,
@@ -34,6 +38,7 @@ class ChargeLocationEntity {
     this.chargersCount = -1,
     this.locationAppearance = '',
     this.status = const [],
+    this.vendor,
   });
 
   ChargeLocationEntity copyWith(
@@ -53,22 +58,22 @@ class ChargeLocationEntity {
       String? locationAppearance,
       List<String>? status}) {
     return ChargeLocationEntity(
-      id: id ?? this.id,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      address: address ?? this.address,
-      connectorsCount: connectorsCount ?? this.connectorsCount,
-      connectorsStatus: connectorsStatus ?? this.connectorsStatus,
-      distance: distance ?? this.distance,
-      vendorName: vendorName ?? this.vendorName,
-      locationName: locationName ?? this.locationName,
-      isFavorite: isFavorite ?? this.isFavorite,
-      maxElectricPowers: maxElectricPowers ?? this.maxElectricPowers,
-      logo: logo ?? this.logo,
-      chargersCount: chargersCount ?? this.chargersCount,
-      locationAppearance: locationAppearance ?? this.locationAppearance,
-      status: status ?? this.status,
-    );
+        id: id ?? this.id,
+        latitude: latitude ?? this.latitude,
+        longitude: longitude ?? this.longitude,
+        address: address ?? this.address,
+        connectorsCount: connectorsCount ?? this.connectorsCount,
+        connectorsStatus: connectorsStatus ?? this.connectorsStatus,
+        distance: distance ?? this.distance,
+        vendorName: vendorName ?? this.vendorName,
+        locationName: locationName ?? this.locationName,
+        isFavorite: isFavorite ?? this.isFavorite,
+        maxElectricPowers: maxElectricPowers ?? this.maxElectricPowers,
+        logo: logo ?? this.logo,
+        chargersCount: chargersCount ?? this.chargersCount,
+        locationAppearance: locationAppearance ?? this.locationAppearance,
+        status: status ?? this.status,
+        vendor: vendor);
   }
 
   Map<String, dynamic> toJson() {
