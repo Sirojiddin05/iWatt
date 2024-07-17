@@ -15,6 +15,16 @@ class AppConstants {
       locale: Locale('uz', 'UZ'),
     ),
     LanguageEntity(
+      icon: AppIcons.flagTg,
+      title: 'Тоҷикӣ',
+      locale: Locale('ta', 'TA'),
+    ),
+    LanguageEntity(
+      icon: AppIcons.flagKaa,
+      title: 'Qaraqalpaqsha',
+      locale: Locale('ka', 'KA'),
+    ),
+    LanguageEntity(
       icon: AppIcons.flagRus,
       title: 'Русский',
       locale: Locale('ru', 'RU'),

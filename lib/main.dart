@@ -253,8 +253,10 @@ class App extends StatelessWidget {
         path: 'assets/translations',
         supportedLocales: const [
           Locale('uz'),
-          Locale('en'),
+          Locale('ta'),
+          Locale('ka'),
           Locale('ru'),
+          Locale('en'),
         ],
         fallbackLocale: Locale(StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'ru')),
         startLocale: Locale(StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'ru')),

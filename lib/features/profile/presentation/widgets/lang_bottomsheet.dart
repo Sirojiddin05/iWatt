@@ -56,7 +56,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 3,
+              itemCount: AppConstants.languageList.length,
               itemBuilder: (context, index) {
                 return WRadioTile(
                   onChanged: (v) {
@@ -127,6 +127,12 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     if (language.locale.languageCode == 'en') {
       return "Language";
     }
+    if (language.locale.languageCode == 'ta') {
+      return "Забон";
+    }
+    if (language.locale.languageCode == 'ka') {
+      return "Til";
+    }
     return "";
   }
 
@@ -139,6 +145,12 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     }
     if (language.locale.languageCode == 'en') {
       return "Confirm";
+    }
+    if (language.locale.languageCode == 'ta') {
+      return "Тасдиқлаш";
+    }
+    if (language.locale.languageCode == 'ka') {
+      return "Тасдиқлаш";
     }
     return "";
   }
