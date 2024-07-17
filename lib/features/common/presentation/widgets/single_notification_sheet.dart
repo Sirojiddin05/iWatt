@@ -58,7 +58,10 @@ class _SingleNotificationSheetState extends State<SingleNotificationSheet> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (state.getNotificationSingleStatus.isInProgress) ...{
-                          const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 16), child: CircularProgressIndicator.adaptive()))
+                          const Center(
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: CircularProgressIndicator.adaptive()))
                         } else if (state.getNotificationSingleStatus.isSuccess) ...{
                           if (state.notificationDetail.photo.isNotEmpty) ...{
                             Align(
@@ -80,24 +83,20 @@ class _SingleNotificationSheetState extends State<SingleNotificationSheet> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            MyFunctions.getNotificationCreatedTime(context.locale.languageCode, state.notificationDetail.createdAt),
+                            MyFunctions.getNotificationCreatedTime(
+                                context.locale.languageCode, state.notificationDetail.createdAt),
                             style: context.textTheme.titleSmall?.copyWith(fontSize: 13),
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            state.notificationDetail.description +
-                                state.notificationDetail.description +
-                                state.notificationDetail.description +
-                                state.notificationDetail.description +
-                                state.notificationDetail.description +
-                                state.notificationDetail.description,
+                            state.notificationDetail.description,
                             style: context.textTheme.titleLarge?.copyWith(fontSize: 13),
                           ),
                           const SizedBox(height: 24),
                         } else if (state.getNotificationSingleStatus.isFailure) ...{
                           Center(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               child: Text(
                                 LocaleKeys.failure_in_loading.tr(),
                               ),

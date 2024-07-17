@@ -120,11 +120,13 @@ class PushNotificationService {
               channelDescription: channel.description,
               icon: android.smallIcon,
             ),
+            iOS: DarwinNotificationDetails(
+              threadIdentifier: channel.id,
+              subtitle: channel.description,
+            ),
           ),
         );
       }
-    }, onError: (error) {
-      print("Error in receiving message: $error");
     });
   }
 

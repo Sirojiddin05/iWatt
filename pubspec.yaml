@@ -3,7 +3,7 @@ description: "I WATT"
 
 publish_to: 'none'
 
-version: 1.0.0+18
+version: 1.0.0+19
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
@@ -90,7 +90,6 @@ flutter:
     - assets/fonts/inter/
     - assets/translations/
     - .env
-    - shorebird.yaml
   fonts:
     - family: Inter
       fonts:
