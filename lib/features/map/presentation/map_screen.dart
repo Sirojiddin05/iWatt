@@ -106,6 +106,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
                         onCameraIdle: _onCameraIdle,
                         style: getMapStyle(themeState, mapState),
                         compassEnabled: false,
+                        zoomControlsEnabled: false,
                       );
                     },
                   );
@@ -150,15 +151,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver, Tick
   }
 
   void _onMapCreated(GoogleMapController controller) async {
-    try {
-      mapController = controller;
-      mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
-      await Future.delayed(const Duration(seconds: 1));
-      headerSizeController.forward();
-      print('error in _onMapCreated: ${headerSizeController.status}');
-    } catch (e) {
-      print('error in _onMapCreated: $e');
-    }
+    mapController = controller;
+    mapBloc.add(InitializeMapControllerEvent(mapController: controller, context: context));
+    await Future.delayed(const Duration(seconds: 1));
+    headerSizeController.forward();
   }
 
   void _onCameraMoved(CameraPosition position) {

@@ -70,9 +70,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   context
                       .read<AuthenticationBloc>()
                       .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.popUntil(context, (route) => route.isFirst);
                 } else if (state.deleteAccountStatus.isFailure) {
+                  Navigator.pop(context);
                   context.showPopUp(
                     context,
                     PopUpStatus.failure,
