@@ -9,14 +9,18 @@ import 'package:formz/formz.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
+import 'package:i_watt_app/core/usecases/base_usecase.dart';
 import 'package:i_watt_app/core/util/enums/connector_status.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
 import 'package:i_watt_app/features/map/domain/entities/get_locations_from_local_params.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_created_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_deleted_locations.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_map_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_updated_locations.dart';
 import 'package:i_watt_app/features/map/domain/usecases/save_location_list_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/widgets/location_pin_widget.dart';
 
@@ -27,12 +31,18 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
   final GetLocationsFromLocalSourceUseCase getLocationsFromLocalSourceUseCase;
   final GetMapLocationsUseCase getLocationsUseCase;
   final SaveLocationListUseCase saveLocationListUseCase;
+  final GetCreatedLocationsUseCase getCreatedLocationsUseCase;
+  final GetUpdatedLocationsUseCase getUpdatedLocationsUseCase;
+  final GetDeletedLocationsUseCase getDeletedLocationsUseCase;
   final BuildContext context;
 
   MapLocationsBloc(
     this.getLocationsFromLocalSourceUseCase,
     this.getLocationsUseCase,
     this.saveLocationListUseCase,
+    this.getCreatedLocationsUseCase,
+    this.getUpdatedLocationsUseCase,
+    this.getDeletedLocationsUseCase,
     this.context,
   ) : super(const MapLocationsState()) {
     on<GetLocationsFromLocal>(_getLocationsFromLocal);
@@ -40,10 +50,10 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
     on<SetVisibleRegionBounds>(_setVisibleRegionBounds);
     on<SetFilterForMapLocationsEvent>(_setFilterForMapLocations);
     on<GetFilteredLocations>(_getFilteredLocations);
-    // final areLocationsFetchedBefore = StorageRepository.getBool(StorageKeys.areLocationsFetched, defValue: false);
-    // if (!areLocationsFetchedBefore) {
-    add(const GeAllLocationsFromRemoteEvent());
-    // }
+    final areLocationsFetchedBefore = StorageRepository.getBool(StorageKeys.areLocationsFetched, defValue: false);
+    if (!areLocationsFetchedBefore) {
+      add(const GeAllLocationsFromRemoteEvent());
+    } else {}
   }
 
   void _getLocationsFromLocal(GetLocationsFromLocal event, Emitter<MapLocationsState> emit) async {
@@ -85,7 +95,7 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
           locationAppearance: base64Encode(locationAppearance),
         );
       }
-      final saved = await saveLocations(locationList);
+      final saved = await _saveLocations(locationList);
       if (saved) {
         emit(state.copyWith(getLocationsFromRemoteStatus: FormzSubmissionStatus.success));
       }
@@ -142,7 +152,12 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
     }
   }
 
-  Future<bool> saveLocations(List<ChargeLocationEntity> locations) async {
+  void updateLocalSource() async {
+    final createdLocationsResult = await getCreatedLocationsUseCase.call(NoParams());
+    if (createdLocationsResult.isRight) {}
+  }
+
+  Future<bool> _saveLocations(List<ChargeLocationEntity> locations) async {
     final result = await saveLocationListUseCase.call(locations);
     if (result.isRight) {
       await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: true);
@@ -151,6 +166,10 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
     }
     return result.isRight;
   }
+
+  // Future<bool> updateLocations(List<ChargeLocationEntity> locations) async {
+  //
+  // }
 
   Future<Uint8List> _getLocationAppearance({
     required List<ConnectorStatus> stationStatuses,
@@ -170,20 +189,5 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
       ),
     );
     return image!;
-  }
-
-  bool _canGet(double zoom, LatLng target) {
-    double oldLat = state.cameraPosition!.target.latitude;
-    double oldLong = state.cameraPosition!.target.longitude;
-    double newLat = target.latitude;
-    double newLong = target.longitude;
-    double distanceInterval = 0.0;
-    double radius = MyFunctions.getRadiusFromZoom(zoom);
-    distanceInterval = (radius * 1000) * .5;
-    final distanceTraveled = MyFunctions.getDistanceBetweenTwoPoints(LatLng(oldLat, oldLong), LatLng(newLat, newLong));
-    if (distanceTraveled > distanceInterval || state.cameraPosition!.zoom <= (zoom - 1)) {
-      return true;
-    }
-    return false;
   }
 }

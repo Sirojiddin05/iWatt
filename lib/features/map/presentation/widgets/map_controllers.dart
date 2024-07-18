@@ -65,10 +65,12 @@ class MapControllers extends StatelessWidget {
                       final isValidStation = result.containsKey('station_id') && result['station_id'] != 0;
                       final isValidConnector = result.containsKey('connector_id') && result['connector_id'] != 0;
                       if (isValidConnector && isValidLocation && isValidStation) {
-                        showCupertinoModalBottomSheet(
+                        showModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
                           backgroundColor: Colors.transparent,
                           barrierColor: AppColors.black.withOpacity(0.52),
-                          context: context,
                           enableDrag: false,
                           builder: (ctx) {
                             return LocationSingleSheet(
@@ -79,7 +81,7 @@ class MapControllers extends StatelessWidget {
                               address: '',
                               latitude: '',
                               longitude: '',
-                              midSize: true,
+                              midSize: false,
                             );
                           },
                         );

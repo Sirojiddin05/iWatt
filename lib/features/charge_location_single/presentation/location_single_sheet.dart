@@ -260,13 +260,18 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                           SliverPersistentHeader(
                                             pinned: true,
                                             delegate: LocationSingleHeaderTop(
-                                              locationName: widget.title,
+                                              locationName: widget.title.replaceAll('"', '').replaceAll(' ', '').isEmpty
+                                                  ? '${location.vendor.name} "${location.name}"'
+                                                  : widget.title,
                                             ),
                                           ),
                                           SliverPersistentHeader(
                                             delegate: LocationSingleHeaderAddress(
-                                              locationAddress: widget.address,
-                                              distance: widget.distance,
+                                              locationAddress:
+                                                  widget.address.isEmpty ? location.address : widget.address,
+                                              distance: widget.distance == ''
+                                                  ? location.distance.toString()
+                                                  : widget.distance,
                                             ),
                                           ),
                                           //TODO next version
@@ -293,9 +298,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                                                     onToggled();
                                                   },
                                                   isIntegrated: vendor.integrated,
-                                                  locationName: widget.title,
-                                                  locationAddress: widget.address,
-                                                  distance: widget.distance,
+                                                  locationName: '${location.vendor.name} "${location.name}"',
+                                                  locationAddress: location.address,
+                                                  distance: location.distance.toString(),
                                                   vendorLogo: state.location.vendor.logo,
                                                   vendorName: state.location.vendor.name,
                                                   organizationName: state.location.vendor.organizationName,

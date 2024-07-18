@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
 import 'package:i_watt_app/features/common/data/repositories_impl/notifications_repository_impl.dart';
@@ -60,13 +61,14 @@ class PushNotificationService {
       .setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
   static Future<void> messagingRequestPermission() async => await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true);
+        alert: true,
+        announcement: true,
+        badge: true,
+        carPlay: true,
+        criticalAlert: true,
+        provisional: true,
+        sound: true,
+      );
 
   static Future<void> configurationFirebaseNotification() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -119,11 +121,14 @@ class PushNotificationService {
               channel.name,
               channelDescription: channel.description,
               icon: android.smallIcon,
+              importance: Importance.max,
+              priority: Priority.high,
+              playSound: true,
+              enableVibration: true,
+              sound: const RawResourceAndroidNotificationSound('notification_sound'),
+              vibrationPattern: Int64List.fromList([0, 1000, 500, 1000]),
             ),
-            iOS: DarwinNotificationDetails(
-              threadIdentifier: channel.id,
-              subtitle: channel.description,
-            ),
+            iOS: const DarwinNotificationDetails(),
           ),
         );
       }

@@ -47,12 +47,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     if (Platform.isAndroid) {
       final info = await device.androidInfo;
       deviceId = info.id;
-      debugPrint('deviceId: $deviceId');
       type = 'android';
     } else {
       final info = await device.iosInfo;
       deviceId = info.identifierForVendor;
-      debugPrint('deviceId: $deviceId');
       type = 'ios';
     }
     await registerDeviceUseCase.call(

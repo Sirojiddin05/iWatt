@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
+import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
 import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
@@ -63,7 +64,7 @@ class ActionSheet extends StatelessWidget {
                   onTap: () async {
                     Navigator.pop(context);
                     await Share.share(
-                        '${location.vendor.name} "${location.name}"\napp.i-watt.uz/location/${location.id}');
+                        '${location.vendor.name} "${location.name}"\n${AppConstants.shareUrl}${location.id}');
                   },
                   color: AppColors.sun.withOpacity(0.18),
                   rippleColor: AppColors.sun.withAlpha(30),

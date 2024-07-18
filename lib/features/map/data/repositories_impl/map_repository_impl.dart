@@ -16,7 +16,8 @@ class MapRepositoryImpl implements MapRepository {
   final MapLocalDataSource _localDataSource;
   const MapRepositoryImpl(this._remoteDataSource, this._localDataSource);
   @override
-  Future<Either<Failure, GenericPagination<ClusterModel>>> getClusters({required GetChargeLocationParamEntity params}) async {
+  Future<Either<Failure, GenericPagination<ClusterModel>>> getClusters(
+      {required GetChargeLocationParamEntity params}) async {
     try {
       final result = await _remoteDataSource.getClusters(params: params);
       return Right(result);
@@ -46,7 +47,8 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote(GetChargeLocationParamEntity params) async {
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote(
+      GetChargeLocationParamEntity params) async {
     try {
       final result = await _remoteDataSource.getMapLocations(params);
       return Right(result);
@@ -71,12 +73,58 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal(GetLocationsFromLocalParams params) async {
+  Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal(
+      GetLocationsFromLocalParams params) async {
     try {
       final result = await _localDataSource.getMapLocations(params);
       return Right(result);
     } catch (e) {
       return Left(CacheFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ChargeLocationEntity>>> getCreatedLocations() async {
+    try {
+      final result = await _remoteDataSource.getCreatedLocations();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errorMessage: e.errorMessage));
+    } on CustomDioException catch (e) {
+      final message = e.type.message;
+      return Left(DioFailure(errorMessage: message));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<int>>> getDeletedLocations() async {
+    try {
+      final result = await _remoteDataSource.getDeletedLocations();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errorMessage: e.errorMessage));
+    } on CustomDioException catch (e) {
+      final message = e.type.message;
+      return Left(DioFailure(errorMessage: message));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ChargeLocationEntity>>> getUpdatedLocations() async {
+    try {
+      final result = await _remoteDataSource.getUpdatedLocations();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errorMessage: e.errorMessage));
+    } on CustomDioException catch (e) {
+      final message = e.type.message;
+      return Left(DioFailure(errorMessage: message));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
     }
   }
 }

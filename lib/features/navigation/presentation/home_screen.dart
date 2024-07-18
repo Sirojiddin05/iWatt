@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/push_notifications.dart';
@@ -14,6 +15,7 @@ import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
+import 'package:i_watt_app/features/charge_location_single/presentation/location_single_sheet.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/bloc/charging_process_bloc/charging_process_bloc.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/check.dart';
 import 'package:i_watt_app/features/charging_processes/presentation/widgets/payment_ckeck_sheet.dart';
@@ -24,9 +26,11 @@ import 'package:i_watt_app/features/common/presentation/widgets/adaptive_dialog.
 import 'package:i_watt_app/features/common/presentation/widgets/no_internet_bottomsheet.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/present_back_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/single_notification_sheet.dart';
+import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/version_check_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_features_usecase.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_version_usecase.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/deeplink_bloc/deep_link_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/version_check_bloc/version_check_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/home_tab_controller_provider.dart';
@@ -224,7 +228,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
               listener: (ctx, state) {
                 onToggled();
               },
-            )
+            ),
+            BlocListener<DeepLinkBloc, DeepLinkState>(
+              listener: (context, state) {
+                if (state is ChargeLocationScanned) {
+                  showLocationSingle(context, const ChargeLocationEntity().copyWith(id: state.locationId));
+                }
+              },
+            ),
           ],
           child: AnimatedBuilder(
             animation: animationController,

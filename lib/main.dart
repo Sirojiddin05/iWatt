@@ -64,12 +64,16 @@ import 'package:i_watt_app/features/common/presentation/blocs/search_history_blo
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
 import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_created_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_deleted_locations.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_map_locations_usecase.dart';
+import 'package:i_watt_app/features/map/domain/usecases/get_updated_locations.dart';
 import 'package:i_watt_app/features/map/domain/usecases/save_location_list_usecase.dart';
 import 'package:i_watt_app/features/map/presentation/blocs/map_locations_bloc/map_locations_bloc.dart';
 import 'package:i_watt_app/features/navigation/data/repositories_impl/instructions_repository_impl.dart';
 import 'package:i_watt_app/features/navigation/domain/usecases/get_instructions_usecase.dart';
+import 'package:i_watt_app/features/navigation/presentation/blocs/deeplink_bloc/deep_link_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/blocs/instructions_bloc/instructions_bloc.dart';
 import 'package:i_watt_app/features/navigation/presentation/home_screen.dart';
 import 'package:i_watt_app/features/profile/data/repositories_impl/payments_repository_impl.dart';
@@ -114,19 +118,29 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => DeepLinkBloc()),
         BlocProvider(create: (context) => CarOnMapBloc()),
         BlocProvider(
           create: (context) => MapLocationsBloc(
             GetLocationsFromLocalSourceUseCase(serviceLocator<MapRepositoryImpl>()),
             GetMapLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
             SaveLocationListUseCase(serviceLocator<MapRepositoryImpl>()),
+            GetCreatedLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
+            GetUpdatedLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
+            GetDeletedLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
             context,
           ),
         ),
         BlocProvider(create: (context) => PresentBottomSheetBloc()),
         BlocProvider(create: (context) => ThemeSwitcherBloc()),
         BlocProvider(create: (context) => InternetBloc(Connectivity())),
-        BlocProvider(create: (context) => InstructionsBloc(GetInstructionsUseCase(serviceLocator<InstructionsRepositoryImpl>()))),
+        BlocProvider(
+          create: (context) => InstructionsBloc(
+            GetInstructionsUseCase(
+              serviceLocator<InstructionsRepositoryImpl>(),
+            ),
+          ),
+        ),
         BlocProvider(create: (context) => CreditCardsBloc()..add(const GetCreditCards())),
         BlocProvider(
           create: (context) => AuthenticationBloc(

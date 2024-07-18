@@ -1,0 +1,19 @@
+{
+  "applinks":{
+    "apps":[
+
+    ],
+    "details":[
+      {
+        "appIDs":[
+          "KHGXWF53U9.org.uicgroup.iwatt"
+        ],
+        "components":[
+          {
+            "/":"/AppRedirect/*",
+          },
+        ]
+      }
+    ]
+  }
+}

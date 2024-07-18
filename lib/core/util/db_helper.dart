@@ -101,19 +101,18 @@ class LocationsDbHelper {
       );
       return locations;
     } catch (e) {
-      print('fetchLocations $e');
       throw CacheException(errorMessage: e.toString());
     }
   }
 
-  // Future<void> insert(String table, Map<String, dynamic> row) async {
-  //   try {
-  //     await database.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
-  //   } catch (e) {
-  //     await init();
-  //     await database.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
-  //   }
-  // }
+  Future<void> insert(String table, Map<String, dynamic> row) async {
+    try {
+      await database.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
+    } catch (e) {
+      await init();
+      await database.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
   //
   // Future<List<Map<String, dynamic>>> getLastAudioSource(String table, int id) async {
   //   try {

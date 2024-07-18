@@ -16,4 +16,7 @@ class StorageKeys {
   static const encryptionKey = 'ENCRYPTION_KEY';
   static const locationAppearance = 'location';
   static const areLocationsFetched = 'are_locations_fetched';
+  static const createdLocationsLastFetch = 'created_locations_last_fetch';
+  static const updatedLocationsLastFetch = 'updated_locations_last_fetch';
+  static const deletedLocationsLastFetch = 'deleted_locations_last_fetch';
 }

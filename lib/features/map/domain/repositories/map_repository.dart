@@ -12,4 +12,7 @@ abstract class MapRepository {
   Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromRemote(GetChargeLocationParamEntity params);
   Future<Either<Failure, List<ChargeLocationEntity>>> getMapLocationsFromLocal(GetLocationsFromLocalParams params);
   Future<Either<Failure, void>> saveLocationList(List<ChargeLocationEntity> locations);
+  Future<Either<Failure, List<ChargeLocationEntity>>> getCreatedLocations();
+  Future<Either<Failure, List<ChargeLocationEntity>>> getUpdatedLocations();
+  Future<Either<Failure, List<int>>> getDeletedLocations();
 }
