@@ -67,7 +67,6 @@ dependencies:
   path: ^1.9.0
   flutter_gradient_animation_text: ^1.0.2
   map_launcher: ^3.3.1
-  firebase_dynamic_links: ^5.5.7
 
 dev_dependencies:
   flutter_test:

@@ -129,7 +129,12 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                         borderRadius: BorderRadius.circular(24),
                         imageUrl: vendorLogo,
                         errorWidget: Padding(
-                            padding: const EdgeInsets.all(16), child: SvgPicture.asset(AppIcons.logoPlaceholder)),
+                          padding: const EdgeInsets.all(16),
+                          child: SvgPicture.asset(
+                            AppIcons.logoPlaceholder,
+                            color: AppColors.limeGreen,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Column(
@@ -137,15 +142,14 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                         children: [
                           Text(vendorName, style: context.textTheme.displayMedium),
                           const SizedBox(height: 2),
-                          Text(organizationName,
-                              style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
+                          Text(organizationName, style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
                           const SizedBox(height: 20),
                           WButton(
                             onTap: () {
                               if (Platform.isAndroid) {
-                                launchUrlString(playMarketUrl);
+                                launchUrlString(playMarketUrl, mode: LaunchMode.externalApplication);
                               } else if (Platform.isIOS) {
-                                launchUrlString(appStoreUrl);
+                                launchUrlString(appStoreUrl, mode: LaunchMode.externalApplication);
                               }
                             },
                             color: context.colorScheme.primary,
