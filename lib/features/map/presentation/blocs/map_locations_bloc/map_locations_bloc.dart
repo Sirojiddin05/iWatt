@@ -16,6 +16,7 @@ import 'package:i_watt_app/features/common/domain/entities/id_name_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
 import 'package:i_watt_app/features/map/domain/entities/get_locations_from_local_params.dart';
+import 'package:i_watt_app/features/map/domain/usecases/delete_locations_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_created_locations_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_deleted_locations.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
@@ -34,6 +35,7 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
   final GetCreatedLocationsUseCase getCreatedLocationsUseCase;
   final GetUpdatedLocationsUseCase getUpdatedLocationsUseCase;
   final GetDeletedLocationsUseCase getDeletedLocationsUseCase;
+  final DeleteLocationsUseCase deleteLocationsUseCase;
   final BuildContext context;
 
   MapLocationsBloc(
@@ -43,6 +45,7 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
     this.getCreatedLocationsUseCase,
     this.getUpdatedLocationsUseCase,
     this.getDeletedLocationsUseCase,
+    this.deleteLocationsUseCase,
     this.context,
   ) : super(const MapLocationsState()) {
     on<GetLocationsFromLocal>(_getLocationsFromLocal);
@@ -53,7 +56,9 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
     final areLocationsFetchedBefore = StorageRepository.getBool(StorageKeys.areLocationsFetched, defValue: false);
     if (!areLocationsFetchedBefore) {
       add(const GeAllLocationsFromRemoteEvent());
-    } else {}
+    } else {
+      updateLocalSource();
+    }
   }
 
   void _getLocationsFromLocal(GetLocationsFromLocal event, Emitter<MapLocationsState> emit) async {
@@ -97,7 +102,10 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
       }
       final saved = await _saveLocations(locationList);
       if (saved) {
+        await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: true);
         emit(state.copyWith(getLocationsFromRemoteStatus: FormzSubmissionStatus.success));
+      } else {
+        await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: false);
       }
     }
   }
@@ -153,23 +161,71 @@ class MapLocationsBloc extends Bloc<MapLocationsEvent, MapLocationsState> {
   }
 
   void updateLocalSource() async {
-    final createdLocationsResult = await getCreatedLocationsUseCase.call(NoParams());
-    if (createdLocationsResult.isRight) {}
+    final createdLocationsResult = await saveCreatedLocations();
+    if (createdLocationsResult) {
+      await saveUpdatedLocations();
+    }
+    await _deleteLocations();
+  }
+
+  Future<bool> saveCreatedLocations() async {
+    final result = await getCreatedLocationsUseCase.call(NoParams());
+    if (result.isRight) {
+      print('created locations: ${result.right.length}');
+      final locationList = [...result.right];
+      for (int i = 0; i < locationList.length; i++) {
+        final locationAppearance = await _getLocationAppearance(
+          logo: locationList[i].logo,
+          stationStatuses: List<ConnectorStatus>.generate(
+            locationList[i].connectorsStatus.length,
+            (index) => ConnectorStatus.fromString(locationList[i].connectorsStatus[index]),
+          ),
+        );
+        locationList[i] = locationList[i].copyWith(
+          locationAppearance: base64Encode(locationAppearance),
+        );
+      }
+      return _saveLocations(locationList);
+    }
+    return false;
+  }
+
+  Future<bool> saveUpdatedLocations() async {
+    final result = await getUpdatedLocationsUseCase.call(NoParams());
+    if (result.isRight) {
+      print('updated locations: ${result.right.length}');
+      final locationList = [...result.right];
+      for (int i = 0; i < locationList.length; i++) {
+        final locationAppearance = await _getLocationAppearance(
+          logo: locationList[i].logo,
+          stationStatuses: List<ConnectorStatus>.generate(
+            locationList[i].connectorsStatus.length,
+            (index) => ConnectorStatus.fromString(locationList[i].connectorsStatus[index]),
+          ),
+        );
+        locationList[i] = locationList[i].copyWith(
+          locationAppearance: base64Encode(locationAppearance),
+        );
+      }
+      return _saveLocations(locationList);
+    }
+    return false;
   }
 
   Future<bool> _saveLocations(List<ChargeLocationEntity> locations) async {
     final result = await saveLocationListUseCase.call(locations);
-    if (result.isRight) {
-      await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: true);
-    } else {
-      await StorageRepository.putBool(key: StorageKeys.areLocationsFetched, value: false);
-    }
     return result.isRight;
   }
 
-  // Future<bool> updateLocations(List<ChargeLocationEntity> locations) async {
-  //
-  // }
+  Future<bool> _deleteLocations() async {
+    final locationIds = await getDeletedLocationsUseCase.call(NoParams());
+    if (locationIds.isRight) {
+      print('deleted locations: ${locationIds.right.length}');
+      final result = await deleteLocationsUseCase.call(locationIds.right);
+      return result.isRight;
+    }
+    return locationIds.isRight;
+  }
 
   Future<Uint8List> _getLocationAppearance({
     required List<ConnectorStatus> stationStatuses,

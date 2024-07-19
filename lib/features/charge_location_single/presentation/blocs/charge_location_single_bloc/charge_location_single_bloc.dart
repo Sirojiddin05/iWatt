@@ -11,6 +11,8 @@ import 'package:i_watt_app/features/charge_location_single/domain/entities/conne
 import 'package:i_watt_app/features/charge_location_single/domain/usecases/get_charge_location_single_usecase.dart';
 import 'package:i_watt_app/features/common/domain/entities/connector_status_message.dart';
 import 'package:i_watt_app/features/common/domain/usecases/connector_status_stream_usecase.dart';
+import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
 
 part 'charge_location_single_event.dart';
 part 'charge_location_single_state.dart';
@@ -18,19 +20,31 @@ part 'charge_location_single_state.dart';
 class ChargeLocationSingleBloc extends Bloc<ChargeLocationSingleEvent, ChargeLocationSingleState> {
   final GetChargeLocationSingleUseCase getChargeLocationSingleUseCase;
   final ConnectorStatusStreamUseCase connectorStatusStreamUseCase;
-  late final StreamSubscription<ConnectorStatusMessageEntity> connectorStausStreamSubscription;
+  late final StreamSubscription<ConnectorStatusMessageEntity> connectorStatusStreamSubscription;
+  late final StreamSubscription<ChargeLocationEntity> chargeLocationSaveSubscription;
+
+  final SaveUnSaveStreamUseCase saveStreamUseCase;
   final double latitude;
   final double longitude;
   ChargeLocationSingleBloc({
     required this.getChargeLocationSingleUseCase,
     required this.connectorStatusStreamUseCase,
+    required this.saveStreamUseCase,
     required String latitude,
     required String longitude,
   })  : latitude = double.tryParse(latitude) ?? 0,
         longitude = double.tryParse(longitude) ?? 0,
         super(const ChargeLocationSingleState()) {
-    connectorStausStreamSubscription = connectorStatusStreamUseCase.call(NoParams()).listen((event) {
+    connectorStatusStreamSubscription = connectorStatusStreamUseCase.call(NoParams()).listen((event) {
       add(ChangeConnectorStatus(connectorId: event.connectorId, status: event.status));
+    });
+    chargeLocationSaveSubscription = saveStreamUseCase.call(NoParams()).listen((location) {
+      if (!isClosed && location.id == state.location.id) {
+        add(ChangeSavedStateOfLocation(saved: location.isFavorite));
+      }
+    });
+    on<ChangeSavedStateOfLocation>((event, emit) {
+      emit(state.copyWith(location: state.location.copyWith(isFavorite: event.saved)));
     });
     on<GetLocationSingle>((event, emit) async {
       emit(state.copyWith(getSingleStatus: FormzSubmissionStatus.inProgress));

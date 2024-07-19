@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/network/dio_settings.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
-import 'package:i_watt_app/core/util/db_helper.dart';
+import 'package:i_watt_app/core/util/db_helpers/locations_db_helper.dart';
 import 'package:i_watt_app/features/authorization/data/datasources/authentication_datasource.dart';
 import 'package:i_watt_app/features/authorization/data/datasources/sign_in_datasource.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';

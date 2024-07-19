@@ -63,7 +63,7 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveLocationList(List<ChargeLocationEntity> locations) async {
+  Future<Either<Failure, void>> saveLocations(List<ChargeLocationEntity> locations) async {
     try {
       final result = await _localDataSource.saveLocationList(locations);
       return Right(result);
@@ -117,6 +117,21 @@ class MapRepositoryImpl implements MapRepository {
   Future<Either<Failure, List<ChargeLocationEntity>>> getUpdatedLocations() async {
     try {
       final result = await _remoteDataSource.getUpdatedLocations();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errorMessage: e.errorMessage));
+    } on CustomDioException catch (e) {
+      final message = e.type.message;
+      return Left(DioFailure(errorMessage: message));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteLocations(List<int> locationIds) async {
+    try {
+      final result = await _localDataSource.deleteLocations(locationIds: locationIds);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(errorMessage: e.errorMessage));

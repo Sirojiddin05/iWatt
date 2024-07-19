@@ -25,6 +25,8 @@ class ChangeLanguageBloc extends Bloc<ChangeLanguageEvent, ChangeLanguageState> 
       final result = await changeLanguageUseCase(event.languageCode);
       print('ChangeLanguageBloc: changeLanguage: success');
       if (result.isRight) {
+        print('ChangeLanguageBloc: changeLanguage: result.isRight');
+
         emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.success));
       } else {
         emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.failure));

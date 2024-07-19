@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
+import 'package:i_watt_app/core/util/enums/pop_up_status.dart';
+import 'package:i_watt_app/core/util/extensions/build_context_extension.dart';
 import 'package:i_watt_app/features/authorization/presentation/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:i_watt_app/features/authorization/presentation/pages/sign_in.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/save_unsave_bloc/save_un_save_bloc.dart';
@@ -24,14 +27,20 @@ class SavedUnSaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SaveUnSaveBloc>(
-      key: UniqueKey(),
+      key: ValueKey(location.id.toString() + location.isFavorite.toString()),
       create: (context) => SaveUnSaveBloc(
         location: location,
         saveChargeLocationUseCase: SaveUnSaveChargeLocationUseCase(
           serviceLocator<ChargeLocationsRepositoryImpl>(),
         ),
       ),
-      child: BlocBuilder<SaveUnSaveBloc, SaveUnSaveState>(
+      child: BlocConsumer<SaveUnSaveBloc, SaveUnSaveState>(
+        listenWhen: (o, n) => o.status != n.status,
+        listener: (context, state) {
+          if (state.status.isFailure) {
+            context.showPopUp(context, PopUpStatus.failure, message: state.error);
+          }
+        },
         builder: (context, state) {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,

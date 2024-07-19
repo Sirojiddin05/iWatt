@@ -29,3 +29,8 @@ class ChangeConnectorStatus extends ChargeLocationSingleEvent {
   final String status;
   const ChangeConnectorStatus({required this.connectorId, required this.status});
 }
+
+class ChangeSavedStateOfLocation extends ChargeLocationSingleEvent {
+  final bool saved;
+  const ChangeSavedStateOfLocation({required this.saved});
+}

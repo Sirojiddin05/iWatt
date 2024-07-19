@@ -85,9 +85,14 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
         queryParameters: params.toJson(),
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-        final data = GenericPagination<ChargeLocationModel>.fromJson(
-            {'results': response.data}, (p0) => ChargeLocationModel.fromJson(p0 as Map<String, dynamic>)).results;
-        return data;
+        try {
+          final data = GenericPagination<ChargeLocationModel>.fromJson(
+              {'results': response.data}, (p0) => ChargeLocationModel.fromJson(p0 as Map<String, dynamic>)).results;
+          return data;
+        } catch (e) {
+          print('parsing error $e');
+          throw ParsingException(errorMessage: e.toString());
+        }
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(

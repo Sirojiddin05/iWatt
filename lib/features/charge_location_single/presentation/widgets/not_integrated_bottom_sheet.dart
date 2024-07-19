@@ -139,25 +139,30 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(vendorName, style: context.textTheme.displayMedium),
+                          Text(appName, style: context.textTheme.displayMedium),
                           const SizedBox(height: 2),
-                          Text(organizationName, style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
+                          Text(organizationName,
+                              style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
                           const SizedBox(height: 20),
-                          WButton(
-                            onTap: () {
-                              if (Platform.isAndroid) {
-                                launchUrlString(playMarketUrl, mode: LaunchMode.externalApplication);
-                              } else if (Platform.isIOS) {
-                                launchUrlString(appStoreUrl, mode: LaunchMode.externalApplication);
-                              }
-                            },
-                            color: context.colorScheme.primary,
-                            borderRadius: 20,
-                            height: 34,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            text: LocaleKeys.download.tr(),
-                          ),
+                          if ((Platform.isAndroid && playMarketUrl.isNotEmpty) ||
+                              (Platform.isIOS && appStoreUrl.isNotEmpty)) ...{
+                            WButton(
+                              onTap: () {
+                                if (Platform.isAndroid) {
+                                  launchUrlString(playMarketUrl, mode: LaunchMode.externalApplication);
+                                } else if (Platform.isIOS) {
+                                  launchUrlString(appStoreUrl, mode: LaunchMode.externalApplication);
+                                }
+                              },
+                              color: context.colorScheme.primary,
+                              borderRadius: 20,
+                              height: 34,
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              text: LocaleKeys.download.tr(),
+                            ),
+                          }
                         ],
                       ),
                     ],

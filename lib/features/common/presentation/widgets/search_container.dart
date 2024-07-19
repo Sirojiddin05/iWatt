@@ -59,11 +59,13 @@ class _SearchFilterContainerState extends State<SearchFilterContainer> {
                     children: [
                       SvgPicture.asset(context.themedIcons.plugAlt),
                       const SizedBox(width: 10),
-                      Text(
-                        LocaleKeys.search_stations.tr(),
-                        style: context.textTheme.headlineSmall!.copyWith(color: AppColors.blueBayoux),
+                      Expanded(
+                        child: Text(
+                          LocaleKeys.search_stations.tr(),
+                          style: context.textTheme.headlineSmall!.copyWith(color: AppColors.blueBayoux),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      const Spacer(),
                       SvgPicture.asset(AppIcons.search),
                     ],
                   ),

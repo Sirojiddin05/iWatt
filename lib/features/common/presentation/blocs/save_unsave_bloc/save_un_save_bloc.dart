@@ -11,7 +11,8 @@ part 'save_un_save_state.dart';
 class SaveUnSaveBloc extends Bloc<SaveUnSaveEvent, SaveUnSaveState> {
   final SaveUnSaveChargeLocationUseCase saveChargeLocationUseCase;
   final ChargeLocationEntity location;
-  SaveUnSaveBloc({required this.saveChargeLocationUseCase, required this.location}) : super(SaveUnSaveState(location: location)) {
+  SaveUnSaveBloc({required this.saveChargeLocationUseCase, required this.location})
+      : super(SaveUnSaveState(location: location)) {
     on<SaveEvent>((event, emit) async {
       final location = state.location;
       emit(
@@ -23,18 +24,14 @@ class SaveUnSaveBloc extends Bloc<SaveUnSaveEvent, SaveUnSaveState> {
       final result = await saveChargeLocationUseCase(location);
 
       if (result.isRight) {
-        print('result.right is ${result.left}');
-
         emit(
           const SaveUnSaveState(status: FormzSubmissionStatus.success),
         );
       } else {
-        print('result.left is ${result.left}');
-
         emit(
           SaveUnSaveState(
             location: location.copyWith(isFavorite: location.isFavorite),
-            status: FormzSubmissionStatus.success,
+            status: FormzSubmissionStatus.failure,
             error: result.left.errorMessage,
           ),
         );

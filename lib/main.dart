@@ -11,7 +11,7 @@ import 'package:i_watt_app/core/config/app_theme/dark.dart';
 import 'package:i_watt_app/core/config/app_theme/light.dart';
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
-import 'package:i_watt_app/core/util/db_helper.dart';
+import 'package:i_watt_app/core/util/db_helpers/locations_db_helper.dart';
 import 'package:i_watt_app/core/util/enums/instructions_type.dart';
 import 'package:i_watt_app/core/util/my_functions.dart';
 import 'package:i_watt_app/features/authorization/data/repositories_impl/authentication_repository_impl.dart';
@@ -64,6 +64,7 @@ import 'package:i_watt_app/features/common/presentation/blocs/search_history_blo
 import 'package:i_watt_app/features/common/presentation/blocs/theme_switcher_bloc/theme_switcher_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/blocs/vendors_bloc/vendors_bloc.dart';
 import 'package:i_watt_app/features/map/data/repositories_impl/map_repository_impl.dart';
+import 'package:i_watt_app/features/map/domain/usecases/delete_locations_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_created_locations_usecase.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_deleted_locations.dart';
 import 'package:i_watt_app/features/map/domain/usecases/get_locations_from_local_source_usecase.dart';
@@ -95,7 +96,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
     await setupLocator();
-    await serviceLocator<LocationsDbHelper>().init();
+    serviceLocator<LocationsDbHelper>().init();
     //TODO uncomment to production
     // await SentryFlutter.init((options) {
     //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
@@ -128,6 +129,7 @@ class App extends StatelessWidget {
             GetCreatedLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
             GetUpdatedLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
             GetDeletedLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
+            DeleteLocationsUseCase(serviceLocator<MapRepositoryImpl>()),
             context,
           ),
         ),

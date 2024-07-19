@@ -3,7 +3,7 @@ description: "I WATT"
 
 publish_to: 'none'
 
-version: 1.0.0+19
+version: 1.0.0+20
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
@@ -67,6 +67,7 @@ dependencies:
   path: ^1.9.0
   flutter_gradient_animation_text: ^1.0.2
   map_launcher: ^3.3.1
+  flutter_isolate: ^2.0.5-pre
 
 dev_dependencies:
   flutter_test:

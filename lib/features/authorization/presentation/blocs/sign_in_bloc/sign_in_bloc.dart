@@ -52,7 +52,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         );
         _setTimer();
       } else {
-        print(' result${result.left.errorMessage}');
         emit(state.copyWith(
           signInStatus: FormzSubmissionStatus.failure,
           signInErrorMessage: result.left.errorMessage,

@@ -27,7 +27,9 @@ import 'package:i_watt_app/features/common/domain/usecases/connector_status_stre
 import 'package:i_watt_app/features/common/presentation/blocs/present_bottom_sheet/present_bottom_sheet_bloc.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/present_back_wrapper.dart';
 import 'package:i_watt_app/features/common/presentation/widgets/w_keyboard_dismisser.dart';
+import 'package:i_watt_app/features/list/data/repository_impl/charge_locations_repository_impl.dart';
 import 'package:i_watt_app/features/list/domain/entities/charge_location_entity.dart';
+import 'package:i_watt_app/features/list/domain/usecases/save_unsave_stream_usecase.dart';
 import 'package:i_watt_app/service_locator.dart';
 
 Future<void> showLocationSingle(BuildContext context, ChargeLocationEntity location) async {
@@ -125,6 +127,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
       connectorStatusStreamUseCase: ConnectorStatusStreamUseCase(
         serviceLocator<SocketRepositoryImpl>(),
       ),
+      saveStreamUseCase: SaveUnSaveStreamUseCase(
+        serviceLocator<ChargeLocationsRepositoryImpl>(),
+      ),
       latitude: widget.latitude,
       longitude: widget.longitude,
     )..add(GetLocationSingle(widget.id));
@@ -217,7 +222,7 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
                     child: DraggableScrollableSheet(
                       snap: true,
                       snapSizes: const [.5, .83, 1],
-                      minChildSize: .45,
+                      minChildSize: .48,
                       initialChildSize: widget.midSize ? .83 : .5,
                       controller: draggableScrollableController,
                       builder: (context, controller) {
