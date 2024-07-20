@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:i_watt_app/core/config/app_colors.dart';
 import 'package:i_watt_app/core/config/app_icons.dart';
@@ -114,7 +115,7 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                   child: Text(
-                    LocaleKeys.not_integrated_hint_text.tr(args: [appName]),
+                    LocaleKeys.not_integrated_hint_text.tr(args: [vendorName]),
                     style: context.textTheme.titleMedium?.copyWith(fontSize: 12),
                   ),
                 ),
@@ -122,6 +123,7 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   color: context.colorScheme.primaryContainer,
                   child: Row(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       WImage(
                         width: 100,
@@ -139,15 +141,16 @@ class NotIntegratedBottomSheet extends StatelessWidget {
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(appName, style: context.textTheme.displayMedium),
-                          const SizedBox(height: 2),
-                          Text(organizationName,
-                              style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
-                          const SizedBox(height: 20),
+                          Text(vendorName, style: context.textTheme.displayMedium),
+                          if (organizationName.isNotEmpty) ...{
+                            const SizedBox(height: 2),
+                            Text(organizationName,
+                                style: context.textTheme.labelMedium?.copyWith(color: AppColors.blueBayoux)),
+                          },
                           if ((Platform.isAndroid && playMarketUrl.isNotEmpty) ||
                               (Platform.isIOS && appStoreUrl.isNotEmpty)) ...{
+                            const SizedBox(height: 20),
                             WButton(
                               onTap: () {
                                 if (Platform.isAndroid) {

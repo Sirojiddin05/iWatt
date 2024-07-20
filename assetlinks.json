@@ -1,9 +1,0 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "org.uicgroup.iwatt",
-    "package_name": "org.uicgroup.iwatt",
-    "sha256_cert_fingerprints":
-    ["CF:CB:85:02:3B:6C:FC:C4:CF:D3:85:BF:5C:8A:1C:E7:D9:36:BC:CD:25:92:A9:BB:BF:6B:68:60:77:AF:D5:77"]
-  }
-}]

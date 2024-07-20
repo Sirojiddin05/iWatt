@@ -38,6 +38,7 @@ import 'package:i_watt_app/features/navigation/presentation/widgets/navigation_b
 import 'package:i_watt_app/features/navigation/presentation/widgets/navigator.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/update_dialog.dart';
 import 'package:i_watt_app/features/navigation/presentation/widgets/version_features_sheet.dart';
+import 'package:i_watt_app/features/profile/presentation/blocs/credit_cards_bloc/credit_cards_bloc.dart';
 import 'package:i_watt_app/features/profile/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -136,10 +137,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             ),
             BlocListener<AuthenticationBloc, AuthenticationState>(
               listenWhen: (o, n) => o.authenticationStatus != n.authenticationStatus,
-              listener: (context, state) {
+              listener: (context, state) async {
                 context.read<ProfileBloc>().add(GetUserData());
                 if (state.authenticationStatus.isAuthenticated) {
+                  await Future.delayed(const Duration(milliseconds: 200));
                   context.read<ChargingProcessBloc>().add(ConnectToSocketEvent());
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  context.read<CreditCardsBloc>().add(const GetCreditCards());
                 } else {
                   context.read<ChargingProcessBloc>().add(DisconnectFromSocketEvent());
                 }
@@ -254,7 +258,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
             child: BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
               builder: (context, themeState) {
                 return AnnotatedRegion(
-                  value: themeState.appTheme.isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+                  value: themeState.appTheme.isDark
+                      ? SystemUiOverlayStyle.light.copyWith(
+                          systemNavigationBarColor: context.themedColors.whiteToCyprus,
+                        )
+                      : SystemUiOverlayStyle.dark.copyWith(
+                          systemNavigationBarColor: context.themedColors.whiteToCyprus,
+                        ),
                   child: HomeTabControllerProvider(
                     controller: _tabController,
                     child: PopScope(

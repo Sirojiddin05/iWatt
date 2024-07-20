@@ -18,7 +18,8 @@ class BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paddingTop = Platform.isIOS ? context.sizeOf.height * 0.16 : context.sizeOf.height * 0.14;
+    final viewInsets = MediaQueryData.fromView(View.of(context));
+    final height = context.sizeOf.height;
     return Positioned(
       top: 0,
       right: 0,
@@ -49,7 +50,7 @@ class BackgroundImage extends StatelessWidget {
                 ),
                 Positioned(
                   left: 16,
-                  top: paddingTop,
+                  bottom: (height - viewInsets.padding.top) * 0.82,
                   child: BlocBuilder<ChargeLocationSingleBloc, ChargeLocationSingleState>(
                     builder: (context, state) {
                       return LogoContainer(

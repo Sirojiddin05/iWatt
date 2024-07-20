@@ -6,8 +6,8 @@ import 'package:i_watt_app/features/profile/domain/entities/language_entity.dart
 import 'package:i_watt_app/generated/locale_keys.g.dart';
 
 class AppConstants {
-  static const String baseUrl = 'https://app.i-watt.uz/api/v1/';
-  static const String shareUrl = 'https://app.i-watt.uz/AppRedirect/';
+  static const String baseUrl = 'https://xn--ls8h.i-watt.uz/api/v1/';
+  static const String shareUrl = 'https://xn--ls8h.i-watt.uz/AppRedirect/';
   static const Duration animationDuration = Duration(milliseconds: 150);
   static const languageList = [
     LanguageEntity(
@@ -19,6 +19,11 @@ class AppConstants {
       icon: AppIcons.flagTg,
       title: 'Тоҷикӣ',
       locale: Locale('ta', 'TA'),
+    ),
+    LanguageEntity(
+      icon: AppIcons.flagKy,
+      title: 'Кыргызча',
+      locale: Locale('ky', 'KY'),
     ),
     LanguageEntity(
       icon: AppIcons.flagKaa,

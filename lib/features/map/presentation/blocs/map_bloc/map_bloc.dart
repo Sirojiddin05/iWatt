@@ -37,7 +37,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       (Set<Marker> markers) => add(SetMarkersEvent(markers: markers)),
       clusterAlgorithm: ClusterAlgorithm.MAX_DIST,
       stopClusteringZoom: 18,
-      maxDistParams: MaxDistParams(10),
+      maxDistParams: MaxDistParams(6),
       markerBuilder: (cluster) async {
         late final Uint8List appearance;
         if (cluster.isMultiple) {

@@ -63,7 +63,25 @@ Future<void> setupLocator() async {
     key: StorageKeys.encryptionKey,
     value: dotenv.env[StorageKeys.encryptionKey] ?? '',
   );
+  await secureStorage.write(
+    key: StorageKeys.caCert,
+    value: '',
+  );
+  await secureStorage.write(
+    key: StorageKeys.clientCert,
+    value: '',
+  );
+  await secureStorage.write(
+    key: StorageKeys.clientKey,
+    value: '',
+  );
+
   serviceLocator.registerLazySingleton(() => DioSettings());
+  // try {
+  //   await serviceLocator<DioSettings>().initSecurityContext();
+  // } catch (e) {
+  //   print('object $e');
+  // }
   serviceLocator.registerLazySingleton(() => LocationsDbHelper());
   serviceLocator.registerFactory(() => AuthenticationDatasourceImpl(dio: serviceLocator<DioSettings>().dio));
   serviceLocator.registerFactory(() => AuthenticationRepositoryImpl(serviceLocator<AuthenticationDatasourceImpl>()));

@@ -19,4 +19,7 @@ class StorageKeys {
   static const createdLocationsLastFetch = 'created_locations_last_fetch';
   static const updatedLocationsLastFetch = 'updated_locations_last_fetch';
   static const deletedLocationsLastFetch = 'deleted_locations_last_fetch';
+  static const caCert = 'ca_cert.pem';
+  static const clientCert = 'client_cert';
+  static const clientKey = 'client_key';
 }

@@ -48,12 +48,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     return BlocBuilder<ThemeSwitcherBloc, ThemeSwitcherState>(
       builder: (context, themeState) {
         return AnnotatedRegion(
-          value: themeState.appTheme.isDark
-              ? SystemUiOverlayStyle.light
-              : SystemUiOverlayStyle.dark.copyWith(
-                  statusBarColor: Colors.transparent,
-                  systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
-                ),
+          value: SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: themeState.appTheme.isDark ? Brightness.dark : null,
+            statusBarIconBrightness: themeState.appTheme.isDark ? Brightness.light : null,
+            systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
+          ),
           child: Scaffold(
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

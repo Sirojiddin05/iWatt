@@ -31,17 +31,20 @@ class MapZoomButtons extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            WCustomTappableButton(
-              onTap: () => context.read<MapBloc>().add(const ZoomInEvent()),
-              rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  AppIcons.plus,
-                  width: 24,
-                  height: 24,
-                  color: context.themedColors.cyprusToBlueBayoux,
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: WCustomTappableButton(
+                onTap: () => context.read<MapBloc>().add(const ZoomInEvent()),
+                rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: SvgPicture.asset(
+                    AppIcons.plus,
+                    width: 24,
+                    height: 24,
+                    color: context.themedColors.cyprusToBlueBayoux,
+                  ),
                 ),
               ),
             ),
@@ -53,17 +56,20 @@ class MapZoomButtons extends StatelessWidget {
               width: 24,
               height: 1,
             ),
-            WCustomTappableButton(
-              onTap: () => context.read<MapBloc>().add(const ZoomOutEvent()),
-              rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  AppIcons.minus,
-                  width: 24,
-                  height: 24,
-                  color: context.themedColors.cyprusToBlueBayoux,
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: WCustomTappableButton(
+                onTap: () => context.read<MapBloc>().add(const ZoomOutEvent()),
+                rippleColor: context.themedColors.cyprusToWhite.withAlpha(20),
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: SvgPicture.asset(
+                    AppIcons.minus,
+                    width: 24,
+                    height: 24,
+                    color: context.themedColors.cyprusToBlueBayoux,
+                  ),
                 ),
               ),
             ),

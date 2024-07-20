@@ -70,15 +70,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   context
                       .read<AuthenticationBloc>()
                       .add(AuthenticationStatusChanged(authenticationStatus: AuthenticationStatus.unauthenticated));
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
                 } else if (state.deleteAccountStatus.isFailure) {
-                  Navigator.pop(context);
+                  Navigator.of(context, rootNavigator: true).pop();
                   context.showPopUp(
                     context,
                     PopUpStatus.failure,
                     message: state.deleteAccountErrorMessage,
                   );
-                  Navigator.pop(context);
                 } else if (state.deleteAccountStatus.isInProgress) {
                   showCommonLoaderDialog(context);
                 }

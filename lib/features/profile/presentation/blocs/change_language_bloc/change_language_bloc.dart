@@ -22,15 +22,13 @@ class ChangeLanguageBloc extends Bloc<ChangeLanguageEvent, ChangeLanguageState> 
       await event.context.setLocale(Locale(event.languageCode));
       serviceLocator<DioSettings>().setBaseOptions();
       await resetLocator();
-      final result = await changeLanguageUseCase(event.languageCode);
-      print('ChangeLanguageBloc: changeLanguage: success');
-      if (result.isRight) {
-        print('ChangeLanguageBloc: changeLanguage: result.isRight');
-
-        emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.success));
-      } else {
-        emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.failure));
-      }
+      emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.success));
+      await changeLanguageUseCase(event.languageCode);
+      // if (result.isRight) {
+      //   emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.success));
+      // } else {
+      //   emit(state.copyWith(changeLanguageStatus: FormzSubmissionStatus.failure));
+      // }
     });
   }
 }

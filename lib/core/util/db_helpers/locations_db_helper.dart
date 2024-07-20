@@ -16,11 +16,8 @@ class LocationsDbHelper {
   static late final Database database;
 
   Future<void> init() async {
-    print('LocationsDbHelper init');
     var databasesPath = await getDatabasesPath();
-    print('databasesPath $databasesPath');
     var path = join(databasesPath, AppConstants.locationDb);
-    print('path $path');
     var exists = await databaseExists(path);
     if (!exists) {
       try {
@@ -29,11 +26,7 @@ class LocationsDbHelper {
         log(error.toString());
       }
     }
-    try {
-      database = await openDatabase(path, readOnly: false, onOpen: (db) {});
-    } catch (e) {
-      log('initError: ${e.toString()}');
-    }
+    database = await openDatabase(path, readOnly: false, onOpen: (db) {});
     await _createTable();
   }
 

@@ -139,7 +139,9 @@ class _LocationSingleSheetState extends State<LocationSingleSheet> with TickerPr
   Widget build(BuildContext context) {
     // final paddingTop = Platform.isAndroid ? MediaQueryData.fromView(View.of(context)).padding.top : context.padding.top + 8;
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: AppColors.white),
+      value: SystemUiOverlayStyle.light.copyWith(
+        systemNavigationBarColor: context.themedColors.whiteToCyprus,
+      ),
       child: BlocProvider(
         create: (ctx) => chargeLocationSingleBloc,
         child: BlocListener<ChargeLocationSingleBloc, ChargeLocationSingleState>(

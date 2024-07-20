@@ -32,6 +32,8 @@ class TokenRefreshInterceptor implements Interceptor {
       options.headers.remove('Authorization');
     }
     options.headers['Accept-Language'] = StorageRepository.getString(StorageKeys.currentLanguage, defValue: 'uz');
+    if (options.headers['Accept-Language'] == 'ta') options.headers['Accept-Language'] = 'tg';
+    // if (options.headers['Accept-Language'] == 'ka') options.headers['Accept-Language'] = 'uz';
     handler.next(options);
   }
 

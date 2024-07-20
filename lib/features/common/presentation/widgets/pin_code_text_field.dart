@@ -55,6 +55,7 @@ class WPinCodeTextField extends StatelessWidget {
         fieldWidth: 48,
         errorBorderColor: context.colorScheme.error,
       ),
+      autoDismissKeyboard: false,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:i_watt_app/core/config/storage_keys.dart';
 import 'package:i_watt_app/core/services/storage_repository.dart';
@@ -38,6 +39,7 @@ class SocketDataSourceImpl implements SocketDataSource {
   @override
   Future<void> connectToSocket() async {
     final token = StorageRepository.getString(StorageKeys.accessToken).replaceAll('Bearer ', '');
+    log('token $token');
     final url = "wss://app.i-watt.uz/ws/v1/mobile/?token=$token";
     final wsUrl = Uri.parse(url);
     _channel = WebSocketChannel.connect(wsUrl);

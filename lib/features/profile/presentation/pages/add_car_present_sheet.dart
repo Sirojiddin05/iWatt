@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:i_watt_app/core/config/app_constants.dart';
@@ -86,35 +87,40 @@ class _AddCarPresentSheetState extends State<AddCarPresentSheet> {
             },
           ),
         ],
-        child: Scaffold(
-          body: SheetWrapper(
-            child: Column(
-              children: [
-                const AddCarSheetHeader(),
-                Expanded(
-                  child: PageView(
-                    controller: pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      const AddCarManufacturersList(),
-                      const SecondStepSwitcher(),
-                      BlocBuilder<AddCarBloc, AddCarState>(
-                        buildWhen: (o, n) => o.temporaryConnectorTypes != n.temporaryConnectorTypes,
-                        builder: (context, state) {
-                          return ConnectorTypesList(
-                            defaultSelectedTypes: state.temporaryConnectorTypes,
-                            onChanged: (list) {
-                              addCarBloc.add(SetTemporaryConnectorTypes(list));
-                            },
-                          );
-                        },
-                      ),
-                      const AdditionalInformation()
-                    ],
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle.light.copyWith(
+            systemNavigationBarColor: context.themedColors.whiteToCyprus,
+          ),
+          child: Scaffold(
+            body: SheetWrapper(
+              child: Column(
+                children: [
+                  const AddCarSheetHeader(),
+                  Expanded(
+                    child: PageView(
+                      controller: pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        const AddCarManufacturersList(),
+                        const SecondStepSwitcher(),
+                        BlocBuilder<AddCarBloc, AddCarState>(
+                          buildWhen: (o, n) => o.temporaryConnectorTypes != n.temporaryConnectorTypes,
+                          builder: (context, state) {
+                            return ConnectorTypesList(
+                              defaultSelectedTypes: state.temporaryConnectorTypes,
+                              onChanged: (list) {
+                                addCarBloc.add(SetTemporaryConnectorTypes(list));
+                              },
+                            );
+                          },
+                        ),
+                        const AdditionalInformation()
+                      ],
+                    ),
                   ),
-                ),
-                const AddCarBottomButton()
-              ],
+                  const AddCarBottomButton()
+                ],
+              ),
             ),
           ),
         ),

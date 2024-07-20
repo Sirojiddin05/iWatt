@@ -1,12 +1,22 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:i_watt_app/core/error/exception_handler.dart';
 import 'package:i_watt_app/features/common/data/models/error_model.dart';
 import 'package:i_watt_app/features/common/data/models/generic_pagination.dart';
 import 'package:i_watt_app/features/list/data/models/charge_location_model.dart';
 import 'package:i_watt_app/features/list/domain/entities/get_charge_locations_param_entity.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:crypto/crypto.dart';
+import 'dart:typed_data';
+import 'package:pointycastle/pointycastle.dart';
+import 'package:pointycastle/export.dart' as pc;
+import 'package:pointycastle/api.dart' show KeyParameter, ParametersWithIV, Pbkdf2Parameters;
 
 abstract class ChargeLocationsDataSource {
-  Future<GenericPagination<ChargeLocationModel>> getChargeLocations({required GetChargeLocationParamEntity paramEntity});
+  Future<GenericPagination<ChargeLocationModel>> getChargeLocations(
+      {required GetChargeLocationParamEntity paramEntity});
   Future<void> saveUnSaveChargeLocation({required int id});
 }
 
@@ -16,7 +26,8 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
   const ChargeLocationsDataSourceImpl(this._dio);
 
   @override
-  Future<GenericPagination<ChargeLocationModel>> getChargeLocations({required GetChargeLocationParamEntity paramEntity}) async {
+  Future<GenericPagination<ChargeLocationModel>> getChargeLocations(
+      {required GetChargeLocationParamEntity paramEntity}) async {
     late final String baseUrl;
     if (paramEntity.next.isNotEmpty) {
       baseUrl = paramEntity.next;
@@ -31,7 +42,12 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
         queryParameters: baseUrl != paramEntity.next ? paramEntity.toJson() : null,
       );
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-        return GenericPagination.fromJson(response.data, (p0) => ChargeLocationModel.fromJson(p0 as Map<String, dynamic>));
+        return GenericPagination.fromJson(
+          response.data,
+          (p0) {
+            return ChargeLocationModel.fromJson(p0 as Map<String, dynamic>);
+          },
+        );
       } else {
         final error = GenericErrorModel.fromJson(response.data);
         throw ServerException(
@@ -77,3 +93,32 @@ class ChargeLocationsDataSourceImpl implements ChargeLocationsDataSource {
     }
   }
 }
+// import 'dart:convert';
+// import 'package:encrypt/encrypt.dart' as encrypt;
+// import 'package:http/http.dart' as http;
+// final secretKey = encrypt.Key.fromUtf8('your-32-byte-secret-key');
+// final ivLength = 16;
+// String decryptData(String base64Encrypted) {
+//   final decoded = base64Url.decode(base64Encrypted);
+//   final salt = decoded.sublist(0, 16);
+//   final iv = encrypt.IV(decoded.sublist(16, 16 + ivLength));
+//   final encryptedData = decoded.sublist(16 + ivLength);
+//   final keyDerivator = encrypt.KeyDerivator('SHA-256/HMAC/PBKDF2');
+//   final key = keyDerivator.process(secretKey.bytes);
+//   final encrypter = encrypt.Encrypter(encrypt.AES(encrypt.Key.fromUtf8(key.toString())));
+//   final decrypted = encrypter.decryptBytes(encrypt.Encrypted(encryptedData), iv: iv);
+//   return utf8.decode(decrypted);
+// }
+// Future<void> fetchEncryptedData() async {
+//   final response = await http.get(Uri.parse('https://yourdomain.com/my_view'));
+//   if (response.statusCode == 200) {
+//     final encryptedData = jsonDecode(response.body)['data'];
+//     final decryptedData = decryptData(encryptedData);
+//     print(decryptedData); // Use your decrypted data
+//   } else {
+//     throw Exception('Failed to load data');
+//   }
+// }
+// void main() {
+//   fetchEncryptedData();
+// }

@@ -122,6 +122,7 @@ abstract class DarkTheme {
             prussianBlueToWhite: AppColors.white,
             deepFirToWhite: AppColors.white,
             geyserToZirconO2: AppColors.zircon.withOpacity(.2),
+            whiteToCyprus: AppColors.cyprus,
           ),
           ThemedIcons(
             splashLogo: AppIcons.splashLogoDark,

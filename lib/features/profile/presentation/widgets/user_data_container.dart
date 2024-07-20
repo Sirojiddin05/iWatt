@@ -30,7 +30,7 @@ class UserDataContainer extends StatelessWidget {
         ),
       ),
       borderRadius: BorderRadius.circular(12),
-      rippleColor: AppColors.cyprusRipple30,
+      rippleColor: context.theme.splashColor,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

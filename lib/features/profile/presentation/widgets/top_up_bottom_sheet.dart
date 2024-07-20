@@ -53,8 +53,8 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
   Widget build(BuildContext context) {
     return WKeyboardDismisser(
       child: AnnotatedRegion(
-        value: SystemUiOverlayStyle.dark.copyWith(
-          systemNavigationBarColor: AppColors.white,
+        value: SystemUiOverlayStyle.light.copyWith(
+          systemNavigationBarColor: context.themedColors.whiteToCyprus,
         ),
         child: Scaffold(
           backgroundColor: context.themedColors.whiteToCyprusO8,
@@ -111,7 +111,8 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
                       ),
                       Divider(color: context.theme.dividerColor, height: 1, thickness: 1),
                       BlocBuilder<CreditCardsBloc, CreditCardsState>(
-                        buildWhen: (p, c) => p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
+                        buildWhen: (p, c) =>
+                            p.getCreditCardsStatus != c.getCreditCardsStatus || p.creditCards != c.creditCards,
                         builder: (context, creditCards) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
@@ -141,7 +142,8 @@ class _TopUpBottomSheetState extends State<TopUpBottomSheet> with WidgetsBinding
                                       );
                                     }),
                                   } else ...{
-                                    Center(
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 16),
                                       child: EmptyStateWidget(
                                         icon: AppImages.creditCards,
                                         title: LocaleKeys.you_dont_have_a_card.tr(),

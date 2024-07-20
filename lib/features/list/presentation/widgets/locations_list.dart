@@ -135,7 +135,11 @@ class LocationsList extends StatelessWidget {
                   ),
                 );
               } else if (state.getChargeLocationsStatus.isFailure) {
-                return const ErrorStateTextWidget();
+                return Center(
+                  child: Text(
+                    LocaleKeys.failure_in_loading.tr(),
+                  ),
+                );
               }
               return const SizedBox.shrink();
             },

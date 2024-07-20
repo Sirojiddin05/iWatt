@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -21,6 +22,17 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class MyFunctions {
   const MyFunctions._();
+
+  // static Future<SecurityContext> get globalContext async {
+  //   SecurityContext securityContext = SecurityContext(withTrustedRoots: false);
+  //   final caCert = File('assets/certificates/ca_cert.pem');
+  //   final chain = File('assets/certificates/client_cert.pem');
+  //   final key = File('assets/certificates/client_key.pem');
+  //   securityContext.setTrustedCertificates(caCert.path); // Optionally add CA certificate if needed
+  //   securityContext.useCertificateChain(chain.path); // Client certificate
+  //   securityContext.usePrivateKey(key.path); // Private key
+  //   return securityContext;
+  // }
 
   static double getRadiusFromZoom(double zoom) {
     return 40000 / pow(2, zoom) > 1 ? 40000 / pow(2, zoom) : 1;
@@ -417,7 +429,8 @@ class MyFunctions {
   }
 
   static double getDistanceBetweenTwoPoints(LatLng firstPoint, LatLng secondPoint) {
-    final distance = Geolocator.distanceBetween(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+    final distance = Geolocator.distanceBetween(
+        firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
     return distance;
   }
 
@@ -466,7 +479,8 @@ class MyFunctions {
       canvas.drawShadow(Path()..addRRect(RRect.fromRectXY(rect, 0, 0)), AppColors.limeGreen, 18, false);
     }
     final Paint paint = Paint()..color = Colors.red;
-    canvas.drawImage(await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
+    canvas.drawImage(
+        await getImageInfo(context, image).then((value) => value.image), offset ?? const Offset(0, 0), paint);
 
     if (shouldAddText) {
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);

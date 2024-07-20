@@ -23,21 +23,23 @@ class LoginToSystemContainer extends StatelessWidget {
             children: [
               SvgPicture.asset(AppIcons.loginToSystem),
               const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.login_to_system.tr(),
-                    style: context.theme.textTheme.headlineLarge?.copyWith(
-                      fontSize: 18,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      LocaleKeys.login_to_system.tr(),
+                      style: context.theme.textTheme.headlineLarge?.copyWith(
+                        fontSize: 18,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    LocaleKeys.you_are_not_authorized.tr(),
-                    style: context.theme.textTheme.titleMedium?.copyWith(color: AppColors.amaranth),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      LocaleKeys.you_are_not_authorized.tr(),
+                      style: context.theme.textTheme.titleMedium?.copyWith(color: AppColors.amaranth),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

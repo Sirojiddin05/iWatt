@@ -13,10 +13,11 @@ class ChangeLanguageDataSourceImpl implements ChangeLanguageDataSource {
 
   @override
   Future<void> changeLanguage({required String languageCode}) async {
+    final code = languageCode == 'ta' ? 'tg' : languageCode;
     try {
       final response = await _dio.patch(
         'users/profile-update/',
-        data: {'language': languageCode},
+        data: {'language': code},
       );
       if (!(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300)) {
         final error = GenericErrorModel.fromJson(response.data);

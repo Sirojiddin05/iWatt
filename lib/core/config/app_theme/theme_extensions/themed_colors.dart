@@ -15,6 +15,7 @@ class ThemedColors extends ThemeExtension<ThemedColors> {
   final Color deepFirToWhite;
   final Color geyserToZirconO2;
   final Color cyprusToBlueBayoux;
+  final Color whiteToCyprus;
 
   ThemedColors({
     required this.lillyWhiteToTaxBreak,
@@ -31,6 +32,7 @@ class ThemedColors extends ThemeExtension<ThemedColors> {
     required this.deepFirToWhite,
     required this.geyserToZirconO2,
     required this.cyprusToBlueBayoux,
+    required this.whiteToCyprus,
   });
 
   @override
@@ -50,6 +52,7 @@ class ThemedColors extends ThemeExtension<ThemedColors> {
       deepFirToWhite: deepFirToWhite,
       geyserToZirconO2: geyserToZirconO2,
       cyprusToBlueBayoux: cyprusToBlueBayoux,
+      whiteToCyprus: whiteToCyprus,
     );
   }
 
@@ -73,6 +76,7 @@ class ThemedColors extends ThemeExtension<ThemedColors> {
       prussianBlueToWhite: Color.lerp(prussianBlueToWhite, other.prussianBlueToWhite, t) ?? prussianBlueToWhite,
       deepFirToWhite: Color.lerp(deepFirToWhite, other.deepFirToWhite, t) ?? deepFirToWhite,
       geyserToZirconO2: Color.lerp(geyserToZirconO2, other.geyserToZirconO2, t) ?? geyserToZirconO2,
+      whiteToCyprus: Color.lerp(whiteToCyprus, other.whiteToCyprus, t) ?? whiteToCyprus,
     );
   }
 }

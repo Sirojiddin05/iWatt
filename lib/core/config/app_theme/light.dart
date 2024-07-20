@@ -126,6 +126,7 @@ abstract class LightTheme {
             prussianBlueToWhite: AppColors.prussianBlue,
             deepFirToWhite: AppColors.deepFir,
             geyserToZirconO2: AppColors.geyser,
+            whiteToCyprus: AppColors.white,
           ),
           ThemedIcons(
             splashLogo: AppIcons.splashLogoLight,

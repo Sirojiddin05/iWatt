@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -90,6 +91,7 @@ import 'package:i_watt_app/features/splash/presentation/splash_sreen.dart';
 import 'package:i_watt_app/firebase_options.dart';
 import 'package:i_watt_app/service_locator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   runZonedGuarded(() async {
@@ -97,18 +99,16 @@ void main() async {
     await EasyLocalization.ensureInitialized();
     await setupLocator();
     serviceLocator<LocationsDbHelper>().init();
-    //TODO uncomment to production
-    // await SentryFlutter.init((options) {
-    //   options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
-    //   options.tracesSampleRate = 1.0;
-    // }, appRunner: () {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    await MyFunctions.currentVersionAsync;
-    return runApp(const App());
-    // }
+    await SentryFlutter.init((options) {
+      options.dsn = 'https://388abcb382d5d3326d84efc657c5df4d@o713327.ingest.us.sentry.io/4507299428564992';
+      options.tracesSampleRate = 1.0;
+    }, appRunner: () async {
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await MyFunctions.currentVersionAsync;
+      return runApp(const App());
+    });
   }, (error, stack) async {
-    //TODO uncomment to production
-    // await Sentry.captureException(error, stackTrace: stack);
+    await Sentry.captureException(error, stackTrace: stack);
   });
 }
 
@@ -270,6 +270,7 @@ class App extends StatelessWidget {
         supportedLocales: const [
           Locale('uz'),
           Locale('ta'),
+          Locale('ky'),
           Locale('ka'),
           Locale('ru'),
           Locale('en'),

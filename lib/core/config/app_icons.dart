@@ -78,6 +78,7 @@ class AppIcons {
   static const flagRus = 'assets/icons/ic_rus_flag.svg';
   static const flagEng = 'assets/icons/ic_eng_flag.svg';
   static const flagTg = 'assets/icons/ic_tg_flag.svg';
+  static const flagKy = 'assets/icons/ic_ky_flag.svg';
   static const flagKaa = 'assets/icons/ic_kaa_flag.svg';
   static const whiteCar = 'assets/icons/ic_white_car.png';
   static const whiteSUV = 'assets/icons/ic_white_suv.png';
