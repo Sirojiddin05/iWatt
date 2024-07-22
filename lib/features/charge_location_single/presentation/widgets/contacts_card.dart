@@ -71,7 +71,7 @@ class ContactsCard extends StatelessWidget {
             ContactsCardRow(
               icon: AppIcons.sms,
               value: email,
-              hint: LocaleKeys.show_web_address.tr(),
+              hint: LocaleKeys.show_email.tr(),
               onTap: () {
                 launchUrlString(
                   "mailto:$email",

@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Sirojiddin Asatullayev on 20/07/24.
+  
+*/
+"NSCameraUsageDescription" = "Профиль сүрөтүңүздү жүктөө үчүн \"Уруксат берүү\" баскычын басыңыз";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Бул колдонмо ачык жана фондо турганда жайгашкан жерди билүүнү талап кылат.";
+"NSLocationAlwaysUsageDescription" = "Бул колдонмо фондо жайгашкан жер дайындарына кирүү мүмкүнчүлүгүн талап кылат.";
+"NSLocationWhenInUseUsageDescription" = "Жакын жерде заряддоо станцияларын орнотуу үчүн \"Уруксат берүү\" баскычын чыкылдатыңыз";
+"NSPhotoLibraryUsageDescription" = "Профиль сүрөтүн жаңыртуу үчүн \"Уруксат берүү\" баскычын басыңыз";
+"NSMotionUsageDescription" = "Колдонмону ачып, фондо иштеткенде бул колдонмо жайгашкан жериңизге кирүү мүмкүнчүлүгүн талап кылат.";

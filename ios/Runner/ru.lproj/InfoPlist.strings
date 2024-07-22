@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Sirojiddin Asatullayev on 20/07/24.
+  
+*/
+"NSCameraUsageDescription"="Пожалуйста, нажмите Разрешить, чтобы загрузить фотографию вашего профиля";
+"NSLocationAlwaysAndWhenInUseUsageDescription"="Этому приложению требуется доступ к местоположению, когда оно открыто и в фоновом режиме.";
+"NSLocationAlwaysUsageDescription"="Этому приложению требуется доступ к данным о местоположении в фоновом режиме.";
+"NSLocationWhenInUseUsageDescription"="Пожалуйста, нажмите Разрешить, чтобы установить зарядные станции поблизости";
+"NSPhotoLibraryUsageDescription"="Пожалуйста, нажмите Разрешить обновить фотографию профиля";
+"NSMotionUsageDescription"="Этому приложению требуется доступ к вашему местоположению при открытии приложения и работе в фоновом режиме.";

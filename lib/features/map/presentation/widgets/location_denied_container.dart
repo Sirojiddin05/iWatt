@@ -33,6 +33,7 @@ class _LocationDeniedContainerState extends State<LocationDeniedContainer> {
           body: Text(
             LocaleKeys.location_access_disabled.tr(),
             style: context.textTheme.titleMedium!.copyWith(fontSize: 13),
+            maxLines: 2,
           ),
           isVisible: !state.isPermissionGranted,
           width: context.sizeOf.width - 92,

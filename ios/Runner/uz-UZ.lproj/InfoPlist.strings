@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Sirojiddin Asatullayev on 20/07/24.
+  
+*/
+"NSCameraUsageDescription"="Iltimos, profil rasmingizni yuklash uchun ruxsat berish tugmasini bosing";
+"NSLocationAlwaysAndWhenInUseUsageDescription"="Ushbu ilova ochiq va fonda turganda joylashuv ma'lumotlariga kirishi kerak.";
+"NSLocationAlwaysUsageDescription"="Ushbu ilova fonda turganda joylashuv ma'lumotlariga kirishi kerak.";
+"NSLocationWhenInUseUsageDescription"="Yaqin atrofdagi zaryadlash stantsiyalarini olish uchun ruxsat berish tugmasini bosing";
+"NSPhotoLibraryUsageDescription"="Iltimos, profil rasmingizni yangilash uchun ruxsat berish tugmasini bosing";
+"NSMotionUsageDescription"="Ushbu ilova ilova ochilganda va fonda ishlaganda joylashuvingiz ma'lumotlariga kirishi kerak.";

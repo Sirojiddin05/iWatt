@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Sirojiddin Asatullayev on 20/07/24.
+  
+*/
+"NSCameraUsageDescription"="Лутфан, клик кунед Иҷозат диҳед акси профили худро бор кунед";
+"NSLocationAlwaysAndWhenInUseUsageDescription"="Ин барнома дастрасии маконро ҳангоми кушода ва дар замина талаб мекунад.";
+"NSLocationAlwaysUsageDescription"="Ин барнома дастрасӣ ба маълумоти ҷойгиршавӣ дар заминаро талаб мекунад.";
+"NSLocationWhenInUseUsageDescription"="Лутфан Иҷозат додан -ро пахш кунед, то истгоҳҳои пуркунандаи барқро дар наздикӣ насб кунед";
+"NSPhotoLibraryUsageDescription"="Лутфан, клик кунед Иҷозат диҳед барои навсозии акси профил";
+"NSMotionUsageDescription"="Ҳангоми кушодани барнома ва дар замина кор кардан, ин барнома дастрасӣ ба макони шуморо талаб мекунад.";

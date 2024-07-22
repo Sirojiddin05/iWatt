@@ -93,6 +93,7 @@ class _SettingsPageState extends State<SettingsPage> with WidgetsBindingObserver
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
+                          isScrollControlled: true,
                           builder: (ctx) {
                             return BlocProvider.value(
                               value: context.read<ProfileBloc>(),

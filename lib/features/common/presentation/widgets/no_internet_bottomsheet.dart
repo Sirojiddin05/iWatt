@@ -17,8 +17,7 @@ class NoInternetBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<InternetBloc, InternetState>(
       listener: (context, state) {
-        print('NoInternetBottomSheet listener state.isConnected: ${state.isConnected}');
-        if (state.isConnected) {
+        if (state.isConnected && Navigator.canPop(context)) {
           Navigator.pop(context);
         }
       },
@@ -54,7 +53,6 @@ class NoInternetBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
                     LocaleKeys.check_connection_and_update.tr(),
-                    //TODO: Adapt color of text to appTheme
                     style: context.textTheme.labelMedium?.copyWith(color: AppColors.taxBreak),
                     textAlign: TextAlign.center,
                   ),

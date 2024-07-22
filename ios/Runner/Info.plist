@@ -62,6 +62,8 @@
 	<string>Please, press allow to update your profile photo</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>FLTEnableImpeller</key>
+    <false />
 	<key>FlutterDeepLinkingEnabled</key>
     <true/>
 	<key>CFBundleURLTypes</key>
@@ -72,7 +74,7 @@
 				<string>https</string>
 			</array>
 			<key>CFBundleURLName</key>
-			<string>app.i-watt.uz</string>
+			<string>xn--ls8h.i-watt.uz</string>
 		</dict>
 	</array>
 	<key>UIBackgroundModes</key>

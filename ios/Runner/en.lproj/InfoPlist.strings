@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Sirojiddin Asatullayev on 20/07/24.
+  
+*/
+"NSCameraUsageDescription"="Please, press allow to upload your profile photo";
+"NSLocationAlwaysAndWhenInUseUsageDescription"="This app needs access to location when open and in the background.";
+"NSLocationAlwaysUsageDescription"="This app needs access to location when in the background.";
+"NSLocationWhenInUseUsageDescription"="Please press allow to get charging stations nearby you";
+"NSPhotoLibraryUsageDescription"="Please, press allow to update your profile photo";
+"NSMotionUsageDescription"="This app needs access to your location when opened app and work in the background.";
